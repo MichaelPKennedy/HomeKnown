@@ -7,7 +7,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import reportWebVitals from "./reportWebVitals";
 
 import HomePage from "./pages/HomePage";
-import SecondPage from "./pages/SecondPage";
+import SearchPage from "./pages/SearchPage";
 import NavBar from "./components/NavBar";
 
 // Create a client
@@ -47,7 +47,7 @@ root.render(
         <NavBar/>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/second" element={<SecondPage />} />
+          <Route path="/search" element={<SearchPage />} />
         </Routes>
       </Router>
     </QueryClientProvider>

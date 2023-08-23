@@ -1,0 +1,15 @@
+.map {
+  width: 800px;
+  height: 500px;
+  margin: auto;
+}
+
+.placeImage {
+  max-width: 800px;
+  max-height: 500px;
+  margin: auto;
+}
+
+.searchbar {
+  width: 75%;
+}
