@@ -5,8 +5,8 @@
     "./*"
   ],
   "dependencies": {
-    "react-scripts": "^5.0.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "web-vitals": "^3.4.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
