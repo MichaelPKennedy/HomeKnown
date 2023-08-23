@@ -10,7 +10,8 @@ import { dataValidator, queryValidator } from '../../validators'
 export const placesSchema = Type.Object(
   {
     id: Type.Number(),
-    text: Type.String()
+    text: Type.String(),
+    query: Type.String()
   },
   { $id: 'Places', additionalProperties: false }
 )
@@ -37,7 +38,7 @@ export const placesPatchValidator = getValidator(placesPatchSchema, dataValidato
 export const placesPatchResolver = resolve<Places, HookContext>({})
 
 // Schema for allowed query properties
-export const placesQueryProperties = Type.Pick(placesSchema, ['id', 'text'])
+export const placesQueryProperties = Type.Pick(placesSchema, ['id', 'text', 'query'])
 export const placesQuerySchema = Type.Intersect(
   [
     querySyntax(placesQueryProperties),

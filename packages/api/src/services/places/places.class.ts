@@ -26,7 +26,7 @@ export class PlacesService implements ServiceMethods<any> {
     }
 
     // Here, GOOGLE_API_KEY is a placeholder. Replace it with your key or a method to retrieve it.
-    const apiKey = process.env.GOOGLE_API_KEY
+    const apiKey = process.env.REACT_APP_GOOGLE_API_KEY
     const url = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${query}&key=${apiKey}`
 
     try {
