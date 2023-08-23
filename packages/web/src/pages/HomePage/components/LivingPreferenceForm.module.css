@@ -1,0 +1,98 @@
+/* Button styles */
+.btnDropdown {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  padding: 0.5rem 1rem;
+}
+
+/* Dropdown menu styles */
+.dropdownMenu .formCheck {
+  padding: 0.5rem 1rem;
+}
+
+.dropdownMenu .formCheck:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdownMenu .btnPrimary {
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+/* Range input styles */
+.formControlRange {
+  width: 75%;
+}
+
+/* Label and other text styles */
+.formCheckLabel,
+.formText,
+.saveButton {
+  margin-left: 5px;
+}
+
+/* Miscellaneous styles */
+.container {
+  max-width: 600px;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.formCheckInput {
+  transform: scale(1.5);
+  margin-right: 5px;
+}
+
+.formCheck {
+  margin-right: 10px;
+}
+/* Chrome */
+.form-control-range::-webkit-slider-thumb {
+  background: red !important; /* Change this to your desired color */
+}
+
+.form-control-range::-webkit-slider-runnable-track {
+  background: red !important; /* Change this to your desired color */
+}
+
+/* Firefox */
+.form-control-range::-moz-range-thumb {
+  background: red !important; /* Change this to your desired color */
+}
+
+.form-control-range::-moz-range-track {
+  background: #ffe0d3; /* Change this to your desired color */
+}
+
+/* IE */
+.form-control-range::-ms-thumb {
+  background: #ff5733; /* Change this to your desired color */
+}
+
+/* Slider thumb (handle) default style for all browsers */
+.form-control-range {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 5px; /* This makes the handle a bit rounder */
+  height: 6px; /* Adjust this to change the height of the slider track */
+  outline: none;
+}
+
+.form-control-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 50%;
+  height: 20px; /* Adjust this to change the size of the handle */
+  width: 20px; /* Adjust this to change the size of the handle */
+  cursor: pointer;
+}
+
+.form-control-range::-moz-range-thumb {
+  border-radius: 50%;
+  height: 20px; /* Adjust this to change the size of the handle */
+  width: 20px; /* Adjust this to change the size of the handle */
+  cursor: pointer;
+}
