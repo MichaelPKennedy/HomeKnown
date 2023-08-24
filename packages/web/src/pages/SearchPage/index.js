@@ -33,7 +33,8 @@ function PlacesComponent() {
   const fetchPlaces = async () => {
     try {
       setLoading(true);
-      const storedPlaces = localStorage.getItem("places");
+      // const storedPlaces = localStorage.getItem("places");
+      const storedPlaces = null;
       if (storedPlaces) {
         setPlaces(JSON.parse(storedPlaces));
         setLoading(false);
