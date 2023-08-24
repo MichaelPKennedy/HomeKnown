@@ -191,7 +191,7 @@ const LivingPreferenceForm = () => {
             aria-haspopup="true"
             aria-expanded="false"
           >
-            Select You and Your Partner's Job Industries
+            Select Family's Job Industries
           </button>
           <div className="dropdown-menu" aria-labelledby="industriesDropdown">
             {[

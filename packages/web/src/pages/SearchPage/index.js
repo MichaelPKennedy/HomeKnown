@@ -57,50 +57,49 @@ function PlacesComponent() {
   };
 
   return (
-    <div className="container">
-      <div className={`row justify-content-beginning mt-4 ${styles.searchbar}`}>
-        <div className="col">
-          <input
-            type="text"
-            className="form-control"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="Search for a place..."
-          />
-        </div>
-        <div className="col-auto">
-          <button className="btn btn-primary" onClick={fetchPlaces}>
-            Search
-          </button>
-        </div>
+    <div className="container mt-5">
+      <div className={`d-flex justify-content-center mb-4 ${styles.searchbar}`}>
+        <input
+          type="text"
+          className="form-control mr-2"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search for a place..."
+          style={{ flex: "1" }}
+        />
+        <button className="btn btn-primary" onClick={fetchPlaces}>
+          Search
+        </button>
       </div>
-      {loading && <div className="mt-3">Loading...</div>}
-      {error && <div className="mt-3 alert alert-danger">Error: {error}</div>}
+
+      {loading && <div className="mt-3 text-center">Loading...</div>}
+      {error && (
+        <div className="mt-3 alert alert-danger text-center">
+          Error: {error}
+        </div>
+      )}
+
       <ul className="mt-3">
         {places.map((place) => (
-          <ul key={place.place_id}>
-            <div className="row mb-4 justify-content-center">
-              <h2>{place.name}</h2>
+          <li key={place.place_id}>
+            <div className={`card mb-4 ${styles.card}`}>
+              <div className={`card-body ${styles.cardBody}`}>
+                <h4 className={`text-center ${styles.name}`}>{place.name}</h4>
+                {place.photos && place.photos.length > 0 && (
+                  <img
+                    src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`}
+                    alt={place.name}
+                    className={`img-fluid mt-3 mb-4 ${styles.placeImage}`}
+                  />
+                )}
+                <div className="d-flex justify-content-center mt-3">
+                  <div id="map" className={`pt-4 ${styles.map}`}></div>
+                </div>
+              </div>
             </div>
-            <div
-              className={`row mb-4 justify-content-center ${styles.placeImage}`}
-            >
-              {place.photos && place.photos.length > 0 && (
-                <img
-                  src={`https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=${place.photos[0].photo_reference}&key=${GOOGLE_API_KEY}`}
-                  alt={place.name}
-                  className="img-fluid"
-                />
-              )}
-            </div>
-          </ul>
+          </li>
         ))}
       </ul>
-      <div
-        id="map"
-        className="mt-3"
-        style={{ width: "100%", height: "400px", margin: "auto" }}
-      ></div>
     </div>
   );
 }

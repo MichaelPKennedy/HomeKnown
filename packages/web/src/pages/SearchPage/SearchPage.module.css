@@ -5,11 +5,40 @@
 }
 
 .placeImage {
-  max-width: 800px;
-  max-height: 500px;
-  margin: auto;
+  width: 800px;
+  height: 500px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
 
 .searchbar {
-  width: 75%;
+  max-width: 800px;
+  width: 100%;
+  margin: auto;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 1);
+}
+.card {
+  border-radius: 10px;
+}
+
+.name {
+  font-weight: 200;
+  margin: 0;
 }
