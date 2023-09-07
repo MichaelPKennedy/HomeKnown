@@ -1,6 +1,6 @@
 # HomeKnown
 ###purpose
-In an age where remote work is not just a trend but a lifestyle, the question isn't just about 'where to work', but more importantly, 'where to live'. Enter Home Known, a sophisticated web application tailored to bridge this gap. 
+In an age where remote work is not just a trend but a lifestyle, the question isn't just about 'where to work', but more importantly, 'where to live'. Enter Home Known, a sophisticated web application tailored to bridge this gap. It features a powerful content-based recommendation system enhanced by machine learning and makes use of publicly available data on topics such as industry, salary, weather, venues and recreational opportunities, demographics, crime rate, and more in order to recommend locations that are right fit for any individual user. 
 
 ###structure
 HomeKnown employs a monorepo structure, encompassing both the React-powered front-end and a Feathers Node.js backend, fully separated. The architecture ensures seamless integration while maintaining clear boundaries for developmental ease.
