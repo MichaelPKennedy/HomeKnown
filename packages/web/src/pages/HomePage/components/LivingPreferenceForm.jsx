@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styles from "./LivingPreferenceForm.module.css";
+import { useQuery } from "react-query";
+import client from "../../../feathersClient.js";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +21,13 @@ const LivingPreferenceForm = () => {
     recreationalInterests: [],
     industries: [],
   });
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const response = await client.service("survey").post({
+      data: formData,
+    });
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,28 +54,23 @@ const LivingPreferenceForm = () => {
     }
   };
 
-  const handleSelectMultipleChange = (e) => {
-    const options = e.target.options;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i++) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setFormData((prevState) => ({
-      ...prevState,
-      recreationalInterests: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+  // const handleSelectMultipleChange = (e) => {
+  //   const options = e.target.options;
+  //   const value = [];
+  //   for (let i = 0, l = options.length; i < l; i++) {
+  //     if (options[i].selected) {
+  //       value.push(options[i].value);
+  //     }
+  //   }
+  //   setFormData((prevState) => ({
+  //     ...prevState,
+  //     recreationalInterests: value,
+  //   }));
+  // };
 
   return (
     <form onSubmit={handleSubmit} className="container mt-5">
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Preferred Landscape Features:</label>
         <div className="dropdown">
           <button
@@ -117,9 +121,9 @@ const LivingPreferenceForm = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Recreational Interests:</label>
         <div className="dropdown">
           <button
@@ -163,7 +167,7 @@ const LivingPreferenceForm = () => {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
       <div className="form-group">
         <label htmlFor="temperature">Preferred Weather (°F):</label>
         <input
@@ -240,7 +244,7 @@ const LivingPreferenceForm = () => {
         </div>
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <label>Living Preference:</label>
         <div className="form-check">
           <input
@@ -284,8 +288,8 @@ const LivingPreferenceForm = () => {
             Rural
           </label>
         </div>
-      </div>
-      <div className="form-group">
+      </div> */}
+      {/* <div className="form-group">
         <label htmlFor="housingBudget">Housing Budget:</label>
         <input
           type="range"
@@ -301,9 +305,7 @@ const LivingPreferenceForm = () => {
         <small className="form-text text-muted">
           ${formData.housingBudget.toLocaleString()}
         </small>
-      </div>
-
-      {/* ... Continue for all the additional questions ... */}
+      </div> */}
 
       <button
         type="submit"
