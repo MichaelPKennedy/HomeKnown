@@ -3,10 +3,17 @@ import styles from "./LivingPreferenceForm.module.css";
 import { useQuery } from "react-query";
 import client from "../../../feathersClient.js";
 
+const naicsMapping = [
+  { naics_code: "001", naics_title: "Technology", displayName: "Tech" },
+  { naics_code: "002", naics_title: "Healthcare", displayName: "Health" },
+  // ... add other naics codes as needed
+];
+
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
     temperature: 70,
     job: "",
+    partnerJob: "",
     livingPreference: "city",
     housingBudget: 150000,
     settingPreference: "",
@@ -20,11 +27,45 @@ const LivingPreferenceForm = () => {
     landscapeFeatures: [],
     recreationalInterests: [],
     industries: [],
+    desiredSalary: null,
+    minSalary: null,
+    jobLevel: "",
+    wagePriority: 5,
+    futureAspiration: "",
+    selectedJobs: [],
   });
+  const [selectedNaics, setSelectedNaics] = useState("");
+
+  // Fetching OCC codes based on the selected NAICS code
+  const { data: occCodes, isLoading } = useQuery(
+    ["fetchOccCodes", selectedNaics],
+    () => fetchOccCodes(selectedNaics),
+    {
+      enabled: !!selectedNaics, // Only run the query if there's a selected NAICS code
+    }
+  );
+
+  const handleNaicsChange = (e) => {
+    setSelectedNaics(e.target.value);
+  };
+
+  const fetchOccCodes = async (naicsCode) => {
+    if (naicsCode === "001")
+      return [
+        { occ_code: "00-0001", occ_title: "Software Engineer" },
+        { occ_code: "00-0002", occ_title: "Data Scientist" },
+      ];
+    if (naicsCode === "002")
+      return [
+        { occ_code: "00-0003", occ_title: "Nurse" },
+        { occ_code: "00-0004", occ_title: "Doctor" },
+      ];
+    return [];
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await client.service("survey").post({
+    const response = await client.service("survey").create({
       data: formData,
     });
   };
@@ -54,6 +95,20 @@ const LivingPreferenceForm = () => {
     }
   };
 
+  const handleAddJob = () => {
+    const naicsCode = formData.naics;
+    const occCode = formData.occ;
+
+    if (naicsCode && occCode) {
+      const newJob = { naics: naicsCode, occ: occCode };
+
+      setFormData((prevState) => ({
+        ...prevState,
+        selectedJobs: [...prevState.selectedJobs, newJob],
+      }));
+    }
+  };
+
   // const handleSelectMultipleChange = (e) => {
   //   const options = e.target.options;
   //   const value = [];
@@ -70,6 +125,169 @@ const LivingPreferenceForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="container mt-5">
+      <div className="form-group">
+        <label>Industry:</label>
+        <select name="naics" onChange={handleNaicsChange}>
+          {naicsMapping.map(({ naics_code, displayName }) => (
+            <option value={naics_code} key={naics_code}>
+              {displayName}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {isLoading ? (
+        <p>Loading OCC codes...</p>
+      ) : (
+        occCodes && (
+          <div className="form-group">
+            <label>Occupation:</label>
+            <select name="occ" onChange={handleInputChange}>
+              {occCodes.map(({ occCode, occTitle }) => (
+                <option value={occCode} key={occCode}>
+                  {occTitle}
+                </option>
+              ))}
+            </select>
+          </div>
+        )
+      )}
+
+      <button onClick={handleAddJob}>Add Job</button>
+
+      {/* Job Profession Input */}
+      <div className="form-group">
+        <label htmlFor="job">
+          What's your current profession or job title?
+        </label>
+        <input
+          type="text"
+          name="job"
+          value={formData.job}
+          onChange={handleInputChange}
+          className="form-control"
+          id="job"
+          placeholder="Enter your job title"
+        />
+      </div>
+
+      {/* Partner's Job Profession Input */}
+      <div className="form-group">
+        <label htmlFor="partnerJob">
+          What is your partner’s profession or job title?
+        </label>
+        <input
+          type="text"
+          name="partnerJob"
+          value={formData.partnerJob || ""}
+          onChange={handleInputChange}
+          className="form-control"
+          id="partnerJob"
+          placeholder="Enter your partner's job title"
+        />
+      </div>
+
+      {/* Desired Salary Input */}
+      <div className="form-group">
+        <label htmlFor="desiredSalary">
+          What's your desired average annual salary?
+        </label>
+        <input
+          type="number"
+          name="desiredSalary"
+          value={formData.desiredSalary || ""}
+          onChange={handleInputChange}
+          className="form-control"
+          id="desiredSalary"
+          placeholder="Enter desired annual salary"
+        />
+      </div>
+
+      {/* Minimum Salary Input */}
+      <div className="form-group">
+        <label htmlFor="minSalary">
+          What's the minimum salary you'd be willing to accept for a job in a
+          new state?
+        </label>
+        <input
+          type="number"
+          name="minSalary"
+          value={formData.minSalary || ""}
+          onChange={handleInputChange}
+          className="form-control"
+          id="minSalary"
+          placeholder="Enter minimum acceptable salary"
+        />
+      </div>
+
+      {/* Entry Level vs Senior Role Radio Buttons */}
+      <div className="form-group">
+        <label>
+          Would you be open to entry-level positions, or are you looking for
+          senior roles?
+        </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="jobLevel"
+            value="entry-level"
+            onChange={handleInputChange}
+            checked={formData.jobLevel === "entry-level"}
+          />
+          <label className="form-check-label">Entry-level</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="jobLevel"
+            value="senior"
+            onChange={handleInputChange}
+            checked={formData.jobLevel === "senior"}
+          />
+          <label className="form-check-label">Senior role</label>
+        </div>
+      </div>
+
+      {/* Job's average hourly wage priority */}
+      <div className="form-group">
+        <label htmlFor="wagePriority">
+          How important is it for you to live in a state where your job's
+          average hourly wage is above the national average?
+        </label>
+        <input
+          type="range"
+          name="wagePriority"
+          min="1"
+          max="10"
+          value={formData.wagePriority || 5}
+          onChange={handleInputChange}
+          className={`form-control-range ${styles.formControlRange}`}
+          id="wagePriority"
+        />
+        <small className="form-text text-muted">
+          Priority: {formData.wagePriority || 5} / 10
+        </small>
+      </div>
+
+      {/* Future Aspirations */}
+      <div className="form-group">
+        <label htmlFor="futureAspiration">
+          Where do you see yourself in the next 5 years in terms of job position
+          and salary?
+        </label>
+        <textarea
+          name="futureAspiration"
+          value={formData.futureAspiration || ""}
+          onChange={handleInputChange}
+          className="form-control"
+          id="futureAspiration"
+          placeholder="Describe your future aspirations"
+          rows="3"
+        />
+      </div>
+
       {/* <div className="form-group">
         <label>Preferred Landscape Features:</label>
         <div className="dropdown">

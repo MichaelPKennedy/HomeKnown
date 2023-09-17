@@ -40,11 +40,7 @@ export const placesPatchResolver = resolve<Places, HookContext>({})
 // Schema for allowed query properties
 export const placesQueryProperties = Type.Pick(placesSchema, ['id', 'text', 'query'])
 export const placesQuerySchema = Type.Intersect(
-  [
-    querySyntax(placesQueryProperties),
-    // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
-  ],
+  [querySyntax(placesQueryProperties), Type.Object({}, { additionalProperties: false })],
   { additionalProperties: false }
 )
 export type PlacesQuery = Static<typeof placesQuerySchema>

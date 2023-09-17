@@ -1,21 +1,9 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
 
-import { hooks as schemaHooks } from '@feathersjs/schema'
-
-import {
-  industryDataValidator,
-  industryPatchValidator,
-  industryQueryValidator,
-  industryResolver,
-  industryExternalResolver,
-  industryDataResolver,
-  industryPatchResolver,
-  industryQueryResolver
-} from './industry.schema'
-
 import type { Application } from '../../declarations'
 import { IndustryService, getOptions } from './industry.class'
 import { industryPath, industryMethods } from './industry.shared'
+import { industryHooks } from './industry.hooks'
 
 export * from './industry.class'
 export * from './industry.schema'
@@ -30,37 +18,7 @@ export const industry = (app: Application) => {
     events: []
   })
   // Initialize hooks
-  app.service(industryPath).hooks({
-    around: {
-      all: [
-        schemaHooks.resolveExternal(industryExternalResolver),
-        schemaHooks.resolveResult(industryResolver)
-      ]
-    },
-    before: {
-      all: [
-        schemaHooks.validateQuery(industryQueryValidator),
-        schemaHooks.resolveQuery(industryQueryResolver)
-      ],
-      find: [],
-      get: [],
-      create: [
-        schemaHooks.validateData(industryDataValidator),
-        schemaHooks.resolveData(industryDataResolver)
-      ],
-      patch: [
-        schemaHooks.validateData(industryPatchValidator),
-        schemaHooks.resolveData(industryPatchResolver)
-      ],
-      remove: []
-    },
-    after: {
-      all: []
-    },
-    error: {
-      all: []
-    }
-  })
+  app.service(industryPath).hooks(industryHooks)
 }
 
 // Add this service to the service type index
