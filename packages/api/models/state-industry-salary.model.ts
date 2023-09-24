@@ -1,9 +1,8 @@
-module.exports = function (app) {
-  const Sequelize = app.get('sequelize')
-  const { Model, DataTypes } = Sequelize
+import { DataTypes, Model, Sequelize } from 'sequelize'
 
-  class StateIndustrySalary extends Model {}
+export class StateIndustrySalary extends Model {}
 
+export const StateIndustrySalaryModel = (sequelize: Sequelize) => {
   StateIndustrySalary.init(
     {
       id: {
@@ -50,11 +49,9 @@ module.exports = function (app) {
       hourly: DataTypes.BOOLEAN
     },
     {
-      sequelize: app.get('sequelizeClient'),
-      tableName: 'HomeKnown.StateIndustrySalary',
+      sequelize,
+      tableName: 'StateIndustrySalary',
       timestamps: false
     }
   )
-
-  return StateIndustrySalary
 }

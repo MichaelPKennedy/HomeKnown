@@ -12,28 +12,30 @@ export interface SurveyParams extends Params {
 }
 
 export interface SurveyFormData {
-  temperature: number
-  job?: string
-  partnerJob?: string
-  desiredSalary?: number
-  minSalary?: number
-  jobLevel?: 'entry-level' | 'senior'
-  wagePriority?: number
-  futureAspiration?: string
-  selectedJobs?: { naics: string; occ: string }[]
-  livingPreference?: 'city' | 'suburb' | 'rural'
-  housingBudget?: number
-  settingPreference?: string
-  hasChildren?: boolean
-  lowCrimePriority?: boolean
-  publicTransportation?: boolean
-  commuteTime?: string
-  proximityAirportHighway?: boolean
-  culturalOfferings?: boolean
-  nightlifeImportance?: boolean
-  landscapeFeatures?: string[]
-  recreationalInterests?: string[]
-  industries?: string[]
+  data: {
+    temperature: number
+    job?: string
+    partnerJob?: string
+    desiredSalary?: number
+    minSalary?: number
+    jobLevel?: 'entry-level' | 'senior'
+    wagePriority?: number
+    futureAspiration?: string
+    selectedJobs?: { naics: string; occ: string }[]
+    livingPreference?: 'city' | 'suburb' | 'rural'
+    housingBudget?: number
+    settingPreference?: string
+    hasChildren?: boolean
+    lowCrimePriority?: boolean
+    publicTransportation?: boolean
+    commuteTime?: string
+    proximityAirportHighway?: boolean
+    culturalOfferings?: boolean
+    nightlifeImportance?: boolean
+    landscapeFeatures?: string[]
+    recreationalInterests?: string[]
+    industries?: string[]
+  }
 }
 
 export class SurveyService implements ServiceMethods<any> {
@@ -45,38 +47,28 @@ export class SurveyService implements ServiceMethods<any> {
 
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
     // Parsing the form data
+    console.log('data', data)
     const jobData = this.parseJobData(data)
-    const livingPreferenceData = this.parseWeatherData(data)
+    // const livingPreferenceData = this.parseWeatherData(data)
+
+    console.log('job data', jobData)
 
     const jobResponse = await this.getIndustryResponse(jobData)
-    const weatherResponse = await this.getWeatherResponse(livingPreferenceData)
+    // const weatherResponse = await this.getWeatherResponse(livingPreferenceData)
 
     return {
-      jobResponse,
-      weatherResponse
+      jobResponse
     }
   }
 
   parseJobData(data: SurveyFormData): any {
-    const {
-      job,
-      partnerJob,
-      desiredSalary,
-      minSalary,
-      jobLevel,
-      wagePriority,
-      futureAspiration,
-      selectedJobs
-    } = data
+    const { desiredSalary, minSalary, jobLevel, wagePriority, selectedJobs } = data.data
 
     return {
-      job,
-      partnerJob,
       desiredSalary,
       minSalary,
       jobLevel,
       wagePriority,
-      futureAspiration,
       selectedJobs
     }
   }
@@ -84,14 +76,22 @@ export class SurveyService implements ServiceMethods<any> {
   parseWeatherData(data: SurveyFormData): any {
     // Extract and format data for the living preference API
     return {
-      livingPreference: data.livingPreference,
-      housingBudget: data.housingBudget
+      livingPreference: data.data.livingPreference,
+      housingBudget: data.data.housingBudget
       // ... other necessary data
     }
   }
 
   async getIndustryResponse(data: any): Promise<any> {
-    // Use this.app or any other mechanism to send data to the job-related API
+    const industryService = this.app.service('industry')
+
+    try {
+      const response = await industryService.find(data)
+      return response
+    } catch (error) {
+      console.error('Error querying the industry service:', error)
+      throw new Error('Unable to fetch data from industry service.')
+    }
   }
 
   async getWeatherResponse(data: any): Promise<any> {

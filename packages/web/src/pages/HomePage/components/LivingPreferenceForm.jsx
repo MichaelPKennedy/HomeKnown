@@ -30,30 +30,25 @@ const LivingPreferenceForm = () => {
     selectedJobs: [],
   });
 
+  console.log("formData:", formData);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
+  const [currentJob, setCurrentJob] = useState({});
 
-  const fetchOccCodes = async (naicsCode) => {
-    if (naicsCode === "001")
-      return [
-        { occ_code: "00-0001", occ_title: "Software Engineer" },
-        { occ_code: "00-0002", occ_title: "Data Scientist" },
-      ];
-    if (naicsCode === "002")
-      return [
-        { occ_code: "00-0003", occ_title: "Nurse" },
-        { occ_code: "00-0004", occ_title: "Doctor" },
-      ];
-    return [];
+  const fetchOccCodes = async (inputQuery) => {
+    try {
+      const results = await client
+        .service("occupation")
+        .find({ query: { query: inputQuery } });
+      return results;
+    } catch (error) {
+      console.error("Error fetching occupation codes:", error);
+      return [];
+    }
   };
 
-  const { data: allOccCodes } = useQuery("fetchAllOccCodes", fetchOccCodes);
-
-  const onSuggestionsFetchRequested = ({ value }) => {
-    // Filter the OCC codes for suggestions
-    const results = allOccCodes.filter((occ) =>
-      occ.occ_title.toLowerCase().includes(value.toLowerCase())
-    );
+  const onSuggestionsFetchRequested = async ({ value }) => {
+    const results = await fetchOccCodes(value);
     setSuggestions(results);
   };
 
@@ -93,20 +88,6 @@ const LivingPreferenceForm = () => {
     }
   };
 
-  const handleAddJob = () => {
-    const naicsCode = formData.naics;
-    const occCode = formData.occ;
-
-    if (naicsCode && occCode) {
-      const newJob = { naics: naicsCode, occ: occCode };
-
-      setFormData((prevState) => ({
-        ...prevState,
-        selectedJobs: [...prevState.selectedJobs, newJob],
-      }));
-    }
-  };
-
   // const handleSelectMultipleChange = (e) => {
   //   const options = e.target.options;
   //   const value = [];
@@ -123,49 +104,66 @@ const LivingPreferenceForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="container mt-5">
-      <Autosuggest
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-        onSuggestionsClearRequested={onSuggestionsClearRequested}
-        getSuggestionValue={(suggestion) => suggestion.occ_title}
-        renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
-        inputProps={{
-          placeholder: "Enter job title...",
-          value: searchTerm,
-          onChange: (_, { newValue }) => setSearchTerm(newValue),
-        }}
-      />
-
-      {/* Job Profession Input */}
       <div className="form-group">
         <label htmlFor="job">
           What's your current profession or job title?
         </label>
-        <input
-          type="text"
-          name="job"
-          value={formData.job}
-          onChange={handleInputChange}
-          className="form-control"
-          id="job"
-          placeholder="Enter your job title"
+        <Autosuggest
+          suggestions={suggestions}
+          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+          onSuggestionsClearRequested={onSuggestionsClearRequested}
+          onSuggestionSelected={(event, { suggestion }) => {
+            setCurrentJob(suggestion);
+          }}
+          getSuggestionValue={(suggestion) => suggestion.occ_title}
+          renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
+          inputProps={{
+            id: "job",
+            placeholder: "Enter job title...",
+            value: searchTerm,
+            onChange: (_, { newValue }) => setSearchTerm(newValue),
+          }}
         />
-      </div>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            if (
+              currentJob &&
+              !formData.selectedJobs.includes(currentJob.occ_title)
+            ) {
+              setFormData((prevState) => ({
+                ...prevState,
+                selectedJobs: [...prevState.selectedJobs, currentJob],
+              }));
+              setCurrentJob({});
+            }
+          }}
+          className="btn btn-primary ml-2"
+        >
+          Add
+        </button>
 
-      {/* Partner's Job Profession Input */}
-      <div className="form-group">
-        <label htmlFor="partnerJob">
-          What is your partner’s profession or job title?
-        </label>
-        <input
-          type="text"
-          name="partnerJob"
-          value={formData.partnerJob || ""}
-          onChange={handleInputChange}
-          className="form-control"
-          id="partnerJob"
-          placeholder="Enter your partner's job title"
-        />
+        <div className="selected-jobs mt-3">
+          {formData.selectedJobs.map((job, index) => (
+            <div key={index} className="badge badge-primary mr-2">
+              {job.occ_title}
+              <span
+                style={{ cursor: "pointer", marginLeft: "5px" }}
+                onClick={() => {
+                  const updatedJobs = formData.selectedJobs.filter(
+                    (j) => j !== job
+                  );
+                  setFormData((prevState) => ({
+                    ...prevState,
+                    selectedJobs: updatedJobs,
+                  }));
+                }}
+              >
+                &times;
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Desired Salary Input */}
@@ -229,6 +227,17 @@ const LivingPreferenceForm = () => {
           />
           <label className="form-check-label">Senior role</label>
         </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="jobLevel"
+            value="both"
+            onChange={handleInputChange}
+            checked={formData.jobLevel === "both"}
+          />
+          <label className="form-check-label">Both</label>
+        </div>
       </div>
 
       {/* Job's average hourly wage priority */}
@@ -250,23 +259,6 @@ const LivingPreferenceForm = () => {
         <small className="form-text text-muted">
           Priority: {formData.wagePriority || 5} / 10
         </small>
-      </div>
-
-      {/* Future Aspirations */}
-      <div className="form-group">
-        <label htmlFor="futureAspiration">
-          Where do you see yourself in the next 5 years in terms of job position
-          and salary?
-        </label>
-        <textarea
-          name="futureAspiration"
-          value={formData.futureAspiration || ""}
-          onChange={handleInputChange}
-          className="form-control"
-          id="futureAspiration"
-          placeholder="Describe your future aspirations"
-          rows="3"
-        />
       </div>
 
       {/* <div className="form-group">
@@ -367,7 +359,7 @@ const LivingPreferenceForm = () => {
           </div>
         </div>
       </div> */}
-      <div className="form-group">
+      {/* <div className="form-group">
         <label htmlFor="temperature">Preferred Weather (°F):</label>
         <input
           type="range"
@@ -381,67 +373,7 @@ const LivingPreferenceForm = () => {
           id="temperature"
         />
         <small className="form-text text-muted">{formData.temperature}°F</small>
-      </div>
-
-      <div className="form-group">
-        <label>Job Industries:</label>
-        <div className="dropdown">
-          <button
-            className={`btn btn-info dropdown-toggle ${styles.btnDropdown}`}
-            type="button"
-            id="industriesDropdown"
-            data-bs-toggle="dropdown"
-            aria-haspopup="true"
-            aria-expanded="false"
-          >
-            Select Family's Job Industries
-          </button>
-          <div className="dropdown-menu" aria-labelledby="industriesDropdown">
-            {[
-              "technology",
-              "finance",
-              "healthcare",
-              "education",
-              "government",
-              "retail",
-              "manufacturing",
-              "construction",
-              "transportation",
-              "agriculture",
-              "entertainment",
-              "hospitality",
-              "self-employed",
-            ].map((industry) => (
-              <div className="form-check" key={industry}>
-                <input
-                  className={`custom-checkbox ${styles.formCheckInput}`}
-                  type="checkbox"
-                  name="industries"
-                  value={industry}
-                  id={`${industry}industry`}
-                  onChange={handleCheckboxChange}
-                  checked={formData.industries.includes(industry)}
-                />
-                <label
-                  className={`${styles.formCheckLabel}`}
-                  htmlFor={`${industry}industry`}
-                >
-                  {industry.charAt(0).toUpperCase() + industry.slice(1)}
-                </label>
-              </div>
-            ))}
-            <button
-              type="button"
-              className={`btn btn-info mt-2 ${styles.btnDropdown} ${styles.saveButton}`}
-              onClick={() => {
-                document.getElementById("industriesDropdown").click();
-              }}
-            >
-              Save
-            </button>
-          </div>
-        </div>
-      </div>
+      </div> */}
 
       {/* <div className="form-group">
         <label>Living Preference:</label>

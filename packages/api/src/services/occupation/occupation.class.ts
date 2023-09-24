@@ -1,8 +1,6 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
-import axios from 'axios'
 import type { Application } from '../../declarations'
 import { Op } from 'sequelize'
-import { Occupation } from '../../models/occupation.model'
 
 interface QueryParams {
   query: string
@@ -14,9 +12,11 @@ export interface OccupationParams extends Params {
 
 export class OccupationService implements ServiceMethods<any> {
   app: Application
+  sequelize: any
 
-  constructor(app: Application) {
+  constructor(app: Application, sequelizeClient: any) {
     this.app = app
+    this.sequelize = sequelizeClient
   }
 
   async find(params: OccupationParams): Promise<any[] | Paginated<any>> {
@@ -25,15 +25,17 @@ export class OccupationService implements ServiceMethods<any> {
     }
 
     const inputQuery = params.query.query
-    const matchingOccupations = await Occupation.findAll({
+
+    // Assuming Occupation is already a Sequelize model. Use this.sequelize.models.Occupation if it's not directly accessible.
+    const matchingOccupations = await this.sequelize.models.Occupation.findAll({
       where: {
         occ_title: {
-          [Op.iLike]: `%${inputQuery}%`
+          [Op.like]: `%${inputQuery}%`
         }
       },
-      limit: 10 // Limit to a reasonable number for suggestions
+      limit: 10
     })
-
+    console.log('matchingOccupations', matchingOccupations)
     return matchingOccupations
   }
 

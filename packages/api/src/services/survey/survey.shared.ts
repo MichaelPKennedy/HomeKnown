@@ -5,7 +5,7 @@ import type { Survey, SurveyData, SurveyPatch, SurveyQuery, SurveyService } from
 
 export type { Survey, SurveyData, SurveyPatch, SurveyQuery }
 
-export type SurveyClientService = Pick<SurveyService<Params<SurveyQuery>>, (typeof surveyMethods)[number]>
+export type SurveyClientService = Pick<SurveyService, (typeof surveyMethods)[number]>
 
 export const surveyPath = 'survey'
 

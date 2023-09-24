@@ -1,6 +1,7 @@
+const { disallow } = require('feathers-hooks-common')
 export const placesHooks = {
   before: {
-    all: [authenticate('jwt')],
+    all: [],
     find: [],
     get: [],
     create: [disallow('external')],

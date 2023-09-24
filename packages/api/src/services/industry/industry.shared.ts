@@ -5,10 +5,7 @@ import type { Industry, IndustryData, IndustryPatch, IndustryQuery, IndustryServ
 
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 
-export type IndustryClientService = Pick<
-  IndustryService<Params<IndustryQuery>>,
-  (typeof industryMethods)[number]
->
+export type IndustryClientService = Pick<IndustryService, (typeof industryMethods)[number]>
 
 export const industryPath = 'industry'
 

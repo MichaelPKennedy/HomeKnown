@@ -58,12 +58,15 @@
     "@feathersjs/socketio": "^5.0.8",
     "@feathersjs/transport-commons": "^5.0.8",
     "@feathersjs/typebox": "^5.0.8",
+    "@types/sequelize": "^4.28.15",
     "compression": "^1.7.4",
+    "feathers-hooks-common": "^8.1.1",
     "knex": "^2.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.1",
     "react-autosuggest": "^10.1.0",
     "sequelize": "^6.33.0",
+    "sequelize-typescript": "^2.1.5",
     "winston": "^3.10.0"
   },
   "devDependencies": {

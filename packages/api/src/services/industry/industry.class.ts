@@ -1,54 +1,91 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Industry, IndustryData, IndustryPatch, IndustryQuery } from './industry.schema'
+import { Op } from 'sequelize'
+import { State } from '../../../models/state.model'
 
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 
-import { StateIndustrySalary } from '../../models/state-industry-salary.model'
-
-export interface SurveyFormData {
-  desiredSalary?: number;
-  selectedJobs?: { naics: string; occ: string }[];
-}
-
-interface QueryParams {
-  query: string
-}
 export interface IndustryParams extends Params {
-  query?: QueryParams
+  selectedJobs: { occ_title: string; occ_code: string }[]
+  desiredSalary: number
+  minSalary: number
+  jobLevel: 'entry-level' | 'senior' | 'both'
+  wagePriority: number
 }
 
 export class IndustryService implements ServiceMethods<any> {
   app: Application
+  sequelize: any
 
-  constructor(app: Application) {
+  constructor(app: Application, sequelizeClient: any) {
     this.app = app
+    this.sequelize = sequelizeClient
+  }
+
+  private async getNationalAverageForOccupation(occ_code: string): Promise<number> {
+    const StateIndustrySalary = this.sequelize.models.StateIndustrySalary
+
+    const nationalAverage = await StateIndustrySalary.findOne({
+      where: { occ_code: occ_code },
+      attributes: [[this.sequelize.fn('AVG', this.sequelize.col('average_hourly')), 'national_avg_hourly']]
+    })
+
+    return parseFloat(nationalAverage.getDataValue('national_avg_hourly'))
   }
 
   async find(params: IndustryParams): Promise<any[] | Paginated<any>> {
-    const { query } = params
-    const { desiredSalary, selectedJobs } = query
+    console.log('params', params)
+    const { selectedJobs, desiredSalary, minSalary, jobLevel, wagePriority } = params
 
-    let whereClause = {}
-
-    if (selectedJobs && selectedJobs.length) {
-      whereClause.naics_code = selectedJobs.map((job) => job.naics)
-      whereClause.occ_code = selectedJobs.map((job) => job.occ)
+    if (!selectedJobs || selectedJobs.length === 0) {
+      throw new Error('No selected jobs provided.')
     }
 
-    // Define the ordering condition to get the "closest" average salary
-    let orderCondition = this?.app?
-      .get('sequelize')
-      .fn('ABS', this.app.get('sequelize').col('average_salary') - desiredSalary)
+    const occ_codes = selectedJobs.map((job: any) => job.occ_code)
 
-    // Query the database using sequelize
+    // Starting with basic filters
+    let whereClause: any = {
+      occ_code: { [Op.in]: occ_codes },
+      average_salary: {
+        [Op.between]: [minSalary, desiredSalary]
+      }
+    }
+
+    // Adjusting for job level
+    if (jobLevel === 'entry-level') {
+      whereClause['average_salary'] = {
+        [Op.lte]: this.sequelize.col('h_median')
+      }
+    } else if (jobLevel === 'senior') {
+      whereClause['average_salary'] = {
+        [Op.gt]: this.sequelize.col('h_median')
+      }
+    }
+
+    const nationalAvgHourly = await this.getNationalAverageForOccupation(occ_codes[0])
+
+    const StateIndustrySalary = this.sequelize.models.StateIndustrySalary
     const results = await StateIndustrySalary.findAll({
       where: whereClause,
-      order: [[orderCondition, 'ASC']],
+      attributes: [
+        'state_code',
+        [this.sequelize.fn('AVG', this.sequelize.col('StateIndustrySalary.average_salary')), 'avg_salary'],
+        [this.sequelize.fn('AVG', this.sequelize.col('StateIndustrySalary.average_hourly')), 'avg_hourly']
+      ],
+      include: [
+        {
+          model: State,
+          attributes: ['state']
+        }
+      ],
+      group: ['state_code'],
+      order: [
+        [this.sequelize.fn('ABS', this.sequelize.literal(`avg_hourly - ${nationalAvgHourly}`)), 'DESC']
+      ],
       limit: 10
     })
 
-    // Return the results
     return results
   }
 

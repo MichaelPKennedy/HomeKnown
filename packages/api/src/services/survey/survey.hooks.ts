@@ -1,9 +1,11 @@
+const { disallow } = require('feathers-hooks-common')
+
 export const surveyHooks = {
   before: {
-    all: [authenticate('jwt')],
+    all: [],
     find: [],
     get: [],
-    create: [disallow('external')],
+    create: [],
     update: [disallow('external')],
     patch: [disallow('external')],
     remove: [disallow('external')]

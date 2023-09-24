@@ -14,7 +14,7 @@ import {
 } from './weather.schema'
 
 import type { Application } from '../../declarations'
-import { WeatherService, getOptions } from './weather.class'
+import { WeatherService } from './weather.class'
 import { weatherPath, weatherMethods } from './weather.shared'
 
 export * from './weather.class'
@@ -23,7 +23,8 @@ export * from './weather.schema'
 // A configure function that registers the service and its hooks via `app.configure`
 export const weather = (app: Application) => {
   // Register our service on the Feathers application
-  app.use(weatherPath, new WeatherService(getOptions(app)), {
+  const sequelizeClient = app.get('sequelizeClient' as any)
+  app.use(weatherPath, new WeatherService(app, sequelizeClient), {
     // A list of all methods this service exposes externally
     methods: weatherMethods,
     // You can add additional custom events to be sent to clients here

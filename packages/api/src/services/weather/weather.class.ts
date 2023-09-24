@@ -1,27 +1,45 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.class.html#database-services
-import type { Params } from '@feathersjs/feathers'
-import { KnexService } from '@feathersjs/knex'
-import type { KnexAdapterParams, KnexAdapterOptions } from '@feathersjs/knex'
-
+import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import type { Weather, WeatherData, WeatherPatch, WeatherQuery } from './weather.schema'
+import { Op } from 'sequelize'
 
-export type { Weather, WeatherData, WeatherPatch, WeatherQuery }
+interface QueryParams {
+  query: string
+}
 
-export interface WeatherParams extends KnexAdapterParams<WeatherQuery> {}
+export interface WeatherParams extends Params {
+  query?: QueryParams
+}
 
-// By default calls the standard Knex adapter service methods but can be customized with your own functionality.
-export class WeatherService<ServiceParams extends Params = WeatherParams> extends KnexService<
-  Weather,
-  WeatherData,
-  WeatherParams,
-  WeatherPatch
-> {}
+export class WeatherService implements ServiceMethods<any> {
+  app: Application
+  sequelize: any // You can also type it more specifically if needed.
 
-export const getOptions = (app: Application): KnexAdapterOptions => {
-  return {
-    paginate: app.get('paginate'),
-    Model: app.get('mysqlClient'),
-    name: 'weather'
+  constructor(app: Application, sequelizeClient: any) {
+    this.app = app
+    this.sequelize = sequelizeClient
+  }
+
+  async find(params: WeatherParams): Promise<any[] | Paginated<any>> {
+    throw new Error('Method not implemented.')
+  }
+
+  async get(id: Id, params?: WeatherParams): Promise<any> {
+    throw new Error('Method not implemented.')
+  }
+
+  async create(data: any, params?: WeatherParams): Promise<any> {
+    throw new Error('Method not implemented.')
+  }
+
+  async update(id: NullableId, data: any, params?: WeatherParams): Promise<any> {
+    throw new Error('Method not implemented.')
+  }
+
+  async patch(id: NullableId, data: any, params?: WeatherParams): Promise<any> {
+    throw new Error('Method not implemented.')
+  }
+
+  async remove(id: NullableId, params?: WeatherParams): Promise<any> {
+    throw new Error('Method not implemented.')
   }
 }
