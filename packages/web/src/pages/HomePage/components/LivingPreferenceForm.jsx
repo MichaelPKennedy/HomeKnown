@@ -1,13 +1,8 @@
 import React, { useState } from "react";
+import Autosuggest from "react-autosuggest";
 import styles from "./LivingPreferenceForm.module.css";
 import { useQuery } from "react-query";
 import client from "../../../feathersClient.js";
-
-const naicsMapping = [
-  { naics_code: "001", naics_title: "Technology", displayName: "Tech" },
-  { naics_code: "002", naics_title: "Healthcare", displayName: "Health" },
-  // ... add other naics codes as needed
-];
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -34,20 +29,9 @@ const LivingPreferenceForm = () => {
     futureAspiration: "",
     selectedJobs: [],
   });
-  const [selectedNaics, setSelectedNaics] = useState("");
 
-  // Fetching OCC codes based on the selected NAICS code
-  const { data: occCodes, isLoading } = useQuery(
-    ["fetchOccCodes", selectedNaics],
-    () => fetchOccCodes(selectedNaics),
-    {
-      enabled: !!selectedNaics, // Only run the query if there's a selected NAICS code
-    }
-  );
-
-  const handleNaicsChange = (e) => {
-    setSelectedNaics(e.target.value);
-  };
+  const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
   const fetchOccCodes = async (naicsCode) => {
     if (naicsCode === "001")
@@ -61,6 +45,20 @@ const LivingPreferenceForm = () => {
         { occ_code: "00-0004", occ_title: "Doctor" },
       ];
     return [];
+  };
+
+  const { data: allOccCodes } = useQuery("fetchAllOccCodes", fetchOccCodes);
+
+  const onSuggestionsFetchRequested = ({ value }) => {
+    // Filter the OCC codes for suggestions
+    const results = allOccCodes.filter((occ) =>
+      occ.occ_title.toLowerCase().includes(value.toLowerCase())
+    );
+    setSuggestions(results);
+  };
+
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]);
   };
 
   const handleSubmit = async (event) => {
@@ -125,35 +123,18 @@ const LivingPreferenceForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="container mt-5">
-      <div className="form-group">
-        <label>Industry:</label>
-        <select name="naics" onChange={handleNaicsChange}>
-          {naicsMapping.map(({ naics_code, displayName }) => (
-            <option value={naics_code} key={naics_code}>
-              {displayName}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      {isLoading ? (
-        <p>Loading OCC codes...</p>
-      ) : (
-        occCodes && (
-          <div className="form-group">
-            <label>Occupation:</label>
-            <select name="occ" onChange={handleInputChange}>
-              {occCodes.map(({ occCode, occTitle }) => (
-                <option value={occCode} key={occCode}>
-                  {occTitle}
-                </option>
-              ))}
-            </select>
-          </div>
-        )
-      )}
-
-      <button onClick={handleAddJob}>Add Job</button>
+      <Autosuggest
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+        onSuggestionsClearRequested={onSuggestionsClearRequested}
+        getSuggestionValue={(suggestion) => suggestion.occ_title}
+        renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
+        inputProps={{
+          placeholder: "Enter job title...",
+          value: searchTerm,
+          onChange: (_, { newValue }) => setSearchTerm(newValue),
+        }}
+      />
 
       {/* Job Profession Input */}
       <div className="form-group">

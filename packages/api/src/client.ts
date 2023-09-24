@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { occupationClient } from './services/occupation/occupation.shared'
+export type {
+  Occupation,
+  OccupationData,
+  OccupationQuery,
+  OccupationPatch
+} from './services/occupation/occupation.shared'
+
 import { weatherClient } from './services/weather/weather.shared'
 export type { Weather, WeatherData, WeatherQuery, WeatherPatch } from './services/weather/weather.shared'
 
@@ -51,5 +59,6 @@ export const createClient = <Configuration = any,>(
   client.configure(surveyClient)
   client.configure(industryClient)
   client.configure(weatherClient)
+  client.configure(occupationClient)
   return client
 }

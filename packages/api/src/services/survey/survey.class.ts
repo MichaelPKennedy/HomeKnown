@@ -58,7 +58,6 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseJobData(data: SurveyFormData): any {
-    // Extract and format data for the job API
     const {
       job,
       partnerJob,

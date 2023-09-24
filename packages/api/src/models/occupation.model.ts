@@ -1,9 +1,8 @@
-module.exports = function (app) {
-  const Sequelize = app.get('sequelize')
-  const { Model, DataTypes } = Sequelize
+import { DataTypes, Model, Sequelize } from 'sequelize'
 
-  class Occupation extends Model {}
+export class Occupation extends Model {}
 
+export const OccupationModel = (sequelize: Sequelize) => {
   Occupation.init(
     {
       occ_code: {
@@ -16,11 +15,9 @@ module.exports = function (app) {
       }
     },
     {
-      sequelize: app.get('sequelizeClient'),
+      sequelize,
       tableName: 'Occupation',
       timestamps: false
     }
   )
-
-  return Occupation
 }
