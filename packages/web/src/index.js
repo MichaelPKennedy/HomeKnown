@@ -1,13 +1,14 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import reportWebVitals from "./reportWebVitals";
 
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
+import ResultsPage from "./pages/ResultsPage";
 import NavBar from "./components/NavBar";
 
 // Create a client
@@ -42,15 +43,16 @@ const root = createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <NavBar/>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/search" element={<SearchPage />} />
-        </Routes>
-      </Router>
-    </QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/results" element={<ResultsPage />} />
+          </Routes>
+        </Router>
+      </QueryClientProvider>
     </ErrorBoundary>
   </React.StrictMode>
 );

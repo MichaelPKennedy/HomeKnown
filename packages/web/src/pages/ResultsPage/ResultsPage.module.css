@@ -1,0 +1,27 @@
+/* ResultsPage.module.css */
+
+/* Layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+/* Styling the chart and table containers */
+.chart,
+.table {
+  width: 90%;
+  margin-bottom: 30px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+/* Error styling */
+.errorMessage {
+  font-size: 1.2em;
+  color: red;
+  text-align: center;
+}

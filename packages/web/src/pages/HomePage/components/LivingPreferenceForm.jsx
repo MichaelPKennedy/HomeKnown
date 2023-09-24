@@ -3,6 +3,7 @@ import Autosuggest from "react-autosuggest";
 import styles from "./LivingPreferenceForm.module.css";
 import { useQuery } from "react-query";
 import client from "../../../feathersClient.js";
+import { useNavigate } from "react-router-dom";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -29,6 +30,8 @@ const LivingPreferenceForm = () => {
     futureAspiration: "",
     selectedJobs: [],
   });
+
+  const navigate = useNavigate();
 
   console.log("formData:", formData);
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,9 +61,17 @@ const LivingPreferenceForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await client.service("survey").create({
-      data: formData,
-    });
+    try {
+      const response = await client.service("survey").create({
+        data: formData,
+      });
+
+      if (response && response.jobResponse) {
+        navigate("/results", { state: { data: response.jobResponse } });
+      }
+    } catch (error) {
+      console.error("Failed to submit the survey:", error);
+    }
   };
 
   const handleInputChange = (e) => {
