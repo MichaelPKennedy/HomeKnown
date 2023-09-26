@@ -1,12 +1,28 @@
+/* General Styles */
+.container {
+  max-width: 650px; /* Widened the container a bit for better readability */
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
 /* Button styles */
 .btnDropdown {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+}
+
+.btnDropdown:hover {
+  background-color: #007acc;
+  color: white;
 }
 
 /* Dropdown menu styles */
 .dropdownMenu .formCheck {
   padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
 }
 
 .dropdownMenu .formCheck:hover {
@@ -18,27 +34,17 @@
   width: calc(100% - 2rem);
   border-radius: 5px;
   font-weight: bold;
+  transition: background-color 0.2s;
 }
 
-/* Range input styles */
-.formControlRange {
-  width: 75%;
+.dropdownMenu .btnPrimary:hover {
+  background-color: #007acc;
+  color: white;
 }
 
-/* Label and other text styles */
-.formCheckLabel,
-.formText,
-.saveButton {
-  margin-left: 5px;
-}
-
-/* Miscellaneous styles */
-.container {
-  max-width: 600px;
-}
-
-.mt-5 {
-  margin-top: 3rem;
+/* Form element styles */
+.form-group {
+  margin-bottom: 1.5rem;
 }
 
 .formCheckInput {
@@ -49,50 +55,102 @@
 .formCheck {
   margin-right: 10px;
 }
-/* Chrome */
+
+/* Slider styles */
+
+/* Range input common styles */
+.form-control-range {
+  width: 75%;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  height: 6px;
+  outline: none;
+  background: #e0e0e0 !important;
+}
+
+/* Handle (thumb) styles */
 .form-control-range::-webkit-slider-thumb {
-  background: red !important; /* Change this to your desired color */
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  border-radius: 50% !important;
+  height: 20px !important;
+  width: 20px !important;
+  background: #ffd700 !important;
+  cursor: pointer;
 }
 
-.form-control-range::-webkit-slider-runnable-track {
-  background: red !important; /* Change this to your desired color */
-}
-
-/* Firefox */
 .form-control-range::-moz-range-thumb {
-  background: red !important; /* Change this to your desired color */
+  border-radius: 50% !important;
+  height: 20px !important;
+  width: 20px !important;
+  background: #ffd700 !important;
+  cursor: pointer;
+}
+
+.form-control-range::-ms-thumb {
+  border-radius: 50% !important;
+  height: 20px !important;
+  width: 20px !important;
+  background: #ffd700 !important;
+  cursor: pointer;
+}
+
+/* Track styles */
+.form-control-range::-webkit-slider-runnable-track {
+  background: #ffea99 !important;
+  border-radius: 5px !important;
+  height: 6px !important;
 }
 
 .form-control-range::-moz-range-track {
-  background: #ffe0d3; /* Change this to your desired color */
+  background: #ffea99 !important;
+  border-radius: 5px !important;
 }
 
-/* IE */
-.form-control-range::-ms-thumb {
-  background: #ff5733; /* Change this to your desired color */
+.form-control-range::-ms-track {
+  background: #ffea99 !important;
+  border-radius: 5px !important;
 }
 
-/* Slider thumb (handle) default style for all browsers */
-.form-control-range {
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 5px; /* This makes the handle a bit rounder */
-  height: 6px; /* Adjust this to change the height of the slider track */
-  outline: none;
+/* For IE */
+.form-control-range::-ms-fill-lower,
+.form-control-range::-ms-fill-upper {
+  background: #ffea99 !important;
 }
 
-.form-control-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  border-radius: 50%;
-  height: 20px; /* Adjust this to change the size of the handle */
-  width: 20px; /* Adjust this to change the size of the handle */
+/* Label and other text styles */
+.formCheckLabel,
+.formText {
+  margin-left: 5px;
+}
+
+.addJobButton {
+  width: 93px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.formControlRange {
+  background: #47cc00;
+}
+
+.noUi-target {
+  background: #e0e0e0;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.noUi-handle {
+  background: #ffd700;
+  border: none;
   cursor: pointer;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  box-shadow: none;
+  top: -7px;
 }
 
-.form-control-range::-moz-range-thumb {
-  border-radius: 50%;
-  height: 20px; /* Adjust this to change the size of the handle */
-  width: 20px; /* Adjust this to change the size of the handle */
-  cursor: pointer;
+.noUi-connect {
+  background: #ffea99;
 }

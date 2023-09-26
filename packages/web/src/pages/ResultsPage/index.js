@@ -8,12 +8,14 @@ function ResultsPage() {
   const location = useLocation();
   const jobResponseData = location.state?.data;
 
+  const { jobs } = jobResponseData;
   if (!jobResponseData) {
     return <p className={styles.errorMessage}>Invalid data!</p>;
   }
 
   return (
     <div className={styles.container}>
+      <h4 className={` pb-4 ${styles.title}`}>{jobs}</h4>
       <div className={styles.chart}>
         <SalaryChart data={jobResponseData} />
       </div>

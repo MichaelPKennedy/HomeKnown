@@ -14,12 +14,8 @@ export interface SurveyParams extends Params {
 export interface SurveyFormData {
   data: {
     temperature: number
-    job?: string
-    partnerJob?: string
-    desiredSalary?: number
     minSalary?: number
-    jobLevel?: 'entry-level' | 'senior'
-    wagePriority?: number
+    jobLevel?: 'entry-level' | 'senior' | 'both'
     futureAspiration?: string
     selectedJobs?: { naics: string; occ: string }[]
     livingPreference?: 'city' | 'suburb' | 'rural'
@@ -34,7 +30,6 @@ export interface SurveyFormData {
     nightlifeImportance?: boolean
     landscapeFeatures?: string[]
     recreationalInterests?: string[]
-    industries?: string[]
   }
 }
 
@@ -62,13 +57,11 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseJobData(data: SurveyFormData): any {
-    const { desiredSalary, minSalary, jobLevel, wagePriority, selectedJobs } = data.data
+    const { minSalary, jobLevel, selectedJobs } = data.data
 
     return {
-      desiredSalary,
       minSalary,
       jobLevel,
-      wagePriority,
       selectedJobs
     }
   }

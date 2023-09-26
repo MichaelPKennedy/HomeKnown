@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 
 function SalaryTable({ data }) {
+  console.log(data);
   return (
     <TableContainer component={Paper}>
       <Table>
@@ -20,7 +21,7 @@ function SalaryTable({ data }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => (
+          {data.topStates.map((row) => (
             <TableRow key={row.state_code}>
               <TableCell>{row.State.state}</TableCell>
               <TableCell align="right">

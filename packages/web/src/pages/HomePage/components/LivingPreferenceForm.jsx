@@ -23,7 +23,6 @@ const LivingPreferenceForm = () => {
     landscapeFeatures: [],
     recreationalInterests: [],
     industries: [],
-    desiredSalary: null,
     minSalary: null,
     jobLevel: "",
     wagePriority: 5,
@@ -149,7 +148,7 @@ const LivingPreferenceForm = () => {
               setCurrentJob({});
             }
           }}
-          className="btn btn-primary ml-2"
+          className={`btn btn-info mt-4 ${styles.addJobButton}`}
         >
           Add
         </button>
@@ -175,22 +174,6 @@ const LivingPreferenceForm = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Desired Salary Input */}
-      <div className="form-group">
-        <label htmlFor="desiredSalary">
-          What's your desired average annual salary?
-        </label>
-        <input
-          type="number"
-          name="desiredSalary"
-          value={formData.desiredSalary || ""}
-          onChange={handleInputChange}
-          className="form-control"
-          id="desiredSalary"
-          placeholder="Enter desired annual salary"
-        />
       </div>
 
       {/* Minimum Salary Input */}
@@ -249,27 +232,6 @@ const LivingPreferenceForm = () => {
           />
           <label className="form-check-label">Both</label>
         </div>
-      </div>
-
-      {/* Job's average hourly wage priority */}
-      <div className="form-group">
-        <label htmlFor="wagePriority">
-          How important is it for you to live in a state where your job's
-          average hourly wage is above the national average?
-        </label>
-        <input
-          type="range"
-          name="wagePriority"
-          min="1"
-          max="10"
-          value={formData.wagePriority || 5}
-          onChange={handleInputChange}
-          className={`form-control-range ${styles.formControlRange}`}
-          id="wagePriority"
-        />
-        <small className="form-text text-muted">
-          Priority: {formData.wagePriority || 5} / 10
-        </small>
       </div>
 
       {/* <div className="form-group">

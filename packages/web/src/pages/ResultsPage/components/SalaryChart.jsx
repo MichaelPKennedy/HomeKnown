@@ -1,7 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import * as d3 from "d3";
+import styles from "../ResultsPage.module.css";
 
 function SalaryChart({ data }) {
+  const { topStates, nationalAverage } = data;
   const svgRef = useRef();
 
   const svgWidth = 1200;
@@ -13,13 +15,13 @@ function SalaryChart({ data }) {
     // Scales
     const xScale = d3
       .scaleBand()
-      .domain(data.map((row) => row.State.state))
-      .range([0, svgWidth - 100])
+      .domain(topStates.map((row) => row.State.state))
+      .range([0, svgWidth])
       .padding(0.5);
 
     const yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (row) => parseFloat(row.avg_salary))])
+      .domain([0, d3.max(topStates, (row) => parseFloat(row.avg_salary))])
       .range([svgHeight - 50, 30]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
@@ -27,7 +29,7 @@ function SalaryChart({ data }) {
     // Bars
     svg
       .selectAll(".bar")
-      .data(data)
+      .data(topStates)
       .join("rect")
       .attr("class", "bar")
       .style("transform", `scale(1, -1)`)
@@ -55,7 +57,7 @@ function SalaryChart({ data }) {
     // Data Labels
     svg
       .selectAll(".label")
-      .data(data)
+      .data(topStates)
       .join("text")
       .attr("class", "label")
       .text((row) => `$${parseFloat(row.avg_salary).toFixed(2)}`)
@@ -63,13 +65,45 @@ function SalaryChart({ data }) {
       .attr("y", (row) => yScale(parseFloat(row.avg_salary)) - 10)
       .attr("text-anchor", "middle")
       .attr("font-size", "12px");
-  }, [data]);
+
+    // National Average Salary Line
+    const avgSalaryYPosition = yScale(nationalAverage.salary); // get the y-coordinate for the average salary
+
+    svg
+      .selectAll(".average-line")
+      .data([nationalAverage.salary]) // bind the average salary data
+      .join("line")
+      .attr("class", "average-line")
+      .attr("x1", 0)
+      .attr("x2", svgWidth - 100)
+      .attr("y1", avgSalaryYPosition)
+      .attr("y2", avgSalaryYPosition)
+      .attr("stroke", "red")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "4 4"); // this makes the line dashed
+
+    // Label for the National Average Salary Line
+    svg
+      .selectAll(".average-label")
+      .data([nationalAverage.salary])
+      .join("text")
+      .attr("class", "average-label")
+      .attr("x", svgWidth - 55)
+      .attr("y", 10)
+      .attr("text-anchor", "end")
+      .attr("alignment-baseline", "middle")
+      .text(`National Avg: $${parseFloat(nationalAverage.salary).toFixed(2)}`)
+      .attr("font-size", "12px")
+      .attr("fill", "red");
+  }, [topStates, nationalAverage]);
 
   return (
-    <svg ref={svgRef} width={svgWidth} height={svgHeight}>
-      <g className="x-axis" />
-      <g className="y-axis" />
-    </svg>
+    <div className={styles.chartContainer}>
+      <svg ref={svgRef} width={svgWidth} height={svgHeight}>
+        <g className="x-axis" />
+        <g className="y-axis" />
+      </svg>
+    </div>
   );
 }
 
