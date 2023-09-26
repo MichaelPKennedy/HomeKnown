@@ -3,6 +3,7 @@ import type { Application } from '../../declarations'
 import type { Industry, IndustryData, IndustryPatch, IndustryQuery } from './industry.schema'
 import { Op } from 'sequelize'
 import { State } from '../../../models/state.model'
+import { Area } from '../../../models/area.model'
 
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 
@@ -89,10 +90,48 @@ export class IndustryService implements ServiceMethods<any> {
       limit: 10
     })
 
+    const topStateCodes = results.map((record: any) => record.getDataValue('state_code'))
+
+    //get top cities
+    const CityIndustrySalary = this.sequelize.models.CityIndustrySalary
+    const Area = this.sequelize.models.Area
+
+    const topCities = await CityIndustrySalary.findAll({
+      where: {
+        ...whereClause
+      },
+      attributes: [
+        'area_code',
+        [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_salary')), 'avg_salary'],
+        [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_hourly')), 'avg_hourly']
+      ],
+      include: [
+        {
+          model: Area,
+          attributes: ['area_title'],
+          where: {
+            state_code: {
+              [Op.in]: topStateCodes
+            }
+          },
+          include: [
+            {
+              model: State,
+              attributes: ['state']
+            }
+          ]
+        }
+      ],
+      group: ['area_code'],
+      order: [[this.sequelize.col('avg_salary'), 'DESC']],
+      limit: 10
+    })
+
     return {
       jobs: selectedJobs.map((job: any) => job.occ_title),
       nationalAverage,
-      topStates: results
+      topStates: results,
+      topCities: topCities
     } as any
   }
 

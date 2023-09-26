@@ -56,11 +56,14 @@
   margin-right: 10px;
 }
 
+.form-control {
+  width: 60%;
+}
 /* Slider styles */
 
 /* Range input common styles */
 .form-control-range {
-  width: 75%;
+  width: 60%;
   -webkit-appearance: none !important;
   appearance: none !important;
   height: 6px;
@@ -153,4 +156,28 @@
 
 .noUi-connect {
   background: #ffea99;
+}
+
+.job {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60%;
+}
+
+.centerContainer {
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.formContent {
+  width: 50%;
+  margin: 0 auto;
+}
+
+.formInput {
+  width: 600px;
+  margin-bottom: 1rem;
 }

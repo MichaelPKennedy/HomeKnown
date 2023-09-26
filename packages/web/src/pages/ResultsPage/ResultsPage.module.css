@@ -5,7 +5,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
 }
 
 /* Styling the chart and table containers */
@@ -31,4 +30,8 @@
   justify-content: center;
   align-items: center;
   height: 100%;
+}
+
+.title {
+  text-align: left;
 }

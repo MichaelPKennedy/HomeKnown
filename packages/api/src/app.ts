@@ -21,6 +21,8 @@ import { channels } from './channels'
 import { OccupationModel } from '../models/occupation.model'
 import { StateIndustrySalaryModel } from '../models/state-industry-salary.model'
 import { StateModel } from '../models/state.model'
+import { CityIndustrySalaryModel } from '../models/city-industry-salary.model'
+import { AreaModel } from '../models/area.model'
 
 const app: Application = express(feathers())
 
@@ -49,6 +51,8 @@ app.set('sequelizeClient' as any, sequelize)
 OccupationModel(sequelize)
 StateIndustrySalaryModel(sequelize)
 StateModel(sequelize)
+CityIndustrySalaryModel(sequelize)
+AreaModel(sequelize)
 
 // Configure services and real-time functionality
 app.configure(rest())

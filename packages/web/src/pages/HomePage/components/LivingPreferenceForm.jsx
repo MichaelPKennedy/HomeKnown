@@ -32,7 +32,6 @@ const LivingPreferenceForm = () => {
 
   const navigate = useNavigate();
 
-  console.log("formData:", formData);
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [currentJob, setCurrentJob] = useState({});
@@ -113,8 +112,12 @@ const LivingPreferenceForm = () => {
   // };
 
   return (
-    <form onSubmit={handleSubmit} className="container mt-5">
+    <form
+      onSubmit={handleSubmit}
+      className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
+    >
       <div className="form-group">
+        <h4 className="pb-2">Job Industry</h4>
         <label htmlFor="job">
           What's your current profession or job title?
         </label>
@@ -128,6 +131,7 @@ const LivingPreferenceForm = () => {
           getSuggestionValue={(suggestion) => suggestion.occ_title}
           renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
           inputProps={{
+            className: `form-control ${styles.formInput}`,
             id: "job",
             placeholder: "Enter job title...",
             value: searchTerm,
@@ -148,7 +152,7 @@ const LivingPreferenceForm = () => {
               setCurrentJob({});
             }
           }}
-          className={`btn btn-info mt-4 ${styles.addJobButton}`}
+          className={`btn btn-info ${styles.addJobButton}`}
         >
           Add
         </button>
@@ -187,7 +191,7 @@ const LivingPreferenceForm = () => {
           name="minSalary"
           value={formData.minSalary || ""}
           onChange={handleInputChange}
-          className="form-control"
+          className={`form-control ${styles.formInput}`}
           id="minSalary"
           placeholder="Enter minimum acceptable salary"
         />
@@ -332,21 +336,22 @@ const LivingPreferenceForm = () => {
           </div>
         </div>
       </div> */}
-      {/* <div className="form-group">
+      <div className="form-group">
+        <h4 className="pb-2 pt-2">Weather</h4>
         <label htmlFor="temperature">Preferred Weather (°F):</label>
         <input
           type="range"
           name="temperature"
           min="0"
           max="120"
-          step="5" // This makes the slider move in increments of 5
+          step="5"
           value={formData.temperature}
           onChange={handleInputChange}
-          className={`form-control-range ${styles.formControlRange}`}
+          className={`form-control-range ${styles.formInput}`}
           id="temperature"
         />
         <small className="form-text text-muted">{formData.temperature}°F</small>
-      </div> */}
+      </div>
 
       {/* <div className="form-group">
         <label>Living Preference:</label>
