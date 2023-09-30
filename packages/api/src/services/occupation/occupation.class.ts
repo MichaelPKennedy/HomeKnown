@@ -1,6 +1,9 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
+import type { Occupation, OccupationData, OccupationPatch, OccupationQuery } from './occupation.schema'
 import { Op } from 'sequelize'
+
+export type { Occupation, OccupationData, OccupationPatch, OccupationQuery }
 
 interface QueryParams {
   query: string

@@ -14,11 +14,11 @@ export const weatherSchema = Type.Object(
   },
   { $id: 'Weather', additionalProperties: false }
 )
-export type Weather = Static<typeof weatherSchema>
+export type WeatherSchema = Static<typeof weatherSchema>
 export const weatherValidator = getValidator(weatherSchema, dataValidator)
-export const weatherResolver = resolve<Weather, HookContext>({})
+export const weatherResolver = resolve<WeatherSchema, HookContext>({})
 
-export const weatherExternalResolver = resolve<Weather, HookContext>({})
+export const weatherExternalResolver = resolve<WeatherSchema, HookContext>({})
 
 // Schema for creating new entries
 export const weatherDataSchema = Type.Pick(weatherSchema, ['text'], {
@@ -26,7 +26,7 @@ export const weatherDataSchema = Type.Pick(weatherSchema, ['text'], {
 })
 export type WeatherData = Static<typeof weatherDataSchema>
 export const weatherDataValidator = getValidator(weatherDataSchema, dataValidator)
-export const weatherDataResolver = resolve<Weather, HookContext>({})
+export const weatherDataResolver = resolve<WeatherSchema, HookContext>({})
 
 // Schema for updating existing entries
 export const weatherPatchSchema = Type.Partial(weatherSchema, {
@@ -34,7 +34,7 @@ export const weatherPatchSchema = Type.Partial(weatherSchema, {
 })
 export type WeatherPatch = Static<typeof weatherPatchSchema>
 export const weatherPatchValidator = getValidator(weatherPatchSchema, dataValidator)
-export const weatherPatchResolver = resolve<Weather, HookContext>({})
+export const weatherPatchResolver = resolve<WeatherSchema, HookContext>({})
 
 // Schema for allowed query properties
 export const weatherQueryProperties = Type.Pick(weatherSchema, ['id', 'text'])

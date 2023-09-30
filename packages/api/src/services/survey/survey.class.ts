@@ -14,6 +14,24 @@ export interface SurveyParams extends Params {
 export interface SurveyFormData {
   data: {
     temperature: number
+    temperaturePreference?: 'mild' | 'distinct'
+    climatePreference?: 'warmer' | 'cooler'
+    snowPreference?: 'none' | 'light' | 'heavy'
+    rainPreference?: 'dry' | 'regular'
+    importantSeason?: 'winter' | 'summer' | 'spring' | 'fall'
+    seasonPreferenceDetail?:
+      | 'mildWinter'
+      | 'coldWinter'
+      | 'snowyWinter'
+      | 'mildSummer'
+      | 'hotSummer'
+      | 'drySummer'
+      | 'warmSpring'
+      | 'coolSpring'
+      | 'drySpring'
+      | 'warmFall'
+      | 'coolFall'
+      | 'dryFall'
     minSalary?: number
     jobLevel?: 'entry-level' | 'senior' | 'both'
     futureAspiration?: string
@@ -41,18 +59,37 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
-    // Parsing the form data
-    console.log('data', data)
     const jobData = this.parseJobData(data)
-    // const livingPreferenceData = this.parseWeatherData(data)
-
-    console.log('job data', jobData)
+    const weatherData = this.parseWeatherData(data)
 
     const jobResponse = await this.getIndustryResponse(jobData)
-    // const weatherResponse = await this.getWeatherResponse(livingPreferenceData)
+    const weatherResponse = await this.getWeatherResponse(weatherData)
+    console.log('weather response states:', weatherResponse.topStates)
+    // filter through jobResponse.topCities and weatherResponse.topCities to find matches
+
+    const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
+      return jobResponse.topCities.some((jobCity: any) => {
+        const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`)
+        console.log(jobCity.Area.area_title, weatherCity.city, regex.test(jobCity.Area.area_title))
+        return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title
+      })
+    })
+
+    console.log('Matched top cities:', topCitiesMatches)
+    console.log('weatherResponse.topCities', weatherResponse.topCities)
+    console.log('jobResponse.topCities', jobResponse.topCities)
+    let topCities
+    if (topCitiesMatches) {
+      topCities = topCitiesMatches
+    } else {
+      //take top 5 cities from weatherResponse.topCities and jobResponse.topCities
+      topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
+    }
 
     return {
-      jobResponse
+      jobResponse,
+      weatherResponse,
+      topCities
     }
   }
 
@@ -67,11 +104,24 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseWeatherData(data: SurveyFormData): any {
-    // Extract and format data for the living preference API
+    const {
+      temperature,
+      temperaturePreference,
+      climatePreference,
+      snowPreference,
+      rainPreference,
+      importantSeason,
+      seasonPreferenceDetail
+    } = data.data
+
     return {
-      livingPreference: data.data.livingPreference,
-      housingBudget: data.data.housingBudget
-      // ... other necessary data
+      temperature,
+      temperaturePreference,
+      climatePreference,
+      snowPreference,
+      rainPreference,
+      importantSeason,
+      seasonPreferenceDetail
     }
   }
 
@@ -88,7 +138,14 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async getWeatherResponse(data: any): Promise<any> {
-    // Use this.app or any other mechanism to send data to the living preference-related API
+    const weatherService = this.app.service('weather')
+    try {
+      const response = await weatherService.find(data)
+      return response
+    } catch (error) {
+      console.error('Error querying the industry service:', error)
+      throw new Error('Unable to fetch data from industry service.')
+    }
   }
 
   async find(params: SurveyParams): Promise<any[] | Paginated<any>> {

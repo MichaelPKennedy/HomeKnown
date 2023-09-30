@@ -3,7 +3,6 @@ import type { Application } from '../../declarations'
 import type { Industry, IndustryData, IndustryPatch, IndustryQuery } from './industry.schema'
 import { Op } from 'sequelize'
 import { State } from '../../../models/state.model'
-import { Area } from '../../../models/area.model'
 
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 

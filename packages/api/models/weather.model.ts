@@ -1,9 +1,9 @@
-module.exports = function (app) {
-  const Sequelize = app.get('sequelize')
-  const { Model, DataTypes } = Sequelize
+import { DataTypes, Model, Sequelize } from 'sequelize'
+import { State } from './state.model'
 
-  class Weather extends Model {}
+export class Weather extends Model {}
 
+export const WeatherModel = (sequelize: Sequelize) => {
   Weather.init(
     {
       id: {
@@ -32,11 +32,11 @@ module.exports = function (app) {
       }
     },
     {
-      sequelize: app.get('sequelizeClient'),
+      sequelize,
       tableName: 'Weather',
       timestamps: false
     }
   )
-
-  return Weather
+  Weather.belongsTo(State, { foreignKey: 'state_code' })
+  State.hasMany(Weather, { foreignKey: 'state_code' })
 }

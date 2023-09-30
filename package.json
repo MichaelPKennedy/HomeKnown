@@ -13,6 +13,8 @@
     "lerna": "^7.1.4"
   },
   "scripts": {
-    "dev": "lerna run dev --stream"
+    "dev": "lerna run dev --stream",
+    "dev-api": "lerna run dev --scope api --stream",
+    "dev-web": "lerna run dev --scope web --stream"
   }
 }

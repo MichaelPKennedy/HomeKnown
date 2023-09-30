@@ -4,6 +4,7 @@ import styles from "../ResultsPage.module.css";
 
 function SalaryChart({ data }) {
   const { topStates, nationalAverage } = data;
+  console.log("All data", data);
   const svgRef = useRef();
 
   const svgWidth = 1200;

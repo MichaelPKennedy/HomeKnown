@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { StateIndustrySalary } from './state-industry-salary.model'
-
+import { Weather } from './weather.model'
 export class State extends Model {}
 
 export const StateModel = (sequelize: Sequelize) => {
@@ -14,7 +14,7 @@ export const StateModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING(25),
         allowNull: false
       },
-      state_abbr: {
+      state_abbrev: {
         type: DataTypes.CHAR(2)
       }
     },

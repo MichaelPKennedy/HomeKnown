@@ -1,7 +1,13 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.shared.html
 import type { Params } from '@feathersjs/feathers'
 import type { ClientApplication } from '../../client'
-import type { OccupationService } from './occupation.class'
+import type {
+  OccupationService,
+  Occupation,
+  OccupationData,
+  OccupationPatch,
+  OccupationQuery
+} from './occupation.class'
 
 export type OccupationClientService = Pick<OccupationService, (typeof occupationMethods)[number]>
 

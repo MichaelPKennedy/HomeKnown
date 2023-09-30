@@ -8,6 +8,11 @@ import { useNavigate } from "react-router-dom";
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
     temperature: 70,
+    temperaturePreference: "mild",
+    climatePreference: "warmer",
+    snowPreference: "none",
+    rainPreference: "regular",
+    importantSeason: "winter",
     job: "",
     partnerJob: "",
     livingPreference: "city",
@@ -63,9 +68,13 @@ const LivingPreferenceForm = () => {
       const response = await client.service("survey").create({
         data: formData,
       });
+      console.log("Survey submitted:", response);
 
       if (response && response.jobResponse) {
-        navigate("/results", { state: { data: response.jobResponse } });
+        navigate("/results", {
+          state: { data: response.jobResponse },
+          fullResponse: response,
+        });
       }
     } catch (error) {
       console.error("Failed to submit the survey:", error);
@@ -338,7 +347,7 @@ const LivingPreferenceForm = () => {
       </div> */}
       <div className="form-group">
         <h4 className="pb-2 pt-2">Weather</h4>
-        <label htmlFor="temperature">Preferred Weather (°F):</label>
+        <label htmlFor="temperature">Ideal average temperature (°F):</label>
         <input
           type="range"
           name="temperature"
@@ -351,6 +360,199 @@ const LivingPreferenceForm = () => {
           id="temperature"
         />
         <small className="form-text text-muted">{formData.temperature}°F</small>
+      </div>
+
+      {/* Weather Preference: Temperature */}
+      <div className="form-group">
+        <label>
+          Do you prefer cities with mild temperatures throughout the year or
+          those that experience distinct seasons?
+        </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="temperaturePreference"
+            value="mild"
+            onChange={handleInputChange}
+            checked={formData.temperaturePreference === "mild"}
+          />
+          <label className="form-check-label">
+            Mild temperatures throughout the year
+          </label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="temperaturePreference"
+            value="distinct"
+            onChange={handleInputChange}
+            checked={formData.temperaturePreference === "distinct"}
+          />
+          <label className="form-check-label">Distinct seasons</label>
+        </div>
+      </div>
+
+      {/* Weather Preference: Climate */}
+      <div className="form-group">
+        <label>
+          Are you more comfortable with warmer climates or cooler climates?
+        </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="climatePreference"
+            value="warmer"
+            onChange={handleInputChange}
+            checked={formData.climatePreference === "warmer"}
+          />
+          <label className="form-check-label">Warmer climates</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="climatePreference"
+            value="cooler"
+            onChange={handleInputChange}
+            checked={formData.climatePreference === "cooler"}
+          />
+          <label className="form-check-label">Cooler climates</label>
+        </div>
+      </div>
+
+      {/* Snow Preference */}
+      <div className="form-group">
+        <label>
+          Would you be okay living in an area that receives snow? If so, would
+          you be okay with heavy snowfall or just light, occasional snow?
+        </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="snowPreference"
+            value="none"
+            onChange={handleInputChange}
+            checked={formData.snowPreference === "none"}
+          />
+          <label className="form-check-label">No snow</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="snowPreference"
+            value="light"
+            onChange={handleInputChange}
+            checked={formData.snowPreference === "light"}
+          />
+          <label className="form-check-label">Light, occasional snow</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="snowPreference"
+            value="heavy"
+            onChange={handleInputChange}
+            checked={formData.snowPreference === "heavy"}
+          />
+          <label className="form-check-label">Heavy snowfall</label>
+        </div>
+      </div>
+
+      {/* Rain Preference */}
+      <div className="form-group">
+        <label>
+          Would you like to live in a city that tends to be dryer throughout the
+          year, or are you comfortable with regular rainfall?
+        </label>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="rainPreference"
+            value="dry"
+            onChange={handleInputChange}
+            checked={formData.rainPreference === "dry"}
+          />
+          <label className="form-check-label">Generally dry</label>
+        </div>
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="radio"
+            name="rainPreference"
+            value="regular"
+            onChange={handleInputChange}
+            checked={formData.rainPreference === "regular"}
+          />
+          <label className="form-check-label">
+            Comfortable with regular rainfall
+          </label>
+        </div>
+      </div>
+
+      {/* Most Important Season Preference */}
+      <div className="form-group">
+        <label>
+          Which season's weather is most important to you when considering a
+          move?
+        </label>
+        <select
+          name="importantSeason"
+          value={formData.importantSeason || ""}
+          onChange={handleInputChange}
+          className={`form-control ${styles.formInput}`}
+        >
+          <option value="winter">Winter</option>
+          <option value="summer">Summer</option>
+          <option value="spring">Spring</option>
+          <option value="fall">Fall</option>
+        </select>
+      </div>
+
+      {/* Preference for the Important Season */}
+      <div className="form-group">
+        <label>What's your preference for the chosen season?</label>
+        <select
+          name="seasonPreferenceDetail"
+          value={formData.seasonPreferenceDetail || ""}
+          onChange={handleInputChange}
+          className={`form-control ${styles.formInput}`}
+        >
+          {formData.importantSeason === "winter" && (
+            <>
+              <option value="mildWinter">Mild</option>
+              <option value="coldWinter">Cold</option>
+              <option value="snowyWinter">Snowy</option>
+            </>
+          )}
+          {formData.importantSeason === "summer" && (
+            <>
+              <option value="mildSummer">Mild</option>
+              <option value="hotSummer">Hot</option>
+              <option value="drySummer">Dry</option>
+            </>
+          )}
+          {formData.importantSeason === "spring" && (
+            <>
+              <option value="warmSpring">Warm</option>
+              <option value="coolSpring">Cool</option>
+              <option value="drySpring">Dry</option>
+            </>
+          )}
+          {formData.importantSeason === "fall" && (
+            <>
+              <option value="warmFall">Warm</option>
+              <option value="coolFall">Cool</option>
+              <option value="dryFall">Dry</option>
+            </>
+          )}
+        </select>
       </div>
 
       {/* <div className="form-group">
