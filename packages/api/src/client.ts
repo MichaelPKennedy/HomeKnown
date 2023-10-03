@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { recreationClient } from './services/recreation/recreation.shared'
+export type {
+  Recreation,
+  RecreationData,
+  RecreationQuery,
+  RecreationPatch
+} from './services/recreation/recreation.shared'
+
 import { occupationClient } from './services/occupation/occupation.shared'
 export type {
   Occupation,
@@ -60,5 +68,6 @@ export const createClient = <Configuration = any,>(
   client.configure(industryClient)
   client.configure(weatherClient)
   client.configure(occupationClient)
+  client.configure(recreationClient)
   return client
 }

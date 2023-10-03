@@ -1,3 +1,4 @@
+import { recreation } from './recreation/recreation'
 import { occupation } from './occupation/occupation'
 import { weather } from './weather/weather'
 import { industry } from './industry/industry'
@@ -7,6 +8,7 @@ import { places } from './places/places'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(recreation)
   app.configure(occupation)
   app.configure(weather)
   app.configure(industry)

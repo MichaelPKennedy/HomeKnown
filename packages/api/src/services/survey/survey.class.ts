@@ -61,11 +61,12 @@ export class SurveyService implements ServiceMethods<any> {
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
+    const recreationData = data.data.recreationalInterests
 
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
+    // const recreationResponse = await this.getRecreationResponse(recreationData)
     console.log('weather response states:', weatherResponse.topStates)
-    // filter through jobResponse.topCities and weatherResponse.topCities to find matches
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
       return jobResponse.topCities.some((jobCity: any) => {
@@ -82,9 +83,10 @@ export class SurveyService implements ServiceMethods<any> {
     if (topCitiesMatches) {
       topCities = topCitiesMatches
     } else {
-      //take top 5 cities from weatherResponse.topCities and jobResponse.topCities
       topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
     }
+
+    //make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
 
     return {
       jobResponse,
@@ -141,6 +143,18 @@ export class SurveyService implements ServiceMethods<any> {
     const weatherService = this.app.service('weather')
     try {
       const response = await weatherService.find(data)
+      return response
+    } catch (error) {
+      console.error('Error querying the industry service:', error)
+      throw new Error('Unable to fetch data from industry service.')
+    }
+  }
+
+  async getRecreationResponse(data: any): Promise<any> {
+    console.log('recreation data', data)
+    const recreationService = this.app.service('recreation')
+    try {
+      const response = await recreationService.find(data)
       return response
     } catch (error) {
       console.error('Error querying the industry service:', error)
