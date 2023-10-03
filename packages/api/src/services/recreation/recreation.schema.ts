@@ -1,10 +1,8 @@
-// // For more information about this file see https://dove.feathersjs.com/guides/cli/service.schemas.html
-import { resolve } from '@feathersjs/schema'
 import { Type, getValidator, querySyntax } from '@feathersjs/typebox'
 import type { Static } from '@feathersjs/typebox'
-
 import type { HookContext } from '../../declarations'
 import { dataValidator, queryValidator } from '../../validators'
+import { resolve } from '@feathersjs/schema'
 
 // Main data model schema
 export const recreationSchema = Type.Object(
@@ -12,7 +10,7 @@ export const recreationSchema = Type.Object(
     id: Type.Number(),
     text: Type.String()
   },
-  { $id: 'Recreation', additionalProperties: false }
+  { $id: 'Recreation', additionalProperties: true }
 )
 export type Recreation = Static<typeof recreationSchema>
 export const recreationValidator = getValidator(recreationSchema, dataValidator)
@@ -36,15 +34,40 @@ export type RecreationPatch = Static<typeof recreationPatchSchema>
 export const recreationPatchValidator = getValidator(recreationPatchSchema, dataValidator)
 export const recreationPatchResolver = resolve<Recreation, HookContext>({})
 
+// Define RecreationalInterestKey in schema
+export type RecreationalInterestKey =
+  | 'mountains'
+  | 'nationalParks'
+  | 'forests'
+  | 'waterfrontViews'
+  | 'scenicDrives'
+  | 'historicSites'
+  | 'monuments'
+  | 'museums'
+  | 'naturalWonders'
+  | 'rockClimbing'
+  | 'waterSports'
+  | 'beach'
+  | 'diverseFloraFauna'
+  | 'birdWatching'
+  | 'zoos'
+  | 'winterSports'
+  | 'stargazing'
+  | 'amusementParks'
+
 // Schema for allowed query properties
 export const recreationQueryProperties = Type.Pick(recreationSchema, ['id', 'text'])
 export const recreationQuerySchema = Type.Intersect(
   [
     querySyntax(recreationQueryProperties),
-    // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object(
+      {
+        recreationalInterests: Type.Optional(Type.Array(Type.String()))
+      },
+      { additionalProperties: true }
+    )
   ],
-  { additionalProperties: false }
+  { additionalProperties: true }
 )
 export type RecreationQuery = Static<typeof recreationQuerySchema>
 export const recreationQueryValidator = getValidator(recreationQuerySchema, queryValidator)

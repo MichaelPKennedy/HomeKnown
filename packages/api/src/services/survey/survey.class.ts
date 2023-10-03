@@ -66,7 +66,7 @@ export class SurveyService implements ServiceMethods<any> {
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
     const recreationResponse = await this.getRecreationResponse(recreationData)
-    console.log('recreationResponse', recreationResponse)
+    // console.log('recreationResponse', recreationResponse)
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
       return jobResponse.topCities.some((jobCity: any) => {
@@ -128,7 +128,11 @@ export class SurveyService implements ServiceMethods<any> {
     const industryService = this.app.service('industry')
 
     try {
-      const response = await industryService.find(data)
+      const response = await industryService.find({
+        query: {
+          ...data
+        }
+      })
       return response
     } catch (error) {
       console.error('Error querying the industry service:', error)
@@ -139,7 +143,11 @@ export class SurveyService implements ServiceMethods<any> {
   async getWeatherResponse(data: any): Promise<any> {
     const weatherService = this.app.service('weather')
     try {
-      const response = await weatherService.find(data)
+      const response = await weatherService.find({
+        query: {
+          ...data
+        }
+      })
       return response
     } catch (error) {
       console.error('Error querying the industry service:', error)
@@ -151,7 +159,9 @@ export class SurveyService implements ServiceMethods<any> {
     const recreationService = this.app.service('recreation')
     try {
       const response = await recreationService.find({
-        recreationalInterests: data
+        query: {
+          recreationalInterests: data
+        }
       })
       return response
     } catch (error) {

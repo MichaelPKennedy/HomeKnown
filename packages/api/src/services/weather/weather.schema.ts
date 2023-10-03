@@ -41,11 +41,46 @@ export const weatherQueryProperties = Type.Pick(weatherSchema, ['id', 'text'])
 export const weatherQuerySchema = Type.Intersect(
   [
     querySyntax(weatherQueryProperties),
-    // Add additional query properties here
-    Type.Object({}, { additionalProperties: false })
+    Type.Object(
+      {
+        temperature: Type.Optional(Type.Number()),
+        temperaturePreference: Type.Optional(Type.Union([Type.Literal('mild'), Type.Literal('distinct')])),
+        climatePreference: Type.Optional(Type.Union([Type.Literal('warmer'), Type.Literal('cooler')])),
+        snowPreference: Type.Optional(
+          Type.Union([Type.Literal('none'), Type.Literal('light'), Type.Literal('heavy')])
+        ),
+        rainPreference: Type.Optional(Type.Union([Type.Literal('dry'), Type.Literal('regular')])),
+        importantSeason: Type.Optional(
+          Type.Union([
+            Type.Literal('winter'),
+            Type.Literal('summer'),
+            Type.Literal('spring'),
+            Type.Literal('fall')
+          ])
+        ),
+        seasonPreferenceDetail: Type.Optional(
+          Type.Union([
+            Type.Literal('mildWinter'),
+            Type.Literal('coldWinter'),
+            Type.Literal('snowyWinter'),
+            Type.Literal('mildSummer'),
+            Type.Literal('hotSummer'),
+            Type.Literal('drySummer'),
+            Type.Literal('warmSpring'),
+            Type.Literal('coolSpring'),
+            Type.Literal('drySpring'),
+            Type.Literal('warmFall'),
+            Type.Literal('coolFall'),
+            Type.Literal('dryFall')
+          ])
+        )
+      },
+      { additionalProperties: false }
+    )
   ],
   { additionalProperties: false }
 )
+
 export type WeatherQuery = Static<typeof weatherQuerySchema>
 export const weatherQueryValidator = getValidator(weatherQuerySchema, queryValidator)
 export const weatherQueryResolver = resolve<WeatherQuery, HookContext>({})

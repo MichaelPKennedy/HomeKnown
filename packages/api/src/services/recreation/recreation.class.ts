@@ -1,10 +1,10 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import type { Recreation, RecreationData, RecreationPatch } from './recreation.schema'
+import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
 import { point, distance } from '@turf/turf'
 import { LandMark } from '../../../models/landmarks.model'
 
-export type { Recreation, RecreationData, RecreationPatch }
+export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
 
 type RecreationalInterestKey =
   | 'mountains'
@@ -115,7 +115,7 @@ const RecreationalInterestMappings = {
 }
 
 export interface RecreationParams extends Params {
-  recreationalInterests: RecreationalInterestKey[]
+  query: RecreationQuery
 }
 
 export class RecreationService implements ServiceMethods<any> {
@@ -128,9 +128,11 @@ export class RecreationService implements ServiceMethods<any> {
   }
 
   async find(params: RecreationParams): Promise<any[] | Paginated<any>> {
-    const { recreationalInterests } = params
+    const { recreationalInterests } = params.query
+    console.log('recreationalInterests params', recreationalInterests)
+    console.log('params', params)
 
-    const landmarkTypes = recreationalInterests.flatMap(
+    const landmarkTypes = recreationalInterests?.flatMap(
       (interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey]
     )
 

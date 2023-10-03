@@ -7,9 +7,11 @@ import { State } from '../../../models/state.model'
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 
 export interface IndustryParams extends Params {
-  selectedJobs: { occ_title: string; occ_code: string }[]
-  minSalary: number
-  jobLevel: 'entry-level' | 'senior' | 'both'
+  query?: {
+    selectedJobs: { occ_title: string; occ_code: string }[]
+    minSalary: number
+    jobLevel: 'entry-level' | 'senior' | 'both'
+  }
 }
 
 export class IndustryService implements ServiceMethods<any> {
@@ -43,7 +45,13 @@ export class IndustryService implements ServiceMethods<any> {
   }
 
   async find(params: IndustryParams): Promise<any[] | Paginated<any>> {
-    const { selectedJobs, minSalary, jobLevel } = params
+    const queryData = params.query
+
+    if (!queryData) {
+      throw new Error('No query data provided.')
+    }
+    console.log('queryData', queryData)
+    const { selectedJobs, minSalary, jobLevel } = queryData
 
     if (!selectedJobs || selectedJobs.length === 0) {
       throw new Error('No selected jobs provided.')

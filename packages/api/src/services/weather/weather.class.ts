@@ -13,29 +13,27 @@ interface QueryParams {
 }
 
 export interface WeatherParams extends Params {
-  temperature: number
-  temperaturePreference?: 'mild' | 'distinct'
-  climatePreference?: 'warmer' | 'cooler'
-  snowPreference?: 'none' | 'light' | 'heavy'
-  rainPreference?: 'dry' | 'regular'
-  importantSeason?: 'winter' | 'summer' | 'spring' | 'fall'
-  seasonPreferenceDetail?:
-    | 'mildWinter'
-    | 'coldWinter'
-    | 'snowyWinter'
-    | 'mildSummer'
-    | 'hotSummer'
-    | 'drySummer'
-    | 'warmSpring'
-    | 'coolSpring'
-    | 'drySpring'
-    | 'warmFall'
-    | 'coolFall'
-    | 'dryFall'
-}
-
-export interface WeatherParams extends Params {
-  query?: QueryParams
+  query?: {
+    temperature?: number
+    temperaturePreference?: 'mild' | 'distinct'
+    climatePreference?: 'warmer' | 'cooler'
+    snowPreference?: 'none' | 'light' | 'heavy'
+    rainPreference?: 'dry' | 'regular'
+    importantSeason?: 'winter' | 'summer' | 'spring' | 'fall'
+    seasonPreferenceDetail?:
+      | 'mildWinter'
+      | 'coldWinter'
+      | 'snowyWinter'
+      | 'mildSummer'
+      | 'hotSummer'
+      | 'drySummer'
+      | 'warmSpring'
+      | 'coolSpring'
+      | 'drySpring'
+      | 'warmFall'
+      | 'coolFall'
+      | 'dryFall'
+  }
 }
 
 export class WeatherService implements ServiceMethods<any> {
@@ -64,6 +62,14 @@ export class WeatherService implements ServiceMethods<any> {
   }
 
   async find(params: WeatherParams): Promise<any[] | Paginated<any>> {
+    console.log('weather params', params)
+    const queryData = params.query
+
+    if (!queryData) {
+      throw new Error('No query data provided.')
+    }
+    console.log('queryData', queryData)
+
     const {
       temperature,
       temperaturePreference,
@@ -72,7 +78,11 @@ export class WeatherService implements ServiceMethods<any> {
       rainPreference,
       importantSeason,
       seasonPreferenceDetail
-    } = params
+    } = queryData
+
+    if (typeof temperature === 'undefined') {
+      throw new Error('Temperature must be provided.')
+    }
 
     type WhereCondition = {
       [key: string]: any
