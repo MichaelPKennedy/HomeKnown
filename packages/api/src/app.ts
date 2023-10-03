@@ -25,6 +25,8 @@ import { CityIndustrySalaryModel } from '../models/city-industry-salary.model'
 import { AreaModel } from '../models/area.model'
 import { WeatherModel } from '../models/weather.model'
 import { CityWeatherModel } from '../models/city-weather.model'
+import { LandMarkModel } from '../models/landmarks.model'
+import { CityModel } from '../models/city.model'
 
 const app: Application = express(feathers())
 
@@ -57,6 +59,8 @@ CityIndustrySalaryModel(sequelize)
 AreaModel(sequelize)
 WeatherModel(sequelize)
 CityWeatherModel(sequelize)
+LandMarkModel(sequelize)
+CityModel(sequelize)
 
 // Configure services and real-time functionality
 app.configure(rest())

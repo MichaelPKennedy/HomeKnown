@@ -1,10 +1,36 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
+import type { Recreation, RecreationData, RecreationPatch } from './recreation.schema'
+import { point, distance } from '@turf/turf'
+import { LandMark } from '../../../models/landmarks.model'
 
-export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
+export type { Recreation, RecreationData, RecreationPatch }
 
-const recreationalInterestMappings = {
+type RecreationalInterestKey =
+  | 'mountains'
+  | 'nationalParks'
+  | 'forests'
+  | 'waterfrontViews'
+  | 'scenicDrives'
+  | 'historicSites'
+  | 'monuments'
+  | 'museums'
+  | 'naturalWonders'
+  | 'rockClimbing'
+  | 'waterSports'
+  | 'beach'
+  | 'diverseFloraFauna'
+  | 'birdWatching'
+  | 'zoos'
+  | 'winterSports'
+  | 'stargazing'
+  | 'amusementParks'
+
+type RecreationalInterestMappings = {
+  [key in RecreationalInterestKey]: string[]
+}
+
+const RecreationalInterestMappings = {
   mountains: ['Mountain Peak', 'Mountain', 'Hiking Trail', 'Hiking Spot'],
   nationalParks: [
     'National Park',
@@ -89,7 +115,7 @@ const recreationalInterestMappings = {
 }
 
 export interface RecreationParams extends Params {
-  // You can define additional parameters specific to the Recreation service here, if necessary.
+  recreationalInterests: RecreationalInterestKey[]
 }
 
 export class RecreationService implements ServiceMethods<any> {
@@ -101,9 +127,58 @@ export class RecreationService implements ServiceMethods<any> {
     this.sequelize = sequelizeClient
   }
 
-  async find(params?: RecreationParams): Promise<any[] | Paginated<any>> {
-    // Implement your method logic here.
-    throw new Error('Method not implemented.')
+  async find(params: RecreationParams): Promise<any[] | Paginated<any>> {
+    const { recreationalInterests } = params
+
+    const landmarkTypes = recreationalInterests.flatMap(
+      (interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey]
+    )
+
+    const landmarks = await this.sequelize.models.LandMark.findAll({
+      where: { Type: landmarkTypes }
+    })
+
+    const cities = await this.sequelize.models.City.findAll()
+
+    const cityRankings: {
+      city: any
+      closestDistance: number
+      landmarkCount: number
+      nearbyLandmarks: any[]
+    }[] = []
+
+    cities.forEach((city: any) => {
+      let closestDistance = Infinity
+      let landmarkCount = 0
+      const nearbyLandmarks: any[] = []
+
+      landmarks.forEach((landmark: any) => {
+        const from = point([city.Latitude, city.Longitude])
+        const to = point([landmark.Latitude, landmark.Longitude])
+        const currentDistance = distance(from, to, { units: 'miles' })
+
+        if (currentDistance < closestDistance) {
+          closestDistance = currentDistance
+        }
+
+        if (currentDistance <= 50) {
+          landmarkCount++
+          nearbyLandmarks.push(landmark)
+        }
+      })
+
+      if (landmarkCount > 0) {
+        cityRankings.push({ city, closestDistance, landmarkCount, nearbyLandmarks })
+      }
+    })
+
+    // Sort cities by number of landmarks and then by proximity, and limit to top 10
+    const topCities = cityRankings
+      .sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
+      .slice(0, 10)
+      .map((entry) => ({ city: entry.city, nearbyLandmarks: entry.nearbyLandmarks }))
+
+    return topCities
   }
 
   async get(id: Id, params?: RecreationParams): Promise<any> {

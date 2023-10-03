@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 
 function SalaryTable({ data }) {
-  console.log(data);
   return (
     <TableContainer component={Paper}>
       <Table>

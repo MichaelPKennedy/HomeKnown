@@ -58,6 +58,7 @@
     "@feathersjs/socketio": "^5.0.8",
     "@feathersjs/transport-commons": "^5.0.8",
     "@feathersjs/typebox": "^5.0.8",
+    "@turf/turf": "^6.5.0",
     "@types/sequelize": "^4.28.15",
     "compression": "^1.7.4",
     "feathers-hooks-common": "^8.1.1",

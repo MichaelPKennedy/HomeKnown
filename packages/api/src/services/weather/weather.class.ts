@@ -104,7 +104,7 @@ export class WeatherService implements ServiceMethods<any> {
       group: ['Weather.state_code', 'State.state_code', 'State.state'],
       limit: 10
     })
-    console.log('topStates', topStates)
+
     const topStateAbbreviations = topStates.map((record: any) => record.State.getDataValue('state_abbrev'))
 
     // Step 2: Fetch the top 20 cities based on user's specific preferences from those states

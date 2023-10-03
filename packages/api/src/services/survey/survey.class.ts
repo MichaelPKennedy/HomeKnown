@@ -65,20 +65,17 @@ export class SurveyService implements ServiceMethods<any> {
 
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
-    // const recreationResponse = await this.getRecreationResponse(recreationData)
-    console.log('weather response states:', weatherResponse.topStates)
+    const recreationResponse = await this.getRecreationResponse(recreationData)
+    console.log('recreationResponse', recreationResponse)
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
       return jobResponse.topCities.some((jobCity: any) => {
         const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`)
-        console.log(jobCity.Area.area_title, weatherCity.city, regex.test(jobCity.Area.area_title))
+
         return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title
       })
     })
 
-    console.log('Matched top cities:', topCitiesMatches)
-    console.log('weatherResponse.topCities', weatherResponse.topCities)
-    console.log('jobResponse.topCities', jobResponse.topCities)
     let topCities
     if (topCitiesMatches) {
       topCities = topCitiesMatches
@@ -151,14 +148,15 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async getRecreationResponse(data: any): Promise<any> {
-    console.log('recreation data', data)
     const recreationService = this.app.service('recreation')
     try {
-      const response = await recreationService.find(data)
+      const response = await recreationService.find({
+        recreationalInterests: data
+      })
       return response
     } catch (error) {
-      console.error('Error querying the industry service:', error)
-      throw new Error('Unable to fetch data from industry service.')
+      console.error('Error querying the recreation service:', error)
+      throw new Error('Unable to fetch data from recreation service.')
     }
   }
 

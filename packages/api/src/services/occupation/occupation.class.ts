@@ -38,7 +38,7 @@ export class OccupationService implements ServiceMethods<any> {
       },
       limit: 10
     })
-    console.log('matchingOccupations', matchingOccupations)
+
     return matchingOccupations
   }
 

@@ -68,7 +68,6 @@ const LivingPreferenceForm = () => {
       const response = await client.service("survey").create({
         data: formData,
       });
-      console.log("Survey submitted:", response);
 
       if (response && response.jobResponse) {
         navigate("/results", {
@@ -101,7 +100,6 @@ const LivingPreferenceForm = () => {
           [name]: prevState[name].filter((item) => item !== value),
         }));
       }
-      console.log("recreationalInterests:", formData.recreationalInterests);
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: checked }));
     }

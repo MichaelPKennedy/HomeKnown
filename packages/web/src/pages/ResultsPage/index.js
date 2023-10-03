@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 function ResultsPage() {
   const location = useLocation();
   const jobResponseData = location.state?.data;
-  console.log("jobResponseData", jobResponseData);
+
   const { jobs } = jobResponseData;
   if (!jobResponseData) {
     return <p className={styles.errorMessage}>Invalid data!</p>;
