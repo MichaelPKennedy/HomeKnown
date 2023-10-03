@@ -114,6 +114,21 @@ const RecreationalInterestMappings = {
   amusementParks: ['Amusement Park']
 }
 
+function haversineDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
+  const R = 6371 // Radius of the Earth in kilometers
+  const dLat = (lat2 - lat1) * (Math.PI / 180)
+  const dLon = (lon2 - lon1) * (Math.PI / 180)
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * (Math.PI / 180)) *
+      Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2)
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+  const d = R * c // Distance in kilometers
+  return d * 0.621371 // Convert to miles
+}
+
 export interface RecreationParams extends Params {
   query: RecreationQuery
 }
@@ -157,7 +172,12 @@ export class RecreationService implements ServiceMethods<any> {
       landmarks.forEach((landmark: any) => {
         const from = point([city.Latitude, city.Longitude])
         const to = point([landmark.Latitude, landmark.Longitude])
-        const currentDistance = distance(from, to, { units: 'miles' })
+        const currentDistance = haversineDistance(
+          city.Latitude,
+          city.Longitude,
+          landmark.Latitude,
+          landmark.Longitude
+        )
 
         if (currentDistance < closestDistance) {
           closestDistance = currentDistance
@@ -165,6 +185,7 @@ export class RecreationService implements ServiceMethods<any> {
 
         if (currentDistance <= 50) {
           landmarkCount++
+          console.log('distance', currentDistance)
           nearbyLandmarks.push(landmark)
         }
       })

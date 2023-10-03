@@ -66,7 +66,7 @@ export class SurveyService implements ServiceMethods<any> {
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
     const recreationResponse = await this.getRecreationResponse(recreationData)
-    // console.log('recreationResponse', recreationResponse)
+    console.log('recreationResponse', recreationResponse)
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
       return jobResponse.topCities.some((jobCity: any) => {
@@ -88,6 +88,7 @@ export class SurveyService implements ServiceMethods<any> {
     return {
       jobResponse,
       weatherResponse,
+      recreationResponse,
       topCities
     }
   }

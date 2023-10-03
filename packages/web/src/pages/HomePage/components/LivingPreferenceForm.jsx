@@ -70,8 +70,12 @@ const LivingPreferenceForm = () => {
       });
 
       if (response && response.jobResponse) {
+        console.log("Response from survey:", response);
         navigate("/results", {
-          state: { data: response.jobResponse },
+          state: {
+            data: response.jobResponse,
+            recreation: response.recreationResponse,
+          },
           fullResponse: response,
         });
       }

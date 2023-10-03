@@ -4,11 +4,14 @@ import StateSalaryChart from "./components/StateSalaryChart";
 import StateSalaryTable from "./components/StateSalaryTable";
 import CitySalaryChart from "./components/CitySalaryChart";
 import CitySalaryTable from "./components/CitySalaryTable";
+import RecreationMap from "./components/RecreationMap";
 import { useLocation } from "react-router-dom";
 
 function ResultsPage() {
   const location = useLocation();
   const jobResponseData = location.state?.data;
+  const recreationData = location.state?.recreation;
+  console.log("recreation data", recreationData);
 
   const { jobs } = jobResponseData;
   if (!jobResponseData) {
@@ -32,6 +35,9 @@ function ResultsPage() {
         </div>
         <div className={styles.table}>
           <CitySalaryTable data={jobResponseData} />
+        </div>
+        <div className={styles.table}>
+          <RecreationMap data={recreationData} />
         </div>
       </div>
     </div>
