@@ -1,7 +1,6 @@
 // components/StateGraph.js
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
-import { select, event } from "d3-selection";
 
 import styles from "../ResultsPage.module.css";
 const monthNames = [
@@ -80,7 +79,6 @@ const StateGraph = ({ stateData, stateAvg, stateName }) => {
       .attr("stroke-width", 1.5)
       .attr("d", line);
 
-    // Annotate with state's yearly average temperature
     svg
       .append("line")
       .attr("class", styles.avgLine)
@@ -148,6 +146,9 @@ const StateGraph = ({ stateData, stateAvg, stateName }) => {
         .style("left", event.pageX + 5 + "px")
         .style("top", event.pageY - 28 + "px");
     }
+    return () => {
+      tooltip.remove();
+    };
   }, [stateData, stateAvg, stateName]);
 
   return (
