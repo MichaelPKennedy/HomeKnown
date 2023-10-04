@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { CityIndustrySalary } from './city-industry-salary.model'
 import { State } from './state.model'
+import { City } from './city.model'
 
 export class Area extends Model {}
 
@@ -26,7 +27,7 @@ export const AreaModel = (sequelize: Sequelize) => {
       state_code: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'State',
+          model: State,
           key: 'state_code'
         }
       }

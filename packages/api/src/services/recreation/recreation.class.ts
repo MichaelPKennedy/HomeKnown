@@ -147,15 +147,30 @@ export class RecreationService implements ServiceMethods<any> {
     console.log('recreationalInterests params', recreationalInterests)
     console.log('params', params)
 
-    const landmarkTypes = recreationalInterests?.flatMap(
-      (interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey]
-    )
+    const landmarkTypes = (
+      Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
+    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey])
 
     const landmarks = await this.sequelize.models.LandMark.findAll({
       where: { Type: landmarkTypes }
     })
 
-    const cities = await this.sequelize.models.City.findAll()
+    const cities = await this.sequelize.models.City.findAll({
+      include: [
+        {
+          model: this.sequelize.models.Area,
+          required: true,
+          attributes: ['area_code'],
+          include: [
+            {
+              model: this.sequelize.models.State,
+              required: true,
+              attributes: ['state']
+            }
+          ]
+        }
+      ]
+    })
 
     const cityRankings: {
       city: any

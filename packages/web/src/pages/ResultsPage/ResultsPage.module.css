@@ -63,3 +63,73 @@
   text-align: center;
   line-height: 30px;
 }
+
+/* State Temperature Graphs */
+.graphContainer {
+  margin-bottom: 40px;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  max-width: 100%;
+  width: 100%;
+}
+
+.graphTitle {
+  font-size: 18px;
+  text-anchor: middle;
+  font-weight: bold;
+  fill: #333;
+}
+
+.linePath {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5;
+}
+
+.avgLine {
+  stroke: red;
+  stroke-dasharray: 4;
+}
+
+.avgText {
+  font-size: 10px;
+  fill: red;
+}
+
+.axis text {
+  font-size: 10px;
+  fill: #666;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #e1e4e8;
+}
+
+.axis text {
+  font-size: 16px;
+  fill: #666;
+}
+.tooltip {
+  position: absolute;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.focus circle {
+  fill: none;
+  stroke: steelblue;
+}
+
+.overlay {
+  fill: none;
+  pointer-events: all;
+}

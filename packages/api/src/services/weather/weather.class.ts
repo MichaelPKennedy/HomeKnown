@@ -157,9 +157,33 @@ export class WeatherService implements ServiceMethods<any> {
       limit: 50
     })
 
+    const weatherDataForTopStates = await Weather.findAll({
+      where: {
+        state_code: { [Op.in]: topStates.map((record: any) => record.getDataValue('state_code')) }
+      },
+      attributes: ['state_code', 'month', 'avgTemp'],
+      order: ['state_code', 'month']
+    })
+
+    // Convert data into a more usable format for graphing
+    const graphData = weatherDataForTopStates.reduce((acc: any, record: any) => {
+      const stateCode = record.getDataValue('state_code')
+      const month = record.getDataValue('month')
+      const avgTemperature = record.getDataValue('avgTemp')
+
+      if (!acc[stateCode]) {
+        acc[stateCode] = { stateCode, monthlyAvg: {} }
+      }
+
+      acc[stateCode].monthlyAvg[month] = avgTemperature
+
+      return acc
+    }, {})
+
     return {
       topStates: topStates,
-      topCities: topCities
+      topCities: topCities,
+      graphData: Object.values(graphData)
     } as any
   }
 

@@ -47,7 +47,9 @@ const RecreationMap = ({ data }) => {
     <div>
       {data.map((item, index) => (
         <div key={index} style={{ marginBottom: "20px" }}>
-          <h2>{item.city.city_name}</h2>
+          <h2>
+            {item?.city?.city_name}, {item?.city?.Area?.State?.state}
+          </h2>
           <MapContainer
             center={[item.city.Latitude, item.city.Longitude]}
             zoom={10}
@@ -79,16 +81,22 @@ const RecreationMap = ({ data }) => {
                     iconSize: [30, 30], // adjust as needed
                   })
                 }
-                ref={(ref) => markerRefs.set(landmark.id, ref)} // Set the ref for each marker
+                ref={(ref) =>
+                  markerRefs.set(`${item.city.city_id}-${landmark.id}`, ref)
+                }
                 eventHandlers={{
                   mouseover: () => {
-                    const marker = markerRefs.get(landmark.id);
+                    const marker = markerRefs.get(
+                      `${item.city.city_id}-${landmark.id}`
+                    );
                     if (marker) {
                       marker.openPopup();
                     }
                   },
                   mouseout: () => {
-                    const marker = markerRefs.get(landmark.id);
+                    const marker = markerRefs.get(
+                      `${item.city.city_id}-${landmark.id}`
+                    );
                     if (marker) {
                       marker.closePopup();
                     }

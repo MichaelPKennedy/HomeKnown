@@ -5,12 +5,14 @@ import StateSalaryTable from "./components/StateSalaryTable";
 import CitySalaryChart from "./components/CitySalaryChart";
 import CitySalaryTable from "./components/CitySalaryTable";
 import RecreationMap from "./components/RecreationMap";
+import TemperatureGraph from "./components/TemperatureGraph";
 import { useLocation } from "react-router-dom";
 
 function ResultsPage() {
   const location = useLocation();
   const jobResponseData = location.state?.data;
   const recreationData = location.state?.recreation;
+  const weatherData = location.state?.weather;
   console.log("recreation data", recreationData);
 
   const { jobs } = jobResponseData;
@@ -36,8 +38,17 @@ function ResultsPage() {
         <div className={styles.table}>
           <CitySalaryTable data={jobResponseData} />
         </div>
+        <h5 className={` pb-4 pt-4 ${styles.title}`}>
+          Recreation Matches Within 50 Miles
+        </h5>
         <div className={styles.table}>
           <RecreationMap data={recreationData} />
+        </div>
+        <h5 className={` pb-4 pt-4 ${styles.title}`}>
+          Average Monthly Temperature
+        </h5>
+        <div className={styles.table}>
+          <TemperatureGraph data={weatherData} />
         </div>
       </div>
     </div>

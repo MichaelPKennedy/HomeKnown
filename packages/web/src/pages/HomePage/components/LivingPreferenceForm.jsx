@@ -75,6 +75,7 @@ const LivingPreferenceForm = () => {
           state: {
             data: response.jobResponse,
             recreation: response.recreationResponse,
+            weather: response.weatherResponse,
           },
           fullResponse: response,
         });
