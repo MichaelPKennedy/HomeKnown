@@ -7,8 +7,11 @@ function SalaryChart({ data }) {
 
   const svgRef = useRef();
 
+  const margin = { top: 20, right: 30, bottom: 40, left: 50 };
   const svgWidth = 1200;
   const svgHeight = 300;
+  const width = svgWidth - margin.left - margin.right;
+  const height = svgHeight - margin.top - margin.bottom;
 
   useEffect(() => {
     const svg = d3.select(svgRef.current);
@@ -17,13 +20,13 @@ function SalaryChart({ data }) {
     const xScale = d3
       .scaleBand()
       .domain(topStates.map((row) => row.State.state))
-      .range([0, svgWidth])
+      .range([margin.left, width + margin.left])
       .padding(0.5);
 
     const yScale = d3
       .scaleLinear()
       .domain([0, d3.max(topStates, (row) => parseFloat(row.avg_salary))])
-      .range([svgHeight - 50, 30]);
+      .range([height, margin.top]);
 
     const colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
@@ -49,10 +52,15 @@ function SalaryChart({ data }) {
     const xAxis = d3.axisBottom(xScale);
     svg
       .select(".x-axis")
-      .style("transform", `translateY(${svgHeight - 50}px)`)
-      .call(xAxis); // Adjusted x-axis position
+      .attr("transform", `translate(0, ${height})`)
+      .call(xAxis);
 
     const yAxis = d3.axisLeft(yScale);
+    svg
+      .select(".y-axis")
+      .attr("transform", `translate(${margin.left},0)`)
+      .call(yAxis);
+
     svg.select(".y-axis").call(yAxis);
 
     // Data Labels
@@ -75,8 +83,8 @@ function SalaryChart({ data }) {
       .data([nationalAverage.salary]) // bind the average salary data
       .join("line")
       .attr("class", "average-line")
-      .attr("x1", 0)
-      .attr("x2", svgWidth - 100)
+      .attr("x1", margin.left)
+      .attr("x2", svgWidth - margin.right)
       .attr("y1", avgSalaryYPosition)
       .attr("y2", avgSalaryYPosition)
       .attr("stroke", "red")
@@ -100,7 +108,13 @@ function SalaryChart({ data }) {
 
   return (
     <div className={styles.chartContainer}>
-      <svg ref={svgRef} width={svgWidth} height={svgHeight}>
+      <svg
+        ref={svgRef}
+        height={svgHeight}
+        width="100%"
+        viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+        preserveAspectRatio="xMidYMid meet"
+      >
         <g className="x-axis" />
         <g className="y-axis" />
       </svg>

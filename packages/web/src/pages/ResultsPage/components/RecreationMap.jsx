@@ -1,6 +1,8 @@
 import React, { useRef } from "react";
 import ReactDOMServer from "react-dom/server";
-
+import L from "leaflet"; // Importing base leaflet library
+import "leaflet/dist/leaflet.css";
+import styles from "../ResultsPage.module.css";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,35 +11,105 @@ import {
   faWater,
   faUmbrellaBeach,
   faMapMarkerAlt,
+  faArchway,
+  faTint,
+  faBinoculars,
+  faHiking,
+  faLandmark,
+  faMonument,
+  faPaw,
+  faTractor,
+  faMusic,
+  faUniversity,
+  faRoad,
+  faBuilding,
+  faLeaf,
+  faFrog,
+  faLaugh,
+  faSnowboarding,
+  faSatellite,
 } from "@fortawesome/free-solid-svg-icons";
 
-import L from "leaflet"; // Importing base leaflet library
-import "leaflet/dist/leaflet.css";
-import styles from "../ResultsPage.module.css";
-
-const getLabelWidth = (text) => {
-  const baseWidth = 60; // A base width
-  const additionalWidth = text.length * 6; // Width per character, adjust as needed
-  return baseWidth + additionalWidth;
+const placeToIconMap = {
+  "National Park": faTree,
+  "Mountain Peak": faMountain,
+  "Hiking Trail": faHiking,
+  "National Monument": faLandmark,
+  "Historic Site": faMonument,
+  "National Recreation Area": faTree,
+  "National Seashore": faWater,
+  "Natural Arch": faArchway,
+  Waterfall: faTint,
+  Viewpoint: faBinoculars,
+  "Hiking Spot": faHiking,
+  Mountain: faMountain,
+  "Granite Dome": faMountain,
+  "Slot Canyon": faMountain,
+  "National Memorial": faMonument,
+  "Mountain Memorial": faMountain,
+  Valley: faMountain,
+  "Historical Park": faLandmark,
+  "National Riverway": faWater,
+  Rainforest: faTree,
+  "National Forest": faTree,
+  Beach: faUmbrellaBeach,
+  "State Park": faTree,
+  Volcano: faMountain,
+  "National Lakeshore": faWater,
+  "Wilderness Area": faTree,
+  "National Reserve": faTree,
+  "National Grassland": faTree,
+  "Scenic Area": faTree,
+  "National Preserve": faTree,
+  "National Scenic River": faWater,
+  "National Historical Park": faLandmark,
+  "National Battlefield": faLandmark,
+  "National River": faWater,
+  Memorial: faMonument,
+  Park: faTree,
+  "Historical Site": faLandmark,
+  Ranch: faTractor,
+  "Historic Landmark": faLandmark,
+  Monument: faMonument,
+  "National Military Park": faLandmark,
+  "National Park for the Performing Arts": faMusic,
+  "Heritage Corridor": faLandmark,
+  Museum: faUniversity,
+  "Scenic River": faWater,
+  "Historic Trail": faHiking,
+  "Memorial Park": faMonument,
+  "Heritage Area": faLandmark,
+  Estuary: faWater,
+  "National Museum": faUniversity,
+  "Battlefields Memorial": faLandmark,
+  Parkway: faRoad,
+  Center: faBuilding,
+  Lake: faWater,
+  "Great Lake": faWater,
+  Lakes: faWater,
+  Reservoir: faWater,
+  Bay: faWater,
+  Inlet: faWater,
+  River: faWater,
+  "Lake Region": faWater,
+  Fjord: faWater,
+  "Lake System": faWater,
+  "Botanical Garden": faLeaf,
+  "Scenic Drive": faRoad,
+  "Wildlife Reserve": faFrog,
+  Cave: faMountain,
+  "Climbing Area": faMountain,
+  Zoo: faPaw,
+  "Amusement Park": faLaugh,
+  "Ski Resort": faSnowboarding,
+  Observatory: faSatellite,
+  Landmark: faLandmark,
 };
 
 const getTypeIcon = (type) => {
-  const iconComponent = (() => {
-    switch (type) {
-      case "Mountain":
-        return <FontAwesomeIcon icon={faMountain} />;
-      case "National Park":
-        return <FontAwesomeIcon icon={faTree} />;
-      case "Lake":
-        return <FontAwesomeIcon icon={faWater} />;
-      case "Beach":
-        return <FontAwesomeIcon icon={faUmbrellaBeach} />;
-      // ... add cases for other types
-      default:
-        return <FontAwesomeIcon icon={faMountain} />; // default icon
-    }
-  })();
-
+  const iconComponent = (
+    <FontAwesomeIcon icon={placeToIconMap[type] || faMapMarkerAlt} />
+  );
   return ReactDOMServer.renderToString(iconComponent);
 };
 

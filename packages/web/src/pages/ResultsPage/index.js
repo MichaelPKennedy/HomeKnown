@@ -6,6 +6,7 @@ import CitySalaryChart from "./components/CitySalaryChart";
 import CitySalaryTable from "./components/CitySalaryTable";
 import RecreationMap from "./components/RecreationMap";
 import TemperatureGraph from "./components/TemperatureGraph";
+import CityWeatherGraph from "./components/CityWeatherGraph";
 import { useLocation } from "react-router-dom";
 
 function ResultsPage() {
@@ -13,6 +14,7 @@ function ResultsPage() {
   const jobResponseData = location.state?.data;
   const recreationData = location.state?.recreation;
   const weatherData = location.state?.weather;
+  const topCities = weatherData?.topCities;
   console.log("recreation data", recreationData);
 
   const { jobs } = jobResponseData;
@@ -49,6 +51,11 @@ function ResultsPage() {
         </h5>
         <div className={styles.table}>
           <TemperatureGraph data={weatherData} />
+        </div>
+        <div className={styles.table}>
+          {topCities.map((city) => (
+            <CityWeatherGraph key={city.id} cityData={city} />
+          ))}
         </div>
       </div>
     </div>
