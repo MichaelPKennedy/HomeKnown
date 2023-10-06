@@ -3,12 +3,12 @@ import React from "react";
 import StateTemperatureGraph from "./StateTemperatureGraph";
 
 const TemperatureGraph = ({ data }) => {
-  const { graphData, topStates } = data;
+  const { graphData, allStatesTemp } = data;
   console.log("graphData", graphData);
-  console.log("topStates", topStates);
+  console.log("topStates", allStatesTemp);
   return (
     <div>
-      {topStates.map((state) => {
+      {allStatesTemp.map((state) => {
         const stateGraphData = graphData.find(
           (data) => data.stateCode === state.state_code
         );

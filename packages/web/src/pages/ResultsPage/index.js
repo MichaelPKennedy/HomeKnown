@@ -49,9 +49,9 @@ function ResultsPage() {
         <h5 className={` pb-4 pt-4 ${styles.title}`}>
           Average Monthly Temperature
         </h5>
-        <div className={styles.table}>
+        {/* <div className={styles.table}>
           <TemperatureGraph data={weatherData} />
-        </div>
+        </div> */}
         <div className={styles.table}>
           {topCities.map((city) => (
             <CityWeatherGraph key={city.id} cityData={city} />

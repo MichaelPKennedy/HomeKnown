@@ -1,7 +1,10 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { WeatherSchema, WeatherData, WeatherPatch, WeatherQuery } from './weather.schema'
 import type { Application } from '../../declarations'
-import { Op } from 'sequelize'
+const { Sequelize } = require('sequelize')
+
+const Op = Sequelize.Op
+
 import { CityWeather } from '../../../models/city-weather.model'
 import { Weather } from '../../../models/weather.model'
 import { State } from '../../../models/state.model'
@@ -36,6 +39,16 @@ export interface WeatherParams extends Params {
   }
 }
 
+type WhereCondition = {
+  [key: string]: any
+}
+
+enum ConditionKey {
+  RainQuery,
+  SnowQuery,
+  TempQuery
+}
+
 export class WeatherService implements ServiceMethods<any> {
   app: Application
   sequelize: any // You can also type it more specifically if needed.
@@ -45,20 +58,71 @@ export class WeatherService implements ServiceMethods<any> {
     this.sequelize = sequelizeClient
   }
 
-  private getColumnsByDetail(
-    detail: string,
-    prefix: string
-  ): { high: string; low: string; prec: string; snow: string } {
-    let columns = {
-      high: `${prefix}_high`,
-      low: `${prefix}_low`,
-      prec: `${prefix}_prec`,
-      snow: `${prefix}_snow`
+  private conditionsMap: Map<ConditionKey, any> = new Map()
+
+  private setCondition(key: ConditionKey, value: any) {
+    this.conditionsMap.set(key, value)
+  }
+
+  private getAllConditions(): any[] {
+    return Array.from(this.conditionsMap.values())
+  }
+
+  private modifyQueryForRetry(
+    whereCityCondition: WhereCondition,
+    retryCount: number,
+    temperature: number,
+    havingConditions: any,
+    temperaturePreference: any
+  ): { whereCityCondition: WhereCondition; havingConditions: any } {
+    switch (retryCount) {
+      case 1:
+        havingConditions.estimatedYearlyAvgTemp = { [Op.between]: [temperature - 10, temperature + 10] }
+        console.log('retry 1')
+        break
+
+      case 2:
+        this.setCondition(
+          ConditionKey.RainQuery,
+          this.sequelize.literal(
+            'jan_prec + feb_prec + mar_prec + apr_prec + may_prec + jun_prec + jul_prec + aug_prec + sep_prec + oct_prec + nov_prec + dec_prec BETWEEN 0 AND 30'
+          )
+        )
+        console.log('retry 2')
+        break
+
+      case 3:
+        if (temperaturePreference === 'distinct') {
+          havingConditions['seasonDifference'] = {
+            [Op.gte]: 15
+          }
+        }
+        console.log('retry 3')
+        break
+
+      // Add more conditions as needed.
     }
+    return { whereCityCondition, havingConditions }
+  }
 
-    // Can add more conditions based on detail if necessary
-
-    return columns
+  private async queryForCities(
+    whereCityCondition: WhereCondition,
+    havingConditions: any,
+    attributesInclude: any
+  ) {
+    return await CityWeather.findAll({
+      where: whereCityCondition,
+      attributes: {
+        include: attributesInclude
+      },
+      having: havingConditions,
+      include: [
+        {
+          model: State
+        }
+      ],
+      limit: 20
+    })
   }
 
   async find(params: WeatherParams): Promise<any[] | Paginated<any>> {
@@ -68,38 +132,18 @@ export class WeatherService implements ServiceMethods<any> {
     if (!queryData) {
       throw new Error('No query data provided.')
     }
-    console.log('queryData', queryData)
 
-    const {
-      temperature,
-      temperaturePreference,
-      climatePreference,
-      snowPreference,
-      rainPreference,
-      importantSeason,
-      seasonPreferenceDetail
-    } = queryData
+    const { temperature, temperaturePreference, snowPreference, rainPreference } = queryData
 
     if (typeof temperature === 'undefined') {
       throw new Error('Temperature must be provided.')
     }
 
-    type WhereCondition = {
-      [key: string]: any
-    }
+    // Clear conditionsMap for the new call
+    this.conditionsMap.clear()
 
-    // Step 1: Get top 10 states based on average temperature close to the user's preference
-    let whereStateCondition: WhereCondition = {}
-    if (temperaturePreference === 'mild') {
-      whereStateCondition.avgTemp = {
-        [Op.between]: [temperature - 5, temperature + 5] // Assuming 'mild' as ±5 of user's preferred temp
-      }
-    } else {
-      whereStateCondition.avgTemp = temperature // 'distinct' matches the exact temperature
-    }
-
-    const topStates = await Weather.findAll({
-      where: whereStateCondition,
+    // Step 1: Get the average temperature for all states
+    const allStatesTemperature = await Weather.findAll({
       attributes: [
         'state_code',
         [this.sequelize.fn('AVG', this.sequelize.col('avgTemp')), 'avg_temperature']
@@ -110,63 +154,110 @@ export class WeatherService implements ServiceMethods<any> {
           attributes: ['state', 'state_code', 'state_abbrev']
         }
       ],
-      order: [[this.sequelize.fn('ABS', this.sequelize.literal(`AVG(avgTemp) - ${temperature}`)), 'ASC']],
-      group: ['Weather.state_code', 'State.state_code', 'State.state'],
-      limit: 10
+      group: ['Weather.state_code', 'State.state_code', 'State.state']
     })
 
-    const topStateAbbreviations = topStates.map((record: any) => record.State.getDataValue('state_abbrev'))
+    // Compute average temperature for the entire year for each city
+    const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+    const monthlyAverages = months.map((month) => `((${month}_high + ${month}_low) / 2)`)
+    const estimatedYearlyAvgTemp = `(${monthlyAverages.join(' + ')}) / 12`
 
-    // Step 2: Fetch the top 20 cities based on user's specific preferences from those states
+    const yearlyPrecipitation = months.map((month) => `${month}_prec`).join(' + ')
+    const yearlySnow = months.map((month) => `${month}_snow`).join(' + ')
+
+    const temperatureCondition = { [Op.between]: [temperature - 5, temperature + 5] }
+
+    // Set snow condition
+    if (snowPreference === 'none') {
+      this.setCondition(ConditionKey.SnowQuery, this.sequelize.literal(`${yearlySnow} = 0`))
+    } else if (snowPreference === 'light') {
+      this.setCondition(ConditionKey.SnowQuery, this.sequelize.literal(`${yearlySnow} BETWEEN 0.1 AND 10`))
+    } else {
+      this.setCondition(ConditionKey.SnowQuery, this.sequelize.literal(`${yearlySnow} > 10`))
+    }
+
+    // Set rain condition
+    const precipitationSumLiteral =
+      'jan_prec + feb_prec + mar_prec + apr_prec + may_prec + jun_prec + jul_prec + aug_prec + sep_prec + oct_prec + nov_prec + dec_prec'
+
+    if (rainPreference === 'dry') {
+      this.setCondition(ConditionKey.RainQuery, this.sequelize.literal(`${precipitationSumLiteral} <= 20`))
+    } else {
+      this.setCondition(ConditionKey.RainQuery, this.sequelize.literal(`${precipitationSumLiteral} > 20`))
+    }
+
+    const attributesInclude: (string | [any, string])[] = [
+      [this.sequelize.literal(estimatedYearlyAvgTemp), 'estimatedYearlyAvgTemp'],
+      [this.sequelize.literal(yearlyPrecipitation), 'yearlyPrecipitation']
+    ]
+
+    // Define the initial conditions for the query
     let whereCityCondition: WhereCondition = {
-      state: { [Op.in]: topStateAbbreviations },
       area_code: { [Op.ne]: null }
     }
+    let havingConditions: any = {
+      estimatedYearlyAvgTemp: temperatureCondition
+    }
 
-    if (importantSeason && seasonPreferenceDetail) {
-      const prefix = importantSeason.slice(0, 3).toLowerCase() // 'jan', 'feb', etc.
-      const { high, low, prec, snow } = this.getColumnsByDetail(seasonPreferenceDetail, prefix)
-      whereCityCondition = {
-        ...whereCityCondition,
-        [high]: { [Op.gte]: temperature },
-        [low]: { [Op.lte]: temperature }
-      }
+    // Check if the user wants distinct seasons
+    if (temperaturePreference === 'distinct') {
+      const highestMonthlyAvg = `GREATEST(${months.map((month) => `${month}_high`).join(', ')})`
+      const lowestMonthlyAvg = `LEAST(${months.map((month) => `${month}_low`).join(', ')})`
 
-      if (snowPreference === 'none') {
-        whereCityCondition[snow] = { [Op.eq]: 0 }
-      } else if (snowPreference === 'light') {
-        whereCityCondition[snow] = { [Op.between]: [0.1, 3] } // example range
-      } else {
-        whereCityCondition[snow] = { [Op.gt]: 3 } // heavy snow
-      }
+      attributesInclude.push(
+        [this.sequelize.literal(highestMonthlyAvg), 'highestMonthlyAvg'],
+        [this.sequelize.literal(lowestMonthlyAvg), 'lowestMonthlyAvg']
+      )
 
-      if (rainPreference === 'dry') {
-        whereCityCondition[prec] = { [Op.lte]: 0.5 } // example dry condition
-      } else {
-        whereCityCondition[prec] = { [Op.gt]: 0.5 } // regular rain
+      const seasonDifferenceLiteral = `(${highestMonthlyAvg} - ${lowestMonthlyAvg})`
+      attributesInclude.push([this.sequelize.literal(seasonDifferenceLiteral), 'seasonDifference'])
+
+      // Set the having condition for distinct seasons
+      const distinctSeasonsThreshold = 30 // You can adjust this value as needed
+      havingConditions['seasonDifference'] = {
+        [Op.gte]: this.sequelize.literal(
+          `highestMonthlyAvg - lowestMonthlyAvg >= ${distinctSeasonsThreshold}`
+        )
       }
     }
 
-    const topCities = await CityWeather.findAll({
-      where: whereCityCondition,
-      include: [
-        {
-          model: State
-        }
-      ],
-      limit: 50
-    })
+    const MAX_RETRIES = 3
+    let retryCount = 0
 
-    const weatherDataForTopStates = await Weather.findAll({
-      where: {
-        state_code: { [Op.in]: topStates.map((record: any) => record.getDataValue('state_code')) }
-      },
+    // Apply the conditions to the whereCityCondition object
+    whereCityCondition[Op.and] = this.getAllConditions()
+
+    // Make the initial query
+    let topCities = await this.queryForCities(whereCityCondition, havingConditions, attributesInclude)
+
+    // Retry logic if the initial query returned no results
+    while (topCities.length === 0 && retryCount < MAX_RETRIES) {
+      retryCount++
+      console.log('WhereCityCondition', whereCityCondition)
+      const modifiedConditions = this.modifyQueryForRetry(
+        whereCityCondition,
+        retryCount,
+        temperature,
+        havingConditions,
+        temperaturePreference
+      )
+      whereCityCondition = modifiedConditions.whereCityCondition
+      havingConditions = modifiedConditions.havingConditions
+
+      // Reapply the conditions to the whereCityCondition object before making the query
+      whereCityCondition[Op.and] = this.getAllConditions()
+
+      // Make the retry query
+      topCities = await this.queryForCities(whereCityCondition, havingConditions, attributesInclude)
+    }
+
+    const weatherDataForAllStates = await Weather.findAll({
       attributes: ['state_code', 'month', 'avgTemp'],
       order: ['state_code', 'month']
     })
 
-    // Convert data into a more usable format for graphing
-    const graphData = weatherDataForTopStates.reduce((acc: any, record: any) => {
+    // Convert the weather data into a format suitable for graphing
+    const graphData = weatherDataForAllStates.reduce((acc: any, record: any) => {
       const stateCode = record.getDataValue('state_code')
       const month = record.getDataValue('month')
       const avgTemperature = record.getDataValue('avgTemp')
@@ -181,7 +272,7 @@ export class WeatherService implements ServiceMethods<any> {
     }, {})
 
     return {
-      topStates: topStates,
+      allStatesTemp: allStatesTemperature,
       topCities: topCities,
       graphData: Object.values(graphData)
     } as any

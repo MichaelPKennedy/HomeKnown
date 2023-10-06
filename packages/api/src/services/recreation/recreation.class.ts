@@ -144,8 +144,6 @@ export class RecreationService implements ServiceMethods<any> {
 
   async find(params: RecreationParams): Promise<any[] | Paginated<any>> {
     const { recreationalInterests } = params.query
-    console.log('recreationalInterests params', recreationalInterests)
-    console.log('params', params)
 
     const landmarkTypes = (
       Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
@@ -200,7 +198,6 @@ export class RecreationService implements ServiceMethods<any> {
 
         if (currentDistance <= 50) {
           landmarkCount++
-          console.log('distance', currentDistance)
           nearbyLandmarks.push(landmark)
         }
       })

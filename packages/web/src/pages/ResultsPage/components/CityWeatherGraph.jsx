@@ -254,6 +254,22 @@ const CityWeatherGraph = ({ cityData }) => {
         .html(`${months[i].full}<br/>High: ${d.high}°F<br/>Low: ${d.low}°F`)
         .style("left", event.pageX + 5 + "px")
         .style("top", event.pageY - 28 + "px");
+
+      const lineAvg = d3
+        .line()
+        .x((d, i) => xScaleLines(i + 1))
+        .y(() => yScale(cityData.estimatedYearlyAvgTemp))
+        .curve(d3.curveMonotoneX);
+
+      // Add average yearly temperature line
+      svg
+        .append("path")
+        .datum(months) // We're using the months array just to get the x-values; y-values are constant
+        .attr("fill", "none")
+        .attr("stroke", "red")
+        .attr("stroke-dasharray", "4 4") // This makes the line dashed
+        .attr("stroke-width", 1)
+        .attr("d", lineAvg);
     }
     return () => {
       tooltip.remove();
