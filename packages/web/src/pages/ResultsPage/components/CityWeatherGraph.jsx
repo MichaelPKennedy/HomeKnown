@@ -19,7 +19,7 @@ const months = [
 
 const legendData = [
   { color: "red", label: "High Temp" },
-  { color: "blue", label: "Low Temp" },
+  { color: "steelblue", label: "Low Temp" },
   { color: "lightblue", label: "Snow" },
   { color: "darkBlue", label: "Rain" },
 ];
@@ -34,17 +34,40 @@ const CityWeatherGraph = ({ cityData }) => {
     snow: Number(cityData[`${month.abbrev}_snow`]),
     rain: Number(cityData[`${month.abbrev}_prec`]),
   }));
+  const width = 1000;
+  const height = 500;
 
   useEffect(() => {
     if (!cityData || !svgRef.current) return;
 
     const svg = d3.select(svgRef.current);
-
     // Clear previous SVG content
     svg.selectAll("*").remove();
 
-    const width = 1000;
-    const height = 500;
+    const defs = svg.append("defs");
+    const filter = defs
+      .append("filter")
+      .attr("id", "drop-shadow")
+      .attr("height", "120%");
+
+    filter
+      .append("feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 12)
+      .attr("result", "blur");
+
+    filter
+      .append("feOffset")
+      .attr("in", "blur")
+      .attr("dx", 5) // Adjust horizontal offset as needed
+      .attr("dy", 5) // Adjust vertical offset as needed
+      .attr("result", "offsetBlur");
+
+    const feMerge = filter.append("feMerge");
+
+    feMerge.append("feMergeNode").attr("in", "offsetBlur");
+    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
     const margin = { top: 20, right: 50, bottom: 40, left: 50 };
 
     const highTemps = months.map(
@@ -112,6 +135,7 @@ const CityWeatherGraph = ({ cityData }) => {
     svg
       .append("path")
       .datum(highTemps)
+      .attr("class", styles.lineHigh)
       .attr("fill", "none")
       .attr("stroke", "red")
       .attr("stroke-width", 2)
@@ -121,8 +145,9 @@ const CityWeatherGraph = ({ cityData }) => {
     svg
       .append("path")
       .datum(lowTemps)
+      .attr("class", styles.lineLow)
       .attr("fill", "none")
-      .attr("stroke", "blue")
+      .attr("stroke", "steelblue")
       .attr("stroke-width", 2)
       .attr("d", lineLow);
 
@@ -144,7 +169,8 @@ const CityWeatherGraph = ({ cityData }) => {
         "height",
         (d) => height - margin.bottom - yScalePrecipitation(d.snow)
       )
-      .attr("fill", "lightblue");
+      .attr("fill", "lightblue")
+      .style("filter", "url(#drop-shadow)");
 
     svg
       .selectAll(".bar-rain")
@@ -159,7 +185,8 @@ const CityWeatherGraph = ({ cityData }) => {
         "height",
         (d) => height - margin.bottom - yScalePrecipitation(d.rain)
       )
-      .attr("fill", "darkBlue");
+      .attr("fill", "darkBlue")
+      .style("filter", "url(#drop-shadow)");
 
     // X & Y axis
     svg
@@ -194,8 +221,8 @@ const CityWeatherGraph = ({ cityData }) => {
       .data(legendData)
       .enter()
       .append("text")
-      .attr("x", 30) // Position text to the right of the colored square
-      .attr("y", (d, i) => i * 25 + 15) // Center text vertically in the colored square
+      .attr("x", 30)
+      .attr("y", (d, i) => i * 25 + 15)
       .text((d) => d.label);
 
     const tooltip = d3
@@ -239,7 +266,7 @@ const CityWeatherGraph = ({ cityData }) => {
 
     function mousemove(event) {
       const x0 = xScaleLines.invert(d3.pointer(event)[0]);
-      const i = Math.round(x0) - 1; // Adjusting index to match our data array
+      const i = Math.round(x0) - 1;
       const d = weatherData[i];
       focusHigh.attr(
         "transform",
@@ -261,13 +288,12 @@ const CityWeatherGraph = ({ cityData }) => {
         .y(() => yScale(cityData.estimatedYearlyAvgTemp))
         .curve(d3.curveMonotoneX);
 
-      // Add average yearly temperature line
       svg
         .append("path")
-        .datum(months) // We're using the months array just to get the x-values; y-values are constant
+        .datum(months)
         .attr("fill", "none")
         .attr("stroke", "red")
-        .attr("stroke-dasharray", "4 4") // This makes the line dashed
+        .attr("stroke-dasharray", "4 4")
         .attr("stroke-width", 1)
         .attr("d", lineAvg);
     }
@@ -284,10 +310,9 @@ const CityWeatherGraph = ({ cityData }) => {
       <svg
         ref={svgRef}
         width="100%"
-        viewBox="0 0 1000 500"
+        viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio="xMidYMid meet"
       ></svg>
-
       <div ref={tooltipRef} className={styles.tooltip}></div>
     </div>
   );
