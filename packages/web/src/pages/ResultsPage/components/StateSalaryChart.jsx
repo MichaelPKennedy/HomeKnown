@@ -36,16 +36,12 @@ function SalaryChart({ data }) {
       .data(topStates)
       .join("rect")
       .attr("class", "bar")
-      .style("transform", `scale(1, -1)`)
       .attr("x", (row) => xScale(row.State.state))
-      .attr("y", -(svgHeight - 50)) // Start bars from the bottom
+      .attr("y", (row) => yScale(parseFloat(row.avg_salary))) // Start bars from the x-axis baseline
       .attr("width", xScale.bandwidth())
       .transition()
       .duration(400)
-      .attr(
-        "height",
-        (row) => svgHeight - 50 - yScale(parseFloat(row.avg_salary))
-      )
+      .attr("height", (row) => height - yScale(parseFloat(row.avg_salary))) // Adjust the height to not extend below the x-axis
       .attr("fill", (row) => colorScale(row.State.state));
 
     // Axes

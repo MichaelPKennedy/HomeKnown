@@ -1,9 +1,17 @@
-import React, { useRef } from "react";
+import React, { useEffect } from "react";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet"; // Importing base leaflet library
 import "leaflet/dist/leaflet.css";
 import styles from "../ResultsPage.module.css";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Tooltip,
+  Circle,
+  useMap,
+} from "react-leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faMountain,
@@ -28,6 +36,7 @@ import {
   faLaugh,
   faSnowboarding,
   faSatellite,
+  faStar,
 } from "@fortawesome/free-solid-svg-icons";
 
 const placeToIconMap = {
@@ -113,74 +122,114 @@ const getTypeIcon = (type) => {
   return ReactDOMServer.renderToString(iconComponent);
 };
 
+const FixMapSize = () => {
+  const map = useMap();
+  React.useEffect(() => {
+    map.invalidateSize();
+  }, []);
+  return null; // this component doesn't render anything visible
+};
+
 const RecreationMap = ({ data }) => {
   const markerRefs = new Map();
+  const [hoveredCity, setHoveredCity] = React.useState(null);
+
   return (
-    <div>
+    <div className={styles.mapContainer}>
       {data.map((item, index) => (
-        <div key={index} style={{ marginBottom: "20px" }}>
+        <div key={index}>
           <h2>
             {item?.city?.city_name}, {item?.city?.Area?.State?.state}
           </h2>
-          <MapContainer
-            center={[item.city.Latitude, item.city.Longitude]}
-            zoom={10}
-            style={{ height: "400px", width: "100%" }}
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <Marker
-              position={[item.city.Latitude, item.city.Longitude]}
-              icon={
-                new L.DivIcon({
-                  // Using L.DivIcon from the leaflet library
-                  className: styles.markerLabel,
-                  html: item.city.city_name,
-                  iconSize: [100, 20], // adjust as needed
-                })
-              }
-            />
-            {item.nearbyLandmarks.map((landmark) => (
+          <div>
+            <MapContainer
+              center={[item.city.Latitude, item.city.Longitude]}
+              zoom={9}
+              className={styles.map}
+            >
+              <FixMapSize />
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Circle
+                center={[item.city.Latitude, item.city.Longitude]}
+                radius={80467} // 50 miles in meters
+                color="gold"
+                fillColor="green"
+                fillOpacity={0.1} // Opacity of the circle fill
+              />
               <Marker
-                key={landmark.id}
-                position={[landmark.Latitude, landmark.Longitude]}
+                position={[item.city.Latitude, item.city.Longitude]}
                 icon={
                   new L.DivIcon({
-                    className: styles.tooltipIcon,
-                    html: getTypeIcon(landmark.Type),
-                    iconSize: [30, 30], // adjust as needed
+                    className: styles.cityMarker,
+                    html: ReactDOMServer.renderToString(
+                      <div>
+                        <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                      </div>
+                    ),
+                    iconSize: [30, 30],
                   })
                 }
-                ref={(ref) =>
-                  markerRefs.set(`${item.city.city_id}-${landmark.id}`, ref)
-                }
-                eventHandlers={{
-                  mouseover: () => {
-                    const marker = markerRefs.get(
-                      `${item.city.city_id}-${landmark.id}`
-                    );
-                    if (marker) {
-                      marker.openPopup();
-                    }
-                  },
-                  mouseout: () => {
-                    const marker = markerRefs.get(
-                      `${item.city.city_id}-${landmark.id}`
-                    );
-                    if (marker) {
-                      marker.closePopup();
-                    }
-                  },
-                }}
               >
-                <Popup>
-                  {landmark.Location} - {landmark.Type}
-                </Popup>
+                <Tooltip
+                  direction="top"
+                  permanent={hoveredCity === item.city.city_id}
+                >
+                  <div
+                    className={styles.tooltipLabel}
+                    onMouseOver={() => setHoveredCity(item.city.city_id)}
+                    onMouseOut={() => setHoveredCity(null)}
+                  >
+                    <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
+                    <span>{item.city.city_name}</span>
+                  </div>
+                </Tooltip>
               </Marker>
-            ))}
-          </MapContainer>
+              {item.nearbyLandmarks.map((landmark) => (
+                <Marker
+                  key={landmark.id}
+                  position={[landmark.Latitude, landmark.Longitude]}
+                  className={styles.markerLabel}
+                  icon={
+                    new L.DivIcon({
+                      className: styles.tooltipIcon,
+                      html: getTypeIcon(landmark.Type),
+                      iconSize: [40, 40], // adjust as needed
+                    })
+                  }
+                  ref={(ref) =>
+                    markerRefs.set(`${item.city.city_id}-${landmark.id}`, ref)
+                  }
+                  eventHandlers={{
+                    mouseover: () => {
+                      const marker = markerRefs.get(
+                        `${item.city.city_id}-${landmark.id}`
+                      );
+                      if (marker) {
+                        marker.openTooltip();
+                      }
+                    },
+                    mouseout: () => {
+                      const marker = markerRefs.get(
+                        `${item.city.city_id}-${landmark.id}`
+                      );
+                      if (marker) {
+                        marker.closeTooltip();
+                      }
+                    },
+                  }}
+                >
+                  <Tooltip>
+                    <div className={styles.tooltipLabel}>
+                      {landmark.Location} - {landmark.Type}
+                    </div>
+                  </Tooltip>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
         </div>
       ))}
     </div>
