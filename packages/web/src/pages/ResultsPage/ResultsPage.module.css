@@ -49,11 +49,11 @@
 }
 
 .tooltipLabel {
-  background-color: rgb(93, 171, 202);
-  color: white;
+  /* background-color: rgb(93, 171, 202); */
+  color: black;
   border-radius: 2px;
   padding: 2px 8px;
-  font-size: 24px;
+  font-size: 18px;
   white-space: nowrap;
 }
 
@@ -163,8 +163,12 @@
 
 /* Apply gradient background to the chart */
 .graphContainer {
-  background: linear-gradient(135deg, #e6f7ff, #c2e2ff);
   /* Add other styles as needed */
+}
+
+.barSnow,
+.barRain {
+  filter: drop-shadow(3px 3px 5px rgba(0, 0, 0.5, 0.6));
 }
 
 /* Apply a 3D effect to lines */

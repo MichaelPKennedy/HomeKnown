@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Autosuggest from "react-autosuggest";
 import styles from "./LivingPreferenceForm.module.css";
+import "./Slider.css";
 import { useQuery } from "react-query";
 import client from "../../../feathersClient.js";
 import { useNavigate } from "react-router-dom";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -51,6 +54,16 @@ const LivingPreferenceForm = () => {
       console.error("Error fetching occupation codes:", error);
       return [];
     }
+  };
+
+  const suggestionSelected = (event, { suggestion }) => {
+    if (!formData.selectedJobs.includes(suggestion.occ_title)) {
+      setFormData((prevState) => ({
+        ...prevState,
+        selectedJobs: [...prevState.selectedJobs, suggestion],
+      }));
+    }
+    setSearchTerm("");
   };
 
   const onSuggestionsFetchRequested = async ({ value }) => {
@@ -138,9 +151,7 @@ const LivingPreferenceForm = () => {
           suggestions={suggestions}
           onSuggestionsFetchRequested={onSuggestionsFetchRequested}
           onSuggestionsClearRequested={onSuggestionsClearRequested}
-          onSuggestionSelected={(event, { suggestion }) => {
-            setCurrentJob(suggestion);
-          }}
+          onSuggestionSelected={suggestionSelected}
           getSuggestionValue={(suggestion) => suggestion.occ_title}
           renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
           inputProps={{
@@ -151,28 +162,13 @@ const LivingPreferenceForm = () => {
             onChange: (_, { newValue }) => setSearchTerm(newValue),
           }}
         />
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            if (
-              currentJob &&
-              !formData.selectedJobs.includes(currentJob.occ_title)
-            ) {
-              setFormData((prevState) => ({
-                ...prevState,
-                selectedJobs: [...prevState.selectedJobs, currentJob],
-              }));
-              setCurrentJob({});
-            }
-          }}
-          className={`btn btn-info ${styles.addJobButton}`}
-        >
-          Add
-        </button>
 
         <div className="selected-jobs mt-3">
           {formData.selectedJobs.map((job, index) => (
-            <div key={index} className="badge badge-primary mr-2">
+            <div
+              key={index}
+              className={`badge badge-primary mr-2 ${styles.selectedJobs}`}
+            >
               {job.occ_title}
               <span
                 style={{ cursor: "pointer", marginLeft: "5px" }}
@@ -349,20 +345,20 @@ const LivingPreferenceForm = () => {
           </div>
         </div>
       </div> */}
-      <div className="form-group">
+      <div className={`form-group ${styles.slider}`}>
         <h4 className="pb-2 pt-2">Weather</h4>
         <label htmlFor="temperature">Ideal average temperature (°F):</label>
-        <input
-          type="range"
-          name="temperature"
-          min="0"
-          max="120"
-          step="5"
+
+        <Slider
+          min={0}
+          max={120}
+          step={1}
           value={formData.temperature}
-          onChange={handleInputChange}
-          className={`${styles.formInput} ${styles.formControlRange}`}
-          id="temperature"
+          onChange={(value) =>
+            setFormData((prevState) => ({ ...prevState, temperature: value }))
+          }
         />
+
         <small className="form-text text-muted">{formData.temperature}°F</small>
       </div>
 
@@ -385,7 +381,7 @@ const LivingPreferenceForm = () => {
             Mild temperatures throughout the year
           </label>
         </div>
-        <div className={styles.formCheck}>
+        <div>
           <input
             className={styles.formCheckInput}
             type="radio"
@@ -500,65 +496,6 @@ const LivingPreferenceForm = () => {
             Comfortable with regular rainfall
           </label>
         </div>
-      </div>
-
-      {/* Most Important Season Preference */}
-      <div className="form-group">
-        <label>
-          Which season's weather is most important to you when considering a
-          move?
-        </label>
-        <select
-          name="importantSeason"
-          value={formData.importantSeason || ""}
-          onChange={handleInputChange}
-          className={`form-control ${styles.formInput}`}
-        >
-          <option value="winter">Winter</option>
-          <option value="summer">Summer</option>
-          <option value="spring">Spring</option>
-          <option value="fall">Fall</option>
-        </select>
-      </div>
-
-      {/* Preference for the Important Season */}
-      <div className="form-group">
-        <label>What's your preference for the chosen season?</label>
-        <select
-          name="seasonPreferenceDetail"
-          value={formData.seasonPreferenceDetail || ""}
-          onChange={handleInputChange}
-          className={`form-control ${styles.formInput}`}
-        >
-          {formData.importantSeason === "winter" && (
-            <>
-              <option value="mildWinter">Mild</option>
-              <option value="coldWinter">Cold</option>
-              <option value="snowyWinter">Snowy</option>
-            </>
-          )}
-          {formData.importantSeason === "summer" && (
-            <>
-              <option value="mildSummer">Mild</option>
-              <option value="hotSummer">Hot</option>
-              <option value="drySummer">Dry</option>
-            </>
-          )}
-          {formData.importantSeason === "spring" && (
-            <>
-              <option value="warmSpring">Warm</option>
-              <option value="coolSpring">Cool</option>
-              <option value="drySpring">Dry</option>
-            </>
-          )}
-          {formData.importantSeason === "fall" && (
-            <>
-              <option value="warmFall">Warm</option>
-              <option value="coolFall">Cool</option>
-              <option value="dryFall">Dry</option>
-            </>
-          )}
-        </select>
       </div>
 
       <div className={`form-group ${styles.recreationalInterestsContainer}`}>

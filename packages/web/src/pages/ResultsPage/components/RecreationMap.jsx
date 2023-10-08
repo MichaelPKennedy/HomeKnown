@@ -155,9 +155,10 @@ const RecreationMap = ({ data }) => {
               <Circle
                 center={[item.city.Latitude, item.city.Longitude]}
                 radius={80467} // 50 miles in meters
-                color="gold"
+                color="black"
                 fillColor="green"
                 fillOpacity={0.1} // Opacity of the circle fill
+                opacity={0.2}
               />
               <Marker
                 position={[item.city.Latitude, item.city.Longitude]}

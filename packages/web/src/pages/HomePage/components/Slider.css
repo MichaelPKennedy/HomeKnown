@@ -1,0 +1,44 @@
+/* Slider Styles */
+
+/* Adjusting the width of the slider */
+.rc-slider {
+  width: 100%; /* or whatever width you want */
+  margin: 0 auto; /* centers the slider */
+}
+
+/* Styling the track (the part of the slider that's filled in) */
+.rc-slider-track {
+  background-color: #78cce8; /* matching the color of the buttons from earlier */
+  height: 8px; /* increases the height */
+}
+
+/* Styling the rail (the background of the slider) */
+.rc-slider-rail {
+  background-color: #e0e0e0; /* a light gray */
+  height: 8px; /* matching the track height */
+}
+
+/* Styling the handle (the draggable part) */
+.rc-slider-handle {
+  width: 20px; /* making the handle larger */
+  height: 20px;
+  border: solid 2px #007bff; /* a border to match the track color */
+  background-color: #fff; /* a white handle */
+  box-shadow: none; /* removing any shadow */
+  margin-top: -6px; /* adjusting margin to vertically center the handle */
+}
+
+/* Styling the handle when it's being dragged */
+.rc-slider-handle:active {
+  border-color: #0056b3; /* a slightly darker blue */
+  box-shadow: 0 0 5px #0056b3; /* adding a subtle shadow for a "pressed" effect */
+}
+
+.styles_formCheckInput {
+  display: none;
+}
+
+.styles_formCheckInput:checked + .styles_formCheckLabel::before {
+  background-color: yourDesiredColor;
+  /* you can even add a small circle inside for radio button style */
+}

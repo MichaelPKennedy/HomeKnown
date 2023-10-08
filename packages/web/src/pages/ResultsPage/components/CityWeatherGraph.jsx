@@ -45,10 +45,7 @@ const CityWeatherGraph = ({ cityData }) => {
     svg.selectAll("*").remove();
 
     const defs = svg.append("defs");
-    const filter = defs
-      .append("filter")
-      .attr("id", "drop-shadow")
-      .attr("height", "120%");
+    const filter = defs.append("filter").attr("height", "120%");
 
     filter
       .append("feGaussianBlur")
@@ -170,7 +167,7 @@ const CityWeatherGraph = ({ cityData }) => {
         (d) => height - margin.bottom - yScalePrecipitation(d.snow)
       )
       .attr("fill", "lightblue")
-      .style("filter", "url(#drop-shadow)");
+      .attr("class", styles.barSnow);
 
     svg
       .selectAll(".bar-rain")
@@ -185,8 +182,8 @@ const CityWeatherGraph = ({ cityData }) => {
         "height",
         (d) => height - margin.bottom - yScalePrecipitation(d.rain)
       )
-      .attr("fill", "darkBlue")
-      .style("filter", "url(#drop-shadow)");
+      .attr("class", styles.barRain)
+      .attr("fill", "darkBlue");
 
     // X & Y axis
     svg
@@ -214,6 +211,7 @@ const CityWeatherGraph = ({ cityData }) => {
       .attr("y", (d, i) => i * 25)
       .attr("width", 20)
       .attr("height", 20)
+      .attr("class", styles.barSnow)
       .attr("fill", (d) => d.color);
 
     legend

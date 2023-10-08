@@ -201,7 +201,7 @@ details[open] > summary {
 }
 
 details[open] .formCheck {
-  background-color: #f1f3f5; /* A shade between white and light gray */
+  background-color: #e8faff; /* A shade between white and light gray */
 }
 
 /* Checkbox Styling */
@@ -222,4 +222,29 @@ details .formCheck {
 .formCheckInput {
   flex-shrink: 0; /* Prevents the checkbox from shrinking */
   padding: 10px;
+  background-color: orange;
+}
+
+.selectedJobs {
+  background-color: rgb(107, 212, 231);
+  width: auto;
+  display: inline-flex;
+  flex-grow: 0;
+  height: 30px;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10px 12px 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  flex-wrap: no-wrap;
+}
+
+.slider {
+  width: 100%;
+  font-size: 18px;
+}
+
+.styles_formCheckInput {
+  display: none;
 }
