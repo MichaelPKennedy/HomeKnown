@@ -21,7 +21,7 @@ const legendData = [
   { color: "red", label: "High Temp" },
   { color: "steelblue", label: "Low Temp" },
   { color: "lightblue", label: "Snow" },
-  { color: "darkBlue", label: "Rain" },
+  { color: "rgb(31, 119, 180)", label: "Rain" },
 ];
 
 const CityWeatherGraph = ({ cityData }) => {
@@ -183,7 +183,7 @@ const CityWeatherGraph = ({ cityData }) => {
         (d) => height - margin.bottom - yScalePrecipitation(d.rain)
       )
       .attr("class", styles.barRain)
-      .attr("fill", "darkBlue");
+      .attr("fill", "rgb(31, 119, 180)");
 
     // X & Y axis
     svg

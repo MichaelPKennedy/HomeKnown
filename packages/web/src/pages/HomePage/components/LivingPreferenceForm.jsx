@@ -206,47 +206,6 @@ const LivingPreferenceForm = () => {
         />
       </div>
 
-      {/* Entry Level vs Senior Role Radio Buttons */}
-      <div className="form-group">
-        <label>
-          Would you be open to entry-level positions, or are you looking for
-          senior roles?
-        </label>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="jobLevel"
-            value="entry-level"
-            onChange={handleInputChange}
-            checked={formData.jobLevel === "entry-level"}
-          />
-          <label className={styles.formCheckLabel}>Entry-level</label>
-        </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="jobLevel"
-            value="senior"
-            onChange={handleInputChange}
-            checked={formData.jobLevel === "senior"}
-          />
-          <label className={styles.formCheckLabel}>Senior role</label>
-        </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="jobLevel"
-            value="both"
-            onChange={handleInputChange}
-            checked={formData.jobLevel === "both"}
-          />
-          <label className={styles.formCheckLabel}>Both</label>
-        </div>
-      </div>
-
       {/* <div className="form-group">
         <label>Preferred Landscape Features:</label>
         <div className="dropdown">

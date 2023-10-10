@@ -88,13 +88,18 @@ export class WeatherService implements ServiceMethods<any> {
             'jan_prec + feb_prec + mar_prec + apr_prec + may_prec + jun_prec + jul_prec + aug_prec + sep_prec + oct_prec + nov_prec + dec_prec BETWEEN 0 AND 30'
           )
         )
+        if (temperaturePreference === 'distinct') {
+          havingConditions['seasonDifference'] = {
+            [Op.gte]: 35
+          }
+        }
         console.log('retry 2')
         break
 
       case 3:
         if (temperaturePreference === 'distinct') {
           havingConditions['seasonDifference'] = {
-            [Op.gte]: 15
+            [Op.gte]: 30
           }
         }
         console.log('retry 3')
@@ -183,7 +188,7 @@ export class WeatherService implements ServiceMethods<any> {
     if (rainPreference === 'dry') {
       this.setCondition(ConditionKey.RainQuery, this.sequelize.literal(`${precipitationSumLiteral} <= 20`))
     } else {
-      this.setCondition(ConditionKey.RainQuery, this.sequelize.literal(`${precipitationSumLiteral} > 20`))
+      this.setCondition(ConditionKey.RainQuery, this.sequelize.literal(`${precipitationSumLiteral} > 5`))
     }
 
     const attributesInclude: (string | [any, string])[] = [
@@ -213,11 +218,8 @@ export class WeatherService implements ServiceMethods<any> {
       attributesInclude.push([this.sequelize.literal(seasonDifferenceLiteral), 'seasonDifference'])
 
       // Set the having condition for distinct seasons
-      const distinctSeasonsThreshold = 30 // You can adjust this value as needed
       havingConditions['seasonDifference'] = {
-        [Op.gte]: this.sequelize.literal(
-          `highestMonthlyAvg - lowestMonthlyAvg >= ${distinctSeasonsThreshold}`
-        )
+        [Op.gte]: 40
       }
     }
 
