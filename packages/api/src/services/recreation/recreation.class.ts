@@ -2,7 +2,7 @@ import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feather
 import type { Application } from '../../declarations'
 import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
 import { point, distance } from '@turf/turf'
-import { LandMark } from '../../../models/landmarks.model'
+import { LandMark } from '../../models/landmarks.model'
 
 export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
 

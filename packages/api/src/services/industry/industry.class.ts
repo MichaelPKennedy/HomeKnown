@@ -2,7 +2,7 @@ import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feather
 import type { Application } from '../../declarations'
 import type { Industry, IndustryData, IndustryPatch, IndustryQuery } from './industry.schema'
 import { Op } from 'sequelize'
-import { State } from '../../../models/state.model'
+import { State } from '../../models/state.model'
 
 export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 

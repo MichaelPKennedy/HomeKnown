@@ -83,7 +83,7 @@ export class SurveyService implements ServiceMethods<any> {
       topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
     }
 
-    //make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
+    //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
 
     return {
       jobResponse,

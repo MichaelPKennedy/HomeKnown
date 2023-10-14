@@ -5,9 +5,9 @@ const { Sequelize } = require('sequelize')
 
 const Op = Sequelize.Op
 
-import { CityWeather } from '../../../models/city-weather.model'
-import { Weather } from '../../../models/weather.model'
-import { State } from '../../../models/state.model'
+import { CityWeather } from '../../models/city-weather.model'
+import { Weather } from '../../models/weather.model'
+import { State } from '../../models/state.model'
 
 export type { WeatherSchema, WeatherData, WeatherPatch, WeatherQuery }
 
