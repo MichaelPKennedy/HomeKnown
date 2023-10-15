@@ -16,6 +16,27 @@ export const StateModel = (sequelize: Sequelize) => {
       },
       state_abbrev: {
         type: DataTypes.CHAR(2)
+      },
+      totalCostIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      GroceryCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      HealthCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      HousingCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      MiscCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      TranspCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
+      },
+      UtilCostsIndex: {
+        type: DataTypes.DECIMAL(10, 2)
       }
     },
     {

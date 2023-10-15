@@ -30,6 +30,10 @@ export const CityModel = (sequelize: Sequelize) => {
       Longitude: {
         type: DataTypes.DECIMAL(9, 6),
         allowNull: true
+      },
+      currentHomePrice: {
+        type: DataTypes.DECIMAL(10, 2),
+        allowNull: true
       }
     },
     {
