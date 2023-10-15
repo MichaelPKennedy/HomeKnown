@@ -7,6 +7,9 @@ import client from "../../../feathersClient.js";
 import { useNavigate } from "react-router-dom";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
+import PreferenceWeight from "./PreferenceWeight.jsx";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -142,152 +145,154 @@ const LivingPreferenceForm = () => {
   // };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
-    >
-      <div className="form-group">
-        <h4 className="pb-2">Job Industry</h4>
-        <label htmlFor="job">
-          What's your current profession or job title?
-        </label>
-        <Autosuggest
-          suggestions={suggestions}
-          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={onSuggestionsClearRequested}
-          onSuggestionSelected={suggestionSelected}
-          getSuggestionValue={(suggestion) => suggestion.occ_title}
-          renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
-          inputProps={{
-            className: `form-control ${styles.formInput}`,
-            id: "job",
-            placeholder: "Enter job title...",
-            value: searchTerm,
-            onChange: (_, { newValue }) => setSearchTerm(newValue),
-          }}
-        />
+    <DndProvider backend={HTML5Backend}>
+      <form
+        onSubmit={handleSubmit}
+        className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
+      >
+        <PreferenceWeight />
+        <div className="form-group">
+          <h4 className="pb-2">Job Industry</h4>
+          <label htmlFor="job">
+            What's your current profession or job title?
+          </label>
+          <Autosuggest
+            suggestions={suggestions}
+            onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={onSuggestionsClearRequested}
+            onSuggestionSelected={suggestionSelected}
+            getSuggestionValue={(suggestion) => suggestion.occ_title}
+            renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
+            inputProps={{
+              className: `form-control ${styles.formInput}`,
+              id: "job",
+              placeholder: "Enter job title...",
+              value: searchTerm,
+              onChange: (_, { newValue }) => setSearchTerm(newValue),
+            }}
+          />
 
-        <div className="selected-jobs mt-3">
-          {formData.selectedJobs.map((job, index) => (
-            <div
-              key={index}
-              className={`badge badge-primary mr-2 ${styles.selectedJobs}`}
-            >
-              {job.occ_title}
-              <span
-                style={{ cursor: "pointer", marginLeft: "5px" }}
-                onClick={() => {
-                  const updatedJobs = formData.selectedJobs.filter(
-                    (j) => j !== job
-                  );
-                  setFormData((prevState) => ({
-                    ...prevState,
-                    selectedJobs: updatedJobs,
-                  }));
-                }}
+          <div className="selected-jobs mt-3">
+            {formData.selectedJobs.map((job, index) => (
+              <div
+                key={index}
+                className={`badge badge-primary mr-2 ${styles.selectedJobs}`}
               >
-                &times;
-              </span>
+                {job.occ_title}
+                <span
+                  style={{ cursor: "pointer", marginLeft: "5px" }}
+                  onClick={() => {
+                    const updatedJobs = formData.selectedJobs.filter(
+                      (j) => j !== job
+                    );
+                    setFormData((prevState) => ({
+                      ...prevState,
+                      selectedJobs: updatedJobs,
+                    }));
+                  }}
+                >
+                  &times;
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Minimum Salary Input */}
+        <div className="form-group">
+          <label htmlFor="minSalary">
+            What's the minimum salary you'd be willing to accept for a job in a
+            new state?
+          </label>
+          <input
+            type="number"
+            name="minSalary"
+            value={formData.minSalary || ""}
+            onChange={handleInputChange}
+            className={`form-control ${styles.formInput}`}
+            id="minSalary"
+            placeholder="Enter minimum acceptable salary"
+          />
+        </div>
+
+        {/* Rent or Buy */}
+        <div className="form-group">
+          <label>Are you looking to buy or rent?</label>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="housingType"
+                value="buy"
+                checked={formData.housingType === "buy"}
+                onChange={handleInputChange}
+              />
+              Buy
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="housingType"
+                value="rent"
+                checked={formData.housingType === "rent"}
+                onChange={handleInputChange}
+              />
+              Rent
+            </label>
+          </div>
+        </div>
+
+        {/* If buying */}
+        {formData.housingType === "buy" && (
+          <div className="form-group">
+            <label htmlFor="homePriceRange">
+              What is the home price range you are looking for?
+            </label>
+            <Slider
+              range
+              min={50000}
+              max={1000000}
+              value={[formData.homeMin, formData.homeMax]}
+              onChange={(values) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  homeMin: values[0],
+                  homeMax: values[1],
+                }));
+              }}
+            />
+            <div className="mt-2">
+              ${formData.homeMin || 50000} - ${formData.homeMax || 1000000}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Minimum Salary Input */}
-      <div className="form-group">
-        <label htmlFor="minSalary">
-          What's the minimum salary you'd be willing to accept for a job in a
-          new state?
-        </label>
-        <input
-          type="number"
-          name="minSalary"
-          value={formData.minSalary || ""}
-          onChange={handleInputChange}
-          className={`form-control ${styles.formInput}`}
-          id="minSalary"
-          placeholder="Enter minimum acceptable salary"
-        />
-      </div>
-
-      {/* Rent or Buy */}
-      <div className="form-group">
-        <label>Are you looking to buy or rent?</label>
-        <div>
-          <label>
-            <input
-              type="radio"
-              name="housingType"
-              value="buy"
-              checked={formData.housingType === "buy"}
-              onChange={handleInputChange}
-            />
-            Buy
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="housingType"
-              value="rent"
-              checked={formData.housingType === "rent"}
-              onChange={handleInputChange}
-            />
-            Rent
-          </label>
-        </div>
-      </div>
-
-      {/* If buying */}
-      {formData.housingType === "buy" && (
-        <div className="form-group">
-          <label htmlFor="homePriceRange">
-            What is the home price range you are looking for?
-          </label>
-          <Slider
-            range
-            min={50000}
-            max={1000000}
-            value={[formData.homeMin, formData.homeMax]}
-            onChange={(values) => {
-              setFormData((prevState) => ({
-                ...prevState,
-                homeMin: values[0],
-                homeMax: values[1],
-              }));
-            }}
-          />
-          <div className="mt-2">
-            ${formData.homeMin || 50000} - ${formData.homeMax || 1000000}
           </div>
-        </div>
-      )}
+        )}
 
-      {/* If renting */}
-      {formData.housingType === "rent" && (
-        <div className="form-group">
-          <label htmlFor="rentPriceRange">
-            What is the rent price range you are looking for?
-          </label>
-          <Slider
-            range
-            min={500}
-            max={5000}
-            value={[formData.rentMin, formData.rentMax]}
-            onChange={(values) => {
-              setFormData((prevState) => ({
-                ...prevState,
-                rentMin: values[0],
-                rentMax: values[1],
-              }));
-            }}
-          />
-          <div className="mt-2">
-            ${formData.rentMin || 500} - ${formData.rentMax || 5000}
+        {/* If renting */}
+        {formData.housingType === "rent" && (
+          <div className="form-group">
+            <label htmlFor="rentPriceRange">
+              What is the rent price range you are looking for?
+            </label>
+            <Slider
+              range
+              min={500}
+              max={5000}
+              value={[formData.rentMin, formData.rentMax]}
+              onChange={(values) => {
+                setFormData((prevState) => ({
+                  ...prevState,
+                  rentMin: values[0],
+                  rentMax: values[1],
+                }));
+              }}
+            />
+            <div className="mt-2">
+              ${formData.rentMin || 500} - ${formData.rentMax || 5000}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* <div className="form-group">
+        {/* <div className="form-group">
         <label>Preferred Landscape Features:</label>
         <div className="dropdown">
           <button
@@ -340,7 +345,7 @@ const LivingPreferenceForm = () => {
         </div>
       </div> */}
 
-      {/* <div className="form-group">
+        {/* <div className="form-group">
         <label>Recreational Interests:</label>
         <div className="dropdown">
           <button
@@ -385,440 +390,454 @@ const LivingPreferenceForm = () => {
           </div>
         </div>
       </div> */}
-      <div className={`form-group ${styles.slider}`}>
-        <h4 className="pb-2 pt-2">Weather</h4>
-        <label htmlFor="temperature">Ideal average temperature (°F):</label>
+        <div className={`form-group ${styles.slider}`}>
+          <h4 className="pb-2 pt-2">Weather</h4>
+          <label htmlFor="temperature">Ideal average temperature (°F):</label>
 
-        <Slider
-          min={0}
-          max={120}
-          step={1}
-          value={formData.temperature}
-          onChange={(value) =>
-            setFormData((prevState) => ({ ...prevState, temperature: value }))
-          }
-        />
-
-        <small className="form-text text-muted">{formData.temperature}°F</small>
-      </div>
-
-      {/* Weather Preference: Temperature */}
-      <div className="form-group">
-        <label>
-          Do you prefer cities with mild temperatures throughout the year or
-          those that experience distinct seasons?
-        </label>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="temperaturePreference"
-            value="mild"
-            onChange={handleInputChange}
-            checked={formData.temperaturePreference === "mild"}
+          <Slider
+            min={0}
+            max={120}
+            step={1}
+            value={formData.temperature}
+            onChange={(value) =>
+              setFormData((prevState) => ({ ...prevState, temperature: value }))
+            }
           />
-          <label className={styles.formCheckLabel}>
-            Mild temperatures throughout the year
+
+          <small className="form-text text-muted">
+            {formData.temperature}°F
+          </small>
+        </div>
+
+        {/* Weather Preference: Temperature */}
+        <div className="form-group">
+          <label>
+            Do you prefer cities with mild temperatures throughout the year or
+            those that experience distinct seasons?
           </label>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="temperaturePreference"
+              value="mild"
+              onChange={handleInputChange}
+              checked={formData.temperaturePreference === "mild"}
+            />
+            <label className={styles.formCheckLabel}>
+              Mild temperatures throughout the year
+            </label>
+          </div>
+          <div>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="temperaturePreference"
+              value="distinct"
+              onChange={handleInputChange}
+              checked={formData.temperaturePreference === "distinct"}
+            />
+            <label className={styles.formCheckLabel}>Distinct seasons</label>
+          </div>
         </div>
-        <div>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="temperaturePreference"
-            value="distinct"
-            onChange={handleInputChange}
-            checked={formData.temperaturePreference === "distinct"}
-          />
-          <label className={styles.formCheckLabel}>Distinct seasons</label>
-        </div>
-      </div>
 
-      {/* Weather Preference: Climate */}
-      <div className="form-group">
-        <label>
-          Are you more comfortable with warmer climates or cooler climates?
-        </label>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="climatePreference"
-            value="warmer"
-            onChange={handleInputChange}
-            checked={formData.climatePreference === "warmer"}
-          />
-          <label className={styles.formCheckLabel}>Warmer climates</label>
-        </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="climatePreference"
-            value="cooler"
-            onChange={handleInputChange}
-            checked={formData.climatePreference === "cooler"}
-          />
-          <label className={styles.formCheckLabel}>Cooler climates</label>
-        </div>
-      </div>
-
-      {/* Snow Preference */}
-      <div className="form-group">
-        <label>
-          Would you be okay living in an area that receives snow? If so, would
-          you be okay with heavy snowfall or just light, occasional snow?
-        </label>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="snowPreference"
-            value="none"
-            onChange={handleInputChange}
-            checked={formData.snowPreference === "none"}
-          />
-          <label className={styles.formCheckLabel}>No snow</label>
-        </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="snowPreference"
-            value="light"
-            onChange={handleInputChange}
-            checked={formData.snowPreference === "light"}
-          />
-          <label className={styles.formCheckLabel}>
-            Light, occasional snow
+        {/* Weather Preference: Climate */}
+        <div className="form-group">
+          <label>
+            Are you more comfortable with warmer climates or cooler climates?
           </label>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="climatePreference"
+              value="warmer"
+              onChange={handleInputChange}
+              checked={formData.climatePreference === "warmer"}
+            />
+            <label className={styles.formCheckLabel}>Warmer climates</label>
+          </div>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="climatePreference"
+              value="cooler"
+              onChange={handleInputChange}
+              checked={formData.climatePreference === "cooler"}
+            />
+            <label className={styles.formCheckLabel}>Cooler climates</label>
+          </div>
         </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="snowPreference"
-            value="heavy"
-            onChange={handleInputChange}
-            checked={formData.snowPreference === "heavy"}
-          />
-          <label className={styles.formCheckLabel}>Heavy snowfall</label>
-        </div>
-      </div>
 
-      {/* Rain Preference */}
-      <div className="form-group">
-        <label>
-          Would you like to live in a city that tends to be dryer throughout the
-          year, or are you comfortable with regular rainfall?
-        </label>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="rainPreference"
-            value="dry"
-            onChange={handleInputChange}
-            checked={formData.rainPreference === "dry"}
-          />
-          <label className={styles.formCheckLabel}>Generally dry</label>
-        </div>
-        <div className={styles.formCheck}>
-          <input
-            className={styles.formCheckInput}
-            type="radio"
-            name="rainPreference"
-            value="regular"
-            onChange={handleInputChange}
-            checked={formData.rainPreference === "regular"}
-          />
-          <label className={styles.formCheckLabel}>
-            Comfortable with regular rainfall
+        {/* Snow Preference */}
+        <div className="form-group">
+          <label>
+            Would you be okay living in an area that receives snow? If so, would
+            you be okay with heavy snowfall or just light, occasional snow?
           </label>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="snowPreference"
+              value="none"
+              onChange={handleInputChange}
+              checked={formData.snowPreference === "none"}
+            />
+            <label className={styles.formCheckLabel}>No snow</label>
+          </div>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="snowPreference"
+              value="light"
+              onChange={handleInputChange}
+              checked={formData.snowPreference === "light"}
+            />
+            <label className={styles.formCheckLabel}>
+              Light, occasional snow
+            </label>
+          </div>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="snowPreference"
+              value="heavy"
+              onChange={handleInputChange}
+              checked={formData.snowPreference === "heavy"}
+            />
+            <label className={styles.formCheckLabel}>Heavy snowfall</label>
+          </div>
         </div>
-      </div>
 
-      <div className={`form-group ${styles.recreationalInterestsContainer}`}>
-        <h4 className="pb-3">Recreational Interests</h4>
-        <p className="mb-3">
-          Please select the recreational activities you are interested in.
-        </p>
-
-        <div className={styles.collapsibleSections}>
-          <details>
-            <summary>Nature and Scenery</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="mountains"
-                id="mountains"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="mountains">
-                Hiking and Trekking in Mountains
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="nationalParks"
-                id="nationalParks"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="nationalParks">
-                Exploring National Parks and Reserves
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="forests"
-                id="forests"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="forests">
-                Forests
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="waterfrontViews"
-                id="waterfrontViews"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label
-                className={styles.formCheckLabel}
-                htmlFor="waterfrontViews"
-              >
-                Scenic Waterfront Views
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="scenicDrives"
-                id="scenicDrives"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="scenicDrives">
-                Scenic Drives
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>History and Culture</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="historicSites"
-                id="historicSites"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="historicSites">
-                Visiting Historic Sites and Landmarks
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="monuments"
-                id="monuments"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="monuments">
-                Exploring National Monuments and Memorials
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="museums"
-                id="museums"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="museums">
-                Museums
-              </label>
-            </div>
-          </details>
-          <details>
-            <summary>Adventure and Exploration</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="naturalWonders"
-                id="naturalWonders"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="naturalWonders">
-                Exploring Natural Wonders (Caves, Waterfalls)
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="rockClimbing"
-                id="rockClimbing"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="rockClimbing">
-                Rock Climbing and Adventurous Activities
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>Water Activities</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="waterSports"
-                id="waterSports"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="waterSports">
-                Boating, Fishing, Swimming
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="beach"
-                id="beach"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="beach">
-                Living Near a Beach
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>Wildlife and Flora</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="diverseFloraFauna"
-                id="diverseFloraFauna"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label
-                className={styles.formCheckLabel}
-                htmlFor="diverseFloraFauna"
-              >
-                Visiting Places with Diverse Flora and Fauna
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="birdWatching"
-                id="birdWatching"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="birdWatching">
-                Bird Watching and Wildlife Activities
-              </label>
-            </div>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="zoos"
-                id="zoos"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="zoos">
-                Zoos and Wildlife Reserves
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>Winter Sports</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="winterSports"
-                id="winterSports"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="winterSports">
-                Skiing and Snowboarding
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>Astronomy</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="stargazing"
-                id="stargazing"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="stargazing">
-                Stargazing and Observing Celestial Objects
-              </label>
-            </div>
-          </details>
-
-          <details>
-            <summary>Entertainment</summary>
-            <div className={styles.formCheck}>
-              <input
-                className={styles.formCheckInput}
-                type="checkbox"
-                value="amusementParks"
-                id="amusementParks"
-                name="recreationalInterests"
-                onChange={handleCheckboxChange}
-              />
-              <label className={styles.formCheckLabel} htmlFor="amusementParks">
-                Visiting Amusement Parks and Entertainment Centers
-              </label>
-            </div>
-          </details>
+        {/* Rain Preference */}
+        <div className="form-group">
+          <label>
+            Would you like to live in a city that tends to be dryer throughout
+            the year, or are you comfortable with regular rainfall?
+          </label>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="rainPreference"
+              value="dry"
+              onChange={handleInputChange}
+              checked={formData.rainPreference === "dry"}
+            />
+            <label className={styles.formCheckLabel}>Generally dry</label>
+          </div>
+          <div className={styles.formCheck}>
+            <input
+              className={styles.formCheckInput}
+              type="radio"
+              name="rainPreference"
+              value="regular"
+              onChange={handleInputChange}
+              checked={formData.rainPreference === "regular"}
+            />
+            <label className={styles.formCheckLabel}>
+              Comfortable with regular rainfall
+            </label>
+          </div>
         </div>
-      </div>
 
-      {/* <div className="form-group">
+        <div className={`form-group ${styles.recreationalInterestsContainer}`}>
+          <h4 className="pb-3">Recreational Interests</h4>
+          <p className="mb-3">
+            Please select the recreational activities you are interested in.
+          </p>
+
+          <div className={styles.collapsibleSections}>
+            <details>
+              <summary>Nature and Scenery</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="mountains"
+                  id="mountains"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="mountains">
+                  Hiking and Trekking in Mountains
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="nationalParks"
+                  id="nationalParks"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="nationalParks"
+                >
+                  Exploring National Parks and Reserves
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="forests"
+                  id="forests"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="forests">
+                  Forests
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="waterfrontViews"
+                  id="waterfrontViews"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="waterfrontViews"
+                >
+                  Scenic Waterfront Views
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="scenicDrives"
+                  id="scenicDrives"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="scenicDrives">
+                  Scenic Drives
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>History and Culture</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="historicSites"
+                  id="historicSites"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="historicSites"
+                >
+                  Visiting Historic Sites and Landmarks
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="monuments"
+                  id="monuments"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="monuments">
+                  Exploring National Monuments and Memorials
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="museums"
+                  id="museums"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="museums">
+                  Museums
+                </label>
+              </div>
+            </details>
+            <details>
+              <summary>Adventure and Exploration</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="naturalWonders"
+                  id="naturalWonders"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="naturalWonders"
+                >
+                  Exploring Natural Wonders (Caves, Waterfalls)
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="rockClimbing"
+                  id="rockClimbing"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="rockClimbing">
+                  Rock Climbing and Adventurous Activities
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>Water Activities</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="waterSports"
+                  id="waterSports"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="waterSports">
+                  Boating, Fishing, Swimming
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="beach"
+                  id="beach"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="beach">
+                  Living Near a Beach
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>Wildlife and Flora</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="diverseFloraFauna"
+                  id="diverseFloraFauna"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="diverseFloraFauna"
+                >
+                  Visiting Places with Diverse Flora and Fauna
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="birdWatching"
+                  id="birdWatching"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="birdWatching">
+                  Bird Watching and Wildlife Activities
+                </label>
+              </div>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="zoos"
+                  id="zoos"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="zoos">
+                  Zoos and Wildlife Reserves
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>Winter Sports</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="winterSports"
+                  id="winterSports"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="winterSports">
+                  Skiing and Snowboarding
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>Astronomy</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="stargazing"
+                  id="stargazing"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.formCheckLabel} htmlFor="stargazing">
+                  Stargazing and Observing Celestial Objects
+                </label>
+              </div>
+            </details>
+
+            <details>
+              <summary>Entertainment</summary>
+              <div className={styles.formCheck}>
+                <input
+                  className={styles.formCheckInput}
+                  type="checkbox"
+                  value="amusementParks"
+                  id="amusementParks"
+                  name="recreationalInterests"
+                  onChange={handleCheckboxChange}
+                />
+                <label
+                  className={styles.formCheckLabel}
+                  htmlFor="amusementParks"
+                >
+                  Visiting Amusement Parks and Entertainment Centers
+                </label>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        {/* <div className="form-group">
         <label>Living Preference:</label>
         <div className={styles.formCheck}>
           <input
@@ -863,7 +882,7 @@ const LivingPreferenceForm = () => {
           </label>
         </div>
       </div> */}
-      {/* <div className="form-group">
+        {/* <div className="form-group">
         <label htmlFor="housingBudget">Housing Budget:</label>
         <input
           type="range"
@@ -881,13 +900,14 @@ const LivingPreferenceForm = () => {
         </small>
       </div> */}
 
-      <button
-        type="submit"
-        className={`btn btn-info mt-2 ${styles.btnDropdown}`}
-      >
-        Submit
-      </button>
-    </form>
+        <button
+          type="submit"
+          className={`btn btn-info mt-2 ${styles.btnDropdown}`}
+        >
+          Submit
+        </button>
+      </form>
+    </DndProvider>
   );
 };
 

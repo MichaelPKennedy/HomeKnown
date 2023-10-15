@@ -10,6 +10,8 @@ import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import ResultsPage from "./pages/ResultsPage";
 import NavBar from "./components/NavBar";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 // Create a client
 
@@ -44,14 +46,16 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <NavBar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/results" element={<ResultsPage />} />
-          </Routes>
-        </Router>
+        <DndProvider backend={HTML5Backend}>
+          <Router>
+            <NavBar />
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/results" element={<ResultsPage />} />
+            </Routes>
+          </Router>
+        </DndProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   </React.StrictMode>

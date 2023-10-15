@@ -1,0 +1,72 @@
+.preferenceToken {
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  background-color: #fafdff;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 3px;
+  cursor: pointer;
+}
+
+.selectedToken {
+  background-color: #9ce0eb;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.dropzone {
+  width: 200px;
+  height: 200px;
+  border: 1px solid rgba(65, 164, 154, 0.5);
+
+  border-radius: 20px;
+  display: inline-block;
+  margin: 10px;
+  padding: 10px;
+  position: relative;
+  transition: background-color 0.2s ease;
+  font-size: 12px;
+}
+
+.dropZoneActive {
+  background-color: #f2e9e4;
+}
+
+.dropZoneContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.dropzoneTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+  margin: auto;
+  text-align: center;
+}
+
+.token {
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 3px;
+}
+
+.multipleDraggingToken {
+  transform: translateY(-10px);
+}
+
+.dragPreview {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.previewToken {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}

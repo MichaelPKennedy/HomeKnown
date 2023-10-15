@@ -29,7 +29,6 @@ export class OccupationService implements ServiceMethods<any> {
 
     const inputQuery = params.query.query
 
-    // Assuming Occupation is already a Sequelize model. Use this.sequelize.models.Occupation if it's not directly accessible.
     const matchingOccupations = await this.sequelize.models.Occupation.findAll({
       where: {
         occ_title: {
