@@ -48,6 +48,11 @@ export interface SurveyFormData {
     nightlifeImportance?: boolean
     landscapeFeatures?: string[]
     recreationalInterests?: string[]
+    housingType?: 'rent' | 'buy'
+    homeMin?: number
+    homeMax?: number
+    rentMin?: number
+    rentMax?: number
   }
 }
 
@@ -62,11 +67,13 @@ export class SurveyService implements ServiceMethods<any> {
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
     const recreationData = data.data.recreationalInterests
+    const housingData = this.parseHousingData(data)
 
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
     const recreationResponse = await this.getRecreationResponse(recreationData)
-    console.log('recreationResponse', recreationResponse)
+    const housingResponse = await this.getHousingResponse(housingData)
+    console.log('housingResponse', housingResponse)
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
       return jobResponse.topCities.some((jobCity: any) => {
@@ -125,6 +132,18 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
+  parseHousingData(data: SurveyFormData): any {
+    const { housingType, homeMin, homeMax, rentMin, rentMax } = data.data
+
+    return {
+      housingType,
+      homeMin,
+      homeMax,
+      rentMin,
+      rentMax
+    }
+  }
+
   async getIndustryResponse(data: any): Promise<any> {
     const industryService = this.app.service('industry')
 
@@ -168,6 +187,20 @@ export class SurveyService implements ServiceMethods<any> {
     } catch (error) {
       console.error('Error querying the recreation service:', error)
       throw new Error('Unable to fetch data from recreation service.')
+    }
+  }
+  async getHousingResponse(data: any): Promise<any> {
+    const housingService = this.app.service('housing')
+    try {
+      const response = await housingService.find({
+        query: {
+          ...data
+        }
+      })
+      return response
+    } catch (error) {
+      console.error('Error querying the housing service:', error)
+      throw new Error('Unable to fetch data from housing service.')
     }
   }
 

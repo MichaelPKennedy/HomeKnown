@@ -5,7 +5,7 @@ import type { Housing, HousingData, HousingPatch, HousingQuery, HousingService }
 
 export type { Housing, HousingData, HousingPatch, HousingQuery }
 
-export type HousingClientService = Pick<HousingService<Params<HousingQuery>>, (typeof housingMethods)[number]>
+export type HousingClientService = Pick<HousingService, (typeof housingMethods)[number]>
 
 export const housingPath = 'housing'
 

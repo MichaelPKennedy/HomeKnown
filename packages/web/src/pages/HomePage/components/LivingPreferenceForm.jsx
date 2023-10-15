@@ -19,7 +19,6 @@ const LivingPreferenceForm = () => {
     job: "",
     partnerJob: "",
     livingPreference: "city",
-    housingBudget: 150000,
     settingPreference: "",
     hasChildren: false,
     lowCrimePriority: false,
@@ -36,6 +35,11 @@ const LivingPreferenceForm = () => {
     wagePriority: 5,
     futureAspiration: "",
     selectedJobs: [],
+    housingType: "",
+    homeMin: 200000,
+    homeMax: 300000,
+    rentMin: 1000,
+    rentMax: 2000,
   });
 
   const navigate = useNavigate();
@@ -205,6 +209,83 @@ const LivingPreferenceForm = () => {
           placeholder="Enter minimum acceptable salary"
         />
       </div>
+
+      {/* Rent or Buy */}
+      <div className="form-group">
+        <label>Are you looking to buy or rent?</label>
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="housingType"
+              value="buy"
+              checked={formData.housingType === "buy"}
+              onChange={handleInputChange}
+            />
+            Buy
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="housingType"
+              value="rent"
+              checked={formData.housingType === "rent"}
+              onChange={handleInputChange}
+            />
+            Rent
+          </label>
+        </div>
+      </div>
+
+      {/* If buying */}
+      {formData.housingType === "buy" && (
+        <div className="form-group">
+          <label htmlFor="homePriceRange">
+            What is the home price range you are looking for?
+          </label>
+          <Slider
+            range
+            min={50000}
+            max={1000000}
+            value={[formData.homeMin, formData.homeMax]}
+            onChange={(values) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                homeMin: values[0],
+                homeMax: values[1],
+              }));
+            }}
+          />
+          <div className="mt-2">
+            ${formData.homeMin || 50000} - ${formData.homeMax || 1000000}
+          </div>
+        </div>
+      )}
+
+      {/* If renting */}
+      {formData.housingType === "rent" && (
+        <div className="form-group">
+          <label htmlFor="rentPriceRange">
+            What is the rent price range you are looking for?
+          </label>
+          <Slider
+            range
+            min={500}
+            max={5000}
+            value={[formData.rentMin, formData.rentMax]}
+            onChange={(values) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                rentMin: values[0],
+                rentMax: values[1],
+              }));
+            }}
+          />
+          <div className="mt-2">
+            ${formData.rentMin || 500} - ${formData.rentMax || 5000}
+          </div>
+        </div>
+      )}
 
       {/* <div className="form-group">
         <label>Preferred Landscape Features:</label>
