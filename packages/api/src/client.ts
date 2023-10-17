@@ -15,16 +15,7 @@ export type {
   RecreationPatch
 } from './services/recreation/recreation.shared'
 
-import { occupationClient } from './services/occupation/occupation.shared'
-export type {
-  Occupation,
-  OccupationData,
-  OccupationQuery,
-  OccupationPatch
-} from './services/occupation/occupation.shared'
-
 import { weatherClient } from './services/weather/weather.shared'
-export type { Weather, WeatherData, WeatherQuery, WeatherPatch } from './services/weather/weather.shared'
 
 import { industryClient } from './services/industry/industry.shared'
 export type {
@@ -38,7 +29,7 @@ import { surveyClient } from './services/survey/survey.shared'
 export type { Survey, SurveyData, SurveyQuery, SurveyPatch } from './services/survey/survey.shared'
 
 import { placesClient } from './services/places/places.shared'
-export type { Places, PlacesData, PlacesQuery, PlacesPatch } from './services/places/places.shared'
+import { occupationClient } from './services/occupation/occupation.shared'
 
 export interface Configuration {
   connection: TransportConnection<ServiceTypes>
@@ -56,7 +47,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {

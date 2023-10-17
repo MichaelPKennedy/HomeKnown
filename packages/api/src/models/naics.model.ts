@@ -1,9 +1,8 @@
-module.exports = function (app) {
-  const Sequelize = app.get('sequelize')
-  const { Model, DataTypes } = Sequelize
+import { DataTypes, Model, Sequelize } from 'sequelize'
 
-  class NAICS extends Model {}
+export class NAICS extends Model {}
 
+export const NAICSModel = (sequelize: Sequelize) => {
   NAICS.init(
     {
       naics_code: {
@@ -16,11 +15,9 @@ module.exports = function (app) {
       }
     },
     {
-      sequelize: app.get('sequelizeClient'),
+      sequelize,
       tableName: 'NAICS',
       timestamps: false
     }
   )
-
-  return NAICS
 }

@@ -1,9 +1,15 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.shared.html
 import type { Params } from '@feathersjs/feathers'
 import type { ClientApplication } from '../../client'
-import type { Recreation, RecreationData, RecreationPatch, RecreationService } from './recreation.class'
+import type {
+  Recreation,
+  RecreationData,
+  RecreationPatch,
+  RecreationService,
+  RecreationQuery
+} from './recreation.class'
 
-export type { Recreation, RecreationData, RecreationPatch }
+export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
 
 export type RecreationClientService = Pick<RecreationService, (typeof recreationMethods)[number]>
 

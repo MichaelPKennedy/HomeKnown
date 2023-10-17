@@ -20,22 +20,6 @@ export const weatherResolver = resolve<WeatherSchema, HookContext>({})
 
 export const weatherExternalResolver = resolve<WeatherSchema, HookContext>({})
 
-// Schema for creating new entries
-export const weatherDataSchema = Type.Pick(weatherSchema, ['text'], {
-  $id: 'WeatherData'
-})
-export type WeatherData = Static<typeof weatherDataSchema>
-export const weatherDataValidator = getValidator(weatherDataSchema, dataValidator)
-export const weatherDataResolver = resolve<WeatherSchema, HookContext>({})
-
-// Schema for updating existing entries
-export const weatherPatchSchema = Type.Partial(weatherSchema, {
-  $id: 'WeatherPatch'
-})
-export type WeatherPatch = Static<typeof weatherPatchSchema>
-export const weatherPatchValidator = getValidator(weatherPatchSchema, dataValidator)
-export const weatherPatchResolver = resolve<WeatherSchema, HookContext>({})
-
 // Schema for allowed query properties
 export const weatherQueryProperties = Type.Pick(weatherSchema, ['id', 'text'])
 export const weatherQuerySchema = Type.Intersect(

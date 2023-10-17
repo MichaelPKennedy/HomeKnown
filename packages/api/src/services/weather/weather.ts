@@ -3,13 +3,9 @@
 import { hooks as schemaHooks } from '@feathersjs/schema'
 
 import {
-  weatherDataValidator,
-  weatherPatchValidator,
   weatherQueryValidator,
   weatherResolver,
   weatherExternalResolver,
-  weatherDataResolver,
-  weatherPatchResolver,
   weatherQueryResolver
 } from './weather.schema'
 
@@ -39,8 +35,8 @@ export const weather = (app: Application) => {
       all: [schemaHooks.validateQuery(weatherQueryValidator), schemaHooks.resolveQuery(weatherQueryResolver)],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(weatherDataValidator), schemaHooks.resolveData(weatherDataResolver)],
-      patch: [schemaHooks.validateData(weatherPatchValidator), schemaHooks.resolveData(weatherPatchResolver)],
+      create: [],
+      patch: [],
       remove: []
     },
     after: {

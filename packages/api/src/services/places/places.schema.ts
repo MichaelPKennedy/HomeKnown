@@ -25,17 +25,6 @@ export const placesExternalResolver = resolve<Places, HookContext>({})
 export const placesDataSchema = Type.Pick(placesSchema, ['text'], {
   $id: 'PlacesData'
 })
-export type PlacesData = Static<typeof placesDataSchema>
-export const placesDataValidator = getValidator(placesDataSchema, dataValidator)
-export const placesDataResolver = resolve<Places, HookContext>({})
-
-// Schema for updating existing entries
-export const placesPatchSchema = Type.Partial(placesSchema, {
-  $id: 'PlacesPatch'
-})
-export type PlacesPatch = Static<typeof placesPatchSchema>
-export const placesPatchValidator = getValidator(placesPatchSchema, dataValidator)
-export const placesPatchResolver = resolve<Places, HookContext>({})
 
 // Schema for allowed query properties
 export const placesQueryProperties = Type.Pick(placesSchema, ['id', 'text', 'query'])

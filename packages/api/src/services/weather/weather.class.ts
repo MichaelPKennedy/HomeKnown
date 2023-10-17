@@ -1,5 +1,5 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
-import type { WeatherSchema, WeatherData, WeatherPatch, WeatherQuery } from './weather.schema'
+import type { WeatherSchema, WeatherQuery } from './weather.schema'
 import type { Application } from '../../declarations'
 const { Sequelize } = require('sequelize')
 
@@ -9,7 +9,7 @@ import { CityWeather } from '../../models/city-weather.model'
 import { Weather } from '../../models/weather.model'
 import { State } from '../../models/state.model'
 
-export type { WeatherSchema, WeatherData, WeatherPatch, WeatherQuery }
+export type { WeatherSchema, WeatherQuery }
 
 interface QueryParams {
   query: string
