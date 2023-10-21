@@ -11,7 +11,9 @@ import SearchPage from "./pages/SearchPage";
 import ResultsPage from "./pages/ResultsPage";
 import NavBar from "./components/NavBar";
 import { DndProvider } from "react-dnd";
+import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 
 // Create a client
 
@@ -38,6 +40,19 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+const HTML5toTouch = {
+  backends: [
+    {
+      backend: HTML5Backend,
+    },
+    {
+      backend: TouchBackend,
+      options: { enableMouseEvents: true }, // Note that you can call your backends with options
+      preview: false,
+      transition: TouchTransition,
+    },
+  ],
+};
 
 const queryClient = new QueryClient();
 
@@ -46,7 +61,7 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <DndProvider backend={HTML5Backend}>
+        <DndProvider backend={MultiBackend} options={HTML5toTouch}>
           <Router>
             <NavBar />
             <Routes>

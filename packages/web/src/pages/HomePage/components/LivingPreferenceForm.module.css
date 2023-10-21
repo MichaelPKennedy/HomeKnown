@@ -1,6 +1,8 @@
 /* General Styles */
 .container {
-  max-width: 650px; /* Widened the container a bit for better readability */
+  width: 100%;
+  max-width: 650px;
+  box-sizing: border-box; /* ensures padding doesn't add extra width */
 }
 
 .mt-5 {
@@ -37,6 +39,10 @@
   transition: background-color 0.2s;
 }
 
+.dropdownMenu {
+  width: fit-content;
+}
+
 .dropdownMenu .btnPrimary:hover {
   background-color: #007acc;
   color: white;
@@ -50,55 +56,6 @@
 .formCheckInput {
   transform: scale(1.5);
   margin-right: 5px;
-}
-
-.form-control {
-  width: 60%;
-}
-/* Slider styles */
-
-/* Range input common styles */
-.form-control-range {
-  width: 60%;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  height: 6px;
-  outline: none;
-  background: #e0e0e0 !important;
-}
-
-/* Handle (thumb) styles */
-.form-control-range::-webkit-slider-thumb {
-  -webkit-appearance: none !important;
-  appearance: none !important;
-  border-radius: 50% !important;
-  height: 20px !important;
-  width: 20px !important;
-  background: #ffd700 !important;
-  cursor: pointer;
-}
-
-.form-control-range::-moz-range-thumb {
-  border-radius: 50% !important;
-  height: 20px !important;
-  width: 20px !important;
-  background: #ffd700 !important;
-  cursor: pointer;
-}
-
-.form-control-range::-ms-thumb {
-  border-radius: 50% !important;
-  height: 20px !important;
-  width: 20px !important;
-  background: #ffd700 !important;
-  cursor: pointer;
-}
-
-/* Track styles */
-.formControlRange {
-  background-color: #ffea99 !important;
-  border-radius: 5px !important;
-  height: 10px !important;
 }
 
 /* Label and other text styles */
@@ -145,16 +102,34 @@
   align-items: start;
   flex-direction: column;
   height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .formContent {
-  width: 50%;
+  width: 100%;
   margin: 0 auto;
+  overflow-y: visible;
+}
+
+/* Desktop */
+@media screen and (min-width: 768px) {
+  /* 768px tablets and up */
+  .formContent {
+    width: 50%;
+    margin: 0 auto;
+    overflow: visible;
+  }
 }
 
 .formInput {
-  width: 600px;
+  width: 100%;
   margin-bottom: 1rem;
+}
+
+.formGroup {
+  width: 100%;
+  margin-bottom: 2rem;
 }
 
 /* Recreational Interests Container */

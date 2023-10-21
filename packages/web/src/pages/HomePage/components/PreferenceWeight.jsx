@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useDrag, useDrop, useDragLayer } from "react-dnd";
 import styles from "./PreferenceWeight.module.css";
+import { useSwipeable } from "react-swipeable";
 
 function DragPreview({ count }) {
   return (
@@ -17,6 +18,24 @@ function DragPreview({ count }) {
   );
 }
 
+function useCombinedRefs(...refs) {
+  const targetRef = useRef();
+
+  useEffect(() => {
+    refs.forEach((ref) => {
+      if (!ref) return;
+
+      if (typeof ref === "function") {
+        ref(targetRef.current);
+      } else {
+        ref.current = targetRef.current;
+      }
+    });
+  }, [refs]);
+
+  return targetRef;
+}
+
 function useItemDragLayer() {
   return useDragLayer((monitor) => ({
     item: monitor.getItem(),
@@ -31,7 +50,11 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
   const [, ref] = useDrag({
     type: "TOKEN",
     item: { fromSection: null, count: selectedTokens.length || 1 },
-
+    end: (item, monitor) => {
+      if (!monitor.didDrop()) {
+        //handle the case where the token is not dropped on a valid target here
+      }
+    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -85,8 +108,10 @@ function SectionDropZone({
   weight,
   onDropToken,
   onDragOut,
+  addTokenToSection,
+  removeTokenFromSection,
 }) {
-  const [{ isOver }, ref] = useDrop({
+  const [{ isOver }, dropRef] = useDrop({
     accept: "TOKEN",
     drop: (draggedItem) => {
       onDropToken(sectionKey, draggedItem.fromSection);
@@ -95,30 +120,50 @@ function SectionDropZone({
         onDragOut(draggedItem.fromSection, sectionKey);
       }
     },
-
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
   });
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => removeTokenFromSection(sectionKey),
+    // add other swipe handlers if needed
+  });
+
+  const ref = useRef(null);
+  const combinedRef = useCombinedRefs(ref, dropRef);
+
+  useEffect(() => {
+    // This ensures that our swipeable handlers are attached to the element
+    if (ref.current) {
+      const el = ref.current;
+      handlers.ref(el);
+    }
+  }, [handlers.ref]);
+
+  const handleClick = () => {
+    addTokenToSection(sectionKey);
+  };
+
   return (
     <div
-      ref={ref}
+      {...handlers}
+      ref={combinedRef}
+      onClick={handleClick}
       className={`${styles.dropzone} ${isOver ? styles.dropZoneActive : ""}`}
     >
       <p className={styles.dropzoneTitle}>{title}</p>
       <div className="tokens">
-        {weight > 0
-          ? Array(weight)
-              .fill(null)
-              .map((_, index) => (
-                <DraggableSectionToken
-                  key={index}
-                  section={sectionKey}
-                  onDragOut={onDragOut}
-                />
-              ))
-          : null}
+        {weight > 0 &&
+          Array(weight)
+            .fill(null)
+            .map((_, index) => (
+              <DraggableSectionToken
+                key={index}
+                section={sectionKey}
+                onDragOut={onDragOut}
+              />
+            ))}
       </div>
     </div>
   );
@@ -156,11 +201,45 @@ function PreferenceWeight() {
     totalAvailablePoints: 10,
   });
 
+  const addTokenToSection = (sectionKey) => {
+    setWeights((prevState) => {
+      if (prevState.totalAvailablePoints > 0) {
+        return {
+          ...prevState,
+          [sectionKey]: prevState[sectionKey] + 1,
+          totalAvailablePoints: prevState.totalAvailablePoints - 1,
+        };
+      }
+      return prevState;
+    });
+  };
+
+  const removeTokenFromSection = (sectionKey) => {
+    setWeights((prevState) => {
+      console.log("Previous State:", prevState);
+      if (prevState[sectionKey] > 0) {
+        const newState = {
+          ...prevState,
+          [sectionKey]: prevState[sectionKey] - 1,
+          totalAvailablePoints: prevState.totalAvailablePoints + 1,
+        };
+        console.log("New State:", newState);
+        return newState;
+      }
+      return prevState;
+    });
+  };
+
   const [selectedTokens, setSelectedTokens] = useState([]);
 
   const { item, itemType, currentOffset, isDragging } = useItemDragLayer();
 
   const handleDragOut = (fromSection, sectionKey) => {
+    if (
+      (fromSection === null && sectionKey === null) ||
+      fromSection === sectionKey
+    )
+      return;
     setWeights((prevState) => {
       const newWeights = {
         ...prevState,
@@ -226,6 +305,7 @@ function PreferenceWeight() {
               selectedTokens={selectedTokens}
               onSelect={toggleTokenSelection}
               isDragging={selectedTokens.length > 0}
+              removeTokenFromSection={removeTokenFromSection}
             />
           ))}
       </div>
@@ -238,6 +318,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
 
         <SectionDropZone
@@ -248,6 +330,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
 
         <SectionDropZone
@@ -258,6 +342,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
 
         <SectionDropZone
@@ -268,6 +354,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
 
         <SectionDropZone
@@ -278,6 +366,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
 
         <SectionDropZone
@@ -288,6 +378,8 @@ function PreferenceWeight() {
             updateSectionWeight(sectionKey, fromSection)
           }
           onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
         />
       </div>
 

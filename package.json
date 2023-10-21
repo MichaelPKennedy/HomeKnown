@@ -2,19 +2,16 @@
   "name": "root",
   "private": true,
   "workspaces": [
-    "./*"
+    " ./packages/api",
+    "./packages/web"
   ],
   "dependencies": {
     "ts-node": "^10.9.1",
+    "use-long-press": "^3.2.0",
     "web-vitals": "^3.4.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.14.5",
-    "lerna": "^7.1.4"
+    "@babel/plugin-proposal-private-property-in-object": "^7.14.5"
   },
-  "scripts": {
-    "dev": "lerna run dev --stream",
-    "dev-api": "lerna run dev --scope api --stream",
-    "dev-web": "lerna run dev --scope web --stream"
-  }
+  "scripts": {}
 }
