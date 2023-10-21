@@ -50,11 +50,6 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
   const [, ref] = useDrag({
     type: "TOKEN",
     item: { fromSection: null, count: selectedTokens.length || 1 },
-    end: (item, monitor) => {
-      if (!monitor.didDrop()) {
-        //handle the case where the token is not dropped on a valid target here
-      }
-    },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -257,11 +252,29 @@ function PreferenceWeight() {
   };
 
   const toggleTokenSelection = (index) => {
-    if (selectedTokens.includes(index)) {
-      setSelectedTokens((prev) => prev.filter((i) => i !== index));
-    } else {
-      setSelectedTokens((prev) => [...prev, index]);
-    }
+    setSelectedTokens((prev) => {
+      let newSelectedTokens = [...prev];
+      if (newSelectedTokens.includes(index)) {
+        newSelectedTokens = newSelectedTokens.filter((i) => i !== index);
+      } else {
+        newSelectedTokens.push(index);
+        // Sort to make sure tokens are in order
+        newSelectedTokens.sort((a, b) => a - b);
+      }
+
+      // Find the two outermost selected tokens
+      const minSelectedIndex = Math.min(...newSelectedTokens);
+      const maxSelectedIndex = Math.max(...newSelectedTokens);
+
+      // Select all tokens between the two outermost selected tokens
+      for (let i = minSelectedIndex; i <= maxSelectedIndex; i++) {
+        if (!newSelectedTokens.includes(i)) {
+          newSelectedTokens.push(i);
+        }
+      }
+
+      return newSelectedTokens;
+    });
   };
 
   const updateSectionWeight = (targetSection, fromSection = null) => {
@@ -286,7 +299,7 @@ function PreferenceWeight() {
       return newWeights;
     });
 
-    setSelectedTokens([]); // Clear selected tokens after the operation
+    setSelectedTokens([]);
   };
 
   function renderItem() {
