@@ -276,8 +276,9 @@ function PreferenceWeight() {
           prevState.totalAvailablePoints - adjustment;
       }
 
-      if (!adjustment) {
+      if (!adjustment && !fromSection) {
         newWeights[targetSection] = prevState[targetSection] + 1;
+        newWeights.totalAvailablePoints = prevState.totalAvailablePoints - 1;
       } else {
         newWeights[targetSection] = prevState[targetSection] + adjustment;
       }
