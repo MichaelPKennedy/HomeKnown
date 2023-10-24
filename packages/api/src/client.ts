@@ -4,6 +4,17 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { crimeClient } from './services/crime/crime.shared'
+export type { Crime, CrimeData, CrimeQuery, CrimePatch } from './services/crime/crime.shared'
+
+import { publicServicesClient } from './services/public-services/public-services.shared'
+export type {
+  PublicServices,
+  PublicServicesData,
+  PublicServicesQuery,
+  PublicServicesPatch
+} from './services/public-services/public-services.shared'
+
 import { housingClient } from './services/housing/housing.shared'
 export type { Housing, HousingData, HousingQuery, HousingPatch } from './services/housing/housing.shared'
 
@@ -47,7 +58,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any>(
+export const createClient = <Configuration = any,>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -64,5 +75,7 @@ export const createClient = <Configuration = any>(
   client.configure(occupationClient)
   client.configure(recreationClient)
   client.configure(housingClient)
+  client.configure(publicServicesClient)
+  client.configure(crimeClient)
   return client
 }

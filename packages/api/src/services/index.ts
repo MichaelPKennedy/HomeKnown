@@ -1,3 +1,5 @@
+import { crime } from './crime/crime'
+import { publicServices } from './public-services/public-services'
 import { housing } from './housing/housing'
 import { recreation } from './recreation/recreation'
 import { occupation } from './occupation/occupation'
@@ -9,6 +11,8 @@ import { places } from './places/places'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(crime)
+  app.configure(publicServices)
   app.configure(housing)
   app.configure(recreation)
   app.configure(occupation)

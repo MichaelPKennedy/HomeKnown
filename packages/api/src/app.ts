@@ -27,6 +27,8 @@ import { WeatherModel } from './models/weather.model'
 import { CityWeatherModel } from './models/city-weather.model'
 import { LandMarkModel } from './models/landmarks.model'
 import { CityModel } from './models/city.model'
+import { CountyModel } from './models/county.model'
+import { CrimeStatsModel } from './models/crime-stats.model'
 
 const app: Application = express(feathers())
 
@@ -61,6 +63,8 @@ WeatherModel(sequelize)
 CityWeatherModel(sequelize)
 LandMarkModel(sequelize)
 CityModel(sequelize)
+CountyModel(sequelize)
+CrimeStatsModel(sequelize)
 
 // Configure services and real-time functionality
 app.configure(rest())

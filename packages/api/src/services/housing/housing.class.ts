@@ -19,7 +19,7 @@ interface StateAttributes {
 export type { Housing, HousingData, HousingPatch, HousingQuery }
 
 export interface HousingParams extends Params {
-  query?: { housingType: 'rent' | 'buy'; min: number; max: number }
+  query?: { housingType: 'rent' | 'buy'; homeMin: number; homeMax: number; rentMin: number; rentMax: number }
 }
 
 export class HousingService implements ServiceMethods<any> {
@@ -34,6 +34,7 @@ export class HousingService implements ServiceMethods<any> {
   async find(params: HousingParams): Promise<any[] | Paginated<any>> {
     const City = this.sequelize.models.City
     const State = this.sequelize.models.State
+    const Area = this.sequelize.models.Area
     const states = await State.findAll({
       attributes: ['state_code', 'totalCostIndex']
     })
@@ -46,9 +47,10 @@ export class HousingService implements ServiceMethods<any> {
     if (!params.query) {
       throw new Error('Query parameters are missing!')
     }
-    const { min, max, housingType } = params.query
-
+    const { homeMin, homeMax, rentMin, rentMax, housingType } = params.query
     const priceType = housingType === 'rent' ? 'currentRentPrice' : 'currentHomePrice'
+    const min = housingType === 'rent' ? rentMin : homeMin
+    const max = housingType === 'rent' ? rentMax : homeMax
 
     const cities = await City.findAll({
       where: {
@@ -57,15 +59,26 @@ export class HousingService implements ServiceMethods<any> {
           [Op.lte]: max
         }
       },
-      attributes: ['city_name', 'area_code', priceType]
+      attributes: ['city_name', 'area_code', priceType],
+      include: [
+        {
+          model: Area,
+          attributes: ['state_code']
+        }
+      ]
     })
 
     const rankedCities = cities
       .map((city: any) => {
-        const totalCostIndex = totalCostIndices[city.area_code]
+        const totalCostIndex = Number(totalCostIndices[city.dataValues.Area.dataValues.state_code])
+        const adjustedCostIndex = totalCostIndex * (min / 100) || 0
+        const homePrice = Number(city.dataValues[priceType])
+        console.log('homePrice', homePrice)
+        console.log('adjustedCostIndex', adjustedCostIndex)
         return {
           ...city.get(),
-          rank: city[priceType] + (totalCostIndex || 0)
+          rank: Math.round((homePrice + adjustedCostIndex) * 100) / 100,
+          costIndex: totalCostIndex
         }
       })
       .sort((a: any, b: any) => a.rank - b.rank)
