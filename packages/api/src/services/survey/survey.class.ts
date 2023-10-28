@@ -49,6 +49,7 @@ export interface SurveyFormData {
     landscapeFeatures?: string[]
     recreationalInterests?: string[]
     publicServices?: string[]
+    searchRadius?: number
     housingType?: 'rent' | 'buy'
     homeMin?: number
     homeMax?: number
@@ -69,37 +70,44 @@ export class SurveyService implements ServiceMethods<any> {
     const weatherData = this.parseWeatherData(data)
     const recreationData = data.data.recreationalInterests
     const housingData = this.parseHousingData(data)
-    const publicServicesData = data.data.publicServices
+    const publicServicesData = this.parsePublicServicesData(data)
 
-    const jobResponse = await this.getIndustryResponse(jobData)
-    const weatherResponse = await this.getWeatherResponse(weatherData)
-    const recreationResponse = await this.getRecreationResponse(recreationData)
-    const housingResponse = await this.getHousingResponse(housingData)
-    const publicServicesResponse = await this.getPublicServicesResponse(publicServicesData)
-    console.log('housingResponse', housingResponse)
+    try {
+      const [jobResponse, weatherResponse, recreationResponse, housingResponse, publicServicesResponse] =
+        await Promise.all([
+          this.getIndustryResponse(jobData),
+          this.getWeatherResponse(weatherData),
+          this.getRecreationResponse(recreationData),
+          this.getHousingResponse(housingData),
+          this.getPublicServicesResponse(publicServicesData)
+        ])
 
-    const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
-      return jobResponse.topCities.some((jobCity: any) => {
-        const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`)
+      const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
+        return jobResponse.topCities.some((jobCity: any) => {
+          const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`)
 
-        return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title
+          return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title
+        })
       })
-    })
 
-    let topCities
-    if (topCitiesMatches) {
-      topCities = topCitiesMatches
-    } else {
-      topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
-    }
+      let topCities
+      if (topCitiesMatches) {
+        topCities = topCitiesMatches
+      } else {
+        topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
+      }
 
-    //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
+      //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
 
-    return {
-      jobResponse,
-      weatherResponse,
-      recreationResponse,
-      topCities
+      return {
+        jobResponse,
+        weatherResponse,
+        recreationResponse,
+        topCities
+      }
+    } catch (error) {
+      console.error('Error processing requests:', error)
+      throw new Error('Unable to process requests.')
     }
   }
 
@@ -144,6 +152,15 @@ export class SurveyService implements ServiceMethods<any> {
       homeMax,
       rentMin,
       rentMax
+    }
+  }
+
+  parsePublicServicesData(data: SurveyFormData): any {
+    const { searchRadius, publicServices } = data.data
+
+    return {
+      searchRadius,
+      publicServices
     }
   }
 
@@ -208,11 +225,13 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async getPublicServicesResponse(data: any): Promise<any> {
+    console.log('public service data', data)
     const publicServicesService = this.app.service('public-services')
     try {
       const response = await publicServicesService.find({
         query: {
-          publicServices: data
+          publicServices: data.publicServices,
+          searchRadius: data.searchRadius
         }
       })
       return response

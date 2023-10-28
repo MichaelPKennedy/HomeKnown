@@ -32,6 +32,7 @@ import { CrimeStatsModel } from './models/crime-stats.model'
 import { MTFCCModel } from './models/MTFCC.model'
 import { LandMarkModel } from './models/landmark.model'
 import { CrimeStatsCityModel } from './models/crime-stats-city.model'
+import { PublicServiceCacheModel } from './models/public-service-cache.model'
 
 const app: Application = express(feathers())
 
@@ -71,6 +72,12 @@ CrimeStatsModel(sequelize)
 MTFCCModel(sequelize)
 LandMarkModel(sequelize)
 CrimeStatsCityModel(sequelize)
+PublicServiceCacheModel(sequelize)
+
+const City = sequelize.models.City
+const PublicServiceCache = sequelize.models.PublicServiceCache
+
+City.hasOne(PublicServiceCache, { foreignKey: 'city_id' })
 
 // Configure services and real-time functionality
 app.configure(rest())

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Area } from './area.model'
+import { PublicServiceCache } from './public-service-cache.model'
 
 export class City extends Model {}
 

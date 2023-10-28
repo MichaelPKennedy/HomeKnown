@@ -1,0 +1,38 @@
+.loadingScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+.loadingText {
+  margin-bottom: 20px;
+  font-size: 24px;
+  text-align: center;
+}
+
+.loadingDots {
+  display: flex;
+  gap: 10px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #333;
+  animation: bounce 1.5s infinite cubic-bezier(0.5, 0, 0.5, 1);
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
