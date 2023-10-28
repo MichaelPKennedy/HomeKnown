@@ -25,10 +25,12 @@ import { CityIndustrySalaryModel } from './models/city-industry-salary.model'
 import { AreaModel } from './models/area.model'
 import { WeatherModel } from './models/weather.model'
 import { CityWeatherModel } from './models/city-weather.model'
-import { LandMarkModel } from './models/landmarks.model'
+import { LandMarksModel } from './models/landmarks.model'
 import { CityModel } from './models/city.model'
 import { CountyModel } from './models/county.model'
 import { CrimeStatsModel } from './models/crime-stats.model'
+import { MTFCCModel } from './models/MTFCC.model'
+import { LandMarkModel } from './models/landmark.model'
 
 const app: Application = express(feathers())
 
@@ -61,10 +63,12 @@ CityIndustrySalaryModel(sequelize)
 AreaModel(sequelize)
 WeatherModel(sequelize)
 CityWeatherModel(sequelize)
-LandMarkModel(sequelize)
+LandMarksModel(sequelize)
 CityModel(sequelize)
 CountyModel(sequelize)
 CrimeStatsModel(sequelize)
+MTFCCModel(sequelize)
+LandMarkModel(sequelize)
 
 // Configure services and real-time functionality
 app.configure(rest())

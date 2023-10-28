@@ -48,6 +48,7 @@ export interface SurveyFormData {
     nightlifeImportance?: boolean
     landscapeFeatures?: string[]
     recreationalInterests?: string[]
+    publicServices?: string[]
     housingType?: 'rent' | 'buy'
     homeMin?: number
     homeMax?: number
@@ -68,11 +69,13 @@ export class SurveyService implements ServiceMethods<any> {
     const weatherData = this.parseWeatherData(data)
     const recreationData = data.data.recreationalInterests
     const housingData = this.parseHousingData(data)
+    const publicServicesData = data.data.publicServices
 
     const jobResponse = await this.getIndustryResponse(jobData)
     const weatherResponse = await this.getWeatherResponse(weatherData)
     const recreationResponse = await this.getRecreationResponse(recreationData)
     const housingResponse = await this.getHousingResponse(housingData)
+    const publicServicesResponse = await this.getPublicServicesResponse(publicServicesData)
     console.log('housingResponse', housingResponse)
 
     const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
@@ -201,6 +204,21 @@ export class SurveyService implements ServiceMethods<any> {
     } catch (error) {
       console.error('Error querying the housing service:', error)
       throw new Error('Unable to fetch data from housing service.')
+    }
+  }
+
+  async getPublicServicesResponse(data: any): Promise<any> {
+    const publicServicesService = this.app.service('public-services')
+    try {
+      const response = await publicServicesService.find({
+        query: {
+          publicServices: data
+        }
+      })
+      return response
+    } catch (error) {
+      console.error('Error querying the public services service:', error)
+      throw new Error('Unable to fetch data from public services service.')
     }
   }
 

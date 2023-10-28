@@ -2,7 +2,6 @@ import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feather
 import type { Application } from '../../declarations'
 import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
 import { point, distance } from '@turf/turf'
-import { LandMark } from '../../models/landmarks.model'
 
 export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
 
@@ -149,7 +148,7 @@ export class RecreationService implements ServiceMethods<any> {
       Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
     ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey])
 
-    const landmarks = await this.sequelize.models.LandMark.findAll({
+    const landmarks = await this.sequelize.models.LandMarks.findAll({
       where: { Type: landmarkTypes }
     })
 

@@ -1,9 +1,9 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 
-export class LandMark extends Model {}
+export class LandMarks extends Model {}
 
-export const LandMarkModel = (sequelize: Sequelize) => {
-  LandMark.init(
+export const LandMarksModel = (sequelize: Sequelize) => {
+  LandMarks.init(
     {
       id: {
         type: DataTypes.INTEGER,
