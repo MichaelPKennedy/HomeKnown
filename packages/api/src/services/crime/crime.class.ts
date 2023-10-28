@@ -19,14 +19,14 @@ export class CrimeService implements ServiceMethods<any> {
   async find(params: CrimeParams): Promise<any[] | Paginated<any>> {
     try {
       const crimeRates = await this.sequelize.models.CrimeStatsCity.findAll({
-        attributes: ['crime_score', 'city', 'state'],
+        attributes: ['crime_score', 'city', 'state', 'city_id'],
         where: {
-          [Op.and]: [{ crime_score: { [Op.ne]: null } }, { crime_score: { [Op.gt]: 0 } }]
+          [Op.and]: [{ crime_score: { [Op.ne]: null } }, { city_id: { [Op.ne]: null } }]
         },
         order: [['crime_score', 'ASC']],
         limit: 100
       })
-      console.log('crimeRates', crimeRates)
+
       return crimeRates.map((crimeRate: any) => ({
         city: crimeRate.city,
         state: crimeRate.state,
