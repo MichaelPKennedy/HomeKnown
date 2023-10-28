@@ -31,6 +31,7 @@ import { CountyModel } from './models/county.model'
 import { CrimeStatsModel } from './models/crime-stats.model'
 import { MTFCCModel } from './models/MTFCC.model'
 import { LandMarkModel } from './models/landmark.model'
+import { CrimeStatsCityModel } from './models/crime-stats-city.model'
 
 const app: Application = express(feathers())
 
@@ -69,6 +70,7 @@ CountyModel(sequelize)
 CrimeStatsModel(sequelize)
 MTFCCModel(sequelize)
 LandMarkModel(sequelize)
+CrimeStatsCityModel(sequelize)
 
 // Configure services and real-time functionality
 app.configure(rest())

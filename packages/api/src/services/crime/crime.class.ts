@@ -18,29 +18,19 @@ export class CrimeService implements ServiceMethods<any> {
 
   async find(params: CrimeParams): Promise<any[] | Paginated<any>> {
     try {
-      const crimeRates = await this.sequelize.models.CrimeStats.findAll({
-        attributes: ['crime_score', 'fips_st', 'stcofips'],
-        include: [
-          {
-            model: this.sequelize.models.County,
-            attributes: ['county_name']
-          }
-        ],
+      const crimeRates = await this.sequelize.models.CrimeStatsCity.findAll({
+        attributes: ['crime_score', 'city', 'state'],
         where: {
-          crime_score: {
-            [Op.ne]: null
-          },
-          year: 2014 //most recent year available
+          [Op.and]: [{ crime_score: { [Op.ne]: null } }, { crime_score: { [Op.gt]: 0 } }]
         },
         order: [['crime_score', 'ASC']],
         limit: 100
       })
-
+      console.log('crimeRates', crimeRates)
       return crimeRates.map((crimeRate: any) => ({
-        county_code: crimeRate.stcofips,
-        county_name: crimeRate.County.county_name,
-        crime_score: crimeRate.crime_score,
-        state_code: crimeRate.fips_st
+        city: crimeRate.city,
+        state: crimeRate.state,
+        crime_score: crimeRate.crime_score
       }))
     } catch (error) {
       console.error('Error fetching crime rates:', error)
