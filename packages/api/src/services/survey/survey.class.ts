@@ -55,6 +55,20 @@ export interface SurveyFormData {
     homeMax?: number
     rentMin?: number
     rentMax?: number
+    temperatureData: [
+      { month: 'Jan'; temp?: number },
+      { month: 'Feb'; temp?: number },
+      { month: 'Mar'; temp?: number },
+      { month: 'Apr'; temp?: number },
+      { month: 'May'; temp?: number },
+      { month: 'Jun'; temp?: number },
+      { month: 'Jul'; temp?: number },
+      { month: 'Aug'; temp?: number },
+      { month: 'Sep'; temp?: number },
+      { month: 'Oct'; temp?: number },
+      { month: 'Nov'; temp?: number },
+      { month: 'Dec'; temp?: number }
+    ]
   }
 }
 
@@ -122,24 +136,12 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseWeatherData(data: SurveyFormData): any {
-    const {
-      temperature,
-      temperaturePreference,
-      climatePreference,
-      snowPreference,
-      rainPreference,
-      importantSeason,
-      seasonPreferenceDetail
-    } = data.data
+    const { temperatureData, snowPreference, rainPreference } = data.data
 
     return {
-      temperature,
-      temperaturePreference,
-      climatePreference,
+      temperatureData,
       snowPreference,
-      rainPreference,
-      importantSeason,
-      seasonPreferenceDetail
+      rainPreference
     }
   }
 

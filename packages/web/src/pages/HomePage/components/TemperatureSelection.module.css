@@ -1,0 +1,58 @@
+.temperatureChart {
+  font-family: "Arial", sans-serif;
+}
+
+.axis path,
+.axis line {
+  stroke: #ccc;
+}
+
+.axis text {
+  font-size: 14px;
+  fill: #666;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 3px;
+}
+
+.circle {
+  fill: #ff4500;
+  stroke: #fff;
+  stroke-width: 2px;
+  cursor: pointer;
+}
+
+.circle:hover {
+  fill: #ff6347;
+}
+
+.x-axis text {
+  font-size: 15px;
+  fill: #000;
+}
+
+.y-axis text {
+  font-size: 15px;
+  fill: #000;
+}
+
+.tooltip {
+  font-size: 17px;
+}
+
+.hidden {
+  display: none;
+}
+
+.plot-area {
+  margin-top: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+}

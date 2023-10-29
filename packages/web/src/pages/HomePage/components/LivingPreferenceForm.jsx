@@ -11,6 +11,7 @@ import PreferenceWeight from "./PreferenceWeight.jsx";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import LoadingScreen from "./LoadingScreen.jsx";
+import TemperatureSelection from "./TemperatureSelection";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
@@ -47,6 +48,20 @@ const LivingPreferenceForm = () => {
     homeMax: 300000,
     rentMin: 1000,
     rentMax: 2000,
+    temperatureData: [
+      { month: "Jan", temp: 30 },
+      { month: "Feb", temp: 35 },
+      { month: "Mar", temp: 45 },
+      { month: "Apr", temp: 55 },
+      { month: "May", temp: 65 },
+      { month: "Jun", temp: 75 },
+      { month: "Jul", temp: 85 },
+      { month: "Aug", temp: 85 },
+      { month: "Sep", temp: 75 },
+      { month: "Oct", temp: 65 },
+      { month: "Nov", temp: 50 },
+      { month: "Dec", temp: 35 },
+    ],
   });
 
   const navigate = useNavigate();
@@ -136,6 +151,17 @@ const LivingPreferenceForm = () => {
     } else {
       setFormData((prevState) => ({ ...prevState, [name]: checked }));
     }
+  };
+
+  const handleTemperatureChange = (updatedData) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      temperatureData: updatedData,
+    }));
+  };
+
+  const hasColdMonth = () => {
+    return formData.temperatureData.some((month) => month.temp <= 35);
   };
 
   // const handleSelectMultipleChange = (e) => {
@@ -534,135 +560,61 @@ const LivingPreferenceForm = () => {
             </div>
           </div>
 
+          <h4>Select Your Ideal Average Monthly Temperatures</h4>
+          <TemperatureSelection
+            data={formData.temperatureData}
+            onDataChange={handleTemperatureChange}
+          />
+
           {/* Weather */}
-          <div className={`form-group ${styles.slider}`}>
-            <h4 className="pb-2 pt-2">Weather</h4>
-            <label htmlFor="temperature">Ideal average temperature (°F):</label>
-
-            <Slider
-              min={0}
-              max={120}
-              step={1}
-              value={formData.temperature}
-              onChange={(value) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  temperature: value,
-                }))
-              }
-            />
-
-            <small className="form-text text-muted">
-              {formData.temperature}°F
-            </small>
-
-            {/* Weather Preference: Temperature */}
-            <div className={`form-group ${styles.formGroup}`}>
-              <label>
-                Do you prefer cities with mild temperatures throughout the year
-                or those that experience distinct seasons?
-              </label>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="temperaturePreference"
-                  value="mild"
-                  onChange={handleInputChange}
-                  checked={formData.temperaturePreference === "mild"}
-                />
-                <label className={styles.formCheckLabel}>
-                  Mild temperatures throughout the year
+          <div className={`form-group ${styles.formGroup}`}>
+            {hasColdMonth() && (
+              <div className={`form-group ${styles.formGroup}`}>
+                {/* Snow Preference */}
+                <label>
+                  Would you be okay living in an area that receives snow? If so,
+                  would you be okay with heavy snowfall or just light,
+                  occasional snow?
                 </label>
+                <div className={styles.formCheck}>
+                  <input
+                    className={styles.formCheckInput}
+                    type="radio"
+                    name="snowPreference"
+                    value="none"
+                    onChange={handleInputChange}
+                    checked={formData.snowPreference === "none"}
+                  />
+                  <label className={styles.formCheckLabel}>No snow</label>
+                </div>
+                <div className={styles.formCheck}>
+                  <input
+                    className={styles.formCheckInput}
+                    type="radio"
+                    name="snowPreference"
+                    value="light"
+                    onChange={handleInputChange}
+                    checked={formData.snowPreference === "light"}
+                  />
+                  <label className={styles.formCheckLabel}>
+                    Light, occasional snow
+                  </label>
+                </div>
+                <div className={styles.formCheck}>
+                  <input
+                    className={styles.formCheckInput}
+                    type="radio"
+                    name="snowPreference"
+                    value="heavy"
+                    onChange={handleInputChange}
+                    checked={formData.snowPreference === "heavy"}
+                  />
+                  <label className={styles.formCheckLabel}>
+                    Heavy snowfall
+                  </label>
+                </div>
               </div>
-              <div>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="temperaturePreference"
-                  value="distinct"
-                  onChange={handleInputChange}
-                  checked={formData.temperaturePreference === "distinct"}
-                />
-                <label className={styles.formCheckLabel}>
-                  Distinct seasons
-                </label>
-              </div>
-            </div>
-
-            {/* Weather Preference: Climate */}
-            <div className={`form-group ${styles.formGroup}`}>
-              <label>
-                Are you more comfortable with warmer climates or cooler
-                climates?
-              </label>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="climatePreference"
-                  value="warmer"
-                  onChange={handleInputChange}
-                  checked={formData.climatePreference === "warmer"}
-                />
-                <label className={styles.formCheckLabel}>Warmer climates</label>
-              </div>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="climatePreference"
-                  value="cooler"
-                  onChange={handleInputChange}
-                  checked={formData.climatePreference === "cooler"}
-                />
-                <label className={styles.formCheckLabel}>Cooler climates</label>
-              </div>
-            </div>
-
-            {/* Snow Preference */}
-            <div className={`form-group ${styles.formGroup}`}>
-              <label>
-                Would you be okay living in an area that receives snow? If so,
-                would you be okay with heavy snowfall or just light, occasional
-                snow?
-              </label>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="snowPreference"
-                  value="none"
-                  onChange={handleInputChange}
-                  checked={formData.snowPreference === "none"}
-                />
-                <label className={styles.formCheckLabel}>No snow</label>
-              </div>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="snowPreference"
-                  value="light"
-                  onChange={handleInputChange}
-                  checked={formData.snowPreference === "light"}
-                />
-                <label className={styles.formCheckLabel}>
-                  Light, occasional snow
-                </label>
-              </div>
-              <div className={styles.formCheck}>
-                <input
-                  className={styles.formCheckInput}
-                  type="radio"
-                  name="snowPreference"
-                  value="heavy"
-                  onChange={handleInputChange}
-                  checked={formData.snowPreference === "heavy"}
-                />
-                <label className={styles.formCheckLabel}>Heavy snowfall</label>
-              </div>
-            </div>
+            )}
 
             {/* Rain Preference */}
             <div className={`form-group ${styles.formGroup}`}>
