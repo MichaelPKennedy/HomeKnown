@@ -33,6 +33,8 @@ import { MTFCCModel } from './models/MTFCC.model'
 import { LandMarkModel } from './models/landmark.model'
 import { CrimeStatsCityModel } from './models/crime-stats-city.model'
 import { PublicServiceCacheModel } from './models/public-service-cache.model'
+import { CityMonthlyWeatherCountyModel } from './models/city-monthly-weather-county.model'
+import { CitySceneryCacheModel } from './models/city-scenery-cache.model'
 
 const app: Application = express(feathers())
 
@@ -73,11 +75,16 @@ MTFCCModel(sequelize)
 LandMarkModel(sequelize)
 CrimeStatsCityModel(sequelize)
 PublicServiceCacheModel(sequelize)
+CityMonthlyWeatherCountyModel(sequelize)
+CitySceneryCacheModel(sequelize)
 
 const City = sequelize.models.City
 const PublicServiceCache = sequelize.models.PublicServiceCache
+const CitySceneryCache = sequelize.models.CitySceneryCache
 
 City.hasOne(PublicServiceCache, { foreignKey: 'city_id' })
+City.hasOne(CitySceneryCache, { foreignKey: 'city_id' })
+CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 
 // Configure services and real-time functionality
 app.configure(rest())

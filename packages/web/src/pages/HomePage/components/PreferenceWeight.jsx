@@ -193,6 +193,7 @@ function PreferenceWeight() {
     jobOpportunityWeight: 0,
     publicServicesWeight: 0,
     crimeRateWeight: 0,
+    sceneryWeight: 0,
     totalAvailablePoints: 10,
   });
 
@@ -356,6 +357,18 @@ function PreferenceWeight() {
           title="Weather"
           sectionKey="weatherWeight"
           weight={weights.weatherWeight}
+          onDropToken={(sectionKey, fromSection) =>
+            updateSectionWeight(sectionKey, fromSection)
+          }
+          onDragOut={handleDragOut}
+          addTokenToSection={addTokenToSection}
+          removeTokenFromSection={removeTokenFromSection}
+        />
+
+        <SectionDropZone
+          title="Scenery"
+          sectionKey="sceneryWeight"
+          weight={weights.sceneryWeight}
           onDropToken={(sectionKey, fromSection) =>
             updateSectionWeight(sectionKey, fromSection)
           }
