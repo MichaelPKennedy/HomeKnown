@@ -560,7 +560,7 @@ const LivingPreferenceForm = () => {
             </div>
           </div>
 
-          <h4>Select Your Ideal Average Monthly Temperatures</h4>
+          <h4>Select Your Ideal Average Monthly Temperatures F </h4>
           <TemperatureSelection
             data={formData.temperatureData}
             onDataChange={handleTemperatureChange}

@@ -1,5 +1,5 @@
-.temperatureChart {
-  font-family: "Arial", sans-serif;
+.chartContainer {
+  width: 100%;
 }
 
 .axis path,
