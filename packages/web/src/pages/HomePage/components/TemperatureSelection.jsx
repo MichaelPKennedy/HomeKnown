@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Bar } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, BarElement } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
@@ -13,12 +13,39 @@ Chart.register(
   ChartDragData
 );
 
+const temperatureProfiles = {
+  "Mild Year Round": [70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70],
+  "Full Seasons": [30, 35, 45, 55, 65, 75, 85, 85, 75, 65, 50, 35],
+  "Just Cold": [30, 30, 35, 40, 45, 50, 55, 55, 50, 45, 40, 35],
+  "Hot Summers, Cold Winters": [30, 35, 50, 60, 70, 90, 95, 95, 80, 65, 50, 35],
+  "Constant Chill": [50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50],
+  Tropical: [80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+  "Desert Climate": [50, 55, 65, 75, 85, 95, 100, 100, 90, 75, 60, 50],
+  "Highland Climate": [40, 40, 45, 50, 55, 60, 65, 65, 60, 55, 45, 40],
+};
+
 const TemperatureSelection = ({ data, onDataChange }) => {
+  const [chartKey, setChartKey] = useState(0);
   const labels = data?.map((month) => month.month);
   const temperatures = data?.map((month) => month.temp);
 
   const [isMounted, setIsMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+
+  const [selectedProfile, setSelectedProfile] = useState("Custom");
+
+  const handleProfileChange = (event) => {
+    const profile = event.target.value;
+    setSelectedProfile(profile);
+    if (profile !== "Custom") {
+      const updatedData = data.map((month, index) => ({
+        ...month,
+        temp: temperatureProfiles[profile][index],
+      }));
+      onDataChange(updatedData);
+      setChartKey((prevKey) => prevKey + 1); // Update the chart key
+    }
+  };
 
   useEffect(() => {
     setIsMounted(true);
@@ -39,7 +66,24 @@ const TemperatureSelection = ({ data, onDataChange }) => {
 
   return isMounted ? (
     <div className={Styles.chartContainer}>
+      <div className={`form-group ${Styles.formGroup}`}>
+        <label htmlFor="temperatureProfile">Temperature Profile</label>
+        <select
+          id="temperatureProfile"
+          className="form-control"
+          value={selectedProfile}
+          onChange={handleProfileChange}
+        >
+          <option value="Custom">Custom</option>
+          {Object.keys(temperatureProfiles).map((profile) => (
+            <option key={profile} value={profile}>
+              {profile}
+            </option>
+          ))}
+        </select>
+      </div>
       <Bar
+        key={chartKey}
         data={{
           labels,
           datasets: [

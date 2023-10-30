@@ -560,11 +560,13 @@ const LivingPreferenceForm = () => {
             </div>
           </div>
 
-          <h4>Select Your Ideal Average Monthly Temperatures F </h4>
-          <TemperatureSelection
-            data={formData.temperatureData}
-            onDataChange={handleTemperatureChange}
-          />
+          <div className={`form-group ${styles.formGroup}`}>
+            <h4>Select Your Ideal Average Monthly Temperatures F </h4>
+            <TemperatureSelection
+              data={formData.temperatureData}
+              onDataChange={handleTemperatureChange}
+            />
+          </div>
 
           {/* Weather */}
           <div className={`form-group ${styles.formGroup}`}>
