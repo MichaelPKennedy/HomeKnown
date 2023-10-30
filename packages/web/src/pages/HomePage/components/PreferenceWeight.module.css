@@ -1,6 +1,6 @@
 .preferenceToken {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: #fafdff;
   border-radius: 50%;
@@ -46,8 +46,8 @@
 }
 
 .token {
-  width: 20px;
-  height: 20px;
+  width: 32px;
+  height: 32px;
   border: 2px solid black;
   border-radius: 50%;
   display: inline-block;
@@ -66,8 +66,8 @@
 }
 
 .previewToken {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
