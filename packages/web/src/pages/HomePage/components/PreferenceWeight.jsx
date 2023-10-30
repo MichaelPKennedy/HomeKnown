@@ -329,89 +329,57 @@ function PreferenceWeight() {
           ))}
       </div>
       <div className={styles.dropZoneContainer}>
-        <SectionDropZone
-          title="Cost of Living"
-          sectionKey="costOfLivingWeight"
-          weight={weights.costOfLivingWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Recreational Activities"
-          sectionKey="recreationalActivitiesWeight"
-          weight={weights.recreationalActivitiesWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Weather"
-          sectionKey="weatherWeight"
-          weight={weights.weatherWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Scenery"
-          sectionKey="sceneryWeight"
-          weight={weights.sceneryWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Salary & Job Opportunity"
-          sectionKey="jobOpportunityWeight"
-          weight={weights.jobOpportunityWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Public Services"
-          sectionKey="publicServicesWeight"
-          weight={weights.publicServicesWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
-
-        <SectionDropZone
-          title="Crime Rate"
-          sectionKey="crimeRateWeight"
-          weight={weights.crimeRateWeight}
-          onDropToken={(sectionKey, fromSection) =>
-            updateSectionWeight(sectionKey, fromSection)
-          }
-          onDragOut={handleDragOut}
-          addTokenToSection={addTokenToSection}
-          removeTokenFromSection={removeTokenFromSection}
-        />
+        {[
+          {
+            title: "Cost of Living",
+            sectionKey: "costOfLivingWeight",
+            weight: weights.costOfLivingWeight,
+          },
+          {
+            title: "Recreation",
+            sectionKey: "recreationalActivitiesWeight",
+            weight: weights.recreationalActivitiesWeight,
+          },
+          {
+            title: "Weather",
+            sectionKey: "weatherWeight",
+            weight: weights.weatherWeight,
+          },
+          {
+            title: "Scenery",
+            sectionKey: "sceneryWeight",
+            weight: weights.sceneryWeight,
+          },
+          {
+            title: "Salary & Job ",
+            sectionKey: "jobOpportunityWeight",
+            weight: weights.jobOpportunityWeight,
+          },
+          {
+            title: "Public Services",
+            sectionKey: "publicServicesWeight",
+            weight: weights.publicServicesWeight,
+          },
+          {
+            title: "Crime Rate",
+            sectionKey: "crimeRateWeight",
+            weight: weights.crimeRateWeight,
+          },
+        ].map((section) => (
+          <div className={styles.section} key={section.sectionKey}>
+            <div className={styles.sectionTitle}>{section.title}</div>
+            <SectionDropZone
+              sectionKey={section.sectionKey}
+              weight={section.weight}
+              onDropToken={(sectionKey, fromSection) =>
+                updateSectionWeight(sectionKey, fromSection)
+              }
+              onDragOut={handleDragOut}
+              addTokenToSection={addTokenToSection}
+              removeTokenFromSection={removeTokenFromSection}
+            />
+          </div>
+        ))}
       </div>
 
       {isDragging && (

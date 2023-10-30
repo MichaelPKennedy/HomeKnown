@@ -1,6 +1,6 @@
 .preferenceToken {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   background-color: #fafdff;
   border-radius: 50%;
@@ -10,14 +10,26 @@
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
 
+.section {
+  display: inline-block;
+  text-align: center;
+  margin: 0;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
 .selectedToken {
   background-color: #9ce0eb;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .dropzone {
-  width: 190px;
-  height: 190px;
+  vertical-align: top;
+  width: 120px;
+  height: 150px;
   border: 1px solid rgba(65, 164, 154, 0.5);
   border-radius: 20px;
   display: inline-block;
@@ -31,19 +43,6 @@
 
 .dropZoneActive {
   background-color: #f2e9e4;
-}
-
-.dropZoneContainer {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.dropzoneTitle {
-  font-size: 18px;
-  margin-bottom: 5px;
-  margin: auto;
-  text-align: center;
 }
 
 .token {
@@ -67,8 +66,8 @@
 }
 
 .previewToken {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);
 }
@@ -77,8 +76,8 @@
 @media screen and (min-width: 768px) {
   /* 768px tablets and up */
   .dropzone {
-    width: 220px;
-    height: 220px;
+    width: 210px;
+    height: 210px;
     border: 1px solid rgba(65, 164, 154, 0.5);
     border-radius: 20px;
     display: inline-block;
@@ -88,5 +87,24 @@
     transition: background-color 0.2s ease;
     font-size: 12px;
     box-shadow: 4px 4px 2px rgba(0, 0, 0, 0.4);
+  }
+  .preferenceToken,
+  .token,
+  .previewToken {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Mobile Styles */
+@media only screen and (max-width: 600px) {
+  .dropZoneContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+
+  .sectionTitle {
+    font-size: 14px;
   }
 }
