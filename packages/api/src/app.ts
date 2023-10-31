@@ -35,6 +35,7 @@ import { CrimeStatsCityModel } from './models/crime-stats-city.model'
 import { PublicServiceCacheModel } from './models/public-service-cache.model'
 import { CityMonthlyWeatherCountyModel } from './models/city-monthly-weather-county.model'
 import { CitySceneryCacheModel } from './models/city-scenery-cache.model'
+import { AirQualityModel } from './models/air-quality.model'
 
 const app: Application = express(feathers())
 
@@ -77,6 +78,7 @@ CrimeStatsCityModel(sequelize)
 PublicServiceCacheModel(sequelize)
 CityMonthlyWeatherCountyModel(sequelize)
 CitySceneryCacheModel(sequelize)
+AirQualityModel(sequelize)
 
 const City = sequelize.models.City
 const PublicServiceCache = sequelize.models.PublicServiceCache

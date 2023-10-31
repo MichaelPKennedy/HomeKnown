@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { airQualityClient } from './services/air-quality/air-quality.shared'
+export type {
+  AirQuality,
+  AirQualityData,
+  AirQualityQuery,
+  AirQualityPatch
+} from './services/air-quality/air-quality.shared'
+
 import { sceneryClient } from './services/scenery/scenery.shared'
 export type { Scenery, SceneryData, SceneryQuery, SceneryPatch } from './services/scenery/scenery.shared'
 
@@ -81,5 +89,6 @@ export const createClient = <Configuration = any,>(
   client.configure(publicServicesClient)
   client.configure(crimeClient)
   client.configure(sceneryClient)
+  client.configure(airQualityClient)
   return client
 }
