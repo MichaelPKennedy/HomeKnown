@@ -13,42 +13,15 @@ export interface SurveyParams extends Params {
 
 export interface SurveyFormData {
   data: {
-    temperature: number
-    temperaturePreference?: 'mild' | 'distinct'
-    climatePreference?: 'warmer' | 'cooler'
     snowPreference?: 'none' | 'light' | 'heavy'
     rainPreference?: 'dry' | 'regular'
-    importantSeason?: 'winter' | 'summer' | 'spring' | 'fall'
-    seasonPreferenceDetail?:
-      | 'mildWinter'
-      | 'coldWinter'
-      | 'snowyWinter'
-      | 'mildSummer'
-      | 'hotSummer'
-      | 'drySummer'
-      | 'warmSpring'
-      | 'coolSpring'
-      | 'drySpring'
-      | 'warmFall'
-      | 'coolFall'
-      | 'dryFall'
     minSalary?: number
     jobLevel?: 'entry-level' | 'senior' | 'both'
-    futureAspiration?: string
     selectedJobs?: { naics: string; occ: string }[]
     livingPreference?: 'city' | 'suburb' | 'rural'
-    housingBudget?: number
-    settingPreference?: string
-    hasChildren?: boolean
-    lowCrimePriority?: boolean
-    publicTransportation?: boolean
-    commuteTime?: string
-    proximityAirportHighway?: boolean
-    culturalOfferings?: boolean
-    nightlifeImportance?: boolean
-    landscapeFeatures?: string[]
     recreationalInterests?: string[]
     publicServices?: string[]
+    scenery?: string[]
     searchRadius?: number
     housingType?: 'rent' | 'buy'
     homeMin?: number
@@ -80,44 +53,43 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
+    console.log('data', data)
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
     const recreationData = data.data.recreationalInterests
     const housingData = this.parseHousingData(data)
     const publicServicesData = this.parsePublicServicesData(data)
+    const sceneryData = this.parseSceneryData(data)
 
     try {
-      const [jobResponse, weatherResponse, recreationResponse, housingResponse, publicServicesResponse] =
-        await Promise.all([
-          this.getIndustryResponse(jobData),
-          this.getWeatherResponse(weatherData),
-          this.getRecreationResponse(recreationData),
-          this.getHousingResponse(housingData),
-          this.getPublicServicesResponse(publicServicesData)
-        ])
+      const [
+        jobResponse,
+        weatherResponse,
+        recreationResponse,
+        housingResponse,
+        publicServicesResponse,
+        sceneryResponse,
+        airQualityResponse,
+        crimeResponse
+      ] = await Promise.all([
+        this.getIndustryResponse(jobData),
+        this.getWeatherResponse(weatherData),
+        this.getRecreationResponse(recreationData),
+        this.getHousingResponse(housingData),
+        this.getPublicServicesResponse(publicServicesData),
+        this.getSceneryResponse(sceneryData),
+        this.getAirQualityResponse(),
+        this.getCrimeResponse()
+      ])
 
-      const topCitiesMatches = weatherResponse.topCities.filter((weatherCity: any) => {
-        return jobResponse.topCities.some((jobCity: any) => {
-          const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`)
-
-          return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title
-        })
-      })
-
-      let topCities
-      if (topCitiesMatches) {
-        topCities = topCitiesMatches
-      } else {
-        topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)]
-      }
+      console.log('weatherResponse', weatherResponse)
 
       //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
 
       return {
         jobResponse,
         weatherResponse,
-        recreationResponse,
-        topCities
+        recreationResponse
       }
     } catch (error) {
       console.error('Error processing requests:', error)
@@ -163,6 +135,15 @@ export class SurveyService implements ServiceMethods<any> {
     return {
       searchRadius,
       publicServices
+    }
+  }
+
+  parseSceneryData(data: SurveyFormData): any {
+    const { searchRadius, scenery } = data.data
+
+    return {
+      searchRadius,
+      scenery
     }
   }
 
@@ -240,6 +221,48 @@ export class SurveyService implements ServiceMethods<any> {
     } catch (error) {
       console.error('Error querying the public services service:', error)
       throw new Error('Unable to fetch data from public services service.')
+    }
+  }
+
+  async getSceneryResponse(data: any): Promise<any> {
+    const sceneryService = this.app.service('scenery')
+    try {
+      const response = await sceneryService.find({
+        query: {
+          scenery: data.scenery,
+          searchRadius: data.searchRadius
+        }
+      })
+      return response
+    } catch (error) {
+      console.error('Error querying the scenery service:', error)
+      throw new Error('Unable to fetch data from scenery service.')
+    }
+  }
+
+  async getAirQualityResponse(): Promise<any> {
+    const airQualityService = this.app.service('air-quality')
+    try {
+      const response = await airQualityService.find({
+        query: {}
+      })
+      return response
+    } catch (error) {
+      console.error('Error querying the air quality service:', error)
+      throw new Error('Unable to fetch data from air quality service.')
+    }
+  }
+
+  async getCrimeResponse(): Promise<any> {
+    const crimeService = this.app.service('crime')
+    try {
+      const response = await crimeService.find({
+        query: {}
+      })
+      return response
+    } catch (error) {
+      console.error('Error querying the crime service:', error)
+      throw new Error('Unable to fetch data from crime service.')
     }
   }
 

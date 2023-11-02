@@ -5,8 +5,10 @@ export type { Housing, HousingData, HousingPatch, HousingQuery };
 export interface HousingParams extends Params {
     query?: {
         housingType: 'rent' | 'buy';
-        min: number;
-        max: number;
+        homeMin: number;
+        homeMax: number;
+        rentMin: number;
+        rentMax: number;
     };
 }
 export declare class HousingService implements ServiceMethods<any> {

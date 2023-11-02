@@ -222,11 +222,11 @@ export declare const weatherQueryResolver: import("@feathersjs/schema").Resolver
         $nin: string[];
     } & {}> | undefined;
 } & {
+    snowPreference?: "none" | "light" | "heavy" | undefined;
+    rainPreference?: "dry" | "regular" | undefined;
     temperature?: number | undefined;
     temperaturePreference?: "distinct" | "mild" | undefined;
     climatePreference?: "warmer" | "cooler" | undefined;
-    snowPreference?: "none" | "light" | "heavy" | undefined;
-    rainPreference?: "dry" | "regular" | undefined;
     importantSeason?: "winter" | "summer" | "spring" | "fall" | undefined;
     seasonPreferenceDetail?: "mildWinter" | "coldWinter" | "snowyWinter" | "mildSummer" | "hotSummer" | "drySummer" | "warmSpring" | "coolSpring" | "drySpring" | "warmFall" | "coolFall" | "dryFall" | undefined;
 }, HookContext>;

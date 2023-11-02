@@ -14,54 +14,52 @@ export const weatherSchema = Type.Object(
   },
   { $id: 'Weather', additionalProperties: false }
 )
-export type WeatherSchema = Static<typeof weatherSchema>
+export type Weather = Static<typeof weatherSchema>
 export const weatherValidator = getValidator(weatherSchema, dataValidator)
-export const weatherResolver = resolve<WeatherSchema, HookContext>({})
+export const weatherResolver = resolve<Weather, HookContext>({})
 
-export const weatherExternalResolver = resolve<WeatherSchema, HookContext>({})
+export const weatherExternalResolver = resolve<Weather, HookContext>({})
+
+// Schema for creating new entries
+export const weatherDataSchema = Type.Pick(weatherSchema, ['text'], {
+  $id: 'WeatherData'
+})
+export type WeatherData = Static<typeof weatherDataSchema>
+export const weatherDataValidator = getValidator(weatherDataSchema, dataValidator)
+export const weatherDataResolver = resolve<Weather, HookContext>({})
+
+// Schema for updating existing entries
+export const weatherPatchSchema = Type.Partial(weatherSchema, {
+  $id: 'WeatherPatch'
+})
+export type WeatherPatch = Static<typeof weatherPatchSchema>
+export const weatherPatchValidator = getValidator(weatherPatchSchema, dataValidator)
+export const weatherPatchResolver = resolve<Weather, HookContext>({})
 
 // Schema for allowed query properties
-export const weatherQueryProperties = Type.Pick(weatherSchema, ['id', 'text'])
-export const weatherQuerySchema = Type.Intersect(
-  [
-    querySyntax(weatherQueryProperties),
-    Type.Object(
-      {
-        temperature: Type.Optional(Type.Number()),
-        temperaturePreference: Type.Optional(Type.Union([Type.Literal('mild'), Type.Literal('distinct')])),
-        climatePreference: Type.Optional(Type.Union([Type.Literal('warmer'), Type.Literal('cooler')])),
-        snowPreference: Type.Optional(
-          Type.Union([Type.Literal('none'), Type.Literal('light'), Type.Literal('heavy')])
-        ),
-        rainPreference: Type.Optional(Type.Union([Type.Literal('dry'), Type.Literal('regular')])),
-        importantSeason: Type.Optional(
-          Type.Union([
-            Type.Literal('winter'),
-            Type.Literal('summer'),
-            Type.Literal('spring'),
-            Type.Literal('fall')
-          ])
-        ),
-        seasonPreferenceDetail: Type.Optional(
-          Type.Union([
-            Type.Literal('mildWinter'),
-            Type.Literal('coldWinter'),
-            Type.Literal('snowyWinter'),
-            Type.Literal('mildSummer'),
-            Type.Literal('hotSummer'),
-            Type.Literal('drySummer'),
-            Type.Literal('warmSpring'),
-            Type.Literal('coolSpring'),
-            Type.Literal('drySpring'),
-            Type.Literal('warmFall'),
-            Type.Literal('coolFall'),
-            Type.Literal('dryFall')
-          ])
-        )
-      },
-      { additionalProperties: false }
+// Schema for allowed query properties
+export const weatherQueryProperties = Type.Pick(weatherSchema, ['id', 'text'], {
+  $id: 'WeatherQueryProperties'
+})
+export const weatherAdditionalQueryProperties = Type.Object(
+  {
+    snowPreference: Type.Optional(
+      Type.Union([Type.Literal('none'), Type.Literal('light'), Type.Literal('heavy')])
+    ),
+    rainPreference: Type.Optional(Type.Union([Type.Literal('dry'), Type.Literal('regular')])),
+    temperatureData: Type.Array(
+      Type.Object({
+        month: Type.String(),
+        temp: Type.Optional(Type.Number())
+      }),
+      { minItems: 12, maxItems: 12 }
     )
-  ],
+  },
+  { additionalProperties: false }
+)
+
+export const weatherQuerySchema = Type.Intersect(
+  [querySyntax(weatherQueryProperties), weatherAdditionalQueryProperties],
   { additionalProperties: false }
 )
 

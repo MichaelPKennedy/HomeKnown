@@ -32,28 +32,43 @@ export class AirQualityService implements ServiceMethods<any> {
         'PM2_5_24hr_ug_m3',
         'SO2_1hr_ppb',
         [
-          sequelize.fn(
-            'SUM',
-            sequelize.col('CO_8hr_ppm'),
-            sequelize.col('Pb_3mo_ug_m3'),
-            sequelize.col('NO2_AM_ppb'),
-            sequelize.col('NO2_1hr_ppb'),
-            sequelize.col('O3_8hr_ppm'),
-            sequelize.col('PM10_24hr_ug_m3'),
-            sequelize.col('PM2_5_Wtd_AM_ug_m3'),
-            sequelize.col('PM2_5_24hr_ug_m3'),
-            sequelize.col('SO2_1hr_ppb')
-          ),
+          sequelize.literal(`
+            COALESCE(CO_8hr_ppm, 0) +
+            COALESCE(Pb_3mo_ug_m3, 0) +
+            COALESCE(NO2_AM_ppb, 0) +
+            COALESCE(NO2_1hr_ppb, 0) +
+            COALESCE(O3_8hr_ppm, 0) +
+            COALESCE(PM10_24hr_ug_m3, 0) +
+            COALESCE(PM2_5_Wtd_AM_ug_m3, 0) +
+            COALESCE(PM2_5_24hr_ug_m3, 0) +
+            COALESCE(SO2_1hr_ppb, 0)
+          `),
           'totalPollutantScore'
         ]
       ],
-      order: [
-        [sequelize.col('totalPollutantScore'), 'ASC'] // Ascending order for the best air quality first
-      ],
+      order: [[sequelize.literal('totalPollutantScore'), 'ASC']],
       limit: 30
     })
+    //take area_code from citiesRankedByAirQuality and find the cities with that area_code
+    const cities = await sequelize.models.City.findAll({
+      where: {
+        area_code: citiesRankedByAirQuality.map((city: any) => city.area_code)
+      }
+    })
 
-    return citiesRankedByAirQuality
+    // Map the cities to their pollutant score
+    const citiesWithPollutantScores = citiesRankedByAirQuality
+      .map((city: any) => {
+        const relatedCities = cities.filter((c: any) => c.area_code === city.area_code)
+        return relatedCities.map((cityData: any) => ({
+          city: cityData,
+          totalPollutantScore: city.dataValues.totalPollutantScore,
+          city_id: cityData.city_id
+        }))
+      })
+      .flat()
+
+    return citiesWithPollutantScores
   }
 
   async get(id: Id, params?: AirQualityParams): Promise<any> {

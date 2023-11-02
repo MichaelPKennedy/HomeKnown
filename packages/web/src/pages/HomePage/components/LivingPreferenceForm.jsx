@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Autosuggest from "react-autosuggest";
 import styles from "./LivingPreferenceForm.module.css";
 import "./Slider.css";
@@ -15,33 +15,15 @@ import TemperatureSelection from "./TemperatureSelection";
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState({
-    temperature: 70,
-    temperaturePreference: "mild",
-    climatePreference: "warmer",
     snowPreference: "none",
     rainPreference: "regular",
-    importantSeason: "winter",
-    job: "",
-    partnerJob: "",
     livingPreference: "city",
-    settingPreference: "",
-    hasChildren: false,
-    lowCrimePriority: false,
-    publicTransportation: false,
-    commuteTime: "",
-    proximityAirportHighway: false,
-    culturalOfferings: false,
-    nightlifeImportance: false,
-    landscapeFeatures: [],
     recreationalInterests: [],
     publicServices: [],
     scenery: [],
     searchRadius: 10,
-    industries: [],
     minSalary: null,
     jobLevel: "",
-    wagePriority: 5,
-    futureAspiration: "",
     selectedJobs: [],
     housingType: "",
     homeMin: 200000,
@@ -62,6 +44,17 @@ const LivingPreferenceForm = () => {
       { month: "Nov", temp: 50 },
       { month: "Dec", temp: 35 },
     ],
+    weights: {
+      costOfLivingWeight: 0,
+      recreationalActivitiesWeight: 0,
+      weatherWeight: 0,
+      jobOpportunityWeight: 0,
+      publicServicesWeight: 0,
+      crimeRateWeight: 0,
+      sceneryWeight: 0,
+      airQualityWeight: 0,
+      totalAvailablePoints: 10,
+    },
   });
 
   const navigate = useNavigate();
@@ -160,8 +153,20 @@ const LivingPreferenceForm = () => {
     }));
   };
 
+  //use effect to console log the formData
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
+
   const hasColdMonth = () => {
     return formData.temperatureData.some((month) => month.temp <= 35);
+  };
+
+  const updateFormDataWithWeights = (newWeights) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      weights: newWeights,
+    }));
   };
 
   // const handleSelectMultipleChange = (e) => {
@@ -188,7 +193,7 @@ const LivingPreferenceForm = () => {
           className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
         >
           <div className={`form-group ${styles.formGroup}`}>
-            <PreferenceWeight />
+            <PreferenceWeight onWeightsChange={updateFormDataWithWeights} />
           </div>
           <div className={`form-group ${styles.formGroup}`}>
             <h4 className="pb-2">Job Industry</h4>
@@ -352,7 +357,7 @@ const LivingPreferenceForm = () => {
           <div className={`form-group ${styles.formGroup}`}>
             <h4 className="pb-3">Public Services</h4>
             <p className="mb-3">
-              Check the following that you want to factor into the search:
+              Check the following public services that you care about:
             </p>
 
             <div className={styles.collapsibleSections}>

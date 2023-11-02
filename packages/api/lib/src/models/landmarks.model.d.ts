@@ -1,4 +1,4 @@
 import { Model, Sequelize } from 'sequelize';
-export declare class LandMark extends Model {
+export declare class LandMarks extends Model {
 }
-export declare const LandMarkModel: (sequelize: Sequelize) => void;
+export declare const LandMarksModel: (sequelize: Sequelize) => void;

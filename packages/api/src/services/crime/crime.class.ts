@@ -28,9 +28,10 @@ export class CrimeService implements ServiceMethods<any> {
       })
 
       return crimeRates.map((crimeRate: any) => ({
-        city: crimeRate.city,
-        state: crimeRate.state,
-        crime_score: crimeRate.crime_score
+        city: crimeRate.dataValues.city,
+        city_id: crimeRate.dataValues.city_id,
+        state: crimeRate.dataValues.state,
+        crime_score: crimeRate.dataValues.crime_score
       }))
     } catch (error) {
       console.error('Error fetching crime rates:', error)

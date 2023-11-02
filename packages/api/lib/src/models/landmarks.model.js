@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LandMarkModel = exports.LandMark = void 0;
+exports.LandMarksModel = exports.LandMarks = void 0;
 const sequelize_1 = require("sequelize");
-class LandMark extends sequelize_1.Model {
+class LandMarks extends sequelize_1.Model {
 }
-exports.LandMark = LandMark;
-const LandMarkModel = (sequelize) => {
-    LandMark.init({
+exports.LandMarks = LandMarks;
+const LandMarksModel = (sequelize) => {
+    LandMarks.init({
         id: {
             type: sequelize_1.DataTypes.INTEGER,
             primaryKey: true,
@@ -34,5 +34,5 @@ const LandMarkModel = (sequelize) => {
         timestamps: false
     });
 };
-exports.LandMarkModel = LandMarkModel;
+exports.LandMarksModel = LandMarksModel;
 //# sourceMappingURL=landmarks.model.js.map

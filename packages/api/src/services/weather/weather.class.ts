@@ -1,5 +1,8 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
+import type { Weather, WeatherData, WeatherPatch, WeatherQuery } from './weather.schema'
+
+export type { Weather, WeatherData, WeatherPatch, WeatherQuery }
 const { Sequelize } = require('sequelize')
 
 const Op = Sequelize.Op
@@ -21,6 +24,20 @@ export interface WeatherParams extends Params {
     { month: string; temp?: number },
     { month: string; temp?: number }
   ]
+}
+const monthToNumber: { [key: string]: number } = {
+  Jan: 1,
+  Feb: 2,
+  Mar: 3,
+  Apr: 4,
+  May: 5,
+  Jun: 6,
+  Jul: 7,
+  Aug: 8,
+  Sep: 9,
+  Oct: 10,
+  Nov: 11,
+  Dec: 12
 }
 
 type WhereCondition = {
@@ -46,14 +63,19 @@ export class WeatherService implements ServiceMethods<any> {
     const { snowPreference, rainPreference, temperatureData } = queryData
 
     const whereConditions: WhereCondition[] = temperatureData.map((monthData) => {
+      const monthNumber = monthToNumber[monthData.month]
+      if (monthNumber === undefined) {
+        throw new Error(`Invalid month: ${monthData.month}`)
+      }
+
       const whereCondition: WhereCondition = {
         year: 2022,
-        month: monthData.month
+        month: monthNumber
       }
 
       if (monthData.temp !== undefined) {
         whereCondition.avg_temp = {
-          [Op.between]: [monthData.temp - 2, monthData.temp + 2]
+          [Op.between]: [monthData.temp - 30, monthData.temp + 30]
         }
       }
 
@@ -63,9 +85,8 @@ export class WeatherService implements ServiceMethods<any> {
     try {
       const monthlyResults = await Promise.all(
         whereConditions.map(async (condition) => {
-          return await this.sequelize.model('CityMonthlyWeatherCounty').findAll({
-            where: condition,
-            limit: 20
+          return await this.sequelize.models.CityMonthlyWeatherCounty.findAll({
+            where: condition
           })
         })
       )
@@ -79,7 +100,6 @@ export class WeatherService implements ServiceMethods<any> {
       )
 
       const sortedResults = scoredResults.sort((a, b) => b.score - a.score)
-
       const topResults = sortedResults.slice(0, 10)
       return topResults
     } catch (error) {
@@ -94,39 +114,56 @@ export class WeatherService implements ServiceMethods<any> {
     snowPreference?: string,
     rainPreference?: string
   ): Promise<any[]> {
-    // Group by city and calculate total snow and rain for the year
+    // Group by city_id and calculate total snow and rain for the year
     const groupedResults = results.reduce((acc, curr) => {
-      if (!acc[curr.cityId]) {
-        acc[curr.cityId] = { city: curr.city, snow: 0, rain: 0, monthlyData: [] }
+      const cityData = curr.dataValues
+
+      if (!acc[cityData.city_id]) {
+        acc[cityData.city_id] = {
+          city_id: cityData.city_id,
+          snow: 0,
+          rain: 0,
+          monthlyData: []
+        }
       }
-      acc[curr.cityId].snow += curr.snow
-      acc[curr.cityId].rain += curr.rain
-      acc[curr.cityId].monthlyData.push(curr)
+
+      acc[cityData.city_id].snow += parseFloat(cityData.snow) || 0
+      acc[cityData.city_id].rain += parseFloat(cityData.rain) || 0
+      acc[cityData.city_id].monthlyData.push(cityData)
+
       return acc
     }, {})
 
-    // Convert groupedResults to an array
     const citiesArray = Object.values(groupedResults)
 
-    // Calculate score for each city based on temperature, snow, and rain preferences
-    const scoredResults = citiesArray.map((city) => {
+    const scoredResults = citiesArray.map((city: any) => {
       let score = 0
 
-      // Score temperature preferences
       temperatureData.forEach((monthData) => {
-        const monthResult = city.monthlyData.find((m) => m.month === monthData.month)
+        const monthNumber = monthToNumber[monthData.month]
+        const monthResult = city.monthlyData.find((m: any) => m.month === monthNumber)
         if (monthResult && monthData.temp !== undefined) {
-          const tempDiff = Math.abs(monthResult.avg_temp - monthData.temp)
-          score += Math.max(0, 10 - tempDiff) // Subtracting the temperature difference from 10, so closer temperatures get higher scores
+          const tempDiff = Math.abs(parseFloat(monthResult.avg_temp) - monthData.temp)
+          if (tempDiff <= 2) {
+            score += 15
+          } else if (tempDiff <= 5) {
+            score += 10
+          } else if (tempDiff <= 10) {
+            score += 5
+          } else if (tempDiff >= 25) {
+            score -= 15
+          } else if (tempDiff >= 20) {
+            score -= 10
+          } else if (tempDiff >= 15) {
+            score -= 5
+          }
         }
       })
 
-      // Score snow preferences
       if (snowPreference) {
         score += this.getSnowScore(city.snow, snowPreference)
       }
 
-      // Score rain preferences
       if (rainPreference) {
         score += this.getRainScore(city.rain, rainPreference)
       }
@@ -137,7 +174,6 @@ export class WeatherService implements ServiceMethods<any> {
     return scoredResults
   }
 
-  // Add `getSnowScore` and `getRainScore` methods to calculate score based on snow and rain preferences
   getSnowScore(totalSnow: number, preference: string): number {
     switch (preference) {
       case 'none':
@@ -154,9 +190,9 @@ export class WeatherService implements ServiceMethods<any> {
   getRainScore(totalRain: number, preference: string): number {
     switch (preference) {
       case 'dry':
-        return totalRain < 50 ? 10 : 0
+        return totalRain < 50 ? 20 : 0
       case 'regular':
-        return totalRain >= 50 ? 10 : 0
+        return totalRain >= 50 ? 20 : 0
       default:
         return 0
     }

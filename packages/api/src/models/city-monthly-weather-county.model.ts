@@ -46,6 +46,14 @@ export const CityMonthlyWeatherCountyModel = (sequelize: Sequelize) => {
       min_temp: {
         type: DataTypes.DECIMAL(5, 2),
         defaultValue: null
+      },
+      snow: {
+        type: DataTypes.DECIMAL(10, 2),
+        defaultValue: null
+      },
+      rain: {
+        type: DataTypes.DECIMAL(10, 2),
+        defaultValue: null
       }
     },
     {

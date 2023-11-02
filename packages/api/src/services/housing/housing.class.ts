@@ -59,7 +59,7 @@ export class HousingService implements ServiceMethods<any> {
           [Op.lte]: max
         }
       },
-      attributes: ['city_name', 'area_code', priceType],
+      attributes: ['city_name', 'city_id', 'area_code', priceType],
       include: [
         {
           model: Area,
@@ -73,8 +73,6 @@ export class HousingService implements ServiceMethods<any> {
         const totalCostIndex = Number(totalCostIndices[city.dataValues.Area.dataValues.state_code])
         const adjustedCostIndex = totalCostIndex * (min / 100) || 0
         const homePrice = Number(city.dataValues[priceType])
-        console.log('homePrice', homePrice)
-        console.log('adjustedCostIndex', adjustedCostIndex)
         return {
           ...city.get(),
           rank: Math.round((homePrice + adjustedCostIndex) * 100) / 100,

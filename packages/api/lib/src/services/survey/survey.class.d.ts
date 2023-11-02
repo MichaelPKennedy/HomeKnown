@@ -36,11 +36,63 @@ export interface SurveyFormData {
         nightlifeImportance?: boolean;
         landscapeFeatures?: string[];
         recreationalInterests?: string[];
+        publicServices?: string[];
+        searchRadius?: number;
         housingType?: 'rent' | 'buy';
         homeMin?: number;
         homeMax?: number;
         rentMin?: number;
         rentMax?: number;
+        temperatureData: [
+            {
+                month: 'Jan';
+                temp?: number;
+            },
+            {
+                month: 'Feb';
+                temp?: number;
+            },
+            {
+                month: 'Mar';
+                temp?: number;
+            },
+            {
+                month: 'Apr';
+                temp?: number;
+            },
+            {
+                month: 'May';
+                temp?: number;
+            },
+            {
+                month: 'Jun';
+                temp?: number;
+            },
+            {
+                month: 'Jul';
+                temp?: number;
+            },
+            {
+                month: 'Aug';
+                temp?: number;
+            },
+            {
+                month: 'Sep';
+                temp?: number;
+            },
+            {
+                month: 'Oct';
+                temp?: number;
+            },
+            {
+                month: 'Nov';
+                temp?: number;
+            },
+            {
+                month: 'Dec';
+                temp?: number;
+            }
+        ];
     };
 }
 export declare class SurveyService implements ServiceMethods<any> {
@@ -50,10 +102,12 @@ export declare class SurveyService implements ServiceMethods<any> {
     parseJobData(data: SurveyFormData): any;
     parseWeatherData(data: SurveyFormData): any;
     parseHousingData(data: SurveyFormData): any;
+    parsePublicServicesData(data: SurveyFormData): any;
     getIndustryResponse(data: any): Promise<any>;
     getWeatherResponse(data: any): Promise<any>;
     getRecreationResponse(data: any): Promise<any>;
     getHousingResponse(data: any): Promise<any>;
+    getPublicServicesResponse(data: any): Promise<any>;
     find(params: SurveyParams): Promise<any[] | Paginated<any>>;
     get(id: Id, params?: SurveyParams): Promise<any>;
     update(id: NullableId, data: any, params?: SurveyParams): Promise<any>;

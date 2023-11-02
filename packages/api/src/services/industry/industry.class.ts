@@ -103,7 +103,7 @@ export class IndustryService implements ServiceMethods<any> {
     const CityIndustrySalary = this.sequelize.models.CityIndustrySalary
     const Area = this.sequelize.models.Area
 
-    const topCities = await CityIndustrySalary.findAll({
+    const topAreas = await CityIndustrySalary.findAll({
       where: {
         ...whereClause
       },
@@ -133,12 +133,31 @@ export class IndustryService implements ServiceMethods<any> {
       order: [[this.sequelize.col('avg_salary'), 'DESC']],
       limit: 10
     })
+    //for top cities, get the cities that are associated with the area_code for that city
+    const topCities = await this.sequelize.models.City.findAll({
+      where: {
+        area_code: topAreas.map((city: any) => city.area_code)
+      }
+    })
+
+    //map the cities to their salary
+    const topCitiesWithSalary = topAreas
+      .map((city: any) => {
+        const relatedCities = topCities.filter((c: any) => c.area_code === city.area_code)
+        return relatedCities.map((cityData: any) => ({
+          city: cityData,
+          avg_salary: city.dataValues.avg_salary,
+          avg_hourly: city.dataValues.avg_hourly,
+          city_id: cityData.city_id
+        }))
+      })
+      .flat()
 
     return {
       jobs: selectedJobs.map((job: any) => job.occ_title),
       nationalAverage,
       topStates: results,
-      topCities: topCities
+      topCities: topCitiesWithSalary
     } as any
   }
 

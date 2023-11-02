@@ -10,31 +10,40 @@ class SurveyService {
         const weatherData = this.parseWeatherData(data);
         const recreationData = data.data.recreationalInterests;
         const housingData = this.parseHousingData(data);
-        const jobResponse = await this.getIndustryResponse(jobData);
-        const weatherResponse = await this.getWeatherResponse(weatherData);
-        const recreationResponse = await this.getRecreationResponse(recreationData);
-        const housingResponse = await this.getHousingResponse(housingData);
-        console.log('housingResponse', housingResponse);
-        const topCitiesMatches = weatherResponse.topCities.filter((weatherCity) => {
-            return jobResponse.topCities.some((jobCity) => {
-                const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`);
-                return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title;
+        const publicServicesData = this.parsePublicServicesData(data);
+        try {
+            const [jobResponse, weatherResponse, recreationResponse, housingResponse, publicServicesResponse] = await Promise.all([
+                this.getIndustryResponse(jobData),
+                this.getWeatherResponse(weatherData),
+                this.getRecreationResponse(recreationData),
+                this.getHousingResponse(housingData),
+                this.getPublicServicesResponse(publicServicesData)
+            ]);
+            const topCitiesMatches = weatherResponse.topCities.filter((weatherCity) => {
+                return jobResponse.topCities.some((jobCity) => {
+                    const regex = new RegExp(`^${weatherCity.city}-|-${weatherCity.city}-|-${weatherCity.city}$`);
+                    return regex.test(jobCity.Area.area_title) || weatherCity.city === jobCity.Area.area_title;
+                });
             });
-        });
-        let topCities;
-        if (topCitiesMatches) {
-            topCities = topCitiesMatches;
+            let topCities;
+            if (topCitiesMatches) {
+                topCities = topCitiesMatches;
+            }
+            else {
+                topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)];
+            }
+            //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
+            return {
+                jobResponse,
+                weatherResponse,
+                recreationResponse,
+                topCities
+            };
         }
-        else {
-            topCities = [...weatherResponse.topCities.slice(0, 5), ...jobResponse.topCities.slice(0, 5)];
+        catch (error) {
+            console.error('Error processing requests:', error);
+            throw new Error('Unable to process requests.');
         }
-        //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
-        return {
-            jobResponse,
-            weatherResponse,
-            recreationResponse,
-            topCities
-        };
     }
     parseJobData(data) {
         const { minSalary, jobLevel, selectedJobs } = data.data;
@@ -45,15 +54,11 @@ class SurveyService {
         };
     }
     parseWeatherData(data) {
-        const { temperature, temperaturePreference, climatePreference, snowPreference, rainPreference, importantSeason, seasonPreferenceDetail } = data.data;
+        const { temperatureData, snowPreference, rainPreference } = data.data;
         return {
-            temperature,
-            temperaturePreference,
-            climatePreference,
+            temperatureData,
             snowPreference,
-            rainPreference,
-            importantSeason,
-            seasonPreferenceDetail
+            rainPreference
         };
     }
     parseHousingData(data) {
@@ -64,6 +69,13 @@ class SurveyService {
             homeMax,
             rentMin,
             rentMax
+        };
+    }
+    parsePublicServicesData(data) {
+        const { searchRadius, publicServices } = data.data;
+        return {
+            searchRadius,
+            publicServices
         };
     }
     async getIndustryResponse(data) {
@@ -124,6 +136,23 @@ class SurveyService {
         catch (error) {
             console.error('Error querying the housing service:', error);
             throw new Error('Unable to fetch data from housing service.');
+        }
+    }
+    async getPublicServicesResponse(data) {
+        console.log('public service data', data);
+        const publicServicesService = this.app.service('public-services');
+        try {
+            const response = await publicServicesService.find({
+                query: {
+                    publicServices: data.publicServices,
+                    searchRadius: data.searchRadius
+                }
+            });
+            return response;
+        }
+        catch (error) {
+            console.error('Error querying the public services service:', error);
+            throw new Error('Unable to fetch data from public services service.');
         }
     }
     async find(params) {

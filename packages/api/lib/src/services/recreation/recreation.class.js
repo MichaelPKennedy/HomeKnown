@@ -106,7 +106,7 @@ class RecreationService {
     async find(params) {
         const { recreationalInterests } = params.query;
         const landmarkTypes = (Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]).flatMap((interest) => RecreationalInterestMappings[interest]);
-        const landmarks = await this.sequelize.models.LandMark.findAll({
+        const landmarks = await this.sequelize.models.LandMarks.findAll({
             where: { Type: landmarkTypes }
         });
         const cities = await this.sequelize.models.City.findAll({

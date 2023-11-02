@@ -185,7 +185,7 @@ function getLayerStyles(currentOffset) {
   };
 }
 
-function PreferenceWeight() {
+function PreferenceWeight({ onWeightsChange }) {
   const [weights, setWeights] = useState({
     costOfLivingWeight: 0,
     recreationalActivitiesWeight: 0,
@@ -194,17 +194,20 @@ function PreferenceWeight() {
     publicServicesWeight: 0,
     crimeRateWeight: 0,
     sceneryWeight: 0,
+    airQualityWeight: 0,
     totalAvailablePoints: 10,
   });
 
   const addTokenToSection = (sectionKey) => {
     setWeights((prevState) => {
       if (prevState.totalAvailablePoints > 0) {
-        return {
+        const newState = {
           ...prevState,
           [sectionKey]: prevState[sectionKey] + 1,
           totalAvailablePoints: prevState.totalAvailablePoints - 1,
         };
+        onWeightsChange(newState);
+        return newState;
       }
       return prevState;
     });
@@ -219,7 +222,7 @@ function PreferenceWeight() {
           [sectionKey]: prevState[sectionKey] - 1,
           totalAvailablePoints: prevState.totalAvailablePoints + 1,
         };
-        console.log("New State:", newState);
+        onWeightsChange(newState);
         return newState;
       }
       return prevState;
@@ -236,6 +239,7 @@ function PreferenceWeight() {
       fromSection === sectionKey
     )
       return;
+
     setWeights((prevState) => {
       const newWeights = {
         ...prevState,
@@ -247,6 +251,8 @@ function PreferenceWeight() {
       } else {
         newWeights.totalAvailablePoints = prevState.totalAvailablePoints + 1;
       }
+
+      onWeightsChange(newWeights);
 
       return newWeights;
     });
@@ -296,6 +302,7 @@ function PreferenceWeight() {
       } else {
         newWeights[targetSection] = prevState[targetSection] + adjustment;
       }
+      onWeightsChange(newWeights);
 
       return newWeights;
     });
@@ -364,6 +371,11 @@ function PreferenceWeight() {
             title: "Crime Rate",
             sectionKey: "crimeRateWeight",
             weight: weights.crimeRateWeight,
+          },
+          {
+            title: "Air Quality",
+            sectionKey: "airQualityWeight",
+            weight: weights.airQualityWeight,
           },
         ].map((section) => (
           <div className={styles.section} key={section.sectionKey}>

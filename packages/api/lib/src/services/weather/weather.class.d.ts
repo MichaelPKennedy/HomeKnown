@@ -1,28 +1,67 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers';
-import type { WeatherSchema, WeatherQuery } from './weather.schema';
 import type { Application } from '../../declarations';
-export type { WeatherSchema, WeatherQuery };
 export interface WeatherParams extends Params {
-    query?: {
-        temperature?: number;
-        temperaturePreference?: 'mild' | 'distinct';
-        climatePreference?: 'warmer' | 'cooler';
-        snowPreference?: 'none' | 'light' | 'heavy';
-        rainPreference?: 'dry' | 'regular';
-        importantSeason?: 'winter' | 'summer' | 'spring' | 'fall';
-        seasonPreferenceDetail?: 'mildWinter' | 'coldWinter' | 'snowyWinter' | 'mildSummer' | 'hotSummer' | 'drySummer' | 'warmSpring' | 'coolSpring' | 'drySpring' | 'warmFall' | 'coolFall' | 'dryFall';
-    };
+    snowPreference?: 'none' | 'light' | 'heavy';
+    rainPreference?: 'dry' | 'regular';
+    temperatureData: [
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        },
+        {
+            month: string;
+            temp?: number;
+        }
+    ];
 }
 export declare class WeatherService implements ServiceMethods<any> {
     app: Application;
     sequelize: any;
     constructor(app: Application, sequelizeClient: any);
-    private conditionsMap;
-    private setCondition;
-    private getAllConditions;
-    private modifyQueryForRetry;
-    private queryForCities;
-    find(params: WeatherParams): Promise<any[] | Paginated<any>>;
+    find(params: Params): Promise<any[] | Paginated<any>>;
+    scoreResults(results: any[], temperatureData: WeatherParams['temperatureData'], snowPreference?: string, rainPreference?: string): Promise<any[]>;
+    getSnowScore(totalSnow: number, preference: string): number;
+    getRainScore(totalRain: number, preference: string): number;
     get(id: Id, params?: WeatherParams): Promise<any>;
     create(data: any, params?: WeatherParams): Promise<any>;
     update(id: NullableId, data: any, params?: WeatherParams): Promise<any>;

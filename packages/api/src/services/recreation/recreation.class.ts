@@ -210,7 +210,11 @@ export class RecreationService implements ServiceMethods<any> {
     const topCities = cityRankings
       .sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
       .slice(0, 10)
-      .map((entry) => ({ city: entry.city, nearbyLandmarks: entry.nearbyLandmarks }))
+      .map((entry) => ({
+        city_id: entry.city.city_id,
+        city: entry.city,
+        nearbyLandmarks: entry.nearbyLandmarks
+      }))
 
     return topCities
   }
