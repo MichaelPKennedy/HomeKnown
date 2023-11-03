@@ -42,6 +42,17 @@ export interface SurveyFormData {
       { month: 'Nov'; temp?: number },
       { month: 'Dec'; temp?: number }
     ]
+    weights: {
+      costOfLivingWeight?: number
+      recreationalActivitiesWeight?: number
+      weatherWeight?: number
+      jobOpportunityWeight?: number
+      publicServicesWeight?: number
+      crimeRateWeight?: number
+      sceneryWeight?: number
+      airQualityWeight?: number
+      totalAvailablePoints?: number
+    }
   }
 }
 
@@ -52,6 +63,64 @@ export class SurveyService implements ServiceMethods<any> {
     this.app = app
   }
 
+  scoreCities(
+    job: any,
+    weather: any,
+    recreation: any,
+    housing: any,
+    publicServices: any,
+    scenery: any,
+    airQuality: any,
+    crime: any,
+    weights: any
+  ): any {
+    console.log('job', job)
+
+    const jobCities = job.topCities.map((city: any) => city.city_id)
+    const weatherCities = weather.map((city: any) => city.city_id)
+    const recreationCities = recreation.map((city: any) => city.city_id)
+    const housingCities = housing.map((city: any) => city.city_id)
+    const publicServicesCities = publicServices.map((city: any) => city.city_id)
+    const sceneryCities = scenery.map((city: any) => city.city_id)
+    const airQualityCities = airQuality.map((city: any) => city.city_id)
+    const crimeCities = crime.map((city: any) => city.city_id)
+
+    const allCities = [
+      ...jobCities,
+      ...weatherCities,
+      ...recreationCities,
+      ...housingCities,
+      ...publicServicesCities,
+      ...sceneryCities,
+      ...airQualityCities,
+      ...crimeCities
+    ]
+    console.log('jobCities.length', jobCities.length)
+    console.log('weatherCities.length', weatherCities.length)
+    console.log('recreationCities.length', recreationCities.length)
+    console.log('housingCities.length', housingCities.length)
+    console.log('publicServicesCities.length', publicServicesCities.length)
+    console.log('sceneryCities.length', sceneryCities.length)
+    console.log('airQualityCities.length', airQualityCities.length)
+    console.log('crimeCities.length', crimeCities.length)
+    console.log('allCities.length', allCities.length)
+
+    const cityCounts = allCities.reduce((acc: { [key: number]: number }, city: number) => {
+      acc[city] = (acc[city] || 0) + 1
+      return acc
+    }, {})
+    const sortedByCount = Object.keys(cityCounts)
+      .map((city) => ({
+        city_id: Number(city),
+        count: cityCounts[city]
+      }))
+      .sort((a, b) => b.count - a.count)
+
+    console.log('sorted cities by count', sortedByCount)
+
+    return sortedByCount.slice(0, 10)
+  }
+
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
     console.log('data', data)
     const jobData = this.parseJobData(data)
@@ -60,6 +129,7 @@ export class SurveyService implements ServiceMethods<any> {
     const housingData = this.parseHousingData(data)
     const publicServicesData = this.parsePublicServicesData(data)
     const sceneryData = this.parseSceneryData(data)
+    const weights = data.data.weights
 
     try {
       const [
@@ -82,9 +152,17 @@ export class SurveyService implements ServiceMethods<any> {
         this.getCrimeResponse()
       ])
 
-      console.log('weatherResponse', weatherResponse)
-
-      //TODO: make a call to non-existent function which will normalize the responses and get all necessary missing data for each of the selected top cites and states
+      const topTen = this.scoreCities(
+        jobResponse,
+        weatherResponse,
+        recreationResponse,
+        housingResponse,
+        publicServicesResponse,
+        sceneryResponse,
+        airQualityResponse,
+        crimeResponse,
+        weights
+      )
 
       return {
         jobResponse,

@@ -58,9 +58,9 @@ export class PublicServicesService implements ServiceMethods<any> {
       }
     })
 
-    cityScores.sort((a: any, b: any) => b.count - a.count)
+    const topCityScores = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
 
-    return cityScores
+    return topCityScores
   }
 
   async get(id: Id, params?: PublicServicesParams): Promise<any> {

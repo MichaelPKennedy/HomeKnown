@@ -67,6 +67,7 @@ export class AirQualityService implements ServiceMethods<any> {
         }))
       })
       .flat()
+      .slice(0, 30)
 
     return citiesWithPollutantScores
   }

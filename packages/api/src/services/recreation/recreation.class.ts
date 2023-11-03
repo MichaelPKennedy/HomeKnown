@@ -206,10 +206,10 @@ export class RecreationService implements ServiceMethods<any> {
       }
     })
 
-    // Sort cities by number of landmarks and then by proximity, and limit to top 10
+    // Sort cities by number of landmarks and then by proximity, and limit to top 30
     const topCities = cityRankings
       .sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
-      .slice(0, 10)
+      .slice(0, 30)
       .map((entry) => ({
         city_id: entry.city.city_id,
         city: entry.city,

@@ -80,6 +80,7 @@ export class HousingService implements ServiceMethods<any> {
         }
       })
       .sort((a: any, b: any) => a.rank - b.rank)
+      .slice(0, 30)
 
     return rankedCities
   }

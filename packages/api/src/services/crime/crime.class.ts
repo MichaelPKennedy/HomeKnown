@@ -24,7 +24,7 @@ export class CrimeService implements ServiceMethods<any> {
           [Op.and]: [{ crime_score: { [Op.ne]: null } }, { city_id: { [Op.ne]: null } }]
         },
         order: [['crime_score', 'ASC']],
-        limit: 100
+        limit: 30
       })
 
       return crimeRates.map((crimeRate: any) => ({

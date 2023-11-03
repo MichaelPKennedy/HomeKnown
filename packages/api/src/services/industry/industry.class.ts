@@ -131,7 +131,7 @@ export class IndustryService implements ServiceMethods<any> {
       ],
       group: ['area_code'],
       order: [[this.sequelize.col('avg_salary'), 'DESC']],
-      limit: 10
+      limit: 30
     })
     //for top cities, get the cities that are associated with the area_code for that city
     const topCities = await this.sequelize.models.City.findAll({
@@ -152,6 +152,7 @@ export class IndustryService implements ServiceMethods<any> {
         }))
       })
       .flat()
+      .slice(0, 30)
 
     return {
       jobs: selectedJobs.map((job: any) => job.occ_title),
