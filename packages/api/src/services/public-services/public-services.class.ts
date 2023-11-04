@@ -33,7 +33,6 @@ export class PublicServicesService implements ServiceMethods<any> {
       publicServicesArray = [publicServicesArray]
     }
 
-    // Fetch all cities along with their public service counts from cache
     const citiesWithCounts = await this.sequelize.models.City.findAll({
       include: [
         {
@@ -57,9 +56,23 @@ export class PublicServicesService implements ServiceMethods<any> {
       }
     })
 
-    const topCityScores = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
+    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
 
-    return topCityScores
+    let ranking = 1
+    let previousCount = sortedCities[0]?.count || 0
+    const topCities = sortedCities.map((city: any, index: any) => {
+      if (index > 0 && city.count < previousCount) {
+        ranking = index + 1
+      }
+      previousCount = city.count
+
+      return {
+        ...city,
+        ranking
+      }
+    })
+
+    return topCities
   }
 
   async get(id: Id, params?: PublicServicesParams): Promise<any> {

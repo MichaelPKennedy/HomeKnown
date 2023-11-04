@@ -100,8 +100,19 @@ export class WeatherService implements ServiceMethods<any> {
       )
 
       const sortedResults = scoredResults.sort((a, b) => b.score - a.score)
-      const topResults = sortedResults.slice(0, 30)
-      return topResults
+
+      let rank = 1
+      let previousScore = sortedResults[0]?.score
+
+      const rankedResults = sortedResults.map((result, index) => {
+        if (index > 0 && result.score !== previousScore) {
+          rank++
+          previousScore = result.score
+        }
+        return { ranking: rank, ...result }
+      })
+
+      return rankedResults.slice(0, 30)
     } catch (error) {
       console.error('Error querying weather data:', error)
       throw new Error('Error querying weather data')

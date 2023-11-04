@@ -22,15 +22,6 @@ export class AirQualityService implements ServiceMethods<any> {
     const citiesRankedByAirQuality = await sequelize.models.AirQuality.findAll({
       attributes: [
         'area_code',
-        'CO_8hr_ppm',
-        'Pb_3mo_ug_m3',
-        'NO2_AM_ppb',
-        'NO2_1hr_ppb',
-        'O3_8hr_ppm',
-        'PM10_24hr_ug_m3',
-        'PM2_5_Wtd_AM_ug_m3',
-        'PM2_5_24hr_ug_m3',
-        'SO2_1hr_ppb',
         [
           sequelize.literal(`
             COALESCE(CO_8hr_ppm, 0) +
@@ -49,26 +40,40 @@ export class AirQualityService implements ServiceMethods<any> {
       order: [[sequelize.literal('totalPollutantScore'), 'ASC']],
       limit: 30
     })
-    //take area_code from citiesRankedByAirQuality and find the cities with that area_code
-    const cities = await sequelize.models.City.findAll({
-      where: {
-        area_code: citiesRankedByAirQuality.map((city: any) => city.area_code)
+
+    // Map and rank the cities by their pollutant score
+    let ranking = 1
+    let previousScore = 0
+    const citiesWithPollutantScoresAndRanking = citiesRankedByAirQuality.map((city: any, index: any) => {
+      const totalPollutantScore = city.dataValues.totalPollutantScore
+
+      if (previousScore !== totalPollutantScore && previousScore !== null) {
+        ranking = index + 1
+      }
+      previousScore = totalPollutantScore
+
+      return {
+        area_code: city.area_code,
+        totalPollutantScore,
+        ranking
       }
     })
 
-    // Map the cities to their pollutant score
-    const citiesWithPollutantScores = citiesRankedByAirQuality
-      .map((city: any) => {
-        const relatedCities = cities.filter((c: any) => c.area_code === city.area_code)
-        return relatedCities.map((cityData: any) => ({
-          city_id: cityData.city_id,
-          totalPollutantScore: city.dataValues.totalPollutantScore
-        }))
-      })
-      .flat()
-      .slice(0, 30)
+    const areaCodes = citiesWithPollutantScoresAndRanking.map((c: any) => c.area_code)
+    const cities = await sequelize.models.City.findAll({
+      where: { area_code: areaCodes }
+    })
 
-    return citiesWithPollutantScores
+    const rankedCitiesWithIds = citiesWithPollutantScoresAndRanking.map((cityScore: any) => {
+      const cityData = cities.find((c: any) => c.area_code === cityScore.area_code)
+      return {
+        city_id: cityData.city_id,
+        totalPollutantScore: cityScore.totalPollutantScore,
+        ranking: cityScore.ranking
+      }
+    })
+
+    return rankedCitiesWithIds
   }
 
   async get(id: Id, params?: AirQualityParams): Promise<any> {

@@ -27,12 +27,25 @@ export class CrimeService implements ServiceMethods<any> {
         limit: 30
       })
 
-      return crimeRates.map((crimeRate: any) => ({
-        city: crimeRate.dataValues.city,
-        city_id: crimeRate.dataValues.city_id,
-        state: crimeRate.dataValues.state,
-        crime_score: crimeRate.dataValues.crime_score
-      }))
+      let ranking = 1 // Start ranking at 1
+      let previousCrimeScore = crimeRates[0]?.dataValues?.crime_score
+
+      const rankedCrimeRates = crimeRates.map((crimeRate: any) => {
+        if (crimeRate.dataValues.crime_score !== previousCrimeScore) {
+          ranking++
+          previousCrimeScore = crimeRate.dataValues.crime_score
+        }
+
+        return {
+          ranking,
+          city: crimeRate.dataValues.city,
+          city_id: crimeRate.dataValues.city_id,
+          state: crimeRate.dataValues.state,
+          crime_score: crimeRate.dataValues.crime_score
+        }
+      })
+
+      return rankedCrimeRates
     } catch (error) {
       console.error('Error fetching crime rates:', error)
       throw new Error('Error fetching crime rates')

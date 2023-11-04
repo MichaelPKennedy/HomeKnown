@@ -94,9 +94,31 @@ export class IndustryService implements ServiceMethods<any> {
       .flat()
       .slice(0, 30)
 
+    const sortedCitiesWithSalary = topCitiesWithSalary.sort((a: any, b: any) => b.avg_salary - a.avg_salary)
+
+    let ranking = 1
+    let skipRank = 0
+    let previousAvgSalary = sortedCitiesWithSalary[0]?.avg_salary
+
+    const rankedCitiesWithSalary = sortedCitiesWithSalary.map((city: any, index: any) => {
+      if (city.avg_salary !== previousAvgSalary) {
+        ranking += skipRank
+        skipRank = 1
+      } else {
+        if (index !== 0) {
+          skipRank++
+        }
+      }
+      previousAvgSalary = city.avg_salary
+      return {
+        ...city,
+        ranking
+      }
+    })
+
     return {
       jobs: selectedJobs.map((job: any) => job.occ_title),
-      topCities: topCitiesWithSalary
+      topCities: rankedCitiesWithSalary
     } as any
   }
 

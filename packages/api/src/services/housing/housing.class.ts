@@ -84,7 +84,21 @@ export class HousingService implements ServiceMethods<any> {
       .sort((a: any, b: any) => a.rank - b.rank)
       .slice(0, 30)
 
-    return rankedCities
+    let ranking = 1
+    let previousRank = rankedCities[0]?.rank
+
+    const finalRankedCities = rankedCities.map((city: any) => {
+      if (city.rank !== previousRank) {
+        ranking++
+        previousRank = city.rank
+      }
+      return {
+        ...city,
+        ranking
+      }
+    })
+
+    return finalRankedCities
   }
 
   async get(id: Id, params?: HousingParams): Promise<any> {
