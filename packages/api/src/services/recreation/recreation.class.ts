@@ -192,7 +192,7 @@ export class RecreationService implements ServiceMethods<any> {
     cityRankings.sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
 
     let ranking = 1
-    let previousLandmarkCount = cityRankings[0].landmarkCount
+    let previousLandmarkCount = 0
     let tieRank = 1
 
     const rankedCities = cityRankings.map((entry, index) => {

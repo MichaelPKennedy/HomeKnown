@@ -103,14 +103,12 @@ const LivingPreferenceForm = () => {
         data: formData,
       });
 
-      if (response && response.jobResponse) {
+      if (response) {
         console.log("Response from survey:", response);
         setLoading(false);
         navigate("/results", {
           state: {
-            data: response.jobResponse,
-            recreation: response.recreationResponse,
-            weather: response.weatherResponse,
+            data: response,
           },
           fullResponse: response,
         });

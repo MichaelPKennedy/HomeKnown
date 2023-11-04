@@ -1,0 +1,12 @@
+.cityPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.cityPage h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 2em;
+}

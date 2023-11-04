@@ -100,15 +100,6 @@ export class SurveyService implements ServiceMethods<any> {
       ...airQualityCities,
       ...crimeCities
     ]
-    console.log('jobCities.length', jobCities.length)
-    console.log('weatherCities.length', weatherCities.length)
-    console.log('recreationCities.length', recreationCities.length)
-    console.log('housingCities.length', housingCities.length)
-    console.log('publicServicesCities.length', publicServicesCities.length)
-    console.log('sceneryCities.length', sceneryCities.length)
-    console.log('airQualityCities.length', airQualityCities.length)
-    console.log('crimeCities.length', crimeCities.length)
-    console.log('allCities.length', allCities.length)
 
     const cityCounts = allCities.reduce((acc: { [key: number]: number }, city: number) => {
       acc[city] = (acc[city] || 0) + 1
@@ -170,13 +161,10 @@ export class SurveyService implements ServiceMethods<any> {
         recreationData,
         jobData
       )
-
       console.log('topTen', topTen)
 
       return {
-        jobResponse,
-        weatherResponse,
-        recreationResponse
+        topTen
       }
     } catch (error) {
       console.error('Error processing requests:', error)

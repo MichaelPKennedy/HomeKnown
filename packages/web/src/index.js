@@ -6,9 +6,11 @@ import "./index.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import reportWebVitals from "./reportWebVitals";
 
+import { CityDataProvider } from "./utils/CityDataContext";
 import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import ResultsPage from "./pages/ResultsPage";
+import City from "./pages/City";
 import NavBar from "./components/NavBar";
 import { DndProvider } from "react-dnd";
 import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
@@ -62,14 +64,17 @@ root.render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-          <Router>
-            <NavBar />
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/search" element={<SearchPage />} />
-              <Route path="/results" element={<ResultsPage />} />
-            </Routes>
-          </Router>
+          <CityDataProvider>
+            <Router>
+              <NavBar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/results" element={<ResultsPage />} />
+                <Route path="/results/:cityId" element={<City />} />
+              </Routes>
+            </Router>
+          </CityDataProvider>
         </DndProvider>
       </QueryClientProvider>
     </ErrorBoundary>
