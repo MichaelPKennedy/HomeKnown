@@ -56,6 +56,116 @@ export interface SurveyFormData {
     }
   }
 }
+type RecreationalInterestKey =
+  | 'mountains'
+  | 'nationalParks'
+  | 'forests'
+  | 'waterfrontViews'
+  | 'scenicDrives'
+  | 'historicSites'
+  | 'monuments'
+  | 'museums'
+  | 'naturalWonders'
+  | 'rockClimbing'
+  | 'waterSports'
+  | 'beach'
+  | 'diverseFloraFauna'
+  | 'birdWatching'
+  | 'zoos'
+  | 'winterSports'
+  | 'stargazing'
+  | 'amusementParks'
+
+type RecreationalInterestMappings = {
+  [key in RecreationalInterestKey]: string[]
+}
+
+const RecreationalInterestMappings = {
+  mountains: ['Mountain Peak', 'Mountain', 'Hiking Trail', 'Hiking Spot'],
+  nationalParks: [
+    'National Park',
+    'State Park',
+    'Park',
+    'National Park for the Performing Arts',
+    'National Preserve',
+    'Scenic Area',
+    'National Grassland',
+    'National Reserve',
+    'Wilderness Area',
+    'National Recreation Area'
+  ],
+  forests: ['National Forest', 'Rainforest'],
+  waterfrontViews: [
+    'National Seashore',
+    'Beach',
+    'National Lakeshore',
+    'Lake',
+    'Great Lake',
+    'Lakes',
+    'Reservoir',
+    'Bay',
+    'Inlet',
+    'River',
+    'Fjord',
+    'Lake System',
+    'Lake Region',
+    'National River'
+  ],
+  scenicDrives: ['Scenic Drive', 'Parkway'],
+  historicSites: [
+    'Historic Site',
+    'Historical Park',
+    'Historical Site',
+    'Ranch',
+    'Historic Landmark',
+    'Historic Trail',
+    'Landmark',
+    'Center',
+    'Battlefields Memorial',
+    'Heritage Area',
+    'Memorial Park',
+    'Heritage Corridor',
+    'National Military Park',
+    'National Battlefield',
+    'National Historical Park'
+  ],
+  monuments: ['National Monument', 'National Memorial', 'Mountain Memorial', 'Memorial', 'Monument'],
+  museums: ['Museum', 'National Museum'],
+  naturalWonders: [
+    'Natural Arch',
+    'Waterfall',
+    'Viewpoint',
+    'Granite Dome',
+    'Slot Canyon',
+    'Valley',
+    'Estuary',
+    'Cave'
+  ],
+  rockClimbing: ['Climbing Area'],
+  waterSports: [
+    'National Riverway',
+    'National Scenic River',
+    'Scenic River',
+    'National Lakeshore',
+    'Lake',
+    'Great Lake',
+    'Lakes',
+    'Bay',
+    'Lake System',
+    'Lake Region',
+    'National River'
+  ],
+  beach: ['Beach'],
+  diverseFloraFauna: ['Botanical Garden'],
+  birdWatching: [],
+  zoos: ['Zoo', 'Wildlife Reserve'],
+  winterSports: ['Ski Resort'],
+  stargazing: ['Observatory'],
+  amusementParks: ['Amusement Park']
+}
+
+type Weights = SurveyFormData['data']['weights']
+type WeightKey = keyof Weights
 
 export class SurveyService implements ServiceMethods<any> {
   app: Application
@@ -79,89 +189,97 @@ export class SurveyService implements ServiceMethods<any> {
     recreationFormData: any,
     jobFormData: any
   ): any {
-    console.log('job', job)
+    const cityScores = new Map<number, number>()
 
-    const jobCities = job.topCities.map((city: any) => city.city_id)
-    const weatherCities = weather.map((city: any) => city.city_id)
-    const recreationCities = recreation.map((city: any) => city.city_id)
-    const housingCities = housing.map((city: any) => city.city_id)
-    const publicServicesCities = publicServices.map((city: any) => city.city_id)
-    const sceneryCities = scenery.map((city: any) => city.city_id)
-    const airQualityCities = airQuality.map((city: any) => city.city_id)
-    const crimeCities = crime.map((city: any) => city.city_id)
-
-    const allCities = [
-      ...jobCities,
-      ...weatherCities,
-      ...recreationCities,
-      ...housingCities,
-      ...publicServicesCities,
-      ...sceneryCities,
-      ...airQualityCities,
-      ...crimeCities
+    const categories = [
+      { data: job?.topCities, weight: weights.jobOpportunityWeight },
+      { data: weather, weight: weights.weatherWeight },
+      { data: recreation, weight: weights.recreationalActivitiesWeight },
+      { data: housing, weight: weights.costOfLivingWeight },
+      { data: publicServices, weight: weights.publicServicesWeight },
+      { data: scenery, weight: weights.sceneryWeight },
+      { data: airQuality, weight: weights.airQualityWeight },
+      { data: crime, weight: weights.crimeRateWeight }
     ]
 
-    const cityCounts = allCities.reduce((acc: { [key: number]: number }, city: number) => {
-      acc[city] = (acc[city] || 0) + 1
-      return acc
-    }, {})
-    const sortedByCount = Object.keys(cityCounts)
-      .map((city) => ({
-        city_id: Number(city),
-        count: cityCounts[city]
-      }))
-      .sort((a, b) => b.count - a.count)
+    categories.forEach((category) => {
+      category.data?.forEach((city: any) => {
+        const normalizedScore = 31 - city.ranking
+        const weightedScore = normalizedScore * (category.weight || 0)
+        cityScores.set(city.city_id, (cityScores.get(city.city_id) || 0) + weightedScore)
+      })
+    })
 
-    const citiesWithDetails = this.getCityDetails(sortedByCount.slice(0, 10), recreationFormData, jobFormData)
+    const sortedCities = Array.from(cityScores)
+      .map(([city_id, score]) => ({ city_id, score }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10)
+
+    // Get detailed information for the top cities
+    const citiesWithDetails = this.getCityDetails(sortedCities, recreationFormData, jobFormData)
 
     return citiesWithDetails
   }
 
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
-    console.log('data', data)
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
     const recreationData = this.parseRecreationData(data)
     const housingData = this.parseHousingData(data)
     const publicServicesData = this.parsePublicServicesData(data)
     const sceneryData = this.parseSceneryData(data)
+    const crimeData = {}
+    const airQualityData = {}
     const weights = data.data.weights
 
+    let apiPromises: { [key in WeightKey]?: Promise<any> } = {}
+
+    // Add API call promises based on weights
+    const addApiCall = (weightKey: WeightKey, apiCall: (data: any) => Promise<any>, parsedData: any) => {
+      console.log(`Checking weight for ${weightKey}:`, weights[weightKey])
+      if (weights[weightKey] && weights[weightKey]! > 0) {
+        console.log(`Adding API call for ${weightKey}`)
+        apiPromises[weightKey] = apiCall(parsedData)
+      } else {
+        console.log(`Skipping API call for ${weightKey}`)
+      }
+    }
+
+    addApiCall('jobOpportunityWeight', this.getIndustryResponse.bind(this), jobData)
+    addApiCall('weatherWeight', this.getWeatherResponse.bind(this), weatherData)
+    addApiCall('recreationalActivitiesWeight', this.getRecreationResponse.bind(this), recreationData)
+    addApiCall('publicServicesWeight', this.getPublicServicesResponse.bind(this), publicServicesData)
+    addApiCall('crimeRateWeight', this.getCrimeResponse.bind(this), crimeData)
+    addApiCall('sceneryWeight', this.getSceneryResponse.bind(this), sceneryData)
+    addApiCall('airQualityWeight', this.getAirQualityResponse.bind(this), airQualityData)
+    addApiCall('costOfLivingWeight', this.getHousingResponse.bind(this), housingData)
+
     try {
-      const [
-        jobResponse,
-        weatherResponse,
-        recreationResponse,
-        housingResponse,
-        publicServicesResponse,
-        sceneryResponse,
-        airQualityResponse,
-        crimeResponse
-      ] = await Promise.all([
-        this.getIndustryResponse(jobData),
-        this.getWeatherResponse(weatherData),
-        this.getRecreationResponse(recreationData),
-        this.getHousingResponse(housingData),
-        this.getPublicServicesResponse(publicServicesData),
-        this.getSceneryResponse(sceneryData),
-        this.getAirQualityResponse(),
-        this.getCrimeResponse()
-      ])
+      let responses = await Promise.allSettled(Object.values(apiPromises))
+      let processedResponses: { [key: string]: any } = {}
+      Object.keys(apiPromises).forEach((key, index) => {
+        const responseKey = key.replace('Weight', 'Response')
+        const result = responses[index]
+        if (result.status === 'fulfilled') {
+          processedResponses[responseKey] = result.value
+        } else {
+          processedResponses[responseKey] = null
+        }
+      })
 
       const topTen = await this.scoreCities(
-        jobResponse,
-        weatherResponse,
-        recreationResponse,
-        housingResponse,
-        publicServicesResponse,
-        sceneryResponse,
-        airQualityResponse,
-        crimeResponse,
+        processedResponses.jobOpportunityResponse,
+        processedResponses.weatherResponse,
+        processedResponses.recreationalActivitiesResponse,
+        processedResponses.publicServicesResponse,
+        processedResponses.crimeRateResponse,
+        processedResponses.sceneryResponse,
+        processedResponses.airQualityResponse,
+        processedResponses.costOfLivingResponse,
         weights,
         recreationData,
         jobData
       )
-      console.log('topTen', topTen)
 
       return {
         topTen
@@ -267,7 +385,7 @@ export class SurveyService implements ServiceMethods<any> {
     try {
       const response = await recreationService.find({
         query: {
-          recreationalInterests: data
+          ...data
         }
       })
       return response
@@ -276,6 +394,7 @@ export class SurveyService implements ServiceMethods<any> {
       throw new Error('Unable to fetch data from recreation service.')
     }
   }
+
   async getHousingResponse(data: any): Promise<any> {
     const housingService = this.app.service('housing')
     try {
@@ -407,12 +526,12 @@ export class SurveyService implements ServiceMethods<any> {
       return acc
     }, {})
 
+    const landmarkTypes = (
+      Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
+    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey])
+
     const landmarks = await this.sequelize.models.LandMarks.findAll({
-      where: {
-        Type: {
-          [Op.in]: recreationalInterests
-        }
-      }
+      where: { Type: landmarkTypes }
     })
 
     const cityDetailsPromises = cityDetailsRaw.map(async (city: any) => {

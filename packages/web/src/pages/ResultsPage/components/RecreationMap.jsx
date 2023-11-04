@@ -127,112 +127,105 @@ const FixMapSize = () => {
   React.useEffect(() => {
     map.invalidateSize();
   }, []);
-  return null; // this component doesn't render anything visible
+  return null;
 };
 
-const RecreationMap = ({ data }) => {
+const RecreationMap = (data) => {
   const markerRefs = new Map();
   const [hoveredCity, setHoveredCity] = React.useState(null);
+  const { Recreation: recreation } = data;
+  console.log("data", data);
+  console.log("recreation", recreation);
 
   return (
     <div className={styles.mapContainer}>
-      {data.map((item, index) => (
-        <div key={index}>
-          <h2>
-            {item?.city?.city_name}, {item?.city?.Area?.State?.state}
-          </h2>
-          <div>
-            <MapContainer
-              center={[item.city.Latitude, item.city.Longitude]}
-              zoom={9}
-              className={styles.map}
-            >
-              <FixMapSize />
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              />
-              <Circle
-                center={[item.city.Latitude, item.city.Longitude]}
-                radius={80467} // 50 miles in meters
-                color="black"
-                fillColor="green"
-                fillOpacity={0.1} // Opacity of the circle fill
-                opacity={0.2}
-              />
-              <Marker
-                position={[item.city.Latitude, item.city.Longitude]}
-                icon={
-                  new L.DivIcon({
-                    className: styles.cityMarker,
-                    html: ReactDOMServer.renderToString(
-                      <div>
-                        <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
-                      </div>
-                    ),
-                    iconSize: [30, 30],
-                  })
-                }
-              >
-                <Tooltip
-                  direction="top"
-                  permanent={hoveredCity === item.city.city_id}
-                >
-                  <div
-                    className={styles.tooltipLabel}
-                    onMouseOver={() => setHoveredCity(item.city.city_id)}
-                    onMouseOut={() => setHoveredCity(null)}
-                  >
-                    <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-                    <span>{item.city.city_name}</span>
+      <div>
+        <MapContainer
+          center={[data.latitude, data.longitude]}
+          zoom={9}
+          className={styles.map}
+        >
+          <FixMapSize />
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Circle
+            center={[data.latitude, data.longitude]}
+            radius={80467} // 50 miles in meters
+            color="black"
+            fillColor="green"
+            fillOpacity={0.1} // Opacity of the circle fill
+            opacity={0.2}
+          />
+          <Marker
+            position={[data.latitude, data.longitude]}
+            icon={
+              new L.DivIcon({
+                className: styles.cityMarker,
+                html: ReactDOMServer.renderToString(
+                  <div>
+                    <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
                   </div>
-                </Tooltip>
-              </Marker>
-              {item.nearbyLandmarks.map((landmark) => (
-                <Marker
-                  key={landmark.id}
-                  position={[landmark.Latitude, landmark.Longitude]}
-                  className={styles.markerLabel}
-                  icon={
-                    new L.DivIcon({
-                      className: styles.tooltipIcon,
-                      html: getTypeIcon(landmark.Type),
-                      iconSize: [40, 40], // adjust as needed
-                    })
+                ),
+                iconSize: [30, 30],
+              })
+            }
+          >
+            <Tooltip direction="top" permanent={hoveredCity === data.city_id}>
+              <div
+                className={styles.tooltipLabel}
+                onMouseOver={() => setHoveredCity(data.city_id)}
+                onMouseOut={() => setHoveredCity(null)}
+              >
+                <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
+                <span>{data.city_name}</span>
+              </div>
+            </Tooltip>
+          </Marker>
+          {recreation.map((landmark) => (
+            <Marker
+              key={`${data.city_id}-${landmark.Location}`}
+              position={[landmark.Latitude, landmark.Longitude]}
+              className={styles.markerLabel}
+              icon={
+                new L.DivIcon({
+                  className: styles.tooltipIcon,
+                  html: getTypeIcon(landmark.Type),
+                  iconSize: [40, 40], // adjust as needed
+                })
+              }
+              ref={(ref) =>
+                markerRefs.set(`${data.city_id}-${landmark.id}`, ref)
+              }
+              eventHandlers={{
+                mouseover: () => {
+                  const marker = markerRefs.get(
+                    `${data.city_id}-${landmark.id}`
+                  );
+                  if (marker) {
+                    marker.openTooltip();
                   }
-                  ref={(ref) =>
-                    markerRefs.set(`${item.city.city_id}-${landmark.id}`, ref)
+                },
+                mouseout: () => {
+                  const marker = markerRefs.get(
+                    `${data.city_id}-${landmark.id}`
+                  );
+                  if (marker) {
+                    marker.closeTooltip();
                   }
-                  eventHandlers={{
-                    mouseover: () => {
-                      const marker = markerRefs.get(
-                        `${item.city.city_id}-${landmark.id}`
-                      );
-                      if (marker) {
-                        marker.openTooltip();
-                      }
-                    },
-                    mouseout: () => {
-                      const marker = markerRefs.get(
-                        `${item.city.city_id}-${landmark.id}`
-                      );
-                      if (marker) {
-                        marker.closeTooltip();
-                      }
-                    },
-                  }}
-                >
-                  <Tooltip>
-                    <div className={styles.tooltipLabel}>
-                      {landmark.Location} - {landmark.Type}
-                    </div>
-                  </Tooltip>
-                </Marker>
-              ))}
-            </MapContainer>
-          </div>
-        </div>
-      ))}
+                },
+              }}
+            >
+              <Tooltip>
+                <div className={styles.tooltipLabel}>
+                  {landmark.Location} - {landmark.Type}
+                </div>
+              </Tooltip>
+            </Marker>
+          ))}
+        </MapContainer>
+      </div>
     </div>
   );
 };

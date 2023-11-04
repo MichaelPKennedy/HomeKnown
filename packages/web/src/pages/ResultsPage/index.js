@@ -25,6 +25,7 @@ function ResultsPage() {
       <Link
         to={`/results/${city.city_id}`}
         key={city.city_id}
+        state={{ city }}
         className={styles.cityContainer}
       >
         <div className={styles.ranking}>#{index + 1}</div>
