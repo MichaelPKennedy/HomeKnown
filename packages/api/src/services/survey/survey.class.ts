@@ -1,6 +1,7 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Survey, SurveyData, SurveyPatch, SurveyQuery } from './survey.schema'
+import { Op } from 'sequelize'
 
 export type { Survey, SurveyData, SurveyPatch, SurveyQuery }
 
@@ -74,7 +75,9 @@ export class SurveyService implements ServiceMethods<any> {
     scenery: any,
     airQuality: any,
     crime: any,
-    weights: any
+    weights: any,
+    recreationFormData: any,
+    jobFormData: any
   ): any {
     console.log('job', job)
 
@@ -118,16 +121,16 @@ export class SurveyService implements ServiceMethods<any> {
       }))
       .sort((a, b) => b.count - a.count)
 
-    const citiesWithDetails = this.getCityDetails(sortedByCount)
+    const citiesWithDetails = this.getCityDetails(sortedByCount.slice(0, 10), recreationFormData, jobFormData)
 
-    return sortedByCount.slice(0, 10)
+    return citiesWithDetails
   }
 
   async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
     console.log('data', data)
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
-    const recreationData = data.data.recreationalInterests
+    const recreationData = this.parseRecreationData(data)
     const housingData = this.parseHousingData(data)
     const publicServicesData = this.parsePublicServicesData(data)
     const sceneryData = this.parseSceneryData(data)
@@ -154,7 +157,7 @@ export class SurveyService implements ServiceMethods<any> {
         this.getCrimeResponse()
       ])
 
-      const topTen = this.scoreCities(
+      const topTen = await this.scoreCities(
         jobResponse,
         weatherResponse,
         recreationResponse,
@@ -163,8 +166,12 @@ export class SurveyService implements ServiceMethods<any> {
         sceneryResponse,
         airQualityResponse,
         crimeResponse,
-        weights
+        weights,
+        recreationData,
+        jobData
       )
+
+      console.log('topTen', topTen)
 
       return {
         jobResponse,
@@ -224,6 +231,15 @@ export class SurveyService implements ServiceMethods<any> {
     return {
       searchRadius,
       scenery
+    }
+  }
+
+  parseRecreationData(data: SurveyFormData): any {
+    const { recreationalInterests, searchRadius } = data.data
+
+    return {
+      recreationalInterests,
+      searchRadius
     }
   }
 
@@ -346,8 +362,15 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  async getCityDetails(cities: any): Promise<any> {
-    const cityDetails = await this.sequelize.models.City.findAll({
+  async getCityDetails(cities: any, recreation: any, job: any): Promise<any> {
+    let { recreationalInterests, searchRadius } = recreation
+    if (typeof recreationalInterests === 'string') {
+      recreationalInterests = [recreationalInterests]
+    }
+    const { selectedJobs } = job
+
+    // Get the raw city details
+    const cityDetailsRaw = await this.sequelize.models.City.findAll({
       where: {
         city_id: cities.map((city: any) => city.city_id)
       },
@@ -371,11 +394,102 @@ export class SurveyService implements ServiceMethods<any> {
           model: this.sequelize.models.Area,
           attributes: ['area_title'],
           include: [{ model: this.sequelize.models.State }, { model: this.sequelize.models.AirQuality }]
+        },
+        {
+          model: this.sequelize.models.County,
+          attributes: ['county_name']
         }
       ]
     })
-    console.log('cityDetails', cityDetails)
+
+    const areaCodes = cityDetailsRaw.map((cityDetail: any) => cityDetail.area_code)
+
+    const jobData = await this.sequelize.models.CityIndustrySalary.findAll({
+      where: {
+        area_code: { [Op.in]: areaCodes },
+        occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
+      }
+    })
+
+    const jobDataByCity = jobData.reduce((acc: { [key: number]: any }, job: any) => {
+      if (!acc[job.area_code]) {
+        acc[job.area_code] = []
+      }
+      acc[job.area_code].push(job)
+      return acc
+    }, {})
+
+    const landmarks = await this.sequelize.models.LandMarks.findAll({
+      where: {
+        Type: {
+          [Op.in]: recreationalInterests
+        }
+      }
+    })
+
+    const cityDetailsPromises = cityDetailsRaw.map(async (city: any) => {
+      const { Latitude: cityLatitude, Longitude: cityLongitude } = city
+
+      const landmarkPromises = landmarks.map(async (landmark: any) => {
+        const distance = await this.calculateDistance(
+          cityLatitude,
+          cityLongitude,
+          landmark.Latitude,
+          landmark.Longitude
+        )
+        return distance <= searchRadius ? landmark : null
+      })
+
+      const cityJobs = jobDataByCity[city.area_code] || []
+
+      const nearbyLandmarks = (await Promise.all(landmarkPromises)).filter((l) => l !== null)
+
+      return {
+        city_id: city.city_id,
+        city_name: city.city_name,
+        county_name: city.County.county_name,
+        state_name: city.Area.State.state,
+        latitude: cityLatitude,
+        longitude: cityLongitude,
+        Population: {
+          pop_2020: city.pop_2020,
+          pop_2021: city.pop_2021,
+          pop_2022: city.pop_2022
+        },
+        AirQuality: city.Area.AirQuality,
+        CityDemographics: city.CityDemographic,
+        Crime: city.CrimeStatsCity,
+        HomePrice: city.HomePrices,
+        MonthlyRent: city.MonthlyRentCities,
+        Jobs: cityJobs,
+        Weather: city.CityMonthlyWeatherCounties,
+        Recreation: nearbyLandmarks.map((landmark: any) => ({
+          Location: landmark.Location,
+          Type: landmark.Type,
+          Latitude: landmark.Latitude,
+          Longitude: landmark.Longitude
+        }))
+      }
+    })
+
+    const cityDetails = await Promise.all(cityDetailsPromises)
+
     return cityDetails
+  }
+
+  async calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): Promise<number> {
+    const R = 6371 // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * (Math.PI / 180)
+    const dLon = (lon2 - lon1) * (Math.PI / 180)
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+    const d = R * c // Distance in kilometers
+    return d * 0.621371 // Convert to miles
   }
 
   async find(params: SurveyParams): Promise<any[] | Paginated<any>> {

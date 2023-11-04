@@ -152,22 +152,7 @@ export class RecreationService implements ServiceMethods<any> {
       where: { Type: landmarkTypes }
     })
 
-    const cities = await this.sequelize.models.City.findAll({
-      include: [
-        {
-          model: this.sequelize.models.Area,
-          required: true,
-          attributes: ['area_code'],
-          include: [
-            {
-              model: this.sequelize.models.State,
-              required: true,
-              attributes: ['state']
-            }
-          ]
-        }
-      ]
-    })
+    const cities = await this.sequelize.models.City.findAll({})
 
     const cityRankings: {
       city: any
@@ -182,8 +167,6 @@ export class RecreationService implements ServiceMethods<any> {
       const nearbyLandmarks: any[] = []
 
       landmarks.forEach((landmark: any) => {
-        const from = point([city.Latitude, city.Longitude])
-        const to = point([landmark.Latitude, landmark.Longitude])
         const currentDistance = haversineDistance(
           city.Latitude,
           city.Longitude,
@@ -206,15 +189,31 @@ export class RecreationService implements ServiceMethods<any> {
       }
     })
 
-    // Sort cities by number of landmarks and then by proximity, and limit to top 30
-    const topCities = cityRankings
-      .sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
-      .slice(0, 30)
-      .map((entry) => ({
-        city_id: entry.city.city_id,
-        city: entry.city,
-        nearbyLandmarks: entry.nearbyLandmarks
-      }))
+    cityRankings.sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
+
+    let ranking = 1
+    let previousLandmarkCount = cityRankings[0].landmarkCount
+    let tieRank = 1
+
+    const rankedCities = cityRankings.map((entry, index) => {
+      if (previousLandmarkCount !== entry.landmarkCount) {
+        previousLandmarkCount = entry.landmarkCount
+        ranking = tieRank
+      }
+
+      tieRank++
+
+      return {
+        ...entry,
+        ranking
+      }
+    })
+
+    const topCities = rankedCities.slice(0, 30).map((entry) => ({
+      city_id: entry.city.city_id,
+      ranking: entry.ranking,
+      nearbyLandmarks: entry.nearbyLandmarks
+    }))
 
     return topCities
   }

@@ -61,9 +61,8 @@ export class AirQualityService implements ServiceMethods<any> {
       .map((city: any) => {
         const relatedCities = cities.filter((c: any) => c.area_code === city.area_code)
         return relatedCities.map((cityData: any) => ({
-          city: cityData,
-          totalPollutantScore: city.dataValues.totalPollutantScore,
-          city_id: cityData.city_id
+          city_id: cityData.city_id,
+          totalPollutantScore: city.dataValues.totalPollutantScore
         }))
       })
       .flat()

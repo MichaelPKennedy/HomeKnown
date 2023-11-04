@@ -39,6 +39,22 @@ export const CityModel = (sequelize: Sequelize) => {
       currentRentPrice: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: true
+      },
+      pop_2020: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      pop_2021: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      pop_2022: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
+      cost_index: {
+        type: DataTypes.DECIMAL(5, 2),
+        allowNull: true
       }
     },
     {

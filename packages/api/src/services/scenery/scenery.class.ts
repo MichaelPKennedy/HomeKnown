@@ -64,12 +64,25 @@ export class SceneryService implements ServiceMethods<any> {
 
       return {
         city_id: cityWithCount?.City?.dataValues?.city_id,
-        city: cityWithCount?.City?.dataValues,
         count
       }
     })
 
-    const topCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
+    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
+
+    let ranking = 1
+    let previousCount = sortedCities[0].count
+    const topCities = sortedCities.map((city: any, index: any) => {
+      if (previousCount !== city.count) {
+        ranking = index + 1
+        previousCount = city.count
+      }
+
+      return {
+        ...city,
+        ranking
+      }
+    })
 
     return topCities
   }

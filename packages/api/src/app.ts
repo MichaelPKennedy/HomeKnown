@@ -88,16 +88,23 @@ HomePriceModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
+const County = sequelize.models.County
 const PublicServiceCache = sequelize.models.PublicServiceCache
 const CitySceneryCache = sequelize.models.CitySceneryCache
 const CrimeStatsCity = sequelize.models.CrimeStatsCity
 const CityDemographics = sequelize.models.CityDemographics
 const CityMonthlyWeatherCounty = sequelize.models.CityMonthlyWeatherCounty
+const CityIndustrySalary = sequelize.models.CityIndustrySalary
 const HomePrice = sequelize.models.HomePrice
 const MonthlyRentCities = sequelize.models.MonthlyRentCities
 const AirQuality = sequelize.models.AirQuality
+const Occupation = sequelize.models.Occupation
 
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
+Area.hasMany(City, { foreignKey: 'area_code' })
+County.hasMany(City, { foreignKey: 'county_fips' })
+City.belongsTo(Area, { foreignKey: 'area_code' })
+City.belongsTo(County, { foreignKey: 'county_fips' })
 City.hasOne(PublicServiceCache, { foreignKey: 'city_id' })
 City.hasOne(CitySceneryCache, { foreignKey: 'city_id' })
 City.hasOne(CrimeStatsCity, { foreignKey: 'city_id' })
@@ -106,6 +113,8 @@ City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
 City.hasMany(HomePrice, { foreignKey: 'city_id' })
 City.hasMany(MonthlyRentCities, { foreignKey: 'city_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
+Occupation.hasMany(CityIndustrySalary, { foreignKey: 'occ_code' })
+CityIndustrySalary.belongsTo(Occupation, { foreignKey: 'occ_code' })
 
 // Configure services and real-time functionality
 app.configure(rest())

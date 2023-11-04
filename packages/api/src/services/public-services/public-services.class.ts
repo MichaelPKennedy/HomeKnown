@@ -52,7 +52,6 @@ export class PublicServicesService implements ServiceMethods<any> {
       }
 
       return {
-        city: cityWithCount,
         city_id: cityWithCount.city_id,
         count
       }

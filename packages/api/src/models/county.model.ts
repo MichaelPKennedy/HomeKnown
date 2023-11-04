@@ -1,6 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { State } from './state.model'
 import { CrimeStats } from './crime-stats.model'
+import { City } from './city.model'
 
 export class County extends Model {}
 
@@ -39,4 +40,5 @@ export const CountyModel = (sequelize: Sequelize) => {
   )
 
   County.belongsTo(State, { foreignKey: 'state_code' })
+  County.hasMany(City, { foreignKey: 'county_fips' })
 }
