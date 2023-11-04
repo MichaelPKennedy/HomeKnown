@@ -7,7 +7,8 @@ export * from './survey.class'
 export * from './survey.schema'
 
 export const survey = (app: Application) => {
-  app.use(surveyPath, new SurveyService(app), {
+  const sequelizeClient = app.get('sequelizeClient' as any)
+  app.use(surveyPath, new SurveyService(app, sequelizeClient), {
     methods: surveyMethods,
     events: []
   })

@@ -1,4 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
+import { City } from './city.model'
 
 export class CrimeStatsCity extends Model {}
 
@@ -74,4 +75,5 @@ export const CrimeStatsCityModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
+  CrimeStatsCity.belongsTo(City, { foreignKey: 'city_id' })
 }

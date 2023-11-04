@@ -36,6 +36,9 @@ import { PublicServiceCacheModel } from './models/public-service-cache.model'
 import { CityMonthlyWeatherCountyModel } from './models/city-monthly-weather-county.model'
 import { CitySceneryCacheModel } from './models/city-scenery-cache.model'
 import { AirQualityModel } from './models/air-quality.model'
+import { CityDemographicsModel } from './models/city-demographics.model'
+import { MonthlyRentCitiesModel } from './models/monthly-rent-cities.model'
+import { HomePriceModel } from './models/home-price.model'
 
 const app: Application = express(feathers())
 
@@ -79,13 +82,29 @@ PublicServiceCacheModel(sequelize)
 CityMonthlyWeatherCountyModel(sequelize)
 CitySceneryCacheModel(sequelize)
 AirQualityModel(sequelize)
+CityDemographicsModel(sequelize)
+MonthlyRentCitiesModel(sequelize)
+HomePriceModel(sequelize)
 
 const City = sequelize.models.City
+const Area = sequelize.models.Area
 const PublicServiceCache = sequelize.models.PublicServiceCache
 const CitySceneryCache = sequelize.models.CitySceneryCache
+const CrimeStatsCity = sequelize.models.CrimeStatsCity
+const CityDemographics = sequelize.models.CityDemographics
+const CityMonthlyWeatherCounty = sequelize.models.CityMonthlyWeatherCounty
+const HomePrice = sequelize.models.HomePrice
+const MonthlyRentCities = sequelize.models.MonthlyRentCities
+const AirQuality = sequelize.models.AirQuality
 
+Area.hasOne(AirQuality, { foreignKey: 'area_code' })
 City.hasOne(PublicServiceCache, { foreignKey: 'city_id' })
 City.hasOne(CitySceneryCache, { foreignKey: 'city_id' })
+City.hasOne(CrimeStatsCity, { foreignKey: 'city_id' })
+City.hasOne(CityDemographics, { foreignKey: 'city_id' })
+City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
+City.hasMany(HomePrice, { foreignKey: 'city_id' })
+City.hasMany(MonthlyRentCities, { foreignKey: 'city_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 
 // Configure services and real-time functionality

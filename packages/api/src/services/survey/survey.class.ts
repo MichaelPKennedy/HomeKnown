@@ -58,9 +58,11 @@ export interface SurveyFormData {
 
 export class SurveyService implements ServiceMethods<any> {
   app: Application
+  sequelize: any
 
-  constructor(app: Application) {
+  constructor(app: Application, sequelizeClient: any) {
     this.app = app
+    this.sequelize = sequelizeClient
   }
 
   scoreCities(
@@ -116,7 +118,7 @@ export class SurveyService implements ServiceMethods<any> {
       }))
       .sort((a, b) => b.count - a.count)
 
-    console.log('sorted cities by count', sortedByCount)
+    const citiesWithDetails = this.getCityDetails(sortedByCount)
 
     return sortedByCount.slice(0, 10)
   }
@@ -342,6 +344,38 @@ export class SurveyService implements ServiceMethods<any> {
       console.error('Error querying the crime service:', error)
       throw new Error('Unable to fetch data from crime service.')
     }
+  }
+
+  async getCityDetails(cities: any): Promise<any> {
+    const cityDetails = await this.sequelize.models.City.findAll({
+      where: {
+        city_id: cities.map((city: any) => city.city_id)
+      },
+      include: [
+        {
+          model: this.sequelize.models.CrimeStatsCity
+        },
+        {
+          model: this.sequelize.models.CityDemographics
+        },
+        {
+          model: this.sequelize.models.CityMonthlyWeatherCounty
+        },
+        {
+          model: this.sequelize.models.HomePrice
+        },
+        {
+          model: this.sequelize.models.MonthlyRentCities
+        },
+        {
+          model: this.sequelize.models.Area,
+          attributes: ['area_title'],
+          include: [{ model: this.sequelize.models.State }, { model: this.sequelize.models.AirQuality }]
+        }
+      ]
+    })
+    console.log('cityDetails', cityDetails)
+    return cityDetails
   }
 
   async find(params: SurveyParams): Promise<any[] | Paginated<any>> {
