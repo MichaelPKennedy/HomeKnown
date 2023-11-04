@@ -2,9 +2,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-left: 50px;
-  padding-right: 50px;
-  padding-top: 20px;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 400px) {
+  .cityPage {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
 }
 
 .cityPage h1 {
