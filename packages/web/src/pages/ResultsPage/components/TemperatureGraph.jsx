@@ -4,8 +4,7 @@ import StateTemperatureGraph from "./StateTemperatureGraph";
 
 const TemperatureGraph = ({ data }) => {
   const { graphData, allStatesTemp } = data;
-  console.log("graphData", graphData);
-  console.log("topStates", allStatesTemp);
+
   return (
     <div>
       {allStatesTemp.map((state) => {

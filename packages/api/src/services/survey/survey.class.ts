@@ -180,11 +180,11 @@ export class SurveyService implements ServiceMethods<any> {
     job: any,
     weather: any,
     recreation: any,
-    housing: any,
     publicServices: any,
+    crime: any,
     scenery: any,
     airQuality: any,
-    crime: any,
+    housing: any,
     weights: any,
     recreationFormData: any,
     jobFormData: any
@@ -236,12 +236,8 @@ export class SurveyService implements ServiceMethods<any> {
 
     // Add API call promises based on weights
     const addApiCall = (weightKey: WeightKey, apiCall: (data: any) => Promise<any>, parsedData: any) => {
-      console.log(`Checking weight for ${weightKey}:`, weights[weightKey])
       if (weights[weightKey] && weights[weightKey]! > 0) {
-        console.log(`Adding API call for ${weightKey}`)
         apiPromises[weightKey] = apiCall(parsedData)
-      } else {
-        console.log(`Skipping API call for ${weightKey}`)
       }
     }
 
@@ -411,7 +407,6 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async getPublicServicesResponse(data: any): Promise<any> {
-    console.log('public service data', data)
     const publicServicesService = this.app.service('public-services')
     try {
       const response = await publicServicesService.find({
@@ -489,6 +484,9 @@ export class SurveyService implements ServiceMethods<any> {
           model: this.sequelize.models.CityDemographics
         },
         {
+          model: this.sequelize.models.PublicServiceCache
+        },
+        {
           model: this.sequelize.models.CityMonthlyWeatherCounty
         },
         {
@@ -552,6 +550,7 @@ export class SurveyService implements ServiceMethods<any> {
       const nearbyLandmarks = (await Promise.all(landmarkPromises)).filter((l) => l !== null)
 
       return {
+        score: cities.find((c: any) => c.city_id === city.city_id)?.score,
         city_id: city.city_id,
         city_name: city.city_name,
         county_name: city.County.county_name,
@@ -565,6 +564,7 @@ export class SurveyService implements ServiceMethods<any> {
         },
         AirQuality: city.Area.AirQuality,
         CityDemographics: city.CityDemographic,
+        PublicServices: city.PublicServiceCache,
         Crime: city.CrimeStatsCity,
         HomePrice: city.HomePrices,
         MonthlyRent: city.MonthlyRentCities,
@@ -581,7 +581,9 @@ export class SurveyService implements ServiceMethods<any> {
 
     const cityDetails = await Promise.all(cityDetailsPromises)
 
-    return cityDetails
+    const sortedCities = cityDetails.sort((a, b) => b.score - a.score)
+
+    return sortedCities
   }
 
   async calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): Promise<number> {

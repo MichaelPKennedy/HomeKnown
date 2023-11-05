@@ -172,7 +172,7 @@ const LivingPreferenceForm = () => {
     const hasNonZeroWeight = !Object.values(formData.weights)
       .filter((weight) => weight !== formData.weights.totalAvailablePoints)
       .every((weight) => weight === 0);
-    console.log("hasNonZeroWeight", hasNonZeroWeight);
+
     setShowSubmitButton(hasNonZeroWeight);
   }, [formData]);
 

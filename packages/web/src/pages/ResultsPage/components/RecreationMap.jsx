@@ -135,7 +135,6 @@ const RecreationMap = (data) => {
   const [hoveredCity, setHoveredCity] = React.useState(null);
   const { Recreation: recreation } = data;
   console.log("data", data);
-  console.log("recreation", recreation);
 
   return (
     <div className={styles.mapContainer}>
