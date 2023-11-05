@@ -34,6 +34,8 @@
   border-radius: 20px;
   display: inline-block;
   padding: 1px;
+  margin-right: 4px;
+  margin-left: 4px;
   margin-bottom: 5px;
   position: relative;
   transition: background-color 0.2s ease;
@@ -98,12 +100,6 @@
 
 /* Mobile Styles */
 @media only screen and (max-width: 600px) {
-  .dropZoneContainer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-  }
-
   .sectionTitle {
     font-size: 14px;
   }

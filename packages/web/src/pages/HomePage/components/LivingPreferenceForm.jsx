@@ -63,6 +63,7 @@ const LivingPreferenceForm = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [currentJob, setCurrentJob] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showSubmitButton, setShowSubmitButton] = useState(false);
 
   const fetchOccCodes = async (inputQuery) => {
     try {
@@ -166,6 +167,14 @@ const LivingPreferenceForm = () => {
       weights: newWeights,
     }));
   };
+
+  useEffect(() => {
+    const hasNonZeroWeight = !Object.values(formData.weights)
+      .filter((weight) => weight !== formData.weights.totalAvailablePoints)
+      .every((weight) => weight === 0);
+    console.log("hasNonZeroWeight", hasNonZeroWeight);
+    setShowSubmitButton(hasNonZeroWeight);
+  }, [formData]);
 
   // const handleSelectMultipleChange = (e) => {
   //   const options = e.target.options;
@@ -1049,13 +1058,14 @@ const LivingPreferenceForm = () => {
           </label>
         </div>
       </div> */}
-
-          <button
-            type="submit"
-            className={`btn btn-info mt-2 ${styles.btnDropdown}`}
-          >
-            Submit
-          </button>
+          {showSubmitButton && (
+            <button
+              type="submit"
+              className={`btn btn-info mt-2 ${styles.btnDropdown}`}
+            >
+              Submit
+            </button>
+          )}
         </form>
       )}
     </DndProvider>
