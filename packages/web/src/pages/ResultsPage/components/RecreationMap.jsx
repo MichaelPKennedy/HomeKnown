@@ -131,10 +131,9 @@ const FixMapSize = () => {
 };
 
 const RecreationMap = (data) => {
-  const markerRefs = new Map();
-  const [hoveredCity, setHoveredCity] = React.useState(null);
+  const [activeLandmarkId, setActiveLandmarkId] = React.useState(null);
+
   const { Recreation: recreation } = data;
-  console.log("data", data);
 
   return (
     <div className={styles.mapContainer}>
@@ -154,7 +153,7 @@ const RecreationMap = (data) => {
             radius={80467} // 50 miles in meters
             color="black"
             fillColor="green"
-            fillOpacity={0.1} // Opacity of the circle fill
+            fillOpacity={0.1}
             opacity={0.2}
           />
           <Marker
@@ -171,52 +170,38 @@ const RecreationMap = (data) => {
               })
             }
           >
-            <Tooltip direction="top" permanent={hoveredCity === data.city_id}>
+            <Tooltip
+              direction="top"
+              permanent={activeLandmarkId === data.city_id}
+            >
               <div
                 className={styles.tooltipLabel}
-                onMouseOver={() => setHoveredCity(data.city_id)}
-                onMouseOut={() => setHoveredCity(null)}
+                onMouseOver={() => setActiveLandmarkId(data.city_id)}
+                onMouseOut={() => setActiveLandmarkId(null)}
               >
                 <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
                 <span>{data.city_name}</span>
               </div>
             </Tooltip>
           </Marker>
-          {recreation.map((landmark) => (
+          {recreation.map((landmark, index) => (
             <Marker
-              key={`${data.city_id}-${landmark.Location}`}
+              key={`${landmark.Location}-${index}`}
               position={[landmark.Latitude, landmark.Longitude]}
               className={styles.markerLabel}
               icon={
                 new L.DivIcon({
                   className: styles.tooltipIcon,
                   html: getTypeIcon(landmark.Type),
-                  iconSize: [40, 40], // adjust as needed
+                  iconSize: [40, 40],
                 })
               }
-              ref={(ref) =>
-                markerRefs.set(`${data.city_id}-${landmark.id}`, ref)
-              }
               eventHandlers={{
-                mouseover: () => {
-                  const marker = markerRefs.get(
-                    `${data.city_id}-${landmark.id}`
-                  );
-                  if (marker) {
-                    marker.openTooltip();
-                  }
-                },
-                mouseout: () => {
-                  const marker = markerRefs.get(
-                    `${data.city_id}-${landmark.id}`
-                  );
-                  if (marker) {
-                    marker.closeTooltip();
-                  }
-                },
+                mouseover: () => setActiveLandmarkId(landmark.id),
+                mouseout: () => setActiveLandmarkId(null),
               }}
             >
-              <Tooltip>
+              <Tooltip open={activeLandmarkId === landmark.id}>
                 <div className={styles.tooltipLabel}>
                   {landmark.Location} - {landmark.Type}
                 </div>
