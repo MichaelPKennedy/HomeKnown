@@ -553,8 +553,8 @@ export class SurveyService implements ServiceMethods<any> {
         score: cities.find((c: any) => c.city_id === city.city_id)?.score,
         city_id: city.city_id,
         city_name: city.city_name,
-        county_name: city.County.county_name,
-        state_name: city.Area.State.state,
+        county_name: city.County?.county_name,
+        state_name: city.Area?.State.state,
         latitude: cityLatitude,
         longitude: cityLongitude,
         Population: {
@@ -562,7 +562,7 @@ export class SurveyService implements ServiceMethods<any> {
           pop_2021: city.pop_2021,
           pop_2022: city.pop_2022
         },
-        AirQuality: city.Area.AirQuality,
+        AirQuality: city.Area?.AirQuality,
         CityDemographics: city.CityDemographic,
         PublicServices: city.PublicServiceCache,
         Crime: city.CrimeStatsCity,
