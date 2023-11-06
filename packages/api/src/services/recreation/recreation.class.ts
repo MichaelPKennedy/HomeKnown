@@ -215,6 +215,10 @@ export class RecreationService implements ServiceMethods<any> {
       nearbyLandmarks: entry.nearbyLandmarks
     }))
 
+    if (topCities.length < 10) {
+      console.log('Obtained less than 10 cities for recreation')
+    }
+
     return topCities
   }
 

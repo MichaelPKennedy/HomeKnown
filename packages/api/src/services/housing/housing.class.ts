@@ -98,6 +98,10 @@ export class HousingService implements ServiceMethods<any> {
       }
     })
 
+    if (finalRankedCities.length < 10) {
+      console.log('obtained less than 10 cities from housing')
+    }
+
     return finalRankedCities
   }
 

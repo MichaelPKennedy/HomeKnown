@@ -72,6 +72,10 @@ export class PublicServicesService implements ServiceMethods<any> {
       }
     })
 
+    if (topCities.length < 10) {
+      console.log('obtained less than 10 cities from public services')
+    }
+
     return topCities
   }
 

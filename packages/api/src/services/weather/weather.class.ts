@@ -112,7 +112,13 @@ export class WeatherService implements ServiceMethods<any> {
         return { ranking: rank, ...result }
       })
 
-      return rankedResults.slice(0, 30)
+      const topCities = rankedResults.slice(0, 30)
+
+      if (topCities.length < 10) {
+        console.log('obtained less than 10 cities from weather')
+      }
+
+      return topCities
     } catch (error) {
       console.error('Error querying weather data:', error)
       throw new Error('Error querying weather data')

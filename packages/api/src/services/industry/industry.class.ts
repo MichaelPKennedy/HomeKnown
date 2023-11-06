@@ -116,6 +116,10 @@ export class IndustryService implements ServiceMethods<any> {
       }
     })
 
+    if (rankedCitiesWithSalary.length < 10) {
+      console.log('obtained less than 10 cities from industry')
+    }
+
     return {
       jobs: selectedJobs.map((job: any) => job.occ_title),
       topCities: rankedCitiesWithSalary
