@@ -7,6 +7,7 @@ function City() {
   const { cityId } = useParams();
   const location = useLocation();
   const { city } = location.state;
+  console.log("city", city);
 
   return (
     <div className={styles.cityPage}>

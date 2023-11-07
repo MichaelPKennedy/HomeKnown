@@ -275,7 +275,7 @@ const LivingPreferenceForm = () => {
               <h4 className="pb-2">Housing</h4>
               <label>Are you looking to buy or rent?</label>
               <div>
-                <label>
+                <label className={styles.radio}>
                   <input
                     type="radio"
                     name="housingType"
@@ -285,7 +285,7 @@ const LivingPreferenceForm = () => {
                   />
                   Buy
                 </label>
-                <label>
+                <label className={styles.radio}>
                   <input
                     type="radio"
                     name="housingType"

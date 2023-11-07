@@ -3,7 +3,7 @@ import rest from "@feathersjs/rest-client";
 import axios from "axios";
 
 // const isMobileTesting = process.env.REACT_APP_MOBILE_TESTING === "true";
-const isMobileTesting = true;
+const isMobileTesting = false;
 const DEFAULT_API_ENDPOINT = isMobileTesting
   ? "http://10.0.0.18:3030"
   : "http://localhost:3030";

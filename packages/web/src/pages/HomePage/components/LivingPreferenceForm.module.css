@@ -174,7 +174,7 @@ details > summary {
 }
 
 details > summary:hover {
-  background-color: #f0f4f8; /* Slightly darker shade for hover */
+  background-color: #9ce0eb;
 }
 
 /* When the section is open */
@@ -231,5 +231,6 @@ details .formCheck {
   display: none;
 }
 
-.radiusSelection {
+.radio {
+  margin: 10px;
 }
