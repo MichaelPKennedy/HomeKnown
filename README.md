@@ -1,21 +1,21 @@
 # HomeKnown
-###purpose
+### purpose
 In an age where remote work is not just a trend but a lifestyle, the question isn't just about 'where to work', but more importantly, 'where to live'. Enter Home Known, a sophisticated web application tailored to bridge this gap. It features a powerful content-based recommendation system enhanced by machine learning and makes use of publicly available data on topics such as industry, salary, weather, venues and recreational opportunities, demographics, crime rate, and more in order to recommend locations that are right fit for any individual user. 
 
-###structure
+### structure
 HomeKnown employs a monorepo structure, encompassing both the React-powered front-end and a Feathers Node.js backend, fully separated. The architecture ensures seamless integration while maintaining clear boundaries for developmental ease.
 
-####Frontend
+#### Frontend
 Location: HomeKnown/packages/web
 Framework: React
 Description: The frontend drives the user interface, allowing users to interact with the application, set preferences, and view results.
 
-####Backend
+#### Backend
 Location: HomeKnown/packages/api
 Framework: Feathers Node.js
 Description: The backend manages data processing, recommendation algorithms, and serves requests made by the front-end.
 
-###Getting Started
+### Getting Started
 Step 1: Clone Repo
 `git clone https://github.com/MichaelPKennedy/HomeKnown.git`
 
