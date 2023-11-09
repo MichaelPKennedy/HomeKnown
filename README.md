@@ -33,3 +33,27 @@ Step 4: cd into both the frontend and backend base directories and run `npm run 
 
 The React app will be accessible at http://localhost:3000.
 The Feathers backend app will be hosted at http://localhost:3030.
+
+### Data Sources
+
+Weather - https://www.ncei.noaa.gov/data/climate-at-a-glance/access/monthly/ , https://www.ncei.noaa.gov/access/monitoring/daily-snow/
+
+Housing - https://www.zillow.com/research/data/
+
+Cost of Living - https://worldpopulationreview.com/state-rankings/cost-of-living-index-by-state
+
+Recreation - https://catalog.data.gov/dataset/tiger-line-shapefile-2019-series-information-for-the-point-landmark-state-based-shapefile
+
+Scenery - https://catalog.data.gov/dataset/tiger-line-shapefile-2019-series-information-for-the-point-landmark-state-based-shapefile
+
+Salary/Job - https://www.bls.gov/oes/current/county_links.htm, https://www.bls.gov/oes/tables.htm
+
+Public Services - https://catalog.data.gov/dataset/tiger-line-shapefile-2019-series-information-for-the-point-landmark-state-based-shapefile
+
+Crime Rate - https://ucr.fbi.gov/crime-in-the-u.s/2019/crime-in-the-u.s.-2019/tables/table-8/table-8.xls/view
+
+Air Quality - https://www.epa.gov/air-trends/air-quality-cities-and-counties
+
+Demographics - https://public.opendatasoft.com/explore/dataset/us-cities-demographics/table/?flg=en-us
+
+Population - https://www.census.gov/data/tables/time-series/demo/popest/2020s-total-cities-and-towns.html
