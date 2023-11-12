@@ -75,10 +75,6 @@ const LivingPreferenceForm = () => {
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(true);
 
-  useEffect(() => {
-    toast.info("Component mounted");
-  }, []);
-
   const validateForm = () => {
     let isValid = true;
     let errorMessage = "";
