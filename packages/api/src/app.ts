@@ -1,3 +1,4 @@
+require('dotenv').config()
 import { feathers } from '@feathersjs/feathers'
 import express, {
   rest,
@@ -50,18 +51,24 @@ app.use(urlencoded({ extended: true }))
 // Host the public folder
 app.use('/', serveStatic(app.get('public')))
 
-const sequelizeConfig = app.get('sequelize' as any)
-const sequelize = new Sequelize(
-  sequelizeConfig.database,
-  sequelizeConfig.username,
-  sequelizeConfig.password,
-  {
-    host: sequelizeConfig.host,
-    port: parseInt(sequelizeConfig.port, 10),
-    dialect: sequelizeConfig.dialect
-  }
-)
+const databaseConfig = require('../config/databaseConfig.js')[process.env.NODE_ENV || 'development']
+console.log('databaseConfig', databaseConfig)
+const sequelize = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
+  host: databaseConfig.host,
+  port: databaseConfig.port,
+  dialect: databaseConfig.dialect
+})
+
 app.set('sequelizeClient' as any, sequelize)
+
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.')
+  })
+  .catch((err) => {
+    console.error('Unable to connect to the database:', err)
+  })
 
 // Initialize your model with this instance
 OccupationModel(sequelize)
