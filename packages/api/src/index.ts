@@ -8,6 +8,7 @@ const host = app.get('host')
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection %O', reason)
 })
+console.log('port', port)
 
 app.listen(port, () => {
   logger.info(`Feathers app listening on http://${host}:${port}`)
