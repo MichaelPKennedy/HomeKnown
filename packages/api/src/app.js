@@ -69,7 +69,6 @@ app.use((0, express_1.urlencoded)({ extended: true }));
 // Host the public folder
 app.use('/', (0, express_1.serveStatic)(app.get('public')));
 const databaseConfig = require('../config/databaseConfig.js')[process.env.NODE_ENV || 'development'];
-console.log('databaseConfig', databaseConfig);
 const sequelize = new sequelize_1.Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
     host: databaseConfig.host,
     port: databaseConfig.port,

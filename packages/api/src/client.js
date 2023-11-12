@@ -30,7 +30,6 @@ const createClient = (connection, authenticationOptions = {}) => {
     client.configure(connection);
     client.configure((0, authentication_client_1.default)(authenticationOptions));
     client.set('connection', connection);
-    client.configure(placesClient);
     client.configure(survey_shared_1.surveyClient);
     client.configure(industry_shared_1.industryClient);
     client.configure(weather_shared_1.weatherClient);

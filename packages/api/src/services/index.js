@@ -22,7 +22,6 @@ const services = (app) => {
     app.configure(weather_1.weather);
     app.configure(industry_1.industry);
     app.configure(survey_1.survey);
-    app.configure(places);
     // All services will be registered here
 };
 exports.services = services;

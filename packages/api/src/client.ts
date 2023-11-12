@@ -78,7 +78,6 @@ export const createClient = <Configuration = any>(
   client.configure(authenticationClient(authenticationOptions))
   client.set('connection', connection)
 
-  client.configure(placesClient)
   client.configure(surveyClient)
   client.configure(industryClient)
   client.configure(weatherClient)
