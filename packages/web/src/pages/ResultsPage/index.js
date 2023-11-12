@@ -10,8 +10,12 @@ import CityWeatherGraph from "./components/CityWeatherGraph";
 import { useLocation, Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
 
-function ResultsPage({ data }) {
-  const topTen = data.topTen || [];
+function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
+  const topTen = data?.topTen || [];
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const renderCityData = (city, index) => {
     return (
@@ -31,6 +35,17 @@ function ResultsPage({ data }) {
 
   return (
     <div className={styles.resultsPage}>
+      <div className="align-self-start">
+        {showEditButton && (
+          <button
+            onClick={toggleFormVisibility}
+            className={`btn btn-info mt-4 ml-4 ${styles.btnDropdown}`}
+          >
+            Edit Preferences
+          </button>
+        )}
+      </div>
+
       <h1>Top 10</h1>
       {topTen.length > 0 ? (
         topTen.map((city, index) => renderCityData(city, index))

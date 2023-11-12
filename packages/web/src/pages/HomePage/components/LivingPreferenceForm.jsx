@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./LivingPreferenceForm.module.css";
 import "./Slider.css";
 import Slider from "rc-slider";
@@ -63,6 +63,7 @@ const initialFormData = {
 
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState(initialFormData);
+  const resultsRef = useRef(null);
 
   const navigate = useNavigate();
 
@@ -124,7 +125,6 @@ const LivingPreferenceForm = () => {
         setLoading(false);
         setSurveyResults(response);
         setShowForm(false);
-
         // Save the results and form state to sessionStorage
         sessionStorage.setItem("surveyResults", JSON.stringify(response));
         sessionStorage.setItem("formData", JSON.stringify(formData));
@@ -151,6 +151,12 @@ const LivingPreferenceForm = () => {
     const { name, value } = e.target;
     setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
+
+  useEffect(() => {
+    if (loading) {
+      resultsRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading]);
 
   const handleCheckboxChange = (e) => {
     const { name, value, checked } = e.target;
@@ -211,6 +217,15 @@ const LivingPreferenceForm = () => {
               onSubmit={handleSubmit}
               className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
             >
+              {surveyResults && (
+                <button
+                  type="button"
+                  onClick={toggleFormVisibility}
+                  className={`btn btn-secondary mt-2 ${styles.btnDropdown}`}
+                >
+                  Cancel
+                </button>
+              )}
               <div className={`form-group ${styles.formGroup}`}>
                 <PreferenceWeight
                   onWeightsChange={updateFormDataWithWeights}
@@ -310,33 +325,24 @@ const LivingPreferenceForm = () => {
                   >
                     Clear Survey
                   </button>
-                  {surveyResults && (
-                    <button
-                      type="button"
-                      onClick={toggleFormVisibility}
-                      className={`btn btn-secondary mt-2 ${styles.btnDropdown}`}
-                    >
-                      Cancel
-                    </button>
-                  )}
                 </div>
               )}
             </form>
-            {!loading && surveyResults ? (
-              <ResultsPage data={surveyResults} />
-            ) : loading ? (
-              <LoadingScreen />
-            ) : null}
+            <div ref={resultsRef}>
+              {!loading && surveyResults ? (
+                <ResultsPage data={surveyResults} />
+              ) : loading ? (
+                <LoadingScreen />
+              ) : null}
+            </div>
           </div>
         ) : (
           <div>
-            <button
-              onClick={toggleFormVisibility}
-              className={`btn btn-info mt-2 ${styles.btnDropdown}`}
-            >
-              Edit Preferences
-            </button>
-            <ResultsPage data={surveyResults} />
+            <ResultsPage
+              data={surveyResults}
+              toggleFormVisibility={toggleFormVisibility}
+              showEditButton={!showForm}
+            />
           </div>
         )}
       </div>
