@@ -5,6 +5,8 @@ import { logger } from './logger'
 const port = process.env.PORT || app.get('port')
 const host = app.get('host')
 
+console.log('port2', port)
+console.log(process.env)
 console.log('test')
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection %O', reason)
