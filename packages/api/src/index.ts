@@ -5,10 +5,12 @@ import { logger } from './logger'
 const port = process.env.PORT || app.get('port')
 const host = app.get('host')
 
+console.log('test')
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled Rejection %O', reason)
 })
 console.log('port', port)
+console.log(process.env)
 
 app.listen(port, () => {
   logger.info(`Feathers app listening on http://${host}:${port}`)
