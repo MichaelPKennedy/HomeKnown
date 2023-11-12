@@ -22,6 +22,5 @@ export const services = (app: Application) => {
   app.configure(weather)
   app.configure(industry)
   app.configure(survey)
-  app.configure(places)
   // All services will be registered here
 }
