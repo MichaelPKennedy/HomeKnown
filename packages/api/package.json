@@ -33,11 +33,11 @@
     "lib/**/*.d.ts",
     "lib/**/*.shared.js"
   ],
-  "main": "lib/client",
+  "main": "src/index.js",
   "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
-    "compile": "shx rm -rf lib/ && tsc",
-    "start": "node lib/",
+    "compile": "tsc",
+    "start": "node src/app.js",
     "prettier": "npx prettier \"**/*.ts\" --write",
     "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
     "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
