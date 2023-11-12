@@ -18,49 +18,51 @@ import RecreationalPreferences from "./RecreationalPreferences.jsx";
 import PopulationPreferences from "./PopulationPreferences";
 import ResultsPage from "../../ResultsPage";
 
+const initialFormData = {
+  snowPreference: "none",
+  rainPreference: "regular",
+  livingPreference: "city",
+  recreationalInterests: [],
+  publicServices: [],
+  scenery: [],
+  searchRadius: 10,
+  minSalary: null,
+  jobLevel: "",
+  selectedJobs: [],
+  housingType: "",
+  homeMin: 200000,
+  homeMax: 300000,
+  rentMin: 1000,
+  rentMax: 2000,
+  temperatureData: [
+    { month: "Jan", temp: 30 },
+    { month: "Feb", temp: 35 },
+    { month: "Mar", temp: 45 },
+    { month: "Apr", temp: 55 },
+    { month: "May", temp: 65 },
+    { month: "Jun", temp: 75 },
+    { month: "Jul", temp: 85 },
+    { month: "Aug", temp: 85 },
+    { month: "Sep", temp: 75 },
+    { month: "Oct", temp: 65 },
+    { month: "Nov", temp: 50 },
+    { month: "Dec", temp: 35 },
+  ],
+  weights: {
+    costOfLivingWeight: 0,
+    recreationalActivitiesWeight: 0,
+    weatherWeight: 0,
+    jobOpportunityWeight: 0,
+    publicServicesWeight: 0,
+    crimeRateWeight: 0,
+    sceneryWeight: 0,
+    airQualityWeight: 0,
+    totalAvailablePoints: 10,
+  },
+};
+
 const LivingPreferenceForm = () => {
-  const [formData, setFormData] = useState({
-    snowPreference: "none",
-    rainPreference: "regular",
-    livingPreference: "city",
-    recreationalInterests: [],
-    publicServices: [],
-    scenery: [],
-    searchRadius: 10,
-    minSalary: null,
-    jobLevel: "",
-    selectedJobs: [],
-    housingType: "",
-    homeMin: 200000,
-    homeMax: 300000,
-    rentMin: 1000,
-    rentMax: 2000,
-    temperatureData: [
-      { month: "Jan", temp: 30 },
-      { month: "Feb", temp: 35 },
-      { month: "Mar", temp: 45 },
-      { month: "Apr", temp: 55 },
-      { month: "May", temp: 65 },
-      { month: "Jun", temp: 75 },
-      { month: "Jul", temp: 85 },
-      { month: "Aug", temp: 85 },
-      { month: "Sep", temp: 75 },
-      { month: "Oct", temp: 65 },
-      { month: "Nov", temp: 50 },
-      { month: "Dec", temp: 35 },
-    ],
-    weights: {
-      costOfLivingWeight: 0,
-      recreationalActivitiesWeight: 0,
-      weatherWeight: 0,
-      jobOpportunityWeight: 0,
-      publicServicesWeight: 0,
-      crimeRateWeight: 0,
-      sceneryWeight: 0,
-      airQualityWeight: 0,
-      totalAvailablePoints: 10,
-    },
-  });
+  const [formData, setFormData] = useState(initialFormData);
 
   const navigate = useNavigate();
 
@@ -70,6 +72,14 @@ const LivingPreferenceForm = () => {
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(true);
+
+  const resetSurvey = () => {
+    setFormData(initialFormData);
+    setSurveyResults(null);
+    setShowForm(true);
+    sessionStorage.removeItem("surveyResults");
+    sessionStorage.removeItem("formData");
+  };
 
   const fetchOccCodes = async (inputQuery) => {
     try {
@@ -286,23 +296,32 @@ const LivingPreferenceForm = () => {
                 handleInputChange={handleInputChange}
               /> */}
               {showSubmitButton && (
-                <button
-                  type="submit"
-                  className={`btn btn-info mt-2 ${styles.btnDropdown}`}
-                >
-                  Submit
-                </button>
+                <div className="d-flex justify-content-start gap-2">
+                  <button
+                    type="submit"
+                    className={`btn btn-info mt-2 ${styles.btnDropdown}`}
+                  >
+                    Submit
+                  </button>
+                  <button
+                    type="button"
+                    onClick={resetSurvey}
+                    className={`btn btn-warning mt-2 ${styles.btnDropdown}`}
+                  >
+                    Clear Survey
+                  </button>
+                  {surveyResults && (
+                    <button
+                      type="button"
+                      onClick={toggleFormVisibility}
+                      className={`btn btn-secondary mt-2 ${styles.btnDropdown}`}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
               )}
             </form>
-            {surveyResults && (
-              <button
-                onClick={toggleFormVisibility}
-                className={`btn btn-secondary mt-2 ${styles.btnDropdown}`}
-              >
-                Cancel
-              </button>
-            )}
-
             {!loading && surveyResults ? (
               <ResultsPage data={surveyResults} />
             ) : loading ? (
