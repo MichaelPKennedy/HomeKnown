@@ -32,7 +32,7 @@
   "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "tsc",
-    "start": "node src/app.js",
+    "start": "node src/index.js",
     "prettier": "npx prettier \"**/*.ts\" --write",
     "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
     "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
