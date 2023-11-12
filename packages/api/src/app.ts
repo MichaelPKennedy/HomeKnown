@@ -52,7 +52,6 @@ app.use(urlencoded({ extended: true }))
 app.use('/', serveStatic(app.get('public')))
 
 const databaseConfig = require('../config/databaseConfig.js')[process.env.NODE_ENV || 'development']
-console.log('databaseConfig', databaseConfig)
 const sequelize = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
   host: databaseConfig.host,
   port: databaseConfig.port,
