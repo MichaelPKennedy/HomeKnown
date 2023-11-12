@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { toast } from "react-toastify";
 import styles from "./LivingPreferenceForm.module.css";
 import "./Slider.css";
 import Slider from "rc-slider";
@@ -57,7 +58,7 @@ const initialFormData = {
     crimeRateWeight: 0,
     sceneryWeight: 0,
     airQualityWeight: 0,
-    totalAvailablePoints: 10,
+    totalAvailablePoints: 8,
   },
 };
 
@@ -73,6 +74,69 @@ const LivingPreferenceForm = () => {
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(true);
+
+  useEffect(() => {
+    toast.info("Component mounted");
+  }, []);
+
+  const validateForm = () => {
+    let isValid = true;
+    let errorMessage = "";
+
+    if (formData.weights.totalAvailablePoints > 0) {
+      isValid = false;
+      errorMessage = "Please allocate all available points for preferences.";
+    }
+
+    if (
+      formData.weights.jobOpportunityWeight > 0 &&
+      formData.selectedJobs.length === 0
+    ) {
+      isValid = false;
+      errorMessage = "Please select at least one job.";
+    }
+
+    if (formData.weights.costOfLivingWeight > 0 && !formData.housingType) {
+      isValid = false;
+      errorMessage = "Please select a housing type.";
+    }
+
+    if (
+      formData.weights.publicServicesWeight > 0 &&
+      formData.publicServices.length === 0
+    ) {
+      isValid = false;
+      errorMessage = "Please select at least one public service.";
+    }
+
+    if (formData.weights.sceneryWeight > 0 && formData.scenery.length === 0) {
+      isValid = false;
+      errorMessage = "Please select at least one scenery preference.";
+    }
+
+    if (formData.weights.weatherWeight > 0) {
+      if (!formData.snowPreference || !formData.rainPreference) {
+        isValid = false;
+        errorMessage = "Please specify your weather preferences.";
+      }
+
+      if (formData.temperatureData.some((month) => month.temp === null)) {
+        isValid = false;
+        errorMessage = "Please complete the temperature data for each month.";
+      }
+    }
+
+    if (
+      formData.weights.recreationalActivitiesWeight > 0 &&
+      formData.recreationalInterests.length === 0
+    ) {
+      isValid = false;
+      errorMessage = "Please select at least one recreational interest.";
+    }
+    console.log("isValid:", isValid);
+
+    return { isValid, errorMessage };
+  };
 
   const resetSurvey = () => {
     setFormData(initialFormData);
@@ -115,6 +179,12 @@ const LivingPreferenceForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const { isValid, errorMessage } = validateForm();
+
+    if (!isValid) {
+      toast.error(errorMessage);
+      return;
+    }
     setLoading(true);
     try {
       const response = await client

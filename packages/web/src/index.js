@@ -5,6 +5,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import "./index.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import reportWebVitals from "./reportWebVitals";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { CityDataProvider } from "./utils/CityDataContext";
 import HomePage from "./pages/HomePage";
@@ -73,6 +75,7 @@ root.render(
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/results/:cityId" element={<City />} />
               </Routes>
+              <ToastContainer />
             </Router>
           </CityDataProvider>
         </DndProvider>
