@@ -10,16 +10,9 @@ import CityWeatherGraph from "./components/CityWeatherGraph";
 import { useLocation, Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
 
-function ResultsPage() {
-  const location = useLocation();
-  const { cityData, setCityData } = useCityData();
-  const topTen = location.state?.data?.topTen || cityData;
+function ResultsPage({ data }) {
+  const topTen = data.topTen || [];
 
-  useEffect(() => {
-    if (location.state?.data?.topTen && !cityData) {
-      setCityData(location.state.data.topTen);
-    }
-  }, [location.state, cityData, setCityData]);
   const renderCityData = (city, index) => {
     return (
       <Link
@@ -39,7 +32,7 @@ function ResultsPage() {
   return (
     <div className={styles.resultsPage}>
       <h1>Top 10</h1>
-      {topTen && topTen.length > 0 ? (
+      {topTen.length > 0 ? (
         topTen.map((city, index) => renderCityData(city, index))
       ) : (
         <p>No cities to display</p>

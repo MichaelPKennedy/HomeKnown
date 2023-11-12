@@ -96,7 +96,6 @@ function DraggableSectionToken({ section, onDragOut }) {
   );
 }
 
-// DropZone Component
 function SectionDropZone({
   title,
   sectionKey,
@@ -122,14 +121,13 @@ function SectionDropZone({
 
   const handlers = useSwipeable({
     onSwipedLeft: () => removeTokenFromSection(sectionKey),
-    // add other swipe handlers if needed
   });
 
   const ref = useRef(null);
   const combinedRef = useCombinedRefs(ref, dropRef);
 
   useEffect(() => {
-    // This ensures that our swipeable handlers are attached to the element
+    // ensures that our swipeable handlers are attached to the element
     if (ref.current) {
       const el = ref.current;
       handlers.ref(el);
@@ -185,48 +183,27 @@ function getLayerStyles(currentOffset) {
   };
 }
 
-function PreferenceWeight({ onWeightsChange }) {
-  const [weights, setWeights] = useState({
-    costOfLivingWeight: 0,
-    recreationalActivitiesWeight: 0,
-    weatherWeight: 0,
-    jobOpportunityWeight: 0,
-    publicServicesWeight: 0,
-    crimeRateWeight: 0,
-    sceneryWeight: 0,
-    airQualityWeight: 0,
-    totalAvailablePoints: 10,
-  });
-
+function PreferenceWeight({ onWeightsChange, weights }) {
   const addTokenToSection = (sectionKey) => {
-    setWeights((prevState) => {
-      if (prevState.totalAvailablePoints > 0) {
-        const newState = {
-          ...prevState,
-          [sectionKey]: prevState[sectionKey] + 1,
-          totalAvailablePoints: prevState.totalAvailablePoints - 1,
-        };
-        onWeightsChange(newState);
-        return newState;
-      }
-      return prevState;
-    });
+    if (weights.totalAvailablePoints > 0) {
+      const newWeights = {
+        ...weights,
+        [sectionKey]: weights[sectionKey] + 1,
+        totalAvailablePoints: weights.totalAvailablePoints - 1,
+      };
+      onWeightsChange(newWeights);
+    }
   };
 
   const removeTokenFromSection = (sectionKey) => {
-    setWeights((prevState) => {
-      console.log("Previous State:", prevState);
-      if (prevState[sectionKey] > 0) {
-        const newState = {
-          ...prevState,
-          [sectionKey]: prevState[sectionKey] - 1,
-          totalAvailablePoints: prevState.totalAvailablePoints + 1,
-        };
-        onWeightsChange(newState);
-        return newState;
-      }
-      return prevState;
-    });
+    if (weights[sectionKey] > 0) {
+      const newWeights = {
+        ...weights,
+        [sectionKey]: weights[sectionKey] - 1,
+        totalAvailablePoints: weights.totalAvailablePoints + 1,
+      };
+      onWeightsChange(newWeights);
+    }
   };
 
   const [selectedTokens, setSelectedTokens] = useState([]);
@@ -237,25 +214,22 @@ function PreferenceWeight({ onWeightsChange }) {
     if (
       (fromSection === null && sectionKey === null) ||
       fromSection === sectionKey
-    )
+    ) {
       return;
+    }
 
-    setWeights((prevState) => {
-      const newWeights = {
-        ...prevState,
-        [fromSection]: prevState[fromSection] - 1,
-      };
+    const newWeights = {
+      ...weights,
+      [fromSection]: weights[fromSection] - 1,
+    };
 
-      if (sectionKey) {
-        newWeights[sectionKey] = prevState[sectionKey] + 1;
-      } else {
-        newWeights.totalAvailablePoints = prevState.totalAvailablePoints + 1;
-      }
+    if (sectionKey) {
+      newWeights[sectionKey] = weights[sectionKey] + 1;
+    } else {
+      newWeights.totalAvailablePoints = weights.totalAvailablePoints + 1;
+    }
 
-      onWeightsChange(newWeights);
-
-      return newWeights;
-    });
+    onWeightsChange(newWeights);
   };
 
   const toggleTokenSelection = (index) => {
@@ -265,15 +239,12 @@ function PreferenceWeight({ onWeightsChange }) {
         newSelectedTokens = newSelectedTokens.filter((i) => i !== index);
       } else {
         newSelectedTokens.push(index);
-        // Sort to make sure tokens are in order
         newSelectedTokens.sort((a, b) => a - b);
       }
 
-      // Find the two outermost selected tokens
       const minSelectedIndex = Math.min(...newSelectedTokens);
       const maxSelectedIndex = Math.max(...newSelectedTokens);
 
-      // Select all tokens between the two outermost selected tokens
       for (let i = minSelectedIndex; i <= maxSelectedIndex; i++) {
         if (!newSelectedTokens.includes(i)) {
           newSelectedTokens.push(i);
@@ -285,27 +256,23 @@ function PreferenceWeight({ onWeightsChange }) {
   };
 
   const updateSectionWeight = (targetSection, fromSection = null) => {
-    setWeights((prevState) => {
-      let adjustment = selectedTokens.length;
+    let adjustment = selectedTokens.length;
+    let newWeights = { ...weights };
 
-      let newWeights = { ...prevState };
+    if (!fromSection) {
+      newWeights.totalAvailablePoints =
+        weights.totalAvailablePoints - adjustment;
+    }
 
-      if (!fromSection) {
-        // Only decrement the totalAvailablePoints if the token is dragged from the bank
-        newWeights.totalAvailablePoints =
-          prevState.totalAvailablePoints - adjustment;
-      }
+    if (!adjustment && !fromSection) {
+      newWeights[targetSection] = weights[targetSection] + 1;
+      newWeights.totalAvailablePoints = weights.totalAvailablePoints - 1;
+    } else {
+      newWeights[targetSection] = weights[targetSection] + adjustment;
+    }
 
-      if (!adjustment && !fromSection) {
-        newWeights[targetSection] = prevState[targetSection] + 1;
-        newWeights.totalAvailablePoints = prevState.totalAvailablePoints - 1;
-      } else {
-        newWeights[targetSection] = prevState[targetSection] + adjustment;
-      }
-      onWeightsChange(newWeights);
-
-      return newWeights;
-    });
+    // Update the weights in the parent component
+    onWeightsChange(newWeights);
 
     setSelectedTokens([]);
   };

@@ -102,7 +102,7 @@
   display: flex;
   align-items: start;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   overflow-x: hidden;
 }

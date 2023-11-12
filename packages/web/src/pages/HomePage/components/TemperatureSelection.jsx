@@ -58,6 +58,22 @@ const TemperatureSelection = ({ data, onDataChange }) => {
     };
   }, []);
 
+  const getProfileName = (data) => {
+    for (const profileName in temperatureProfiles) {
+      const profileTemps = temperatureProfiles[profileName];
+      if (data.every((month, index) => month.temp === profileTemps[index])) {
+        return profileName;
+      }
+    }
+    return "Custom";
+  };
+
+  useEffect(() => {
+    // Update the selected profile based on the data prop
+    const profileName = getProfileName(data);
+    setSelectedProfile(profileName);
+  }, [data]);
+
   const handleBarUpdate = (datasetIndex, index, value) => {
     const updatedData = [...data];
     updatedData[index].temp = value;
