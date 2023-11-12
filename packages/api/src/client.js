@@ -16,7 +16,6 @@ const recreation_shared_1 = require("./services/recreation/recreation.shared");
 const weather_shared_1 = require("./services/weather/weather.shared");
 const industry_shared_1 = require("./services/industry/industry.shared");
 const survey_shared_1 = require("./services/survey/survey.shared");
-const places_shared_1 = require("./services/places/places.shared");
 const occupation_shared_1 = require("./services/occupation/occupation.shared");
 /**
  * Returns a typed client for the api app.
@@ -31,7 +30,7 @@ const createClient = (connection, authenticationOptions = {}) => {
     client.configure(connection);
     client.configure((0, authentication_client_1.default)(authenticationOptions));
     client.set('connection', connection);
-    client.configure(places_shared_1.placesClient);
+    client.configure(placesClient);
     client.configure(survey_shared_1.surveyClient);
     client.configure(industry_shared_1.industryClient);
     client.configure(weather_shared_1.weatherClient);

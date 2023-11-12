@@ -17,7 +17,6 @@ import './services/industry/industry.shared';
 export type { Industry, IndustryData, IndustryQuery, IndustryPatch } from './services/industry/industry.shared';
 import './services/survey/survey.shared';
 export type { Survey, SurveyData, SurveyQuery, SurveyPatch } from './services/survey/survey.shared';
-import './services/places/places.shared';
 import './services/occupation/occupation.shared';
 export interface Configuration {
     connection: TransportConnection<ServiceTypes>;

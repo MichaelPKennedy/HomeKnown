@@ -11,7 +11,6 @@ const occupation_1 = require("./occupation/occupation");
 const weather_1 = require("./weather/weather");
 const industry_1 = require("./industry/industry");
 const survey_1 = require("./survey/survey");
-const places_1 = require("./places/places");
 const services = (app) => {
     app.configure(air_quality_1.airQuality);
     app.configure(scenery_1.scenery);
@@ -23,7 +22,7 @@ const services = (app) => {
     app.configure(weather_1.weather);
     app.configure(industry_1.industry);
     app.configure(survey_1.survey);
-    app.configure(places_1.places);
+    app.configure(places);
     // All services will be registered here
 };
 exports.services = services;

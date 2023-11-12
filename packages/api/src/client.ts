@@ -50,7 +50,6 @@ export type {
 import { surveyClient } from './services/survey/survey.shared'
 export type { Survey, SurveyData, SurveyQuery, SurveyPatch } from './services/survey/survey.shared'
 
-import { placesClient } from './services/places/places.shared'
 import { occupationClient } from './services/occupation/occupation.shared'
 
 export interface Configuration {
@@ -69,7 +68,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
