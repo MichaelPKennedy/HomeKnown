@@ -32,7 +32,7 @@ const ReusableChartComponent = ({
   dataType,
 }) => {
   const [viewType, setViewType] = useState("monthly");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedYear, setSelectedYear] = useState(2022);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
