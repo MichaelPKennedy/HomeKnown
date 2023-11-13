@@ -1,5 +1,5 @@
 // ReusableChartComponent.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "../City.module.css";
 
@@ -31,8 +31,21 @@ const ReusableChartComponent = ({
   endYear,
   dataType,
 }) => {
-  const [viewType, setViewType] = useState("yearly"); // 'yearly' or 'monthly'
+  const [viewType, setViewType] = useState("monthly");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const transformWeatherData = (weatherData, selectedYear) => {
     const filteredData = weatherData.filter(
@@ -41,18 +54,15 @@ const ReusableChartComponent = ({
     const sortedData = filteredData.sort((a, b) => a.month - b.month);
 
     return sortedData.map((item) => ({
-      label: getMonthName(item.month),
-      value: item.avg_temp,
+      label: getMonthName(item.month, isMobile),
+      value: Math.round(item.avg_temp),
     }));
   };
 
-  // Utility function to get month names might also benefit from logging
-  const getMonthName = (monthNumber) => {
+  const getMonthName = (monthNumber, short = false) => {
     const date = new Date();
     date.setMonth(monthNumber - 1);
-    const monthName = date.toLocaleString("default", { month: "long" });
-    console.log(`Converting month number ${monthNumber} to name:`, monthName);
-    return monthName;
+    return date.toLocaleString("default", { month: short ? "short" : "long" });
   };
 
   const transformHousingData = (housingDataArray, selectedYear) => {
@@ -62,7 +72,7 @@ const ReusableChartComponent = ({
       if (parseInt(year, 10) === selectedYear) {
         acc.push({
           label: getMonthName(parseInt(month, 10)),
-          value: parseFloat(value),
+          value: parseInt(value).round(),
         });
       }
       return acc;
@@ -89,7 +99,8 @@ const ReusableChartComponent = ({
     data,
     viewType,
     selectedYear,
-    dataType
+    dataType,
+    isMobile
   );
 
   const chartData = {
