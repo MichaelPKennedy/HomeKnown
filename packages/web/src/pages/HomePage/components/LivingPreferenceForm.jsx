@@ -377,7 +377,7 @@ const LivingPreferenceForm = () => {
                 handleInputChange={handleInputChange}
               /> */}
               {showSubmitButton && (
-                <div className="d-flex justify-content-start gap-2">
+                <div className="d-flex justify-content-start">
                   <button
                     type="submit"
                     className={`btn btn-info mt-2 ${styles.btnDropdown}`}

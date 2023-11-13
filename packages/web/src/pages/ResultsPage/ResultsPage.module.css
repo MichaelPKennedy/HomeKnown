@@ -216,32 +216,38 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f0f4f8; /* Example background color */
+  background-color: #f0f4f8;
 }
 
 .cityContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   width: 100%;
-  max-width: 1200px; /* You can adjust this value */
+  max-width: 1200px;
   margin-bottom: 30px;
   padding: 15px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
-  text-decoration: none; /* Removes underline from links */
+  text-decoration: none;
 }
 
 .cityContainer h2 {
   margin-bottom: 15px;
   color: #333;
   text-align: center;
+  align-items: center;
 }
 
 .ranking {
   position: absolute;
   top: -10px;
   left: -10px;
-  background-color: #ffcc00;
+  background-color: #17a2b8;
   color: #fff;
   padding: 5px 10px;
   border-radius: 50%;

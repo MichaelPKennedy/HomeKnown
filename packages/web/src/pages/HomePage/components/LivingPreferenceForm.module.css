@@ -14,7 +14,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
-  margin-bottom: 200px;
+  margin-bottom: 25px;
+  margin-right: 20px;
 }
 
 .btnDropdown:hover {
@@ -125,8 +126,8 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 0.5rem 1rem;
     transition: background-color 0.2s;
-    margin: 10px;
-    margin-bottom: 50px;
+    margin-right: 20px;
+    margin-bottom: 40px;
   }
 }
 

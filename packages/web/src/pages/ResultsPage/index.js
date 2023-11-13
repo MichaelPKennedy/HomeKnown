@@ -18,18 +18,22 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   }, []);
 
   const renderCityData = (city, index) => {
+    console.log("city2", city);
     return (
-      <Link
-        to={`/results/${city.city_id}`}
-        key={city.city_id}
-        state={{ city }}
-        className={styles.cityContainer}
-      >
-        <div className={styles.ranking}>#{index + 1}</div>
-        <h2>
-          {city.city_name}, {city.state_name}
-        </h2>
-      </Link>
+      <div className={styles.cityContainer}>
+        <Link
+          to={`/results/${city.city_id}`}
+          key={city.city_id}
+          state={{ city }}
+        >
+          <div className={styles.ranking}>#{index + 1}</div>
+          <h2>
+            {city.city_name}, {city.state_name}
+          </h2>
+        </Link>
+        <h5>County: {city.county_name}</h5>
+        <h5>Population: {city?.Population?.pop_2022 || "N/A"}</h5>
+      </div>
     );
   };
 
