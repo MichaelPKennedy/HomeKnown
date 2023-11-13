@@ -7,6 +7,14 @@
   align-items: center;
 }
 
+.btnDropdown {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 25px;
+  margin-right: 20px;
+}
+
 /* Styling the chart and table containers */
 .chart,
 .table {
