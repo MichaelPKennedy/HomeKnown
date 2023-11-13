@@ -55,7 +55,11 @@ const ReusableChartComponent = ({
 
     return sortedData.map((item) => ({
       label: getMonthName(item.month, isMobile),
-      value: Math.round(item.avg_temp),
+      avgTemp: Math.round(item.avg_temp),
+      maxTemp: Math.round(item.max_temp),
+      minTemp: Math.round(item.min_temp),
+      snow: item.snow || 0,
+      rain: item.rain || 0,
     }));
   };
 
@@ -83,9 +87,8 @@ const ReusableChartComponent = ({
     if (viewType === "yearly") {
       // Handle yearly data
       let yearlyData = [];
-      // Add logic for yearly data transformation for both weather and housing
+      //TODO: Add logic for yearly data transformation for both weather and housing
     } else if (viewType === "monthly") {
-      // Handle monthly data
       if (dataType === "weather") {
         return transformWeatherData(data, selectedYear);
       } else if (dataType === "housing") {
@@ -107,11 +110,34 @@ const ReusableChartComponent = ({
     labels: chartFilteredData.map((item) => item.label),
     datasets: [
       {
-        label: label,
-        data: chartFilteredData.map((item) => item.value),
+        label: "Average Temperature",
+        data: chartFilteredData.map((item) => item.avgTemp),
         fill: false,
-        backgroundColor: "rgb(75, 192, 192)",
-        borderColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: "Max Temperature",
+        data: chartFilteredData.map((item) => item.maxTemp),
+        fill: false,
+        borderColor: "rgb(255, 99, 132)",
+      },
+      {
+        label: "Min Temperature",
+        data: chartFilteredData.map((item) => item.minTemp),
+        fill: false,
+        borderColor: "rgb(54, 162, 235)",
+      },
+      {
+        label: "Snow",
+        data: chartFilteredData.map((item) => item.snow),
+        fill: false,
+        borderColor: "rgb(201, 203, 207)",
+      },
+      {
+        label: "Rain",
+        data: chartFilteredData.map((item) => item.rain),
+        fill: false,
+        borderColor: "rgb(75, 192, 75)",
       },
     ],
   };
@@ -138,9 +164,8 @@ const ReusableChartComponent = ({
           ))}
         </select>
       )}
-      <div styles={{ width: "100%" }}>
-        <Line data={chartData} />
-      </div>
+
+      <Line data={chartData} options={{ maintainAspectRatio: false }} />
     </div>
   );
 };
