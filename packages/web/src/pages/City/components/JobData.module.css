@@ -1,0 +1,83 @@
+/* Container for the entire job data display */
+
+/* Container for the basic info section */
+.basicInfoContainer {
+  display: flex;
+  flex-direction: column; /* Stacks items vertically on mobile */
+  gap: 10px; /* Adjust gap to your preference */
+  margin-bottom: 20px;
+}
+
+/* Style for each basic info item */
+.basicInfoItem {
+  background-color: #f2f2f2;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Media query for desktop screens */
+@media (min-width: 768px) {
+  /* Adjust the min-width as necessary for your design */
+  .basicInfoContainer {
+    flex-direction: row; /* Places items side by side on desktop */
+    justify-content: space-evenly; /* Distributes space evenly between items */
+  }
+}
+
+.jobDataContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 20px;
+  width: 100%;
+  height: 400px;
+}
+
+/* Styling for each job card */
+.jobCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  background-color: white;
+}
+
+/* Header of each job card */
+.jobCardHeader {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Accordion styles */
+.accordionHeader {
+  background-color: #f7f7f7;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.accordionBody {
+  padding: 10px;
+  background-color: #fafafa;
+  border-radius: 5px;
+}
+
+/* List styles within accordion body */
+.salaryDetailsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.salaryDetailsList li {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #444;
+}
+
+/* Additional styling as needed */

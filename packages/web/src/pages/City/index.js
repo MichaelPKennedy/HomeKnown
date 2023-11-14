@@ -3,11 +3,14 @@ import { useParams, useLocation } from "react-router-dom";
 import styles from "./City.module.css";
 import RecreationMap from "../ResultsPage/components/RecreationMap";
 import ReusableChart from "./components/ReusableChart";
+import JobData from "./components/JobData";
 
 function City() {
   const { cityId } = useParams();
   const location = useLocation();
   const { city } = location.state;
+  const { Jobs: jobs } = city;
+  console.log("jobs", jobs);
   console.log("city", city);
 
   const weatherData = city.Weather;
@@ -31,6 +34,7 @@ function City() {
         endYear={endYear}
         dataType="weather"
       />
+      <JobData jobs={jobs} />
     </div>
   );
 }
