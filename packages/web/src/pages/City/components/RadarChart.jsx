@@ -1,57 +1,27 @@
 // ReusableChartComponent.jsx
+import { Radar } from "react-chartjs-2";
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "../City.module.css";
 
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
+  RadialLinearScale,
   PointElement,
   LineElement,
-  Title,
+  Filler,
   Tooltip,
   Legend,
 } from "chart.js";
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
+  RadialLinearScale,
   PointElement,
   LineElement,
-  Title,
+  Filler,
   Tooltip,
   Legend
 );
-
-const datalabelsPlugin = {
-  id: "datalabelsPlugin",
-  afterDatasetsDraw: (chart, args, options) => {
-    const { ctx } = chart;
-    chart.data.datasets.forEach((dataset, i) => {
-      const meta = chart.getDatasetMeta(i);
-      if (!meta.hidden) {
-        meta.data.forEach((element, index) => {
-          ctx.fillStyle = "black";
-          const fontSize = 14; // or your desired size
-          ctx.font = `${fontSize}px Arial`;
-          const dataString = dataset.data[index].toString();
-
-          // Calculate the position to draw from
-          const x = element.x;
-          const y = element.y - fontSize; // Adjust for the height above the point
-
-          // Center the text
-          const textWidth = ctx.measureText(dataString).width;
-          ctx.fillText(dataString, x - textWidth / 2, y);
-        });
-      }
-    });
-  },
-};
-
-// Add plugin to ChartJS instance
-ChartJS.register(datalabelsPlugin);
 
 const ReusableChartComponent = ({
   data,
@@ -135,55 +105,40 @@ const ReusableChartComponent = ({
     isMobile
   );
 
-  const maxPrecip =
-    Math.ceil(
-      Math.max(
-        ...chartFilteredData.map((item) => Math.max(item.snow, item.rain))
-      ) / 5
-    ) * 5;
-
   const options = {
     scales: {
-      y: {
-        type: "linear",
-        display: true,
-        position: "left",
-        title: {
+      r: {
+        angleLines: {
           display: true,
-          text: "Temperature (°C or °F)",
         },
         ticks: {
+          display: true,
           font: {
             size: 14,
           },
+          backdropColor: "transparent",
+          callback: function (value) {
+            return value + " units";
+          },
         },
-      },
-      y1: {
-        type: "linear",
-        display: true,
-        position: "right",
-        max: maxPrecip * 3,
-        title: {
-          display: true,
-          text: "Precipitation (mm or inches)",
-        },
-        grid: {
-          drawOnChartArea: false,
-        },
-        ticks: {
+        pointLabels: {
           font: {
             size: 14,
           },
         },
       },
     },
-    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
-        position: "top",
+        labels: {
+          font: {
+            size: 14,
+          },
+        },
       },
       tooltip: {
+        enabled: true,
         mode: "index",
         intersect: false,
         bodyFont: {
@@ -193,70 +148,70 @@ const ReusableChartComponent = ({
           size: 16,
         },
       },
-      datalabelsPlugin: {},
       datalabels: {
         display: false,
       },
     },
-    interaction: {
-      mode: "nearest",
-      axis: "x",
-      intersect: false,
-    },
+    maintainAspectRatio: false,
   };
 
   const chartData = {
     labels: chartFilteredData.map((item) => item.label),
     datasets: [
       {
-        type: "line",
         label: "Average Temperature",
         data: chartFilteredData.map((item) => item.avgTemp),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
         fill: true,
-        tension: 0.1,
-        yAxisID: "y",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgb(75, 192, 192)",
+        pointBackgroundColor: "rgb(75, 192, 192)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(75, 192, 192)",
       },
       {
-        type: "line",
         label: "Max Temperature",
         data: chartFilteredData.map((item) => item.maxTemp),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
         fill: true,
-        tension: 0.1,
-        yAxisID: "y",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgb(255, 99, 132)",
+        pointBackgroundColor: "rgb(255, 99, 132)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(255, 99, 132)",
       },
       {
-        type: "line",
         label: "Min Temperature",
         data: chartFilteredData.map((item) => item.minTemp),
-        borderColor: "rgb(54, 162, 235)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
         fill: true,
-        tension: 0.1,
-        yAxisID: "y",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgb(54, 162, 235)",
+        pointBackgroundColor: "rgb(54, 162, 235)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(54, 162, 235)",
       },
       {
-        type: "line",
         label: "Snow",
         data: chartFilteredData.map((item) => item.snow),
-        borderColor: "rgb(201, 203, 207)",
-        backgroundColor: "rgba(201, 203, 207, 0.2)",
         fill: true,
-        tension: 0.1,
-        yAxisID: "y1",
+        backgroundColor: "rgba(201, 203, 207, 0.2)",
+        borderColor: "rgb(201, 203, 207)",
+        pointBackgroundColor: "rgb(201, 203, 207)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(201, 203, 207)",
       },
       {
-        type: "line",
         label: "Rain",
         data: chartFilteredData.map((item) => item.rain),
-        borderColor: "rgb(75, 192, 75)",
-        backgroundColor: "rgba(75, 192, 75, 0.2)",
         fill: true,
-        tension: 0.1,
-        yAxisID: "y1",
+        backgroundColor: "rgba(75, 192, 75, 0.2)",
+        borderColor: "rgb(75, 192, 75)",
+        pointBackgroundColor: "rgb(75, 192, 75)",
+        pointBorderColor: "#fff",
+        pointHoverBackgroundColor: "#fff",
+        pointHoverBorderColor: "rgb(75, 192, 75)",
       },
     ],
   };
@@ -284,7 +239,7 @@ const ReusableChartComponent = ({
         </select>
       )}
 
-      <Line data={chartData} options={options} />
+      <Radar data={chartData} options={options} />
     </div>
   );
 };
