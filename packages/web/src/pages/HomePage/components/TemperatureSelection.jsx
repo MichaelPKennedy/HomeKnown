@@ -136,12 +136,7 @@ const TemperatureSelection = ({ data, onDataChange }) => {
           },
           plugins: {
             datalabels: {
-              color: "#000000",
-              anchor: "end",
-              align: "top",
-              font: {
-                size: 16,
-              },
+              display: false,
             },
             dragData: {
               round: 0,

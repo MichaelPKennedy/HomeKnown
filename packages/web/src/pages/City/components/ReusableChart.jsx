@@ -32,18 +32,17 @@ const datalabelsPlugin = {
       const meta = chart.getDatasetMeta(i);
       if (!meta.hidden) {
         meta.data.forEach((element, index) => {
-          ctx.fillStyle = "black";
-          const fontSize = 14; // or your desired size
-          ctx.font = `${fontSize}px Arial`;
-          const dataString = dataset.data[index].toString();
-
-          // Calculate the position to draw from
-          const x = element.x;
-          const y = element.y - fontSize; // Adjust for the height above the point
-
-          // Center the text
-          const textWidth = ctx.measureText(dataString).width;
-          ctx.fillText(dataString, x - textWidth / 2, y);
+          const value = dataset.data[index];
+          if (value !== null && value !== undefined) {
+            ctx.fillStyle = "black";
+            const fontSize = 14;
+            ctx.font = `${fontSize}px Arial`;
+            const dataString = value.toString();
+            const x = element.x;
+            const y = element.y - fontSize; // Adjust for the height above the point
+            const textWidth = ctx.measureText(dataString).width;
+            ctx.fillText(dataString, x - textWidth / 2, y);
+          }
         });
       }
     });
@@ -60,9 +59,9 @@ const ReusableChartComponent = ({
   endYear,
   dataType,
 }) => {
-  const [viewType, setViewType] = useState("monthly");
   const [selectedYear, setSelectedYear] = useState(2022);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [chartType, setChartType] = useState("temperature");
 
   useEffect(() => {
     const handleResize = () => {
@@ -112,45 +111,36 @@ const ReusableChartComponent = ({
     }, []);
   };
 
-  const filteredData = (data, viewType, selectedYear, dataType) => {
-    if (viewType === "yearly") {
-      // Handle yearly data
-      let yearlyData = [];
-      //TODO: Add logic for yearly data transformation for both weather and housing
-    } else if (viewType === "monthly") {
-      if (dataType === "weather") {
-        return transformWeatherData(data, selectedYear);
-      } else if (dataType === "housing") {
-        return transformHousingData(data, selectedYear);
-      }
+  const filteredData = (data, selectedYear, dataType) => {
+    if (dataType === "weather") {
+      return transformWeatherData(data, selectedYear);
+    } else if (dataType === "housing") {
+      return transformHousingData(data, selectedYear);
     }
+
     return [];
+  };
+
+  const toggleChartType = () => {
+    setChartType(chartType === "temperature" ? "precipitation" : "temperature");
   };
 
   const chartFilteredData = filteredData(
     data,
-    viewType,
     selectedYear,
     dataType,
     isMobile
   );
 
-  const maxPrecip =
-    Math.ceil(
-      Math.max(
-        ...chartFilteredData.map((item) => Math.max(item.snow, item.rain))
-      ) / 5
-    ) * 5;
-
   const options = {
     scales: {
       y: {
         type: "linear",
-        display: true,
+        display: chartType === "temperature",
         position: "left",
         title: {
           display: true,
-          text: "Temperature (°C or °F)",
+          text: "Temperature (°F)",
         },
         ticks: {
           font: {
@@ -160,15 +150,11 @@ const ReusableChartComponent = ({
       },
       y1: {
         type: "linear",
-        display: true,
-        position: "right",
-        max: maxPrecip * 3,
+        display: chartType === "precipitation",
+        position: "left",
         title: {
           display: true,
-          text: "Precipitation (mm or inches)",
-        },
-        grid: {
-          drawOnChartArea: false,
+          text: "Precipitation (inches)",
         },
         ticks: {
           font: {
@@ -205,73 +191,78 @@ const ReusableChartComponent = ({
     },
   };
 
+  const datasets =
+    chartType === "temperature"
+      ? [
+          {
+            type: "line",
+            label: "Average Temperature",
+            data: chartFilteredData.map((item) => item.avgTemp),
+            borderColor: "rgb(75, 192, 192)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: true,
+            tension: 0.1,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "Max Temperature",
+            data: chartFilteredData.map((item) => item.maxTemp),
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            fill: true,
+            tension: 0.1,
+            yAxisID: "y",
+          },
+          {
+            type: "line",
+            label: "Min Temperature",
+            data: chartFilteredData.map((item) => item.minTemp),
+            borderColor: "rgb(54, 162, 235)",
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            fill: true,
+            tension: 0.1,
+            yAxisID: "y",
+          },
+        ]
+      : [
+          {
+            type: "bar",
+            label: "Snow",
+            data: chartFilteredData.map((item) => item.snow),
+            borderColor: "rgb(201, 203, 207)",
+            backgroundColor: "rgba(201, 203, 207, 0.5)",
+            yAxisID: "y1",
+          },
+          {
+            type: "bar",
+            label: "Rain",
+            data: chartFilteredData.map((item) => item.rain),
+            borderColor: "rgb(75, 192, 75)",
+            backgroundColor: "rgba(75, 192, 75, 0.5)",
+            yAxisID: "y1",
+          },
+        ];
+
   const chartData = {
     labels: chartFilteredData.map((item) => item.label),
-    datasets: [
-      {
-        type: "line",
-        label: "Average Temperature",
-        data: chartFilteredData.map((item) => item.avgTemp),
-        borderColor: "rgb(75, 192, 192)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        fill: true,
-        tension: 0.1,
-        yAxisID: "y",
-      },
-      {
-        type: "line",
-        label: "Max Temperature",
-        data: chartFilteredData.map((item) => item.maxTemp),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
-        fill: true,
-        tension: 0.1,
-        yAxisID: "y",
-      },
-      {
-        type: "line",
-        label: "Min Temperature",
-        data: chartFilteredData.map((item) => item.minTemp),
-        borderColor: "rgb(54, 162, 235)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
-        fill: true,
-        tension: 0.1,
-        yAxisID: "y",
-      },
-      {
-        type: "line",
-        label: "Snow",
-        data: chartFilteredData.map((item) => item.snow),
-        borderColor: "rgb(201, 203, 207)",
-        backgroundColor: "rgba(201, 203, 207, 0.2)",
-        fill: true,
-        tension: 0.1,
-        yAxisID: "y1",
-      },
-      {
-        type: "line",
-        label: "Rain",
-        data: chartFilteredData.map((item) => item.rain),
-        borderColor: "rgb(75, 192, 75)",
-        backgroundColor: "rgba(75, 192, 75, 0.2)",
-        fill: true,
-        tension: 0.1,
-        yAxisID: "y1",
-      },
-    ],
+    datasets: datasets,
   };
 
   return (
-    <div className={styles.chartContainer}>
-      <select value={viewType} onChange={(e) => setViewType(e.target.value)}>
-        <option value="yearly">Yearly</option>
-        <option value="monthly">Monthly</option>
-      </select>
-
-      {viewType === "monthly" && (
+    <>
+      <h4>Weather</h4>
+      <div className={styles.chartContainer}>
+        <button onClick={toggleChartType}>
+          {chartType === "temperature"
+            ? "Show Precipitation"
+            : "Show Temperature"}
+        </button>
         <select
+          className="form-select form-select-lg ml-4"
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
+          style={{ padding: "10px", borderRadius: "5px" }}
         >
           {Array.from(
             { length: endYear - startYear + 1 },
@@ -282,10 +273,10 @@ const ReusableChartComponent = ({
             </option>
           ))}
         </select>
-      )}
 
-      <Line data={chartData} options={options} />
-    </div>
+        <Line data={chartData} options={options} />
+      </div>
+    </>
   );
 };
 

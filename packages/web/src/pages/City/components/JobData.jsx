@@ -85,7 +85,7 @@ const JobData = ({ jobs }) => {
               <Accordion.Body>
                 <Bar
                   data={createSalaryChartData(job)}
-                  options={{ maintainAspectRatio: false }}
+                  options={{ maintainAspectRatio: true }}
                 />
               </Accordion.Body>
             </Accordion.Item>
