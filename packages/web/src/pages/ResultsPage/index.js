@@ -27,12 +27,12 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           state={{ city }}
         >
           <div className={styles.ranking}>#{index + 1}</div>
-          <h2>
+          <h4 className={styles.header}>
             {city.city_name}, {city.state_name}
-          </h2>
+          </h4>
         </Link>
-        <h5>County: {city.county_name}</h5>
-        <h5>Population: {city?.Population?.pop_2022 || "N/A"}</h5>
+        <h6>County: {city.county_name}</h6>
+        <h6>Population: {city?.Population?.pop_2022 || "N/A"}</h6>
       </div>
     );
   };
@@ -43,14 +43,15 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
         {showEditButton && (
           <button
             onClick={toggleFormVisibility}
-            className={`btn btn-info mt-4 ml-4 ${styles.btnDropdown}`}
+            className={`btn mt-4 ml-4 ${styles.btnDropdown}`}
           >
             Edit Preferences
           </button>
         )}
       </div>
-
-      <h1>Top 10</h1>
+      <div className="mb-4">
+        <h4>Top Results</h4>
+      </div>
       {topTen.length > 0 ? (
         topTen.map((city, index) => renderCityData(city, index))
       ) : (

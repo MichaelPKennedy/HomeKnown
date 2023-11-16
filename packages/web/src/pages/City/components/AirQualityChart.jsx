@@ -82,7 +82,7 @@ const AirQualityChart = ({ airQualityData }) => {
         },
       },
     },
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
 
     plugins: {
       tooltip: {

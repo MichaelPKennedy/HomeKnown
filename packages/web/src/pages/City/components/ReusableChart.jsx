@@ -253,13 +253,13 @@ const ReusableChartComponent = ({
     <>
       <h4>Weather</h4>
       <div className={styles.chartContainer}>
-        <button onClick={toggleChartType}>
+        <button className={styles.btnDropdown} onClick={toggleChartType}>
           {chartType === "temperature"
             ? "Show Precipitation"
             : "Show Temperature"}
         </button>
         <select
-          className="form-select form-select-lg ml-4"
+          className={`form-select form-select-lg ml-4 ${styles.btnDropdown}`}
           value={selectedYear}
           onChange={(e) => setSelectedYear(e.target.value)}
           style={{ padding: "10px", borderRadius: "5px" }}

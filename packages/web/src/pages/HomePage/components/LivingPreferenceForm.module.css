@@ -16,11 +16,17 @@
   transition: background-color 0.2s;
   margin-bottom: 25px;
   margin-right: 20px;
+  background-color: transparent; /* Makes the inside of the button transparent */
+  color: #17a2b8; /* Sets the text color, use your desired color */
+  border: 1px solid #17a2b8; /* Sets the border color and width */
+  padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
+  border-radius: 4px; /* Optional: Rounds the corners of the button */
+  transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
 }
 
 .btnDropdown:hover {
-  background-color: #007acc;
-  color: white;
+  background-color: #96e0e6; /* Changes background on hover, optional */
+  color: white; /* Changes text color on hover, optional */
 }
 
 /* Dropdown menu styles */

@@ -711,7 +711,7 @@ export const MonthlyRentCitiesModel = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      tableName: 'HomePrice',
+      tableName: 'MonthlyRentCities',
       timestamps: false
     }
   )

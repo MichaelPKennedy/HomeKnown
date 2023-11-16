@@ -13,6 +13,17 @@
   transition: background-color 0.2s;
   margin-bottom: 25px;
   margin-right: 20px;
+  background-color: transparent;
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btnDropdown:hover {
+  background-color: #96e0e6;
+  color: white;
 }
 
 /* Styling the chart and table containers */
@@ -224,7 +235,6 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #f0f4f8;
 }
 
 .cityContainer {
@@ -242,6 +252,12 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   position: relative;
   text-decoration: none;
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.header {
+  color: black;
 }
 
 .cityContainer h2 {
@@ -255,7 +271,7 @@
   position: absolute;
   top: -10px;
   left: -10px;
-  background-color: #17a2b8;
+  background-color: #96e0e6;
   color: #fff;
   padding: 5px 10px;
   border-radius: 50%;

@@ -7,6 +7,7 @@ import ReusableChart from "./components/ReusableChart";
 import JobData from "./components/JobData";
 import AirQualityChart from "./components/AirQualityChart";
 import DemographicsTable from "./components/DemographicsTable";
+import HousingChart from "./components/HousingChart";
 
 function City() {
   const { cityId } = useParams();
@@ -16,7 +17,16 @@ function City() {
     Jobs: jobs,
     AirQuality: airQuality,
     CityDemographics: demographics,
+    HomePrice: homePriceData,
+    MonthlyRent: rentPriceData,
   } = city;
+
+  const homePrice = homePriceData.map(
+    ({ city_id, city_name, county, id, abbrev, metro, ...rest }) => rest
+  );
+  const rentPrice = rentPriceData.map(
+    ({ city_id, city_name, county, id, abbrev, metro, ...rest }) => rest
+  );
   console.log("city", city);
   console.log("demo", demographics);
 
@@ -51,6 +61,9 @@ function City() {
       {jobs && <JobData jobs={jobs} />}
       {airQuality && <AirQualityChart airQualityData={airQuality} />}
       {demographics && <DemographicsTable data={demographics} />}
+      {homePrice && (
+        <HousingChart housingData={homePrice} rentData={rentPrice} />
+      )}
     </div>
   );
 }

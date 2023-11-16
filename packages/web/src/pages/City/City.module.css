@@ -26,3 +26,22 @@
   color: #333;
   font-size: 2em;
 }
+
+.btnDropdown {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 25px;
+  margin-right: 20px;
+  background-color: transparent;
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.btnDropdown:hover {
+  background-color: #96e0e6;
+  color: white;
+}
