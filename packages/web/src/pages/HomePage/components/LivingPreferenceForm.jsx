@@ -396,14 +396,16 @@ const LivingPreferenceForm = () => {
             </form>
             <div ref={resultsRef}>
               {!loading && surveyResults ? (
-                <ResultsPage data={surveyResults} />
+                <div className={styles.formContent}>
+                  <ResultsPage data={surveyResults} />
+                </div>
               ) : loading ? (
                 <LoadingScreen />
               ) : null}
             </div>
           </div>
         ) : (
-          <div>
+          <div className={styles.formContent}>
             <ResultsPage
               data={surveyResults}
               toggleFormVisibility={toggleFormVisibility}
