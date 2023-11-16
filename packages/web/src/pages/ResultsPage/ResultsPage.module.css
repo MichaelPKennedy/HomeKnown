@@ -269,13 +269,12 @@
 
 .ranking {
   position: absolute;
-  top: -10px;
-  left: -10px;
+  top: -5px;
+  left: -5px;
   background-color: #96e0e6;
   color: #fff;
   padding: 5px 10px;
   border-radius: 50%;
-  font-weight: bold;
 }
 .chartContainer {
   width: 100%;
