@@ -48,9 +48,9 @@ function City() {
         endYear={endYear}
         dataType="weather"
       /> */}
-      <JobData jobs={jobs} />
-      <AirQualityChart airQualityData={airQuality} />
-      <DemographicsTable data={demographics} />
+      {jobs && <JobData jobs={jobs} />}
+      {airQuality && <AirQualityChart airQualityData={airQuality} />}
+      {demographics && <DemographicsTable data={demographics} />}
     </div>
   );
 }
