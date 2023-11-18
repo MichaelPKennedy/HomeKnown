@@ -205,7 +205,13 @@ const RecreationMap = (data) => {
             }}
           >
             <Tooltip open={activeLandmarkId === landmark.id}>
-              <div className={styles.tooltipLabel}>
+              <div
+                className={styles.tooltipLabel}
+                style={{
+                  maxWidth: "400px",
+                  whiteSpace: "normal",
+                }}
+              >
                 {landmark.Location} - {landmark.Type}
               </div>
             </Tooltip>
