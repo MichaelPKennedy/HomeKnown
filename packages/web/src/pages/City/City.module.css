@@ -22,7 +22,8 @@
 
 .housingChartContainer {
   width: 100%;
-  height: 650px;
+  height: auto;
+  max-height: 500px;
   margin-bottom: 90px;
 }
 
