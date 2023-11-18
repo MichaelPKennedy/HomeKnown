@@ -1,4 +1,6 @@
 import React from "react";
+import { Card } from "react-bootstrap";
+import styles from "../City.module.css";
 
 const DemographicsTable = ({ data }) => {
   console.log("in table", data);
