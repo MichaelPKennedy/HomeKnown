@@ -13,6 +13,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Card } from "react-bootstrap";
 
 ChartJS.register(
   CategoryScale,
@@ -139,7 +140,7 @@ const ReusableChartComponent = ({
         display: chartType === "temperature",
         position: "left",
         title: {
-          display: true,
+          display: false,
           text: "Temperature (°F)",
         },
         ticks: {
@@ -153,7 +154,7 @@ const ReusableChartComponent = ({
         display: chartType === "precipitation",
         position: "left",
         title: {
-          display: true,
+          display: false,
           text: "Precipitation (inches)",
         },
         ticks: {
@@ -196,7 +197,7 @@ const ReusableChartComponent = ({
       ? [
           {
             type: "line",
-            label: "Average Temperature",
+            label: "Average Temperature (°F)",
             data: chartFilteredData.map((item) => item.avgTemp),
             borderColor: "rgb(75, 192, 192)",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
@@ -206,7 +207,7 @@ const ReusableChartComponent = ({
           },
           {
             type: "line",
-            label: "Max Temperature",
+            label: "Max Temperature (°F)",
             data: chartFilteredData.map((item) => item.maxTemp),
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
@@ -216,7 +217,7 @@ const ReusableChartComponent = ({
           },
           {
             type: "line",
-            label: "Min Temperature",
+            label: "Min Temperature (°F)",
             data: chartFilteredData.map((item) => item.minTemp),
             borderColor: "rgb(54, 162, 235)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
@@ -250,33 +251,37 @@ const ReusableChartComponent = ({
   };
 
   return (
-    <>
-      <h4>Weather</h4>
-      <div className={styles.chartContainer}>
-        <button className={styles.btnDropdown} onClick={toggleChartType}>
-          {chartType === "temperature"
-            ? "Show Precipitation"
-            : "Show Temperature"}
-        </button>
-        <select
-          className={`form-select form-select-lg ml-4 ${styles.btnDropdown}`}
-          value={selectedYear}
-          onChange={(e) => setSelectedYear(e.target.value)}
-          style={{ padding: "10px", borderRadius: "5px" }}
-        >
-          {Array.from(
-            { length: endYear - startYear + 1 },
-            (_, i) => startYear + i
-          ).map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
+    <Card className={styles.card}>
+      <Card.Header>
+        <h4>Weather</h4>
+      </Card.Header>
+      <div className={styles.housingChartContainer}>
+        <div className={styles.buttonContainer}>
+          <button className={styles.btnDropdown} onClick={toggleChartType}>
+            {chartType === "temperature"
+              ? "Show Precipitation"
+              : "Show Temperature"}
+          </button>
+          <select
+            className={`form-select form-select-lg ${styles.btnDropdown}`}
+            value={selectedYear}
+            onChange={(e) => setSelectedYear(e.target.value)}
+            style={{ padding: "10px", borderRadius: "5px" }}
+          >
+            {Array.from(
+              { length: endYear - startYear + 1 },
+              (_, i) => startYear + i
+            ).map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
+          </select>
+        </div>
 
         <Line data={chartData} options={options} />
       </div>
-    </>
+    </Card>
   );
 };
 

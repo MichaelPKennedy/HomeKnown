@@ -9,8 +9,10 @@ const DemographicsTable = ({ data }) => {
   );
 
   return (
-    <>
-      <h4>Demographics</h4>
+    <Card className={styles.card}>
+      <Card.Header>
+        <h4>Demographics</h4>
+      </Card.Header>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <tbody>
@@ -29,7 +31,7 @@ const DemographicsTable = ({ data }) => {
           </tbody>
         </table>
       </div>
-    </>
+    </Card>
   );
 };
 

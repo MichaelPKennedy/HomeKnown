@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
-import { Card, Accordion } from "react-bootstrap";
+import { Card, Button } from "react-bootstrap";
 import styles from "./JobData.module.css";
 
 const JobData = ({ jobs }) => {
+  const [wageType, setWageType] = useState("hourly");
+
+  const chartOptions = {
+    plugins: {
+      datalabels: {
+        display: false,
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value, index, ticks) {
+            return value >= 1000 ? `${value / 1000}k` : value;
+          },
+        },
+      },
+    },
+  };
   const createHourlyChartData = (job) => {
     return {
       labels: ["10th %", "25th %", "Median", "75th %", "90th %"],
@@ -51,45 +70,43 @@ const JobData = ({ jobs }) => {
       {jobs.map((job) => (
         <Card key={job.id} className={styles.jobCard}>
           <Card.Header>
-            <strong>Job ID:</strong> {job.id} | <strong>Area Code:</strong>{" "}
-            {job.area_code} | <strong>Occ Code:</strong> {job.occ_code}
+            <h4>Industry</h4>
           </Card.Header>
-          <Accordion>
-            <Accordion.Item eventKey="0">
-              <Accordion.Header>Basic Info</Accordion.Header>
-              <Accordion.Body>
-                <div className={styles.basicInfoContainer}>
-                  <div className={styles.basicInfoItem}>
-                    Total Employment: {job.tot_emp}
-                  </div>
-                  <div className={styles.basicInfoItem}>
-                    Average Hourly: ${job.average_hourly}
-                  </div>
-                  <div className={styles.basicInfoItem}>
-                    Average Salary: ${job.average_salary}
-                  </div>
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-            <Accordion.Item eventKey="1">
-              <Accordion.Header>Wage Distribution</Accordion.Header>
-              <Accordion.Body>
-                <Bar
-                  data={createHourlyChartData(job)}
-                  options={{ maintainAspectRatio: false }}
-                />
-              </Accordion.Body>
-            </Accordion.Item>
-            <Accordion.Item eventKey="2">
-              <Accordion.Header>Salary Progression</Accordion.Header>
-              <Accordion.Body>
-                <Bar
-                  data={createSalaryChartData(job)}
-                  options={{ maintainAspectRatio: false }}
-                />
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+          <div className={styles.basicInfoContainer}>
+            <div className={styles.basicInfoItem}>
+              Total Employment: {job.tot_emp}
+            </div>
+            <div className={styles.basicInfoItem}>
+              Average Hourly: ${job.average_hourly}
+            </div>
+            <div className={styles.basicInfoItem}>
+              Average Salary: ${job.average_salary}
+            </div>
+          </div>
+          <div className={styles.toggleButtons}>
+            <Button
+              onClick={() => setWageType("hourly")}
+              active={wageType === "hourly"}
+              className={styles.btnDropdown}
+            >
+              Hourly
+            </Button>
+            <Button
+              onClick={() => setWageType("salary")}
+              active={wageType === "salary"}
+              className={styles.btnDropdown}
+            >
+              Salary
+            </Button>
+          </div>
+          <Bar
+            data={
+              wageType === "hourly"
+                ? createHourlyChartData(job)
+                : createSalaryChartData(job)
+            }
+            options={chartOptions}
+          />
         </Card>
       ))}
     </div>

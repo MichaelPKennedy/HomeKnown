@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import styles from "../City.module.css";
+import { Card, Button } from "react-bootstrap";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,12 +24,22 @@ ChartJS.register(
 );
 
 const ReusablePriceChartComponent = ({ housingData, rentData }) => {
-  const [viewType, setViewType] = useState("monthly");
+  const [viewType, setViewType] = useState("yearly");
   const [dataType, setDataType] = useState("homePrice");
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [startYear, setStartYear] = useState();
   const [endYear, setEndYear] = useState();
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     const data = dataType === "homePrice" ? housingData[0] : rentData[0];
@@ -49,7 +60,7 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
       labels: [],
       datasets: [
         {
-          label: `${dataType === "homePrice" ? "Home" : "Rent"} Price`,
+          label: `${dataType === "homePrice" ? "Home" : "Rent"} Price (USD)`,
           data: [],
           borderColor: "rgba(54, 162, 235, 1)",
           backgroundColor: "rgba(54, 162, 235, 0.2)",
@@ -99,9 +110,22 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
       newChartData.labels = chartLabels;
       newChartData.datasets[0].data = chartValues;
     }
+    const isMobile = windowWidth <= 768;
+    const currentYear = new Date().getFullYear();
+    const tenYearsAgo = currentYear - 10;
+
+    if (isMobile) {
+      newChartData.labels = newChartData.labels.filter((label) => {
+        const year = parseInt(label, 10);
+        return year > tenYearsAgo;
+      });
+      newChartData.datasets.forEach((dataset) => {
+        dataset.data = dataset.data.slice(-10);
+      });
+    }
 
     setChartData(newChartData);
-  }, [housingData, rentData, viewType, dataType, selectedYear]);
+  }, [housingData, rentData, viewType, dataType, selectedYear, windowWidth]);
 
   const handleViewTypeChange = (event) => {
     setViewType(event.target.value);
@@ -145,32 +169,46 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
     scales: {
       x: {
         title: {
-          display: true,
+          display: false,
           text: viewType === "monthly" ? "Month" : "Year",
         },
       },
       y: {
-        title: {
-          display: true,
-          text: "Price (USD)",
-        },
         beginAtZero: true,
+        ticks: {
+          callback: function (value, index, values) {
+            if (value >= 1000) {
+              return value / 1000 + "k";
+            }
+            return value;
+          },
+        },
       },
     },
   };
 
   return (
-    <>
-      <h4>{dataType === "homePrice" ? "Home" : "Rent"} Prices</h4>
-      <div className={styles.chartContainer}>
-        <select onChange={handleViewTypeChange} className={styles.btnDropdown}>
-          <option value="monthly">Monthly</option>
-          <option value="yearly">Yearly</option>
-        </select>
-        <select onChange={handleDataTypeChange} className={styles.btnDropdown}>
-          <option value="homePrice">Home Price</option>
-          <option value="rentPrice">Rent Price</option>
-        </select>
+    <Card className={styles.card}>
+      <Card.Header>
+        <h4>{dataType === "homePrice" ? "Home" : "Rent"} Prices</h4>
+      </Card.Header>
+      <div className={styles.housingChartContainer}>
+        <div className={styles.buttonContainer}>
+          <select
+            onChange={handleViewTypeChange}
+            className={styles.btnDropdown}
+          >
+            <option value="yearly">Yearly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+          <select
+            onChange={handleDataTypeChange}
+            className={styles.btnDropdown}
+          >
+            <option value="homePrice">Home Price</option>
+            <option value="rentPrice">Rent Price</option>
+          </select>
+        </div>
         {viewType === "monthly" && (
           <select
             className={styles.btnDropdown}
@@ -189,7 +227,7 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
         )}
         <Line data={chartData} options={chartOptions} />
       </div>
-    </>
+    </Card>
   );
 };
 

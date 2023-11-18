@@ -38,6 +38,7 @@ import {
   faSatellite,
   faStar,
 } from "@fortawesome/free-solid-svg-icons";
+import { Card } from "react-bootstrap";
 
 const placeToIconMap = {
   "National Park": faTree,
@@ -136,81 +137,82 @@ const RecreationMap = (data) => {
   const { Recreation: recreation } = data;
 
   return (
-    <div className={styles.mapContainer}>
-      <div>
-        <MapContainer
+    <Card className={styles.card}>
+      <Card.Header>
+        <h4>Recreation</h4>
+      </Card.Header>
+      <MapContainer
+        center={[data.latitude, data.longitude]}
+        zoom={9}
+        className={styles.map}
+      >
+        <FixMapSize />
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Circle
           center={[data.latitude, data.longitude]}
-          zoom={9}
-          className={styles.map}
+          radius={80467} // 50 miles in meters
+          color="black"
+          fillColor="green"
+          fillOpacity={0.1}
+          opacity={0.2}
+        />
+        <Marker
+          position={[data.latitude, data.longitude]}
+          icon={
+            new L.DivIcon({
+              className: styles.cityMarker,
+              html: ReactDOMServer.renderToString(
+                <div>
+                  <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                </div>
+              ),
+              iconSize: [30, 30],
+            })
+          }
         >
-          <FixMapSize />
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <Circle
-            center={[data.latitude, data.longitude]}
-            radius={80467} // 50 miles in meters
-            color="black"
-            fillColor="green"
-            fillOpacity={0.1}
-            opacity={0.2}
-          />
+          <Tooltip
+            direction="top"
+            permanent={activeLandmarkId === data.city_id}
+          >
+            <div
+              className={styles.tooltipLabel}
+              onMouseOver={() => setActiveLandmarkId(data.city_id)}
+              onMouseOut={() => setActiveLandmarkId(null)}
+            >
+              <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
+              <span>{data.city_name}</span>
+            </div>
+          </Tooltip>
+        </Marker>
+        {recreation.map((landmark, index) => (
           <Marker
-            position={[data.latitude, data.longitude]}
+            key={`${landmark.Location}-${index}`}
+            position={[landmark.Latitude, landmark.Longitude]}
+            className={styles.markerLabel}
             icon={
               new L.DivIcon({
-                className: styles.cityMarker,
-                html: ReactDOMServer.renderToString(
-                  <div>
-                    <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
-                  </div>
-                ),
-                iconSize: [30, 30],
+                className: styles.tooltipIcon,
+                html: getTypeIcon(landmark.Type),
+                iconSize: [40, 40],
               })
             }
+            eventHandlers={{
+              mouseover: () => setActiveLandmarkId(landmark.id),
+              mouseout: () => setActiveLandmarkId(null),
+            }}
           >
-            <Tooltip
-              direction="top"
-              permanent={activeLandmarkId === data.city_id}
-            >
-              <div
-                className={styles.tooltipLabel}
-                onMouseOver={() => setActiveLandmarkId(data.city_id)}
-                onMouseOut={() => setActiveLandmarkId(null)}
-              >
-                <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-                <span>{data.city_name}</span>
+            <Tooltip open={activeLandmarkId === landmark.id}>
+              <div className={styles.tooltipLabel}>
+                {landmark.Location} - {landmark.Type}
               </div>
             </Tooltip>
           </Marker>
-          {recreation.map((landmark, index) => (
-            <Marker
-              key={`${landmark.Location}-${index}`}
-              position={[landmark.Latitude, landmark.Longitude]}
-              className={styles.markerLabel}
-              icon={
-                new L.DivIcon({
-                  className: styles.tooltipIcon,
-                  html: getTypeIcon(landmark.Type),
-                  iconSize: [40, 40],
-                })
-              }
-              eventHandlers={{
-                mouseover: () => setActiveLandmarkId(landmark.id),
-                mouseout: () => setActiveLandmarkId(null),
-              }}
-            >
-              <Tooltip open={activeLandmarkId === landmark.id}>
-                <div className={styles.tooltipLabel}>
-                  {landmark.Location} - {landmark.Type}
-                </div>
-              </Tooltip>
-            </Marker>
-          ))}
-        </MapContainer>
-      </div>
-    </div>
+        ))}
+      </MapContainer>
+    </Card>
   );
 };
 

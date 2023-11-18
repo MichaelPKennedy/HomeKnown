@@ -45,8 +45,6 @@
 .jobDataContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  margin: 20px;
   width: 100%;
   height: auto;
 }
@@ -56,8 +54,11 @@
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 15px;
   background-color: white;
+  width: 100%;
+  height: auto;
+  padding: 15px;
+  text-align: center;
 }
 
 /* Header of each job card */
@@ -98,4 +99,44 @@
   color: #444;
 }
 
-/* Additional styling as needed */
+/* JobData.module.css */
+
+.jobDataContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.jobCard {
+  width: 100%; /* Adjust width as needed */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+.toggleButtons {
+  display: flex;
+  justify-content: start;
+  gap: 10px;
+  padding: 15px;
+}
+
+.toggleButtons .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.toggleButtons .btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+
+.toggleButtons .btn-primary.active,
+.toggleButtons .btn-secondary.active {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+/* You can also add custom styles for the chart if needed */
+.chartContainer {
+  padding: 15px;
+}

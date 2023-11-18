@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { Card } from "react-bootstrap";
 
 ChartJS.register(
   CategoryScale,
@@ -23,20 +24,10 @@ ChartJS.register(
 const AirQualityChart = ({ airQualityData }) => {
   console.log("in chart", airQualityData);
   const chartData = {
-    labels: [
-      "CO",
-      "Pb",
-      "NO2 AM",
-      "NO2 1hr",
-      "O3",
-      "PM10 24hr",
-      "PM2.5 AM",
-      "PM2.5 24hr",
-      "SO2 1hr",
-    ],
+    labels: ["CO", "Pb", "NO2", "NO2", "O3", "PM10", "PM2.5", "PM2.5", "SO2"],
     datasets: [
       {
-        label: "Pollutant Levels",
+        label: "Concentration",
         data: [
           airQualityData.CO_8hr_ppm,
           airQualityData.Pb_3mo_ug_m3,
@@ -77,7 +68,7 @@ const AirQualityChart = ({ airQualityData }) => {
       y: {
         beginAtZero: true,
         title: {
-          display: true,
+          display: false,
           text: "Concentration",
         },
       },
@@ -104,7 +95,7 @@ const AirQualityChart = ({ airQualityData }) => {
         },
       },
       legend: {
-        display: false,
+        display: true,
       },
       datalabels: {
         display: false,
@@ -113,12 +104,14 @@ const AirQualityChart = ({ airQualityData }) => {
   };
 
   return (
-    <>
-      <h4>Air Pollutants</h4>
+    <Card className={styles.card}>
+      <Card.Header>
+        <h4>Air Pollutants</h4>
+      </Card.Header>
       <div className={styles.chartContainer}>
         <Bar data={chartData} options={options} />
       </div>
-    </>
+    </Card>
   );
 };
 
