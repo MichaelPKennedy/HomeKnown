@@ -40,74 +40,66 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
 
   useEffect(() => {
     const data = dataType === "homePrice" ? housingData[0] : rentData[0];
+    const monthlyData = {};
+    const yearlyAverages = {};
+    let mostRecentValue = null;
+    let mostRecentLabel = "";
 
-    const newChartData = {
-      labels: [],
-      datasets: [
-        {
-          label: `${dataType === "homePrice" ? "Home" : "Rent"} Price (USD)`,
-          data: [],
-          borderColor: "rgba(54, 162, 235, 1)",
-          backgroundColor: "rgba(54, 162, 235, 0.2)",
-        },
-      ],
-    };
-
+    // Process each entry in the data
     Object.entries(data).forEach(([key, value]) => {
       const [month, year] = key.split("_");
-      if (year === selectedYear.toString()) {
-        newChartData.labels.push(
-          month.charAt(0).toUpperCase() + month.slice(1)
-        );
-        if (value !== null) {
-          newChartData.datasets[0].data.push(parseFloat(value));
+      if (!monthlyData[year]) {
+        monthlyData[year] = [];
+      }
+      if (value !== null) {
+        const floatValue = parseFloat(value);
+        if (!isNaN(floatValue)) {
+          monthlyData[year].push(floatValue);
+
+          // Check if this is the most recent value
+          if (
+            !mostRecentValue ||
+            year > mostRecentLabel ||
+            (year === mostRecentLabel &&
+              month.localeCompare(mostRecentLabel.split("_")[0]) > 0)
+          ) {
+            mostRecentValue = floatValue;
+            mostRecentLabel = key;
+          }
         }
       }
     });
 
-    const filteredYearsWithData = Object.keys(data)
-      .filter((key) => key.includes("_"))
-      .reduce((acc, key) => {
-        const [month, year] = key.split("_");
-        const value = parseFloat(data[key]);
-        if (!isNaN(value) && value !== 0) {
-          if (!acc[year]) {
-            acc[year] = [];
-          }
-          acc[year].push({ month, value });
-        }
-        return acc;
-      }, {});
-
-    const yearsWithData = Object.keys(filteredYearsWithData).sort(
-      (a, b) => a - b
-    );
-
-    const chartLabels = yearsWithData;
-    const chartValues = yearsWithData.map((year) => {
-      const yearData = filteredYearsWithData[year];
-      const decemberData = yearData.find((data) => data.month === "december");
-      return decemberData ? decemberData.value : null;
+    // Calculate yearly averages
+    Object.keys(monthlyData).forEach((year) => {
+      yearlyAverages[year] =
+        monthlyData[year].reduce((acc, val) => acc + val, 0) /
+        monthlyData[year].length;
     });
 
-    newChartData.labels = chartLabels;
-    newChartData.datasets[0].data = chartValues;
+    // Prepare chart data
+    const chartLabels = Object.keys(yearlyAverages).sort((a, b) => a - b);
+    const chartValues = chartLabels.map((year) =>
+      Math.round(yearlyAverages[year])
+    );
 
-    const isMobile = windowWidth <= 768;
-    const currentYear = new Date().getFullYear();
-    const yearsAgo = currentYear - 8;
-
-    if (isMobile) {
-      newChartData.labels = newChartData.labels.filter((label) => {
-        const year = parseInt(label, 10);
-        return year > yearsAgo;
-      });
-      newChartData.datasets.forEach((dataset) => {
-        dataset.data = dataset.data.slice(-10);
-      });
+    // Add the most recent price if it's not included in the yearly averages
+    if (mostRecentLabel && !yearlyAverages[mostRecentLabel.split("_")[1]]) {
+      chartLabels.push(mostRecentLabel);
+      chartValues.push(mostRecentValue);
     }
 
-    setChartData(newChartData);
+    setChartData({
+      labels: chartLabels,
+      datasets: [
+        {
+          label: `${dataType === "homePrice" ? "Home" : "Rent"} Price (USD)`,
+          data: chartValues,
+          borderColor: "rgba(54, 162, 235, 1)",
+          backgroundColor: "rgba(54, 162, 235, 0.2)",
+        },
+      ],
+    });
   }, [housingData, rentData, dataType, selectedYear, windowWidth]);
 
   const handleDataTypeChange = (event) => {
@@ -116,6 +108,11 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
   const chartOptions = {
     maintainAspectRatio: false,
     responsive: true,
+    layout: {
+      padding: {
+        right: 30,
+      },
+    },
     interaction: {
       mode: "index",
       intersect: false,

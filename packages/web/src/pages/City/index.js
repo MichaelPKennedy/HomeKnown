@@ -22,10 +22,28 @@ function City() {
   } = city;
 
   const homePrice = homePriceData.map(
-    ({ city_id, city_name, county, id, abbrev, metro, ...rest }) => rest
+    ({
+      city_id,
+      city_name,
+      county,
+      id,
+      abbrev,
+      state_abbrev,
+      metro,
+      ...rest
+    }) => rest
   );
   const rentPrice = rentPriceData.map(
-    ({ city_id, city_name, county, id, abbrev, metro, ...rest }) => rest
+    ({
+      city_id,
+      city_name,
+      county,
+      id,
+      abbrev,
+      state_abbrev,
+      metro,
+      ...rest
+    }) => rest
   );
   console.log("city", city);
   console.log("demo", demographics);

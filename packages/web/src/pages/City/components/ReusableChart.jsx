@@ -33,25 +33,31 @@ const datalabelsPlugin = {
       const meta = chart.getDatasetMeta(i);
       if (!meta.hidden) {
         meta.data.forEach((element, index) => {
-          // Retrieve the value and parse it to a float
           const rawValue = dataset.data[index];
           const parsedValue = parseFloat(rawValue);
-
-          // Determine the display value, '0' for zero values, otherwise round if whole number
-          let displayValue = parsedValue === 0 ? "0" : parsedValue.toFixed(2);
+          if (parsedValue === 0) {
+            return;
+          }
+          let displayValue = parsedValue.toFixed(2);
           // If the number is an integer after parsing (e.g., 9.00), display it as an integer
           if (parsedValue === Math.floor(parsedValue)) {
             displayValue = parsedValue.toString();
           }
 
-          ctx.fillStyle = "black";
-          const fontSize = 14;
-          ctx.font = `${fontSize}px Arial`;
-          const dataString = displayValue;
-          const x = element.x;
-          const y = element.y - fontSize; // Adjust for the height above the point
-          const textWidth = ctx.measureText(dataString).width;
-          ctx.fillText(dataString, x - textWidth / 2, y);
+          // Check for mobile device
+          const isMobile = window.innerWidth <= 768;
+
+          // Display logic depending on device type
+          if (!isMobile || (isMobile && displayValue.length <= 5)) {
+            ctx.fillStyle = "black";
+            const fontSize = 14;
+            ctx.font = `${fontSize}px Arial`;
+            const dataString = displayValue;
+            const x = element.x;
+            const y = element.y - fontSize;
+            const textWidth = ctx.measureText(dataString).width;
+            ctx.fillText(dataString, x - textWidth / 2, y);
+          }
         });
       }
     });
