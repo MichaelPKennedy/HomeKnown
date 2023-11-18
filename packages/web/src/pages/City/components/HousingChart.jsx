@@ -112,12 +112,12 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
     }
     const isMobile = windowWidth <= 768;
     const currentYear = new Date().getFullYear();
-    const tenYearsAgo = currentYear - 10;
+    const yearsAgo = currentYear - 8;
 
     if (isMobile) {
       newChartData.labels = newChartData.labels.filter((label) => {
         const year = parseInt(label, 10);
-        return year > tenYearsAgo;
+        return year > yearsAgo;
       });
       newChartData.datasets.forEach((dataset) => {
         dataset.data = dataset.data.slice(-10);
