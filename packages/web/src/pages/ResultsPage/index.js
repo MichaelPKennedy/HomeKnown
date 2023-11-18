@@ -18,7 +18,6 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   }, []);
 
   const renderCityData = (city, index) => {
-    console.log("city2", city);
     return (
       <div className={styles.cityContainer}>
         <Link

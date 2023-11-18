@@ -45,8 +45,8 @@ function City() {
       ...rest
     }) => rest
   );
+
   console.log("city", city);
-  console.log("demo", demographics);
 
   const weatherData = city.Weather;
   const startYear = 2010;
@@ -79,7 +79,7 @@ function City() {
       {jobs && <JobData jobs={jobs} />}
       {airQuality && <AirQualityChart airQualityData={airQuality} />}
       {demographics && <DemographicsTable data={demographics} />}
-      {homePrice && (
+      {homePrice.length && rentPrice.length && (
         <HousingChart housingData={homePrice} rentData={rentPrice} />
       )}
     </div>
