@@ -33,17 +33,25 @@ const datalabelsPlugin = {
       const meta = chart.getDatasetMeta(i);
       if (!meta.hidden) {
         meta.data.forEach((element, index) => {
-          const value = dataset.data[index];
-          if (value !== null && value !== undefined) {
-            ctx.fillStyle = "black";
-            const fontSize = 14;
-            ctx.font = `${fontSize}px Arial`;
-            const dataString = value.toString();
-            const x = element.x;
-            const y = element.y - fontSize; // Adjust for the height above the point
-            const textWidth = ctx.measureText(dataString).width;
-            ctx.fillText(dataString, x - textWidth / 2, y);
+          // Retrieve the value and parse it to a float
+          const rawValue = dataset.data[index];
+          const parsedValue = parseFloat(rawValue);
+
+          // Determine the display value, '0' for zero values, otherwise round if whole number
+          let displayValue = parsedValue === 0 ? "0" : parsedValue.toFixed(2);
+          // If the number is an integer after parsing (e.g., 9.00), display it as an integer
+          if (parsedValue === Math.floor(parsedValue)) {
+            displayValue = parsedValue.toString();
           }
+
+          ctx.fillStyle = "black";
+          const fontSize = 14;
+          ctx.font = `${fontSize}px Arial`;
+          const dataString = displayValue;
+          const x = element.x;
+          const y = element.y - fontSize; // Adjust for the height above the point
+          const textWidth = ctx.measureText(dataString).width;
+          ctx.fillText(dataString, x - textWidth / 2, y);
         });
       }
     });
@@ -149,6 +157,11 @@ const ReusableChartComponent = ({
           },
         },
       },
+      x: {
+        ticks: {
+          maxRotation: 0,
+        },
+      },
       y1: {
         type: "linear",
         display: chartType === "precipitation",
@@ -160,6 +173,9 @@ const ReusableChartComponent = ({
         ticks: {
           font: {
             size: 14,
+          },
+          callback: function (value) {
+            return Math.round(Number(value) * 100) / 100;
           },
         },
       },

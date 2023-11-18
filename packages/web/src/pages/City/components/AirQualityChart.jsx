@@ -22,9 +22,18 @@ ChartJS.register(
 );
 
 const AirQualityChart = ({ airQualityData }) => {
-  console.log("in chart", airQualityData);
   const chartData = {
-    labels: ["CO", "Pb", "NO2", "NO2", "O3", "PM10", "PM2.5", "PM2.5", "SO2"],
+    labels: [
+      "CO",
+      "Pb",
+      "NO2 AM",
+      "NO2 1hr",
+      "O3",
+      "PM10 24hr",
+      "PM2.5 AM",
+      "PM2.5 24hr",
+      "SO2 1hr",
+    ],
     datasets: [
       {
         label: "Concentration",
@@ -71,6 +80,14 @@ const AirQualityChart = ({ airQualityData }) => {
           display: false,
           text: "Concentration",
         },
+        ticks: {
+          maxRotation: 0,
+        },
+      },
+      x: {
+        ticks: {
+          maxRotation: 0,
+        },
       },
     },
     maintainAspectRatio: false,
@@ -88,11 +105,29 @@ const AirQualityChart = ({ airQualityData }) => {
             }
             const additionalInfo = pollutantInfo[context.label];
             if (additionalInfo) {
-              label += `\n(${additionalInfo})`;
+              const words = additionalInfo.split(" ");
+              const lines = [];
+              let currentLine = words[0];
+
+              for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const length = currentLine.length + word.length + 1;
+                if (length < 30) {
+                  currentLine += " " + word;
+                } else {
+                  lines.push(currentLine);
+                  currentLine = word;
+                }
+              }
+              lines.push(currentLine);
+              return [label].concat(lines);
             }
             return label;
           },
         },
+        displayColors: false,
+        boxWidth: 10,
+        titleSpacing: 6,
       },
       legend: {
         display: true,
