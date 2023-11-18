@@ -113,6 +113,11 @@ const TemperatureSelection = ({ data, onDataChange }) => {
           ],
         }}
         options={{
+          layout: {
+            padding: {
+              top: 30,
+            },
+          },
           scales: {
             y: {
               beginAtZero: true,
@@ -143,6 +148,13 @@ const TemperatureSelection = ({ data, onDataChange }) => {
               dragX: false,
               onDragEnd: (e, datasetIndex, index, value) =>
                 handleBarUpdate(datasetIndex, index, value),
+            },
+            legend: {
+              display: false,
+              labels: {
+                padding: 20,
+                boxWidth: 20,
+              },
             },
           },
         }}
