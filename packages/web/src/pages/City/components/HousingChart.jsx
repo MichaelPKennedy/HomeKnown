@@ -25,9 +25,9 @@ ChartJS.register(
 
 const ReusablePriceChartComponent = ({ housingData, rentData }) => {
   const [dataType, setDataType] = useState("homePrice");
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [mostRecentPrice, setMostRecentPrice] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,33 +40,34 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
 
   useEffect(() => {
     const data = dataType === "homePrice" ? housingData[0] : rentData[0];
-    const monthlyData = {};
-    const yearlyAverages = {};
+
+    // Sort the keys (month_year) in descending order to process the most recent first
+    const sortedKeys = Object.keys(data).sort((a, b) => b.localeCompare(a));
+
     let mostRecentValue = null;
     let mostRecentLabel = "";
 
-    // Process each entry in the data
-    Object.entries(data).forEach(([key, value]) => {
-      const [month, year] = key.split("_");
-      if (!monthlyData[year]) {
-        monthlyData[year] = [];
-      }
-      if (value !== null) {
-        const floatValue = parseFloat(value);
-        if (!isNaN(floatValue)) {
-          monthlyData[year].push(floatValue);
+    const monthlyData = {};
+    const yearlyAverages = {};
 
-          // Check if this is the most recent value
-          if (
-            !mostRecentValue ||
-            year > mostRecentLabel ||
-            (year === mostRecentLabel &&
-              month.localeCompare(mostRecentLabel.split("_")[0]) > 0)
-          ) {
-            mostRecentValue = floatValue;
-            mostRecentLabel = key;
-          }
+    sortedKeys.forEach((key) => {
+      const [month, year] = key.split("_");
+      const value = data[key];
+
+      // Continue if value is null
+      if (value === null) return;
+
+      const floatValue = parseFloat(value);
+      if (!isNaN(floatValue)) {
+        if (!mostRecentValue) {
+          mostRecentValue = floatValue;
+          mostRecentLabel = key;
         }
+
+        if (!monthlyData[year]) {
+          monthlyData[year] = [];
+        }
+        monthlyData[year].push(floatValue);
       }
     });
 
@@ -85,7 +86,7 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
 
     // Add the most recent price if it's not included in the yearly averages
     if (mostRecentLabel && !yearlyAverages[mostRecentLabel.split("_")[1]]) {
-      chartLabels.push(mostRecentLabel);
+      chartLabels.push(mostRecentLabel.split("_")[1]);
       chartValues.push(mostRecentValue);
     }
 
@@ -100,7 +101,12 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
         },
       ],
     });
-  }, [housingData, rentData, dataType, selectedYear, windowWidth]);
+
+    setMostRecentPrice({
+      label: mostRecentLabel,
+      value: mostRecentValue,
+    });
+  }, [housingData, rentData, dataType]);
 
   const handleDataTypeChange = (event) => {
     setDataType(event.target.value);
@@ -110,7 +116,7 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
     responsive: true,
     layout: {
       padding: {
-        right: 30,
+        right: windowWidth > 768 ? 30 : 0,
       },
     },
     interaction: {
@@ -148,40 +154,40 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
           display: false,
           text: "Year",
         },
+        ticks: {
+          maxRotation: 0,
+        },
       },
       y: {
         beginAtZero: true,
         ticks: {
-          stepSize: calculateStepSize(chartData?.datasets?.[0]?.data, 5),
-          callback: function (value, index, values) {
-            if (value >= 1000) {
-              return Math.round(value / 1000) + "k";
+          callback: function (value) {
+            if (value >= 100000) {
+              return value / 1000 + "k";
+            } else {
+              //return value with proper commas
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
-            return value;
           },
         },
       },
     },
   };
 
-  function calculateStepSize(data, desiredSteps) {
-    if (!data || data.length === 0) {
-      return 1;
-    }
-    const maxVal = Math.max(...data);
-    const minVal = Math.min(...data);
-    const dataRange = maxVal - minVal;
-
-    const stepSize = Math.ceil(dataRange / desiredSteps);
-
-    return Math.max(stepSize, 1);
-  }
-
   return (
     <Card className={styles.card}>
       <Card.Header>
         <h4>{dataType === "homePrice" ? "Home" : "Rent"} Prices</h4>
       </Card.Header>
+      {mostRecentPrice && (
+        <div className="mt-4">
+          <strong>Current Average Price: </strong>
+
+          {mostRecentPrice.value
+            .toString()
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+        </div>
+      )}
       <div className={styles.housingChartContainer}>
         <div className={styles.buttonContainer}>
           <select

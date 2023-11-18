@@ -48,7 +48,7 @@ const datalabelsPlugin = {
           const isMobile = window.innerWidth <= 768;
 
           // Display logic depending on device type
-          if (!isMobile || (isMobile && displayValue.length <= 5)) {
+          if (!isMobile || (isMobile && displayValue.length < 5)) {
             ctx.fillStyle = "black";
             const fontSize = 14;
             ctx.font = `${fontSize}px Arial`;
