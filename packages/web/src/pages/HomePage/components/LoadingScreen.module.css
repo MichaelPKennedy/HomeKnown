@@ -41,8 +41,8 @@
 }
 
 .dot {
-  width: 15px; /* Size of the dot */
-  height: 15px; /* Size of the dot */
+  width: 12px; /* Size of the dot */
+  height: 12px; /* Size of the dot */
   margin: 0 5px; /* Space between dots */
   background-color: #000; /* Color of the dot */
   border-radius: 50%;
