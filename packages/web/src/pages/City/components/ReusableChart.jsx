@@ -152,6 +152,8 @@ const ReusableChartComponent = ({
       y: {
         type: "linear",
         display: chartType === "temperature",
+        suggestedMax:
+          Math.max(...chartFilteredData.map((item) => item.maxTemp)) * 1.05,
         position: "left",
         title: {
           display: false,
