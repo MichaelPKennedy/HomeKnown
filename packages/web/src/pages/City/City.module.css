@@ -76,3 +76,20 @@
   background-color: #96e0e6;
   color: white;
 }
+
+/*# Weather Forecast */
+
+@keyframes rotateSun {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.sun-icon {
+  display: inline-block;
+  animation: rotateSun 10s linear infinite;
+  font-size: 48px; /* Adjust size as needed */
+}

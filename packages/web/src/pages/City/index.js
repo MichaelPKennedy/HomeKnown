@@ -8,6 +8,7 @@ import JobData from "./components/JobData";
 import AirQualityChart from "./components/AirQualityChart";
 import DemographicsTable from "./components/DemographicsTable";
 import HousingChart from "./components/HousingChart";
+import WeatherForecast from "./components/WeatherForecast";
 
 function City() {
   const { cityId } = useParams();
@@ -69,6 +70,7 @@ function City() {
         endYear={endYear}
         dataType="weather"
       />
+      <WeatherForecast {...city} />
       {/* <RadarChart
         data={weatherData}
         label="Average Temperature"

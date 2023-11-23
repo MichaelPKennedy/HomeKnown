@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { forecastClient } from './services/forecast/forecast.shared'
+export type {
+  Forecast,
+  ForecastData,
+  ForecastQuery,
+  ForecastPatch
+} from './services/forecast/forecast.shared'
+
 import { airQualityClient } from './services/air-quality/air-quality.shared'
 export type {
   AirQuality,
@@ -68,7 +76,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any>(
+export const createClient = <Configuration = any,>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -88,5 +96,6 @@ export const createClient = <Configuration = any>(
   client.configure(crimeClient)
   client.configure(sceneryClient)
   client.configure(airQualityClient)
+  client.configure(forecastClient)
   return client
 }

@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.services = void 0;
+const forecast_1 = require("./forecast/forecast");
 const air_quality_1 = require("./air-quality/air-quality");
 const scenery_1 = require("./scenery/scenery");
 const crime_1 = require("./crime/crime");
@@ -12,6 +13,7 @@ const weather_1 = require("./weather/weather");
 const industry_1 = require("./industry/industry");
 const survey_1 = require("./survey/survey");
 const services = (app) => {
+    app.configure(forecast_1.forecast);
     app.configure(air_quality_1.airQuality);
     app.configure(scenery_1.scenery);
     app.configure(crime_1.crime);

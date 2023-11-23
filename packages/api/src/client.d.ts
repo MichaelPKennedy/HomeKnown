@@ -1,5 +1,7 @@
 import type { TransportConnection, Application } from '@feathersjs/feathers';
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client';
+import './services/forecast/forecast.shared';
+export type { Forecast, ForecastData, ForecastQuery, ForecastPatch } from './services/forecast/forecast.shared';
 import './services/air-quality/air-quality.shared';
 export type { AirQuality, AirQualityData, AirQualityQuery, AirQualityPatch } from './services/air-quality/air-quality.shared';
 import './services/scenery/scenery.shared';
