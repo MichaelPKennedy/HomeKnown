@@ -305,7 +305,8 @@ const LivingPreferenceForm = () => {
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderSecond}`}
                     >
-                      Put more tokens into the categories you care about most.{" "}
+                      Put more tokens into the categories you care about the
+                      most.{" "}
                     </p>
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderThird}`}
