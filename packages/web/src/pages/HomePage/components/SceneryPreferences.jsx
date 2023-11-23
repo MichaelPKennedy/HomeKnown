@@ -6,8 +6,7 @@ const SceneryPreferences = ({ formData, handleCheckboxChange }) => {
     <div className={`form-group ${styles.formGroup}`}>
       <h4 className="pb-3">Scenery and Landscape</h4>
       <p className="mb-3">
-        Check the following scenery options that you want to factor into the
-        search:
+        Select the following scenery options that you enjoy:
       </p>
 
       <div className={styles.collapsibleSections}>

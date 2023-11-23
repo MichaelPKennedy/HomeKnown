@@ -66,8 +66,7 @@ const JobPreferences = ({
 
         {/* Minimum Salary Input */}
         <label htmlFor="minSalary">
-          What's the minimum salary you'd be willing to accept for a job in a
-          new state?
+          What's the minimum salary you'd be willing to accept?
         </label>
         <input
           type="number"
