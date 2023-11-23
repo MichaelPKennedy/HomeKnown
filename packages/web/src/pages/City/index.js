@@ -79,7 +79,7 @@ function City() {
       {jobs && <JobData jobs={jobs} />}
       {airQuality && <AirQualityChart airQualityData={airQuality} />}
       {demographics && <DemographicsTable data={demographics} />}
-      {homePrice.length && rentPrice.length && (
+      {homePrice.length > 0 && rentPrice.length > 0 && (
         <HousingChart housingData={homePrice} rentData={rentPrice} />
       )}
     </div>
