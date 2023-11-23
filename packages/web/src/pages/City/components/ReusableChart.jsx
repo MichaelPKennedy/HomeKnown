@@ -253,7 +253,7 @@ const ReusableChartComponent = ({
       : [
           {
             type: "bar",
-            label: "Snow",
+            label: "Snow (inches)",
             data: chartFilteredData.map((item) => item.snow),
             borderColor: "rgb(201, 203, 207)",
             backgroundColor: "rgba(201, 203, 207, 0.5)",
@@ -261,7 +261,7 @@ const ReusableChartComponent = ({
           },
           {
             type: "bar",
-            label: "Rain",
+            label: "Rain (inches)",
             data: chartFilteredData.map((item) => item.rain),
             borderColor: "rgb(75, 192, 75)",
             backgroundColor: "rgba(75, 192, 75, 0.5)",
