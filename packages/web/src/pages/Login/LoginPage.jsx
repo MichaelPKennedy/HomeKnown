@@ -1,15 +1,42 @@
 import React, { useState } from "react";
 import { Card, Form, Button } from "react-bootstrap";
-import styles from "./LoginPage.module.css"; // Import your custom CSS module
+import styles from "./LoginPage.module.css";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (event) => {
+  if (localStorage.getItem("authToken")) {
+    window.location.href = "/";
+    return null;
+  }
+
+  const handleLogin = async (event) => {
     event.preventDefault();
-    // Handle login logic here
-    console.log(email, password);
+    try {
+      const response = await fetch("http://localhost:3030/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          login: login,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        const { accessToken } = await response.json();
+        localStorage.setItem("authToken", accessToken);
+        toast.success("Login successful");
+        window.location.href = "/";
+      } else {
+        toast.error("Incorrect Username or Password");
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
   };
 
   return (
@@ -19,12 +46,11 @@ const LoginPage = () => {
         <Card.Body>
           <Form onSubmit={handleLogin}>
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label>User Name</Form.Label>
               <Form.Control
-                type="email"
-                placeholder="Enter email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter username or email"
+                value={login}
+                onChange={(e) => setLogin(e.target.value)}
               />
             </Form.Group>
 
@@ -42,6 +68,7 @@ const LoginPage = () => {
               variant="primary"
               type="submit"
               className={styles.submitButton}
+              onSubmit={handleLogin}
             >
               Login
             </Button>
@@ -56,6 +83,7 @@ const LoginPage = () => {
               variant="primary"
               type="submit"
               className={styles.registerButton}
+              href="/register"
             >
               Sign Up
             </Button>

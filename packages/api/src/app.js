@@ -59,6 +59,7 @@ const air_quality_model_1 = require("./models/air-quality.model");
 const city_demographics_model_1 = require("./models/city-demographics.model");
 const monthly_rent_cities_model_1 = require("./models/monthly-rent-cities.model");
 const home_price_model_1 = require("./models/home-price.model");
+const users_model_1 = require("./models/users.model");
 const app = (0, express_1.default)((0, feathers_1.feathers)());
 exports.app = app;
 // Load app configuration
@@ -105,6 +106,7 @@ sequelize
 (0, city_demographics_model_1.CityDemographicsModel)(sequelize);
 (0, monthly_rent_cities_model_1.MonthlyRentCitiesModel)(sequelize);
 (0, home_price_model_1.HomePriceModel)(sequelize);
+(0, users_model_1.UsersModel)(sequelize);
 const City = sequelize.models.City;
 const Area = sequelize.models.Area;
 const County = sequelize.models.County;

@@ -7,6 +7,7 @@ exports.createClient = void 0;
 // For more information about this file see https://dove.feathersjs.com/guides/cli/client.html
 const feathers_1 = require("@feathersjs/feathers");
 const authentication_client_1 = __importDefault(require("@feathersjs/authentication-client"));
+const users_shared_1 = require("./services/users/users.shared");
 const forecast_shared_1 = require("./services/forecast/forecast.shared");
 const air_quality_shared_1 = require("./services/air-quality/air-quality.shared");
 const scenery_shared_1 = require("./services/scenery/scenery.shared");
@@ -42,6 +43,7 @@ const createClient = (connection, authenticationOptions = {}) => {
     client.configure(scenery_shared_1.sceneryClient);
     client.configure(air_quality_shared_1.airQualityClient);
     client.configure(forecast_shared_1.forecastClient);
+    client.configure(users_shared_1.usersClient);
     return client;
 };
 exports.createClient = createClient;
