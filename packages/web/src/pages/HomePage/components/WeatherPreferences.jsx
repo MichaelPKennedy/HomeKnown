@@ -11,7 +11,7 @@ const WeatherPreferences = ({
   return (
     <div>
       <div className={`form-group ${styles.formGroup}`}>
-        <h4>Select Your Ideal Average Monthly Temperatures F </h4>
+        <h4>Select Your Ideal Average Monthly Temperatures (°F) </h4>
         <TemperatureSelection
           data={formData.temperatureData}
           onDataChange={handleTemperatureChange}
@@ -19,6 +19,7 @@ const WeatherPreferences = ({
       </div>
 
       <div className={`form-group ${styles.formGroup}`}>
+        <h4>Precipitation Preferences</h4>
         {hasColdMonth() && (
           <div className={`form-group ${styles.formGroup}`}>
             {/* Snow Preference */}

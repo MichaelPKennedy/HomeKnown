@@ -129,7 +129,6 @@ const LivingPreferenceForm = () => {
       isValid = false;
       errorMessage = "Please select at least one recreational interest.";
     }
-    console.log("isValid:", isValid);
 
     return { isValid, errorMessage };
   };
@@ -345,7 +344,11 @@ const LivingPreferenceForm = () => {
                 formData.weights.publicServicesWeight > 0) && (
                 <div className={`form-group ${styles.slider}`}>
                   <label htmlFor="searchRadius">
-                    Select Search Radius (miles)
+                    <h4>Select Search Radius (miles)</h4>
+                    <p className={`mb-2 ${styles.par}`}>
+                      This will apply for recreation, public services, and
+                      scenery preferences.
+                    </p>
                   </label>
                   <Slider
                     min={10}
@@ -364,7 +367,12 @@ const LivingPreferenceForm = () => {
                   </div>
                 </div>
               )}
-
+              {formData.weights.recreationalActivitiesWeight > 0 && (
+                <RecreationalPreferences
+                  formData={formData}
+                  handleCheckboxChange={handleCheckboxChange}
+                />
+              )}
               {formData.weights.publicServicesWeight > 0 && (
                 <PublicServicePreferences
                   formData={formData}
@@ -385,13 +393,6 @@ const LivingPreferenceForm = () => {
                   handleInputChange={handleInputChange}
                   handleTemperatureChange={handleTemperatureChange}
                   hasColdMonth={hasColdMonth}
-                />
-              )}
-
-              {formData.weights.recreationalActivitiesWeight > 0 && (
-                <RecreationalPreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
                 />
               )}
               {/* <PopulationPreferences
