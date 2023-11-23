@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useDrag, useDrop, useDragLayer } from "react-dnd";
 import styles from "./PreferenceWeight.module.css";
-import { useSwipeable } from "react-swipeable";
 
 function DragPreview({ count }) {
   return (
@@ -119,20 +118,8 @@ function SectionDropZone({
     }),
   });
 
-  const handlers = useSwipeable({
-    onSwipedLeft: () => removeTokenFromSection(sectionKey),
-  });
-
   const ref = useRef(null);
   const combinedRef = useCombinedRefs(ref, dropRef);
-
-  useEffect(() => {
-    // ensures that our swipeable handlers are attached to the element
-    if (ref.current) {
-      const el = ref.current;
-      handlers.ref(el);
-    }
-  }, [handlers.ref]);
 
   const handleClick = () => {
     addTokenToSection(sectionKey);
@@ -140,7 +127,6 @@ function SectionDropZone({
 
   return (
     <div
-      {...handlers}
       ref={combinedRef}
       onClick={handleClick}
       className={`${styles.dropzone} ${isOver ? styles.dropZoneActive : ""}`}
