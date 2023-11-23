@@ -1,0 +1,71 @@
+.card-body {
+  padding: 2rem;
+}
+
+.submitButton {
+  background-color: #017c8c;
+  border: none;
+  margin-top: 20px;
+}
+
+.registerButton {
+  background-color: #017c8c;
+  border: none;
+  margin-left: 20px;
+}
+
+.submitButton:hover {
+  background-color: #01697c;
+}
+
+.form-control {
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.form-label {
+  font-size: 1rem;
+  color: #333;
+}
+
+.loginPageContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start; /* Centering in the viewport */
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f2f5;
+  padding: 20px; /* Add some padding */
+}
+
+/* No need to hide overflow in html, body - we want the page to be scrollable on small screens */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.card {
+  width: 100%; /* Full width on small screens */
+  max-width: 600px; /* Maximum width */
+  margin-bottom: 20px; /* Spacing between cards */
+  margin-top: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Media query for larger screens */
+@media (min-width: 1000px) {
+  .card {
+    width: 600px;
+  }
+
+  /* Adjust the login container for larger screens */
+  .loginPageContainer {
+    justify-content: start;
+    padding-top: 50px; /* Space from the top */
+  }
+}
+
+/* Add more media queries as needed for different breakpoints */

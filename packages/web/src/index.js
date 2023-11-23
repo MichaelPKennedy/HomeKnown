@@ -18,6 +18,7 @@ import { DndProvider } from "react-dnd";
 import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
+import LoginPage from "./pages/Login/LoginPage";
 
 // Create a client
 
@@ -74,6 +75,7 @@ root.render(
                 <Route path="/search" element={<SearchPage />} />
                 <Route path="/results" element={<ResultsPage />} />
                 <Route path="/results/:cityId" element={<City />} />
+                <Route path="/login" element={<LoginPage />} />
               </Routes>
               <ToastContainer />
             </Router>
