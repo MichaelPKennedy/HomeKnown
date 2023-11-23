@@ -285,13 +285,15 @@ const LivingPreferenceForm = () => {
               className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
             >
               {surveyResults && (
-                <button
-                  type="button"
-                  onClick={toggleFormVisibility}
-                  className={`btn btn-secondary mt-2 ${styles.btnDropdown}`}
-                >
-                  Cancel
-                </button>
+                <div className={styles.btnContainer}>
+                  <button
+                    type="button"
+                    onClick={toggleFormVisibility}
+                    className={`btn btn-secondary mt-2 ml-2 ${styles.btnCancel}`}
+                  >
+                    Cancel
+                  </button>
+                </div>
               )}
               <div className={`form-group ${styles.formGroup}`}>
                 {!showSubmitButton && (
