@@ -24,9 +24,7 @@ const WeatherPreferences = ({
           <div className={`form-group ${styles.formGroup}`}>
             {/* Snow Preference */}
             <label>
-              Would you be okay living in an area that receives snow? If so,
-              would you be okay with heavy snowfall or just light, occasional
-              snow?
+              Would you be okay living in an area that receives snow?
             </label>
             <div className={styles.formCheck}>
               <input
@@ -69,8 +67,7 @@ const WeatherPreferences = ({
         {/* Rain Preference */}
         <div className={`form-group ${styles.formGroup}`}>
           <label>
-            Would you like to live in a city that tends to be dryer throughout
-            the year, or are you comfortable with regular rainfall?
+            Would you be okay living in an area that receives regular rainfall?
           </label>
           <div className={styles.formCheck}>
             <input
