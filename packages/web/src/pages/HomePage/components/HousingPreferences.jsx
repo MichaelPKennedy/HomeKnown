@@ -14,6 +14,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
       <div>
         <label className={styles.radio}>
           <input
+            className={styles.formCheckInput}
             type="radio"
             name="housingType"
             value="buy"
@@ -26,6 +27,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
         </label>
         <label className={styles.radio}>
           <input
+            className={styles.formCheckInput}
             type="radio"
             name="housingType"
             value="rent"
