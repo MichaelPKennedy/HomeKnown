@@ -76,6 +76,12 @@ const AirQualityChart = ({ airQualityData }) => {
     scales: {
       y: {
         beginAtZero: true,
+        afterDataLimits: (axis) => {
+          let maxDataValue = Math.max(
+            ...chartData.datasets.flatMap((dataset) => dataset.data)
+          );
+          axis.max = Math.max(500, maxDataValue * 1.1);
+        },
         title: {
           display: false,
           text: "Concentration",
@@ -143,7 +149,7 @@ const AirQualityChart = ({ airQualityData }) => {
       <Card.Header>
         <h4>Air Pollutants</h4>
       </Card.Header>
-      <div className={styles.chartContainer}>
+      <div className={styles.airContainer}>
         <Bar data={chartData} options={options} />
       </div>
     </Card>
