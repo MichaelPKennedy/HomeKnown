@@ -288,7 +288,7 @@ function PreferenceWeight({ onWeightsChange, weights }) {
 
   return (
     <div>
-      <div className="token-bank">
+      <div className={styles.tokenBank}>
         {Array(weights.totalAvailablePoints)
           .fill(null)
           .map((_, index) => (

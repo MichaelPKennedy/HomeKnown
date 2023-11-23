@@ -26,7 +26,7 @@ const initialFormData = {
   recreationalInterests: [],
   publicServices: [],
   scenery: [],
-  searchRadius: 10,
+  searchRadius: 50,
   minSalary: null,
   jobLevel: "",
   selectedJobs: [],
@@ -267,9 +267,10 @@ const LivingPreferenceForm = () => {
   };
 
   useEffect(() => {
-    const hasNonZeroWeight = !Object.values(formData.weights)
-      .filter((weight) => weight !== formData.weights.totalAvailablePoints)
-      .every((weight) => weight === 0);
+    const { totalAvailablePoints, ...weightsWithoutTotal } = formData.weights;
+    const hasNonZeroWeight = Object.values(weightsWithoutTotal).some(
+      (weight) => weight > 0
+    );
 
     setShowSubmitButton(hasNonZeroWeight);
   }, [formData]);
@@ -293,6 +294,25 @@ const LivingPreferenceForm = () => {
                 </button>
               )}
               <div className={`form-group ${styles.formGroup}`}>
+                {!showSubmitButton && (
+                  <div className={styles.parHeaderContainer}>
+                    <p
+                      className={`${styles.parHeader} ${styles.parHeaderFirst}`}
+                    >
+                      Drag and drop tokens to your desired categories.{" "}
+                    </p>
+                    <p
+                      className={`${styles.parHeader} ${styles.parHeaderSecond}`}
+                    >
+                      Put more tokens into the categories you care about most.{" "}
+                    </p>
+                    <p
+                      className={`${styles.parHeader} ${styles.parHeaderThird}`}
+                    >
+                      Drag and drop tokens to your desired categories.{" "}
+                    </p>
+                  </div>
+                )}
                 <PreferenceWeight
                   onWeightsChange={updateFormDataWithWeights}
                   weights={formData.weights}
