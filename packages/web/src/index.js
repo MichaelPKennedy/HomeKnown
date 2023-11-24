@@ -20,6 +20,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Login/RegisterPage";
+import LoggedOut from "./pages/Login/LoggedOut";
 
 // Create a client
 
@@ -78,6 +79,7 @@ root.render(
                 <Route path="/results/:cityId" element={<City />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path="/signed-out" element={<LoggedOut />} />
               </Routes>
               <ToastContainer />
             </Router>

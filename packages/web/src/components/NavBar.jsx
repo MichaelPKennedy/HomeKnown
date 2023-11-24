@@ -1,15 +1,17 @@
 // NavBar.js
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import styles from "./NavBar.module.css";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("authToken");
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    window.location.href = "/"; // Redirect to home page or login page
+    // Redirect to home page or login page
+    navigate("/signed-out");
   };
 
   return (

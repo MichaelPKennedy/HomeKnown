@@ -1,14 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import { toast } from "react-toastify";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (localStorage.getItem("showRegisterSuccessToast") === "true") {
+      toast.success("You are now registered. Please log in to continue.");
+      localStorage.removeItem("showRegisterSuccessToast");
+    }
+  }, []);
+
   if (localStorage.getItem("authToken")) {
-    window.location.href = "/";
+    navigate("/");
     return null;
   }
 
@@ -34,7 +43,7 @@ const LoginPage = () => {
       if (response.ok) {
         const { accessToken } = await response.json();
         localStorage.setItem("authToken", accessToken);
-        toast.success("Login successful");
+        localStorage.setItem("showLoginSuccessToast", "true");
         window.location.href = "/";
       } else {
         toast.error("Incorrect Username or Password");

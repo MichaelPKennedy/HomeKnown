@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import client from "../../feathersClient.js";
 import { toast } from "react-toastify";
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,9 +24,8 @@ const RegisterPage = () => {
       await client
         .service("users")
         .create({ username, primary_email: email, password });
-
-      toast.success("You are now registered!");
-      window.location.href = "/";
+      localStorage.setItem("showRegisterSuccessToast", "true");
+      navigate("/login");
     } catch (error) {
       console.error("Error registering:", error);
       toast.error("Something went wrong");

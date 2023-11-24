@@ -274,6 +274,13 @@ const LivingPreferenceForm = () => {
     setShowSubmitButton(hasNonZeroWeight);
   }, [formData]);
 
+  useEffect(() => {
+    if (localStorage.getItem("showLoginSuccessToast") === "true") {
+      toast.success("Login Successful");
+      localStorage.removeItem("showLoginSuccessToast");
+    }
+  }, []);
+
   return (
     <DndProvider backend={HTML5Backend} className={styles.centerContainer}>
       <div>
