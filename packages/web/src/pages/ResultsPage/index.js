@@ -37,25 +37,25 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   };
 
   return (
-    <div className={styles.resultsPage}>
-      <div className="align-self-start">
-        {showEditButton && (
-          <button
-            onClick={toggleFormVisibility}
-            className={`btn mt-4  ${styles.btnDropdown}`}
-          >
-            Edit Preferences
-          </button>
+    <div>
+      {showEditButton && (
+        <button
+          onClick={toggleFormVisibility}
+          className={`btn btn-success ${styles.btnPreferences}`}
+        >
+          Edit Preferences
+        </button>
+      )}
+      <div className={styles.resultsPage}>
+        <div className="mb-4">
+          <h4>Top Results</h4>
+        </div>
+        {topTen.length > 0 ? (
+          topTen.map((city, index) => renderCityData(city, index))
+        ) : (
+          <p>No cities to display</p>
         )}
       </div>
-      <div className="mb-4">
-        <h4>Top Results</h4>
-      </div>
-      {topTen.length > 0 ? (
-        topTen.map((city, index) => renderCityData(city, index))
-      ) : (
-        <p>No cities to display</p>
-      )}
     </div>
   );
 }
