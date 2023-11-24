@@ -12,10 +12,15 @@ const LoginPage = () => {
     return null;
   }
 
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_API_URL
+      : "http://localhost:3030";
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3030/login", {
+      const response = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

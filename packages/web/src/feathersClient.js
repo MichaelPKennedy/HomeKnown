@@ -1,6 +1,7 @@
 import feathers from "@feathersjs/feathers";
 import rest from "@feathersjs/rest-client";
 import axios from "axios";
+import auth from "@feathersjs/authentication-client";
 
 const isMobileTesting = process.env.REACT_APP_MOBILE_TESTING;
 const DEFAULT_API_ENDPOINT = isMobileTesting
@@ -10,6 +11,12 @@ const API_ENDPOINT = process.env.REACT_APP_API_URL || DEFAULT_API_ENDPOINT;
 
 const restClient = rest(API_ENDPOINT);
 const client = feathers();
+
+client.configure(
+  auth({
+    storage: window.localStorage,
+  })
+);
 
 client.configure(restClient.axios(axios));
 
