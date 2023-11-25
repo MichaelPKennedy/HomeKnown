@@ -211,6 +211,10 @@
   color: white; /* Changes text color on hover, optional */
 }
 
+.btnDropdown:focus {
+  outline: none;
+}
+
 /* Dropdown menu styles */
 .dropdownMenu .formCheck {
   padding: 0.5rem 1rem;
