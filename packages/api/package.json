@@ -54,6 +54,7 @@
     "@feathersjs/socketio": "^5.0.8",
     "@feathersjs/transport-commons": "^5.0.8",
     "@feathersjs/typebox": "^5.0.8",
+    "@google-cloud/storage": "^7.6.0",
     "@turf/turf": "^6.5.0",
     "@types/sequelize": "^4.28.15",
     "@uidotdev/usehooks": "^2.4.0",
