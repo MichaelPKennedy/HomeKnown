@@ -15,7 +15,9 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav
+      className={`${styles.nav} navbar navbar-expand-lg navbar-light bg-light`}
+    >
       <Link to="/">
         <img src={logo} alt="Home Known Logo" className={styles.logo} />
       </Link>

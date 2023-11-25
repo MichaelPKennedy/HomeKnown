@@ -17,6 +17,19 @@ function DragPreview({ count }) {
   );
 }
 
+function useWindowSize() {
+  const [size, setSize] = useState([0, 0]);
+  useEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener("resize", updateSize);
+    updateSize();
+    return () => window.removeEventListener("resize", updateSize);
+  }, []);
+  return size;
+}
+
 function useCombinedRefs(...refs) {
   const targetRef = useRef();
 
@@ -180,15 +193,19 @@ function SectionDropZone({
 }
 
 function getLayerStyles(currentOffset, surveyResults) {
+  const [width, height] = useWindowSize();
   if (!currentOffset) {
     return { display: "none" };
   }
 
   let { x, y } = currentOffset;
 
-  if (surveyResults) {
+  if (surveyResults && width > 768) {
     x += -230;
     y += -150;
+  } else if (surveyResults && width <= 768) {
+    x += -230;
+    y += -91;
   } else {
     x += -230;
     y += -91;
