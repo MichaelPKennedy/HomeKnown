@@ -21,10 +21,19 @@
   transition: all 0.3s ease;
 }
 
-.btnDropdown:hover,
-.btnPreferences:hover {
+.btnDropdown:hover {
   background-color: #01697c;
   color: white;
+}
+
+.btnPreferences:hover {
+  background-color: white;
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+}
+
+.btnPreferences:focus {
+  outline: 2px solid #17a2b8;
 }
 
 /* Styling the chart and table containers */
@@ -291,7 +300,7 @@
   position: absolute;
   top: -10px;
   left: -10px;
-  background-color: #01697c;
+  background-color: #17a2b8;
   color: #fff;
   padding: 5px 10px;
   border-radius: 50%;

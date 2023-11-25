@@ -299,9 +299,8 @@ const LivingPreferenceForm = () => {
       {surveyResults && showForm && (
         <div className={styles.btnContainer}>
           <button
-            type="button"
             onClick={toggleFormVisibility}
-            className={`btn btn-secondary  ${styles.btnCancel}`}
+            className={`${styles.btnCancel}`}
           >
             Hide Preferences
           </button>
