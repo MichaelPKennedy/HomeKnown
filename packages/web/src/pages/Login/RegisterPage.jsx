@@ -49,7 +49,7 @@ const RegisterPage = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
+              <Form.Label className="mt-2">Email address</Form.Label>
               <Form.Control
                 type="email"
                 placeholder="Enter email"
@@ -59,7 +59,7 @@ const RegisterPage = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
+              <Form.Label className="mt-2">Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Password"
@@ -69,7 +69,7 @@ const RegisterPage = () => {
             </Form.Group>
 
             <Form.Group controlId="formBasicConfirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
+              <Form.Label className="mt-2">Confirm Password</Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Confirm Password"
