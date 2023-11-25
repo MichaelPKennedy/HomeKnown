@@ -231,35 +231,39 @@
   padding: 20px;
 }
 
-@media (max-width: 767px) {
-  .btnPreferences {
-    position: relative;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 0.5rem 1rem;
-    transition: background-color 0.2s;
-    background-color: transparent;
-    color: #17a2b8;
-    border: 1px solid #17a2b8;
-    border-radius: 0;
-    margin-bottom: 15px;
-    height: 40px;
-  }
-
-  .btnPreferences::after {
-    content: "";
-    position: absolute;
-    bottom: -10px; /* Adjust as needed */
-    left: 50%;
-    transform: translateX(-50%);
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid black; /* Arrow color */
+@media screen and (min-width: 1000px) {
+  /* 768px tablets and up */
+  .resultsPage {
+    width: 70%;
+    margin: 0 auto;
+    overflow: visible;
+    margin-top: 0;
   }
 }
 
 .btnPreferences {
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: transparent;
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+  border-radius: 0;
+  margin-bottom: 15px;
   width: 100%;
-  padding: 0;
+  height: 40px;
+}
+
+.btnPreferences::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid black; /* Arrow color */
 }
 
 .cityContainer {

@@ -97,23 +97,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
-  max-width: 200px;
   margin-bottom: 20px;
-  margin-right: 20px;
-  background-color: transparent; /* Makes the inside of the button transparent */
-  color: #17a2b8; /* Sets the text color, use your desired color */
-  border: 1px solid #17a2b8; /* Sets the border color and width */
-  padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
-  border-radius: 4px; /* Optional: Rounds the corners of the button */
-  transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
-}
-
-.btnCancel {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 1rem;
-  transition: background-color 0.2s;
-  max-width: 200px;
-  margin-bottom: 10px;
   margin-right: 20px;
   background-color: transparent; /* Makes the inside of the button transparent */
   color: #17a2b8; /* Sets the text color, use your desired color */
@@ -128,6 +112,37 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: left;
+  width: 100%;
+}
+
+.btnCancel {
+  position: relative;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: transparent;
+  color: #17a2b8;
+  border: 1px solid #17a2b8;
+  border-radius: 0;
+  margin-bottom: 15px;
+  margin-right: 0;
+  width: 100%;
+  height: 40px;
+}
+
+.btnCancel::after {
+  content: "";
+  position: absolute;
+  bottom: -10px; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid black; /* Arrow color */
+}
+
+.btnContainer {
+  width: 100%;
 }
 
 .btnDropdown:hover {
@@ -224,6 +239,10 @@
   overflow-x: hidden;
 }
 
+.formContainer {
+  margin-top: 30px;
+}
+
 .formContent {
   width: 100%;
   margin: 0 auto;
@@ -237,6 +256,7 @@
     width: 70%;
     margin: 0 auto;
     overflow: visible;
+    margin-top: 0;
   }
   .btnDropdown {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);

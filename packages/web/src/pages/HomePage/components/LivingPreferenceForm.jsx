@@ -286,157 +286,159 @@ const LivingPreferenceForm = () => {
       <div>
         {showForm ? (
           <div>
-            <form
-              onSubmit={handleSubmit}
-              className={`container mt-5 ${styles.centerContainer} ${styles.formContent}`}
-            >
-              {surveyResults && (
-                <div className={styles.btnContainer}>
-                  <button
-                    type="button"
-                    onClick={toggleFormVisibility}
-                    className={`btn btn-secondary mt-2 ml-2 ${styles.btnCancel}`}
-                  >
-                    Cancel
-                  </button>
+            {surveyResults && (
+              <div className={styles.btnContainer}>
+                <button
+                  type="button"
+                  onClick={toggleFormVisibility}
+                  className={styles.btnCancel}
+                >
+                  Hide Preferences
+                </button>
+              </div>
+            )}
+            <div className={styles.formContainer}>
+              <form
+                onSubmit={handleSubmit}
+                className={`${styles.centerContainer} ${styles.formContent}`}
+              >
+                <div className={`form-group ${styles.formGroup}`}>
+                  {!showSubmitButton && (
+                    <div className={styles.parHeaderContainer}>
+                      <p
+                        className={`${styles.parHeader} ${styles.parHeaderFirst}`}
+                      >
+                        Drag and drop tokens to your desired categories.{" "}
+                      </p>
+                      <p
+                        className={`${styles.parHeader} ${styles.parHeaderSecond}`}
+                      >
+                        Put more tokens into the categories you care about the
+                        most.{" "}
+                      </p>
+                      <p
+                        className={`${styles.parHeader} ${styles.parHeaderThird}`}
+                      >
+                        Drag and drop tokens to your desired categories.{" "}
+                      </p>
+                    </div>
+                  )}
+                  <PreferenceWeight
+                    onWeightsChange={updateFormDataWithWeights}
+                    weights={formData.weights}
+                  />
                 </div>
-              )}
-              <div className={`form-group ${styles.formGroup}`}>
-                {!showSubmitButton && (
-                  <div className={styles.parHeaderContainer}>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderFirst}`}
-                    >
-                      Drag and drop tokens to your desired categories.{" "}
-                    </p>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderSecond}`}
-                    >
-                      Put more tokens into the categories you care about the
-                      most.{" "}
-                    </p>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderThird}`}
-                    >
-                      Drag and drop tokens to your desired categories.{" "}
-                    </p>
+                {formData.weights.jobOpportunityWeight > 0 && (
+                  <JobPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    suggestionSelected={suggestionSelected}
+                  />
+                )}
+                {/* Housing */}
+                {formData.weights.costOfLivingWeight > 0 && (
+                  <HousingPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                )}
+
+                {(formData.weights.sceneryWeight > 0 ||
+                  formData.weights.recreationalActivitiesWeight > 0 ||
+                  formData.weights.publicServicesWeight > 0) && (
+                  <div className={`form-group ${styles.slider}`}>
+                    <label htmlFor="searchRadius">
+                      <h4>Select Search Radius (miles)</h4>
+                      <p className={`mb-2 ${styles.par}`}>
+                        This will apply for recreation, public services, and
+                        scenery preferences.
+                      </p>
+                    </label>
+                    <Slider
+                      min={10}
+                      max={50}
+                      step={5}
+                      value={formData.searchRadius}
+                      onChange={(value) => {
+                        setFormData((prevState) => ({
+                          ...prevState,
+                          searchRadius: value,
+                        }));
+                      }}
+                    />
+                    <div className="mt-2">
+                      {formData.searchRadius || 10} miles
+                    </div>
                   </div>
                 )}
-                <PreferenceWeight
-                  onWeightsChange={updateFormDataWithWeights}
-                  weights={formData.weights}
-                />
-              </div>
-              {formData.weights.jobOpportunityWeight > 0 && (
-                <JobPreferences
-                  formData={formData}
-                  setFormData={setFormData}
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  suggestionSelected={suggestionSelected}
-                />
-              )}
-              {/* Housing */}
-              {formData.weights.costOfLivingWeight > 0 && (
-                <HousingPreferences
-                  formData={formData}
-                  setFormData={setFormData}
-                />
-              )}
-
-              {(formData.weights.sceneryWeight > 0 ||
-                formData.weights.recreationalActivitiesWeight > 0 ||
-                formData.weights.publicServicesWeight > 0) && (
-                <div className={`form-group ${styles.slider}`}>
-                  <label htmlFor="searchRadius">
-                    <h4>Select Search Radius (miles)</h4>
-                    <p className={`mb-2 ${styles.par}`}>
-                      This will apply for recreation, public services, and
-                      scenery preferences.
-                    </p>
-                  </label>
-                  <Slider
-                    min={10}
-                    max={50}
-                    step={5}
-                    value={formData.searchRadius}
-                    onChange={(value) => {
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        searchRadius: value,
-                      }));
-                    }}
+                {formData.weights.recreationalActivitiesWeight > 0 && (
+                  <RecreationalPreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
                   />
-                  <div className="mt-2">
-                    {formData.searchRadius || 10} miles
-                  </div>
-                </div>
-              )}
-              {formData.weights.recreationalActivitiesWeight > 0 && (
-                <RecreationalPreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              )}
-              {formData.weights.publicServicesWeight > 0 && (
-                <PublicServicePreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              )}
-              {formData.weights.sceneryWeight > 0 && (
-                <SceneryPreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
-              )}
+                )}
+                {formData.weights.publicServicesWeight > 0 && (
+                  <PublicServicePreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                )}
+                {formData.weights.sceneryWeight > 0 && (
+                  <SceneryPreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                )}
 
-              {/* Weather */}
-              {formData.weights.weatherWeight > 0 && (
-                <WeatherPreferences
-                  formData={formData}
-                  handleInputChange={handleInputChange}
-                  handleTemperatureChange={handleTemperatureChange}
-                  hasColdMonth={hasColdMonth}
-                />
-              )}
-              {/* <PopulationPreferences
+                {/* Weather */}
+                {formData.weights.weatherWeight > 0 && (
+                  <WeatherPreferences
+                    formData={formData}
+                    handleInputChange={handleInputChange}
+                    handleTemperatureChange={handleTemperatureChange}
+                    hasColdMonth={hasColdMonth}
+                  />
+                )}
+                {/* <PopulationPreferences
                 formData={formData}
                 handleInputChange={handleInputChange}
               /> */}
-              {showSubmitButton && (
-                <div className="d-flex justify-content-start">
-                  <button
-                    type="submit"
-                    className={`btn mt-2 ${styles.btnDropdown}`}
-                  >
-                    Submit
-                  </button>
-                  <button
-                    type="button"
-                    onClick={resetSurvey}
-                    className={`btn mt-2 ${styles.btnDropdown}`}
-                  >
-                    Clear Survey
-                  </button>
-                </div>
-              )}
-            </form>
-            <div ref={resultsRef}>
-              {!loading && surveyResults ? (
-                <div className={styles.formContent}>
-                  <ResultsPage data={surveyResults} />
-                </div>
-              ) : loading ? (
-                <LoadingScreen />
-              ) : null}
+                {showSubmitButton && (
+                  <div className="d-flex justify-content-start">
+                    <button
+                      type="submit"
+                      className={`btn mt-2 ${styles.btnDropdown}`}
+                    >
+                      Submit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={resetSurvey}
+                      className={`btn mt-2 ${styles.btnDropdown}`}
+                    >
+                      Clear Survey
+                    </button>
+                  </div>
+                )}
+              </form>
+              <div ref={resultsRef}>
+                {!loading && surveyResults ? (
+                  <div>
+                    <ResultsPage data={surveyResults} />
+                  </div>
+                ) : loading ? (
+                  <LoadingScreen />
+                ) : null}
+              </div>
             </div>
           </div>
         ) : (
-          <div className={styles.formContent}>
+          <div>
             <ResultsPage
               data={surveyResults}
               toggleFormVisibility={toggleFormVisibility}
