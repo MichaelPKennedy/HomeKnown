@@ -264,12 +264,21 @@ const LivingPreferenceForm = () => {
 
   const toggleFormVisibility = () => {
     if (showForm) {
+      // When hiding the form, start the slide-up animation
       setFormAnimation(styles.formSlidingExit);
+      // Use a timeout to change the state after the animation completes
+      setTimeout(() => setShowForm(false), 200); // Adjust the timeout to match your animation duration
     } else {
-      setFormAnimation(styles.formSlidingEnter);
-      setShowForm(!showForm);
+      // When showing the form, just change the state and let CSS handle the slide down
+      setShowForm(true);
     }
   };
+
+  useEffect(() => {
+    if (showForm) {
+      setFormAnimation(styles.formSlidingEnter);
+    }
+  }, [showForm]);
 
   useEffect(() => {
     const { totalAvailablePoints, ...weightsWithoutTotal } = formData.weights;
@@ -291,7 +300,7 @@ const LivingPreferenceForm = () => {
     <DndProvider backend={HTML5Backend} className={styles.centerContainer}>
       <div>
         {showForm ? (
-          <div className={formAnimation}>
+          <div>
             {surveyResults && (
               <div className={styles.btnContainer}>
                 <button
@@ -303,7 +312,7 @@ const LivingPreferenceForm = () => {
                 </button>
               </div>
             )}
-            <div className={styles.formContainer}>
+            <div className={`{styles.formContainer} ${formAnimation}`}>
               <form
                 onSubmit={handleSubmit}
                 className={`${styles.centerContainer} ${styles.formContent}`}

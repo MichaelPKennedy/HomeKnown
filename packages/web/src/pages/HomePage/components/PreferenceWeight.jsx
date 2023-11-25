@@ -346,10 +346,6 @@ function PreferenceWeight({ onWeightsChange, weights }) {
           </div>
         ))}
       </div>
-
-      {isDragging && (
-        <div style={getLayerStyles(currentOffset)}>{renderItem()}</div>
-      )}
     </div>
   );
 }

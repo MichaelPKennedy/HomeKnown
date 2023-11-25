@@ -2,3 +2,7 @@
   width: 50px;
   margin-right: 15px;
 }
+
+.nav {
+  z-index: 1000;
+}
