@@ -41,7 +41,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
       {showEditButton && (
         <button
           onClick={toggleFormVisibility}
-          className={styles.btnPreferences}
+          className={`btn btn-success ${styles.btnPreferences}`}
         >
           Edit Preferences
         </button>
