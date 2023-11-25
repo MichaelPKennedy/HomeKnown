@@ -392,7 +392,6 @@ details > summary {
   list-style: none; /* Remove the default arrow icon */
   background-color: #01697c;
   color: #ffffff; /* White text for contrast */
-  font-weight: bold;
   transition: background-color 0.3s;
 }
 
