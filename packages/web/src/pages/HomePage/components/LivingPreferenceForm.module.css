@@ -145,20 +145,6 @@
   transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
 }
 
-.btnCancel {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 0.5rem 1rem;
-  transition: background-color 0.2s;
-  margin-bottom: 10px;
-  margin-right: 20px;
-  background-color: transparent; /* Makes the inside of the button transparent */
-  color: #17a2b8; /* Sets the text color, use your desired color */
-  border: 1px solid #17a2b8; /* Sets the border color and width */
-  padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
-  border-radius: 4px; /* Optional: Rounds the corners of the button */
-  transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
-}
-
 .btnContainer {
   display: flex;
   flex-direction: row;
@@ -200,6 +186,16 @@
   border-right: 5px solid transparent;
   border-top: 5px solid #17a2b8; /* Arrow color */
   transform: rotate(180deg);
+}
+
+@media screen and (min-width: 1000px) {
+  .btnCancel {
+    width: 70%;
+  }
+  .btnContainer {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .btnDropdown:hover,

@@ -305,7 +305,7 @@ const LivingPreferenceForm = () => {
             onClick={toggleFormVisibility}
             className={`btn btn-secondary  ${styles.btnCancel}`}
           >
-            Cancel
+            Hide Preferences
           </button>
         </div>
       )}
