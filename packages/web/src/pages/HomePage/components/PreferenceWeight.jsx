@@ -204,10 +204,13 @@ function getLayerStyles(currentOffset, surveyResults) {
     x += -230;
     y += -150;
   } else if (surveyResults && width <= 768) {
+    x += -100;
+    y += -150;
+  } else if (!surveyResults && width > 768) {
     x += -230;
     y += -91;
   } else {
-    x += -230;
+    x += -100;
     y += -91;
   }
 
