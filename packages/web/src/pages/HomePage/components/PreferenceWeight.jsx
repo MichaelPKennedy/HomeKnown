@@ -17,19 +17,6 @@ function DragPreview({ count }) {
   );
 }
 
-function useWindowSize() {
-  const [size, setSize] = useState([0, 0]);
-  useEffect(() => {
-    function updateSize() {
-      setSize([window.innerWidth, window.innerHeight]);
-    }
-    window.addEventListener("resize", updateSize);
-    updateSize();
-    return () => window.removeEventListener("resize", updateSize);
-  }, []);
-  return size;
-}
-
 function useCombinedRefs(...refs) {
   const targetRef = useRef();
 
@@ -79,37 +66,6 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
           ${isDragging && isTokenSelected ? styles.draggingToken : ""}
         `}
     ></div>
-  );
-}
-
-// Custom drag layer for touch devices
-function CustomDragLayer({ surveyResults }) {
-  const { itemType, isDragging, item, currentOffset } = useDragLayer(
-    (monitor) => ({
-      item: monitor.getItem(),
-      itemType: monitor.getItemType(),
-      currentOffset: monitor.getSourceClientOffset(),
-      isDragging: monitor.isDragging(),
-    })
-  );
-
-  if (!isDragging) {
-    return null;
-  }
-
-  // Function to render the drag preview
-  function renderItem() {
-    switch (itemType) {
-      // Handle different item types here
-      default:
-        return <DragPreview count={item.count} />;
-    }
-  }
-
-  return (
-    <div style={getLayerStyles(currentOffset, surveyResults)}>
-      {renderItem()}
-    </div>
   );
 }
 
@@ -193,26 +149,11 @@ function SectionDropZone({
 }
 
 function getLayerStyles(currentOffset, surveyResults) {
-  const [width, height] = useWindowSize();
   if (!currentOffset) {
     return { display: "none" };
   }
 
   let { x, y } = currentOffset;
-
-  if (surveyResults && width > 768) {
-    x += -230;
-    y += -150;
-  } else if (surveyResults && width <= 768) {
-    x += -100;
-    y += -150;
-  } else if (!surveyResults && width > 768) {
-    x += -230;
-    y += -91;
-  } else {
-    x += -100;
-    y += -91;
-  }
 
   const transform = `translate(${x}px, ${y}px)`;
 
@@ -319,7 +260,6 @@ function PreferenceWeight({ onWeightsChange, weights, surveyResults }) {
 
   return (
     <div>
-      <CustomDragLayer surveyResults={surveyResults} />
       <div className={styles.tokenBank}>
         {Array(weights.totalAvailablePoints)
           .fill(null)

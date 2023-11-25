@@ -7,8 +7,6 @@ import "rc-slider/assets/index.css";
 import client from "../../../feathersClient.js";
 import { useNavigate } from "react-router-dom";
 import PreferenceWeight from "./PreferenceWeight.jsx";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import LoadingScreen from "./LoadingScreen.jsx";
 import JobPreferences from "./JobPreferences.jsx";
 import HousingPreferences from "./HousingPreferences.jsx";
@@ -297,7 +295,7 @@ const LivingPreferenceForm = () => {
   }, []);
 
   return (
-    <DndProvider backend={HTML5Backend} className={styles.centerContainer}>
+    <div className={styles.centerContainer}>
       {surveyResults && showForm && (
         <div className={styles.btnContainer}>
           <button
@@ -461,7 +459,7 @@ const LivingPreferenceForm = () => {
           </div>
         )}
       </div>
-    </DndProvider>
+    </div>
   );
 };
 
