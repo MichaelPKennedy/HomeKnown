@@ -33,7 +33,7 @@
 }
 
 .btnPreferences:focus {
-  outline: 2px solid #17a2b8;
+  outline: none;
 }
 
 /* Styling the chart and table containers */
