@@ -203,7 +203,7 @@ function getLayerStyles(currentOffset, surveyResults) {
   // Adjust these values as needed
   const xOffset = 0;
   console.log("survey?", surveyResults);
-  const yOffset = surveyResults ? -150 : -80;
+  const yOffset = surveyResults ? -125 : -67;
 
   const transform = `translate(${x + xOffset}px, ${y + yOffset}px)`;
 
