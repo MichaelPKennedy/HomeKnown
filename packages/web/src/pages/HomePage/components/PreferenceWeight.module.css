@@ -10,16 +10,16 @@
   background-image: radial-gradient(circle, #9ce0eb, #01697c);
 }
 
-.preferenceWeightContainer {
+.preferenceContainer {
   display: flex;
   flex-direction: column;
+  height: auto;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
 }
 
 .tokenBank {
-  margin-bottom: 30px;
   text-align: center;
   display: flex;
   justify-content: center;
@@ -37,6 +37,10 @@
   margin-bottom: 5px;
 }
 
+.dropZoneContainer {
+  margin-top: 15px;
+}
+
 @media screen and (min-width: 1000px) {
   .dropZoneContainer {
     display: flex;
@@ -44,6 +48,7 @@
     flex-wrap: wrap;
     justify-content: center;
     margin-bottom: 20px;
+    margin-top: 30px;
   }
 }
 

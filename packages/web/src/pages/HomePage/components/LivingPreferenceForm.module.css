@@ -325,6 +325,13 @@
   z-index: 1;
 }
 
+.formGroup {
+  width: 100%;
+  margin-bottom: 2rem;
+  z-index: 1;
+  margin-top: 1rem;
+}
+
 /* Desktop */
 @media screen and (min-width: 1000px) {
   /* 768px tablets and up */
@@ -345,12 +352,6 @@
 .formInput {
   width: 100%;
   margin-bottom: 1rem;
-}
-
-.formGroup {
-  width: 100%;
-  margin-bottom: 2rem;
-  z-index: 1;
 }
 
 .preferenceWeightContainer {

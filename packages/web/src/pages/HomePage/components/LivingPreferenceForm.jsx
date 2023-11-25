@@ -311,11 +311,11 @@ const LivingPreferenceForm = () => {
           <div>
             <form
               onSubmit={handleSubmit}
-              className={`container mt-4 ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
+              className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
               <div className={`form-group ${styles.formGroup}`}>
                 {!showSubmitButton && (
-                  <div className={styles.parHeaderContainer}>
+                  <div className={`${styles.parHeaderContainer}`}>
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderFirst}`}
                     >

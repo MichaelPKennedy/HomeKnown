@@ -301,7 +301,7 @@ function PreferenceWeight({ onWeightsChange, weights, surveyResults }) {
   };
 
   return (
-    <div>
+    <div className={styles.preferenceContainer}>
       {isMobile && <CustomDragLayer surveyResults={surveyResults} />}
       <div className={styles.tokenBank}>
         {Array(weights.totalAvailablePoints)
