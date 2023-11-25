@@ -2,6 +2,21 @@ import React, { useState, useRef, useEffect } from "react";
 import { useDrag, useDrop, useDragLayer } from "react-dnd";
 import styles from "./PreferenceWeight.module.css";
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return isMobile;
+}
+
 function DragPreview({ count }) {
   return (
     <div className={styles.dragPreview}>
@@ -13,6 +28,36 @@ function DragPreview({ count }) {
             className={`${styles.preferenceToken} ${styles.previewToken} ${styles.selectedToken}`}
           ></div>
         ))}
+    </div>
+  );
+}
+
+function CustomDragLayer({ surveyResults }) {
+  const { itemType, isDragging, item, currentOffset } = useDragLayer(
+    (monitor) => ({
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      currentOffset: monitor.getSourceClientOffset(),
+      isDragging: monitor.isDragging(),
+    })
+  );
+
+  if (!isDragging) {
+    return null;
+  }
+
+  // Function to render the drag preview
+  function renderItem() {
+    switch (itemType) {
+      // Handle different item types here
+      default:
+        return <DragPreview count={item.count} />;
+    }
+  }
+
+  return (
+    <div style={getLayerStyles(currentOffset, surveyResults)}>
+      {renderItem()}
     </div>
   );
 }
@@ -155,7 +200,12 @@ function getLayerStyles(currentOffset, surveyResults) {
 
   let { x, y } = currentOffset;
 
-  const transform = `translate(${x}px, ${y}px)`;
+  // Adjust these values as needed
+  const xOffset = 0;
+  console.log("survey?", surveyResults);
+  const yOffset = surveyResults ? -150 : -80;
+
+  const transform = `translate(${x + xOffset}px, ${y + yOffset}px)`;
 
   return {
     transform,
@@ -169,6 +219,7 @@ function getLayerStyles(currentOffset, surveyResults) {
 }
 
 function PreferenceWeight({ onWeightsChange, weights, surveyResults }) {
+  const isMobile = useIsMobile();
   const addTokenToSection = (sectionKey) => {
     if (weights.totalAvailablePoints > 0) {
       const newWeights = {
@@ -249,17 +300,9 @@ function PreferenceWeight({ onWeightsChange, weights, surveyResults }) {
     setSelectedTokens([]);
   };
 
-  function renderItem() {
-    switch (itemType) {
-      case "TOKEN":
-        return <DragPreview count={item.count} />;
-      default:
-        return null;
-    }
-  }
-
   return (
     <div>
+      {isMobile && <CustomDragLayer surveyResults={surveyResults} />}
       <div className={styles.tokenBank}>
         {Array(weights.totalAvailablePoints)
           .fill(null)
