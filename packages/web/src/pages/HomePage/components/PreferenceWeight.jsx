@@ -69,6 +69,37 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
   );
 }
 
+// Custom drag layer for touch devices
+function CustomDragLayer({ surveyResults }) {
+  const { itemType, isDragging, item, currentOffset } = useDragLayer(
+    (monitor) => ({
+      item: monitor.getItem(),
+      itemType: monitor.getItemType(),
+      currentOffset: monitor.getSourceClientOffset(),
+      isDragging: monitor.isDragging(),
+    })
+  );
+
+  if (!isDragging) {
+    return null;
+  }
+
+  // Function to render the drag preview
+  function renderItem() {
+    switch (itemType) {
+      // Handle different item types here
+      default:
+        return <DragPreview count={item.count} />;
+    }
+  }
+
+  return (
+    <div style={getLayerStyles(currentOffset, surveyResults)}>
+      {renderItem()}
+    </div>
+  );
+}
+
 function DraggableSectionToken({ section, onDragOut }) {
   const [isBeingDragged, ref] = useDrag({
     type: "TOKEN",
@@ -148,14 +179,21 @@ function SectionDropZone({
   );
 }
 
-function getLayerStyles(currentOffset) {
+function getLayerStyles(currentOffset, surveyResults) {
   if (!currentOffset) {
-    return {
-      display: "none",
-    };
+    return { display: "none" };
   }
 
-  const { x, y } = currentOffset;
+  let { x, y } = currentOffset;
+
+  if (surveyResults) {
+    x += -230;
+    y += -150;
+  } else {
+    x += -230;
+    y += -91;
+  }
+
   const transform = `translate(${x}px, ${y}px)`;
 
   return {
@@ -169,7 +207,7 @@ function getLayerStyles(currentOffset) {
   };
 }
 
-function PreferenceWeight({ onWeightsChange, weights }) {
+function PreferenceWeight({ onWeightsChange, weights, surveyResults }) {
   const addTokenToSection = (sectionKey) => {
     if (weights.totalAvailablePoints > 0) {
       const newWeights = {
@@ -220,24 +258,11 @@ function PreferenceWeight({ onWeightsChange, weights }) {
 
   const toggleTokenSelection = (index) => {
     setSelectedTokens((prev) => {
-      let newSelectedTokens = [...prev];
-      if (newSelectedTokens.includes(index)) {
-        newSelectedTokens = newSelectedTokens.filter((i) => i !== index);
+      if (prev.includes(index)) {
+        return [];
       } else {
-        newSelectedTokens.push(index);
-        newSelectedTokens.sort((a, b) => a - b);
+        return [index];
       }
-
-      const minSelectedIndex = Math.min(...newSelectedTokens);
-      const maxSelectedIndex = Math.max(...newSelectedTokens);
-
-      for (let i = minSelectedIndex; i <= maxSelectedIndex; i++) {
-        if (!newSelectedTokens.includes(i)) {
-          newSelectedTokens.push(i);
-        }
-      }
-
-      return newSelectedTokens;
     });
   };
 
@@ -274,6 +299,7 @@ function PreferenceWeight({ onWeightsChange, weights }) {
 
   return (
     <div>
+      <CustomDragLayer surveyResults={surveyResults} />
       <div className={styles.tokenBank}>
         {Array(weights.totalAvailablePoints)
           .fill(null)

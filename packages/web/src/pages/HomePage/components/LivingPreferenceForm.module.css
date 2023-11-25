@@ -291,6 +291,7 @@
   height: 100%;
   width: 100%;
   overflow-x: hidden;
+  z-index: 1;
 }
 
 .formContainer {
@@ -302,6 +303,7 @@
   width: 100%;
   margin: 0 auto;
   overflow-y: visible;
+  z-index: 1;
 }
 
 /* Desktop */
@@ -329,6 +331,7 @@
 .formGroup {
   width: 100%;
   margin-bottom: 2rem;
+  z-index: 1;
 }
 
 .preferenceWeightContainer {

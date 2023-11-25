@@ -314,7 +314,7 @@ const LivingPreferenceForm = () => {
           <div>
             <form
               onSubmit={handleSubmit}
-              className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
+              className={`container mt-4 ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
               <div className={`form-group ${styles.formGroup}`}>
                 {!showSubmitButton && (
@@ -340,6 +340,7 @@ const LivingPreferenceForm = () => {
                 <PreferenceWeight
                   onWeightsChange={updateFormDataWithWeights}
                   weights={formData.weights}
+                  surveyResults={surveyResults}
                 />
               </div>
               {formData.weights.jobOpportunityWeight > 0 && (

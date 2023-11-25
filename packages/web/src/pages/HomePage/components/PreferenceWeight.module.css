@@ -37,12 +37,6 @@
   margin-bottom: 5px;
 }
 
-.selectedToken {
-  background-color: #9ce0eb;
-  border: 2px solid rgba(0, 0, 0, 0.3);
-  z-index: 100;
-}
-
 @media screen and (min-width: 1000px) {
   .dropZoneContainer {
     display: flex;
