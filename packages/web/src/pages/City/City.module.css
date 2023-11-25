@@ -72,6 +72,14 @@
   transition: all 0.3s ease;
 }
 
+@media (max-width: 1000px) {
+  .btnDropdown {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
 .btnDropdown:focus {
   outline: none;
 }

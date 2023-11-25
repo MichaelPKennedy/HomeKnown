@@ -192,7 +192,7 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
         <div className={styles.buttonContainer}>
           <select
             onChange={handleDataTypeChange}
-            className={`form-select form-select-lg ${styles.btnDropdown}`}
+            className={`form-select ${styles.btnDropdown}`}
           >
             <option value="homePrice">Home Price</option>
             <option value="rentPrice">Rent Price</option>
