@@ -21,6 +21,13 @@
   transition: all 0.3s ease;
 }
 
+@media (max-width: 1000px) {
+  .btnContainer {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
 .btnDropdown:hover {
   background-color: #01697c;
   color: white;
@@ -251,6 +258,7 @@
   border: 1px solid #01697c;
   border-radius: 0;
   margin-bottom: 15px;
+  border-radius: 4px;
   height: 40px;
   width: 100%;
 }

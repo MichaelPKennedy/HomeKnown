@@ -39,12 +39,14 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   return (
     <div>
       {showEditButton && (
-        <button
-          onClick={toggleFormVisibility}
-          className={`${styles.btnPreferences}`}
-        >
-          Edit Preferences
-        </button>
+        <div className={styles.btnContainer}>
+          <button
+            onClick={toggleFormVisibility}
+            className={`${styles.btnPreferences}`}
+          >
+            Edit Preferences
+          </button>
+        </div>
       )}
       <div className={styles.resultsPage}>
         <div className="mb-4">
