@@ -406,6 +406,7 @@ details[open] > summary {
 
 details[open] .formCheck {
   background-color: #f8f9fa; /* A shade between white and light gray */
+  padding-left: 14px;
 }
 
 /* Checkbox Styling */
