@@ -32,6 +32,43 @@
   }
 }
 
+/* Start the animation from above the viewport */
+@keyframes slideDownFromTop {
+  0% {
+    transform: translateY(-100vh); /* Start from above the viewport */
+    visibility: hidden;
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0); /* End at the top of the container */
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+/* Apply this class to the form container when you want to show it */
+.formSlidingEnter {
+  animation: slideDownFromTop 0.5s ease forwards;
+}
+
+/* When hiding the form, you can define another animation */
+@keyframes slideUpToTop {
+  0% {
+    transform: translateY(0);
+    visibility: visible;
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh);
+    visibility: hidden;
+    opacity: 0;
+  }
+}
+
+.formSlidingExit {
+  animation: slideUpToTop 0.5s ease forwards;
+}
+
 /* Apply the animations to your elements */
 .parHeaderFirst {
   animation: slideIn 2s ease, fadeOut 2s ease 10s forwards;

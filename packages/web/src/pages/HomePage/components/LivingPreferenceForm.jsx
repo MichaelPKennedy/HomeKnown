@@ -74,6 +74,7 @@ const LivingPreferenceForm = () => {
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(true);
+  const [formAnimation, setFormAnimation] = useState("");
 
   const validateForm = () => {
     let isValid = true;
@@ -262,7 +263,12 @@ const LivingPreferenceForm = () => {
   };
 
   const toggleFormVisibility = () => {
-    setShowForm(!showForm);
+    if (showForm) {
+      setFormAnimation(styles.formSlidingExit);
+    } else {
+      setFormAnimation(styles.formSlidingEnter);
+      setShowForm(!showForm);
+    }
   };
 
   useEffect(() => {
@@ -285,7 +291,7 @@ const LivingPreferenceForm = () => {
     <DndProvider backend={HTML5Backend} className={styles.centerContainer}>
       <div>
         {showForm ? (
-          <div>
+          <div className={formAnimation}>
             {surveyResults && (
               <div className={styles.btnContainer}>
                 <button
