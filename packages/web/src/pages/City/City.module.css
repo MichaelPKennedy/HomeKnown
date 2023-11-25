@@ -65,15 +65,19 @@
   margin-bottom: 25px;
   margin-right: 20px;
   background-color: transparent;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
   padding: 8px 16px;
   border-radius: 4px;
   transition: all 0.3s ease;
 }
 
+.btnDropdown:focus {
+  outline: none;
+}
+
 .btnDropdown:hover {
-  background-color: #96e0e6;
+  background-color: #01697c;
   color: white;
 }
 

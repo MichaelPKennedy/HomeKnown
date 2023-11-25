@@ -14,8 +14,8 @@
   margin-bottom: 25px;
   margin-right: 20px;
   background-color: transparent;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
   padding: 8px 16px;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -28,8 +28,8 @@
 
 .btnPreferences:hover {
   background-color: white;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
 }
 
 .btnPreferences:focus {
@@ -247,8 +247,8 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   background-color: transparent;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
   border-radius: 0;
   margin-bottom: 15px;
   height: 40px;
@@ -258,12 +258,12 @@
 .btnPreferences::after {
   content: "";
   position: absolute;
-  bottom: 2px; /* Adjust as needed */
+  bottom: -10px; /* Adjust as needed */
   left: 50%;
 
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #17a2b8; /* Arrow color */
+  border-top: 5px solid #01697c; /* Arrow color */
 }
 
 .cityContainer {
@@ -300,7 +300,7 @@
   position: absolute;
   top: -10px;
   left: -10px;
-  background-color: #17a2b8;
+  background-color: #01697c;
   color: #fff;
   padding: 5px 10px;
   border-radius: 50%;

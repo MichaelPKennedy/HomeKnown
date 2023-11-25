@@ -138,8 +138,8 @@
   margin-bottom: 20px;
   margin-right: 20px;
   background-color: transparent; /* Makes the inside of the button transparent */
-  color: #17a2b8; /* Sets the text color, use your desired color */
-  border: 1px solid #17a2b8; /* Sets the border color and width */
+  color: #01697c; /* Sets the text color, use your desired color */
+  border: 1px solid #01697c; /* Sets the border color and width */
   padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
   border-radius: 4px; /* Optional: Rounds the corners of the button */
   transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
@@ -165,8 +165,8 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   background-color: transparent;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
   border-radius: 0;
   margin-bottom: 15px;
   height: 40px;
@@ -176,19 +176,20 @@
 .btnCancel::after {
   content: "";
   position: absolute;
-  bottom: 2px; /* Adjust as needed */
+  bottom: -10px; /* Adjust as needed */
+  height: 50px;
   left: 50%;
   transform: translateX(-50%);
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #17a2b8; /* Arrow color */
+  border-top: 5px solid #01697c; /* Arrow color */
   transform: rotate(180deg);
 }
 
 .btnCancel:hover {
   background-color: white;
-  color: #17a2b8;
-  border: 1px solid #17a2b8;
+  color: #01697c;
+  border: 1px solid #01697c;
 }
 
 .btnCancel:focus {

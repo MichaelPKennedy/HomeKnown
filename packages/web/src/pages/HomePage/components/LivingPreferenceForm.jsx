@@ -424,14 +424,14 @@ const LivingPreferenceForm = () => {
                 <div className="d-flex justify-content-start">
                   <button
                     type="submit"
-                    className={`btn mt-2 ${styles.btnDropdown}`}
+                    className={`mt-2 ${styles.btnDropdown}`}
                   >
                     Submit
                   </button>
                   <button
                     type="button"
                     onClick={resetSurvey}
-                    className={`btn mt-2 ${styles.btnDropdown}`}
+                    className={`mt-2 ${styles.btnDropdown}`}
                   >
                     Clear Survey
                   </button>
