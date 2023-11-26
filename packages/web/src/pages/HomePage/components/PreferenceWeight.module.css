@@ -5,7 +5,7 @@
   background-color: #9ce0eb;
   border-radius: 50%;
   display: inline-block;
-  margin: 3px;
+  margin: 1px;
   cursor: pointer;
   background-image: radial-gradient(circle, #9ce0eb, #01697c);
 }
@@ -54,7 +54,7 @@
 
 .dropzone {
   vertical-align: top;
-  width: 120px;
+  width: 106px;
   height: 150px;
   border: 1px solid rgba(65, 164, 154, 0.5);
   border-radius: 20px;
@@ -124,4 +124,31 @@
   .sectionTitle {
     font-size: 14px;
   }
+}
+
+@keyframes shineEffect {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 1);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+.preferenceToken {
+  animation-name: shineEffect;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+/* For a conditional effect, use a separate class */
+.shiningToken {
+  animation-name: shineEffect;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
 }

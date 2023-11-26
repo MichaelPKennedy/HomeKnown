@@ -101,6 +101,8 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
 
   const isTokenSelected = selectedTokens.includes(index);
 
+  const animationDelay = `${index * 0.1}s`;
+
   return (
     <div
       ref={ref}
@@ -110,6 +112,7 @@ function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
           ${isTokenSelected ? styles.selectedToken : ""}
           ${isDragging && isTokenSelected ? styles.draggingToken : ""}
         `}
+      style={{ animationDelay: animationDelay }}
     ></div>
   );
 }
