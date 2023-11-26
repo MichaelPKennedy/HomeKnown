@@ -110,6 +110,9 @@
     width: 40px;
     height: 40px;
   }
+  .preferenceToken {
+    margin: 3px;
+  }
 }
 
 /* Mobile Styles */
