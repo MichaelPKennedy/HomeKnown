@@ -200,12 +200,17 @@ function getLayerStyles(currentOffset, surveyResults) {
 
   let { x, y } = currentOffset;
 
-  // Adjust these values as needed
+  // Get the current scroll position
+  const scrollX = window.scrollX || window.pageXOffset;
+  const scrollY = window.scrollY || window.pageYOffset;
+
+  //calibrate offset
   const xOffset = 0;
-  console.log("survey?", surveyResults);
   const yOffset = surveyResults ? -125 : -67;
 
-  const transform = `translate(${x + xOffset}px, ${y + yOffset}px)`;
+  const transform = `translate(${x + xOffset + scrollX}px, ${
+    y + yOffset + scrollY
+  }px)`;
 
   return {
     transform,
