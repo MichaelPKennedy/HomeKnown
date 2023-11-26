@@ -205,8 +205,6 @@
 }
 
 @media screen and (min-width: 1000px) {
-  .btnCancel {
-  }
   .btnContainer {
     margin: auto;
     display: flex;
