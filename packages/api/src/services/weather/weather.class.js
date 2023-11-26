@@ -62,7 +62,7 @@ class WeatherService {
                 }
                 return { ranking: rank, ...result };
             });
-            const topCities = rankedResults.slice(0, 30);
+            const topCities = rankedResults.slice(0, 300);
             if (topCities.length < 10) {
                 console.log('obtained less than 10 cities from weather');
             }

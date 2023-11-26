@@ -32,7 +32,7 @@ class PublicServicesService {
                 count
             };
         });
-        const sortedCities = cityScores.sort((a, b) => b.count - a.count).slice(0, 30);
+        const sortedCities = cityScores.sort((a, b) => b.count - a.count).slice(0, 300);
         let ranking = 1;
         let previousCount = sortedCities[0]?.count || 0;
         const topCities = sortedCities.map((city, index) => {

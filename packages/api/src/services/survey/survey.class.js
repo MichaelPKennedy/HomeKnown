@@ -104,7 +104,10 @@ class SurveyService {
         ];
         categories.forEach((category) => {
             category.data?.forEach((city) => {
-                const normalizedScore = 31 - city.ranking;
+                if (!city?.ranking) {
+                    return;
+                }
+                const normalizedScore = 301 - city?.ranking;
                 const weightedScore = normalizedScore * (category.weight || 0);
                 cityScores.set(city.city_id, (cityScores.get(city.city_id) || 0) + weightedScore);
             });

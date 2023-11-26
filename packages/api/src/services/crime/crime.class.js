@@ -15,7 +15,7 @@ class CrimeService {
                     [sequelize_1.Op.and]: [{ crime_score: { [sequelize_1.Op.ne]: null } }, { city_id: { [sequelize_1.Op.ne]: null } }]
                 },
                 order: [['crime_score', 'ASC']],
-                limit: 30
+                limit: 300
             });
             let ranking = 1; // Start ranking at 1
             let previousCrimeScore = crimeRates[0]?.dataValues?.crime_score;

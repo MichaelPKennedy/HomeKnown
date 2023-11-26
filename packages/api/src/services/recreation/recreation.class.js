@@ -143,7 +143,7 @@ class RecreationService {
                 ranking
             };
         });
-        const topCities = rankedCities.slice(0, 30).map((entry) => ({
+        const topCities = rankedCities.slice(0, 300).map((entry) => ({
             city_id: entry.city.city_id,
             ranking: entry.ranking,
             nearbyLandmarks: entry.nearbyLandmarks

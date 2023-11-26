@@ -54,7 +54,7 @@ class HousingService {
             };
         })
             .sort((a, b) => a.rank - b.rank)
-            .slice(0, 30);
+            .slice(0, 300);
         let ranking = 1;
         let previousRank = rankedCities[0]?.rank;
         const finalRankedCities = rankedCities.map((city) => {

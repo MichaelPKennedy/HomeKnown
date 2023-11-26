@@ -66,12 +66,18 @@ export class AirQualityService implements ServiceMethods<any> {
 
     const rankedCitiesWithIds = citiesWithPollutantScoresAndRanking.map((cityScore: any) => {
       const cityData = cities.find((c: any) => c.area_code === cityScore.area_code)
+
+      if (!cityData) {
+        return null
+      }
       return {
         city_id: cityData.city_id,
         totalPollutantScore: cityScore.totalPollutantScore,
         ranking: cityScore.ranking
       }
     })
+
+    rankedCitiesWithIds.filter((c: any) => c !== null)
 
     return rankedCitiesWithIds
   }

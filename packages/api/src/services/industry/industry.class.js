@@ -49,7 +49,7 @@ class IndustryService {
             ],
             group: ['area_code'],
             order: [[this.sequelize.col('avg_salary'), 'DESC']],
-            limit: 30
+            limit: 300
         });
         //for top cities, get the cities that are associated with the area_code for that city
         const topCities = await this.sequelize.models.City.findAll({
@@ -69,7 +69,7 @@ class IndustryService {
             }));
         })
             .flat()
-            .slice(0, 30);
+            .slice(0, 300);
         const sortedCitiesWithSalary = topCitiesWithSalary.sort((a, b) => b.avg_salary - a.avg_salary);
         let ranking = 1;
         let skipRank = 0;

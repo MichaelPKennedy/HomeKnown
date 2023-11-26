@@ -28,7 +28,7 @@ class AirQualityService {
                 ]
             ],
             order: [[sequelize.literal('totalPollutantScore'), 'ASC']],
-            limit: 30
+            limit: 300
         });
         // Map and rank the cities by their pollutant score
         let ranking = 1;
@@ -51,12 +51,16 @@ class AirQualityService {
         });
         const rankedCitiesWithIds = citiesWithPollutantScoresAndRanking.map((cityScore) => {
             const cityData = cities.find((c) => c.area_code === cityScore.area_code);
+            if (!cityData) {
+                return null;
+            }
             return {
                 city_id: cityData.city_id,
                 totalPollutantScore: cityScore.totalPollutantScore,
                 ranking: cityScore.ranking
             };
         });
+        rankedCitiesWithIds.filter((c) => c !== null);
         return rankedCitiesWithIds;
     }
     async get(id, params) {

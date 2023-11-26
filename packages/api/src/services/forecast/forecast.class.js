@@ -11,13 +11,8 @@ class ForecastService {
         if (!params.query) {
             throw new Error('Query parameters are missing!');
         }
-        console.log('Params:', params);
         const { latitude, longitude } = params.query;
-        console.log('latitude', latitude);
-        console.log('process.env.WEATHER_API_KEY', process.env.WEATHER_API_KEY);
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=imperial&appid=${process.env.WEATHER_API_KEY}`);
-        console.log('response', response);
-        //change response to Fahrenheit
         return response.json();
     }
     async get(id, params) {
