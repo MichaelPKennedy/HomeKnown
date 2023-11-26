@@ -39,11 +39,17 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           </div>
         </Link>
         {city.photoUrl && (
-          <img
-            src={city.photoUrl}
-            alt={`View of ${city.city_name}`}
-            className={styles.cityImage}
-          />
+          <Link
+            to={`/results/${city.city_id}`}
+            key={city.city_id}
+            state={{ city }}
+          >
+            <img
+              src={city.photoUrl}
+              alt={`View of ${city.city_name}`}
+              className={styles.cityImage}
+            />
+          </Link>
         )}
       </div>
     );
