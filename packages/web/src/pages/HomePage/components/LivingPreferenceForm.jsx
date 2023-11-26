@@ -363,7 +363,9 @@ const LivingPreferenceForm = () => {
               {(formData.weights.sceneryWeight > 0 ||
                 formData.weights.recreationalActivitiesWeight > 0 ||
                 formData.weights.publicServicesWeight > 0) && (
-                <div className={`form-group ${styles.slider}`}>
+                <div
+                  className={`form-group ${styles.slider} ${styles.formGroup}`}
+                >
                   <label htmlFor="searchRadius">
                     <h4>Select Search Radius (miles)</h4>
                     <p className={`mb-2 ${styles.par}`}>
