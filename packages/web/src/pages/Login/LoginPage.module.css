@@ -12,9 +12,11 @@
   background-color: #017c8c;
   border: none;
   margin-left: 20px;
+  color: white !important;
 }
 
-.submitButton:hover {
+.submitButton:hover,
+.registerButton:hover {
   background-color: #01697c;
 }
 
