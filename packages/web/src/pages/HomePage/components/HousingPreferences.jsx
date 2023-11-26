@@ -42,7 +42,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
 
       {/* If buying */}
       {formData.housingType === "buy" && (
-        <div>
+        <div className={`form-group mt-3`}>
           <label htmlFor="homePriceRange">
             What is the home price range you are looking for?
           </label>
@@ -67,7 +67,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
 
       {/* If renting */}
       {formData.housingType === "rent" && (
-        <div className={`form-group ${styles.formGroup}`}>
+        <div className={`form-group mt-3`}>
           <label htmlFor="rentPriceRange">
             What is the rent price range you are looking for?
           </label>
