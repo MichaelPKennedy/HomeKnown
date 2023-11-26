@@ -178,7 +178,11 @@ export class WeatherService implements ServiceMethods<any> {
       })
 
       if (snowPreference) {
-        score += this.getSnowScore(city.snow, snowPreference)
+        const snow = this.getSnowScore(city.snow, snowPreference)
+        if (snow > 0) {
+          console.log('snow score', snow)
+        }
+        score += snow
       }
 
       if (rainPreference) {
@@ -194,11 +198,17 @@ export class WeatherService implements ServiceMethods<any> {
   getSnowScore(totalSnow: number, preference: string): number {
     switch (preference) {
       case 'none':
-        return totalSnow === 0 ? 10 : 0
+        return totalSnow === 0 ? 50 : 0
       case 'light':
-        return totalSnow < 30 ? 10 : 0
+        if (totalSnow < 20) {
+          return 10 - Math.floor(totalSnow / 2)
+        }
+        return 0
       case 'heavy':
-        return totalSnow >= 30 ? 10 : 0
+        if (totalSnow >= 20) {
+          return 30 + Math.floor((totalSnow - 20) / 2)
+        }
+        return 0
       default:
         return 0
     }
