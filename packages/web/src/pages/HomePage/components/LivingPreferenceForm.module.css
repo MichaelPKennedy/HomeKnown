@@ -206,11 +206,14 @@
 
 @media screen and (min-width: 1000px) {
   .btnCancel {
-    width: 70%;
   }
   .btnContainer {
+    margin: auto;
     display: flex;
     justify-content: center;
+    width: 70%;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
@@ -432,7 +435,7 @@ details .formCheck {
 }
 
 .selectedJobs {
-  background-color: rgb(107, 212, 231);
+  background-color: #01697c;
   width: auto;
   display: inline-flex;
   flex-grow: 0;
