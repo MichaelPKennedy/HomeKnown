@@ -75,7 +75,7 @@ const JobPreferences = ({
           onChange={(e) =>
             setFormData({ ...formData, minSalary: e.target.value })
           }
-          className={`form-control ${styles.formInput}`}
+          className={`form-control`}
           id="minSalary"
           placeholder="Enter minimum acceptable salary"
         />
