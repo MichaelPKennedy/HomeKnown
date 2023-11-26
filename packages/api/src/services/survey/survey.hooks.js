@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.surveyHooks = void 0;
 const { disallow } = require('feathers-hooks-common');
+const get_city_photos_1 = __importDefault(require("./hooks/get-city-photos"));
 exports.surveyHooks = {
     before: {
         all: [],
@@ -16,7 +20,7 @@ exports.surveyHooks = {
         all: [],
         find: [],
         get: [],
-        create: [],
+        create: [get_city_photos_1.default],
         update: [],
         patch: [],
         remove: []

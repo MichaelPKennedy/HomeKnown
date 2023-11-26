@@ -283,14 +283,14 @@
 
 .cityContainer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column; /* Align items horizontally */
+  align-items: center; /* Vertically center items in the container */
+  justify-content: space-between; /* Spreads out the children */
   text-align: center;
   width: 100%;
   max-width: 1200px;
-  margin-bottom: 30px;
-  padding: 15px;
+  margin-bottom: 20px;
+  padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -298,6 +298,71 @@
   text-decoration: none;
   border: 1px solid #e1e4e8;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.cityImage {
+  /* Set a specific width and height for the image or make it responsive */
+  height: 200px; /* Example fixed width, adjust as necessary */ /* Maintains the aspect ratio */
+  width: 330px;
+  object-fit: cover; /* Ensures the image covers the area */
+  border-radius: 15px;
+  margin-top: 20px;
+}
+
+.cityImage:hover {
+  transform: scale(1.05); /* Slightly enlarge the image on hover */
+  transition: transform 0.3s ease-in-out;
+  /* Other styles */
+}
+
+a,
+a:visited,
+a:hover {
+  /* Targets links and visited links */
+  color: inherit; /* This makes the link color the same as the parent text color */
+  text-decoration: none; /* Removes the underline */
+}
+
+/* If you want to remove styles for a specific class, ensure your <a> tag has that class */
+.text,
+.text:visited,
+.text:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* To remove the outline that appears when the link is focused or active */
+a:focus,
+a:active {
+  outline: none;
+}
+
+@media screen and (min-width: 1000px) {
+  .cityContainer {
+    align-items: center; /* Vertically center items in the container */
+    justify-content: space-between; /* Spreads out the children */
+    width: 100%;
+    max-width: 1200px;
+    margin-bottom: 30px;
+    padding: 30px;
+    padding-right: 100px;
+    padding-left: 100px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    text-decoration: none;
+    border: 1px solid #e1e4e8;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .cityImage {
+    /* Set a specific width and height for the image or make it responsive */
+    height: 300px; /* Example fixed width, adjust as necessary */ /* Maintains the aspect ratio */
+    width: 500px;
+    object-fit: cover; /* Ensures the image covers the area */
+    border-radius: 15px;
+  }
 }
 
 .header {

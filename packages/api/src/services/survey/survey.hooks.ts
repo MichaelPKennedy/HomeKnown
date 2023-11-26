@@ -1,4 +1,5 @@
 const { disallow } = require('feathers-hooks-common')
+import getCityPhoto from './hooks/get-city-photos'
 
 export const surveyHooks = {
   before: {
@@ -14,7 +15,7 @@ export const surveyHooks = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [getCityPhoto],
     update: [],
     patch: [],
     remove: []

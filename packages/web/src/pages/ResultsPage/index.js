@@ -25,13 +25,26 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           key={city.city_id}
           state={{ city }}
         >
-          <div className={styles.ranking}>#{index + 1}</div>
-          <h4 className={styles.header}>
-            {city.city_name}, {city.state_name}
-          </h4>
+          <div className={styles.cityDetails}>
+            {" "}
+            {/* New wrapper for text */}
+            <div className={styles.ranking}>#{index + 1}</div>
+            <h4 className={styles.header}>
+              {city.city_name}, {city.state_name}
+            </h4>
+            <h6 className={styles.text}>County: {city.county_name}</h6>
+            <h6 className={styles.text}>
+              Population: {city?.Population?.pop_2022 || "N/A"}
+            </h6>
+          </div>
         </Link>
-        <h6>County: {city.county_name}</h6>
-        <h6>Population: {city?.Population?.pop_2022 || "N/A"}</h6>
+        {city.photoUrl && (
+          <img
+            src={city.photoUrl}
+            alt={`View of ${city.city_name}`}
+            className={styles.cityImage}
+          />
+        )}
       </div>
     );
   };

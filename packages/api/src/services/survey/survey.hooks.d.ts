@@ -12,7 +12,7 @@ export declare const surveyHooks: {
         all: never[];
         find: never[];
         get: never[];
-        create: never[];
+        create: import("@feathersjs/feathers").Hook<import("../../declarations").Application, import("./survey.class").SurveyService>[];
         update: never[];
         patch: never[];
         remove: never[];
