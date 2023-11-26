@@ -6,7 +6,8 @@ import { SurveyService } from '../survey.class'
 const getCityPhoto: Hook<Application, SurveyService> = async (
   context: HookContext<Application, SurveyService>
 ): Promise<HookContext<Application, SurveyService>> => {
-  const storage = new Storage()
+  const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || '')
+  const storage = new Storage({ credentials: credentials })
   const bucketName = 'city-photos'
   const bucket = storage.bucket(bucketName)
 

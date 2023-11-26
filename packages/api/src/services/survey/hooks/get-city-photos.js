@@ -2,7 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const storage_1 = require("@google-cloud/storage");
 const getCityPhoto = async (context) => {
-    const storage = new storage_1.Storage();
+    const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || '');
+    const storage = new storage_1.Storage({ credentials: credentials });
     const bucketName = 'city-photos';
     const bucket = storage.bucket(bucketName);
     const cities = context.result?.topTen ?? [];
