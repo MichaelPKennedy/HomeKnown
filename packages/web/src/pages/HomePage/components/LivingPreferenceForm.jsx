@@ -6,6 +6,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import client from "../../../feathersClient.js";
 import { useNavigate } from "react-router-dom";
+import PreferenceWeightMobile from "./PreferenceWeightMobile.jsx";
 import PreferenceWeight from "./PreferenceWeight.jsx";
 import LoadingScreen from "./LoadingScreen.jsx";
 import JobPreferences from "./JobPreferences.jsx";
@@ -64,8 +65,6 @@ const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const resultsRef = useRef(null);
 
-  const navigate = useNavigate();
-
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -73,6 +72,16 @@ const LivingPreferenceForm = () => {
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(true);
   const [formAnimation, setFormAnimation] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1000);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const validateForm = () => {
     let isValid = true;
@@ -334,11 +343,17 @@ const LivingPreferenceForm = () => {
                     </p>
                   </div>
                 )}
-                <PreferenceWeight
-                  onWeightsChange={updateFormDataWithWeights}
-                  weights={formData.weights}
-                  surveyResults={surveyResults}
-                />
+                {isMobile ? (
+                  <PreferenceWeightMobile
+                    onWeightsChange={updateFormDataWithWeights}
+                    weights={formData.weights}
+                  />
+                ) : (
+                  <PreferenceWeight
+                    onWeightsChange={updateFormDataWithWeights}
+                    weights={formData.weights}
+                  />
+                )}
               </div>
               {formData.weights.jobOpportunityWeight > 0 && (
                 <JobPreferences

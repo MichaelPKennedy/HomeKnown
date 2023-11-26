@@ -1,74 +1,16 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useDrag, useDrop } from "react-dnd";
+import React, { useState } from "react";
+import { useSwipeable } from "react-swipeable";
 import styles from "./PreferenceWeight.module.css";
 
-function useCombinedRefs(...refs) {
-  const targetRef = useRef();
-
-  useEffect(() => {
-    refs.forEach((ref) => {
-      if (!ref) return;
-
-      if (typeof ref === "function") {
-        ref(targetRef.current);
-      } else {
-        ref.current = targetRef.current;
-      }
-    });
-  }, [refs]);
-
-  return targetRef;
-}
-// Draggable Token Component
-function DraggableToken({ index, selectedTokens, onSelect, isDragging }) {
-  const [, ref] = useDrag({
-    type: "TOKEN",
-    item: { fromSection: null, count: selectedTokens.length || 1 },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
-  const isTokenSelected = selectedTokens.includes(index);
-
-  const animationDelay = `${index * 0.1}s`;
-
-  return (
-    <div
-      ref={ref}
-      onClick={() => onSelect(index)}
-      className={`
-          ${styles.preferenceToken}
-          ${isTokenSelected ? styles.selectedToken : ""}
-          ${isDragging && isTokenSelected ? styles.draggingToken : ""}
-        `}
-      style={{ animationDelay: animationDelay }}
-    ></div>
-  );
-}
-
-function DraggableSectionToken({ section, onDragOut }) {
-  const [isBeingDragged, ref] = useDrag({
-    type: "TOKEN",
-    item: { fromSection: section, count: 1 },
-    collect: (monitor) => ({
-      isBeingDragged: !!monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      if (!monitor.didDrop()) {
-        onDragOut(section);
-      }
-    },
+function DraggableToken({ sectionKey, onRemove }) {
+  const handlers = useSwipeable({
+    onSwipedLeft: () => onRemove(sectionKey),
   });
 
   return (
     <div
-      ref={ref}
-      className={`
-      ${styles.preferenceToken}
-      ${styles.selectedToken}
-      ${isBeingDragged ? styles.tokenBeingDragged : ""}
-    `}
+      {...handlers}
+      className={`${styles.preferenceToken} ${styles.selectedToken}`}
     ></div>
   );
 }
@@ -77,48 +19,33 @@ function SectionDropZone({
   title,
   sectionKey,
   weight,
-  onDropToken,
-  onDragOut,
   addTokenToSection,
+  removeTokenFromSection,
 }) {
-  const [{ isOver }, dropRef] = useDrop({
-    accept: "TOKEN",
-    drop: (draggedItem) => {
-      onDropToken(sectionKey, draggedItem.fromSection);
-      if (draggedItem.fromSection) {
-        onDragOut(draggedItem.fromSection, sectionKey);
+  const handlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (weight > 0) {
+        removeTokenFromSection(sectionKey);
       }
     },
-    collect: (monitor) => ({
-      isOver: monitor.isOver(),
-    }),
   });
-
-  const ref = useRef(null);
-  const combinedRef = useCombinedRefs(ref, dropRef);
 
   const handleClick = () => {
     addTokenToSection(sectionKey);
   };
 
   return (
-    <div
-      ref={combinedRef}
-      onClick={handleClick}
-      className={`${styles.dropzone} ${isOver ? styles.dropZoneActive : ""}`}
-    >
+    <div {...handlers} onClick={handleClick} className={styles.dropzone}>
       <p className={styles.dropzoneTitle}>{title}</p>
       <div className="tokens">
-        {weight > 0 &&
-          Array(weight)
-            .fill(null)
-            .map((_, index) => (
-              <DraggableSectionToken
-                key={index}
-                section={sectionKey}
-                onDragOut={onDragOut}
-              />
-            ))}
+        {Array(weight)
+          .fill(null)
+          .map((_, index) => (
+            <div
+              key={index}
+              className={`${styles.preferenceToken} ${styles.selectedToken}`}
+            ></div>
+          ))}
       </div>
     </div>
   );
