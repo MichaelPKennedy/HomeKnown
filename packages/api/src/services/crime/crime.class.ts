@@ -24,7 +24,7 @@ export class CrimeService implements ServiceMethods<any> {
           [Op.and]: [{ crime_score: { [Op.ne]: null } }, { city_id: { [Op.ne]: null } }]
         },
         order: [['crime_score', 'ASC']],
-        limit: 30
+        limit: 300
       })
 
       let ranking = 1 // Start ranking at 1

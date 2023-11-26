@@ -38,7 +38,7 @@ export class AirQualityService implements ServiceMethods<any> {
         ]
       ],
       order: [[sequelize.literal('totalPollutantScore'), 'ASC']],
-      limit: 30
+      limit: 300
     })
 
     // Map and rank the cities by their pollutant score

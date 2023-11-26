@@ -68,7 +68,7 @@ export class SceneryService implements ServiceMethods<any> {
       }
     })
 
-    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 30)
+    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 300)
 
     let ranking = 1
     let previousCount = sortedCities[0].count
