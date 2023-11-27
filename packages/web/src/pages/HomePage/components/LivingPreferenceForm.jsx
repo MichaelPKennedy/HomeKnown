@@ -74,6 +74,12 @@ const LivingPreferenceForm = () => {
   const [formAnimation, setFormAnimation] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  const instructions1 = isMobile
+    ? "Click to add a token to a category. Swipe left on a category to remove."
+    : "Drag and drop or click inside a category to add a token. Drag to and drop to remove or swap tokens.";
+  const instructions2 =
+    "Put more tokens into the categories you care about the most.";
+
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
@@ -328,18 +334,17 @@ const LivingPreferenceForm = () => {
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderFirst}`}
                     >
-                      Drag and drop tokens to your desired categories.{" "}
+                      {instructions1}
                     </p>
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderSecond}`}
                     >
-                      Put more tokens into the categories you care about the
-                      most.{" "}
+                      {instructions2}
                     </p>
                     <p
                       className={`${styles.parHeader} ${styles.parHeaderThird}`}
                     >
-                      Drag and drop tokens to your desired categories.{" "}
+                      {instructions1}
                     </p>
                   </div>
                 )}
