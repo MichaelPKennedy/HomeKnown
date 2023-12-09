@@ -58,6 +58,4 @@ export const CityDemographicsModel = (sequelize: Sequelize) => {
       ]
     }
   )
-
-  CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
 }

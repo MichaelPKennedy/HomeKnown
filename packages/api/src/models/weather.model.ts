@@ -37,6 +37,4 @@ export const WeatherModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  Weather.belongsTo(State, { foreignKey: 'state_code' })
-  State.hasMany(Weather, { foreignKey: 'state_code' })
 }

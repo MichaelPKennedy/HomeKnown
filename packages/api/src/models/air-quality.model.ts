@@ -76,5 +76,4 @@ export const AirQualityModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  AirQuality.belongsTo(Area, { foreignKey: 'area_code' })
 }

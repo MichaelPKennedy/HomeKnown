@@ -75,5 +75,4 @@ export const CrimeStatsCityModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  CrimeStatsCity.belongsTo(City, { foreignKey: 'city_id' })
 }

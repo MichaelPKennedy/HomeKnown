@@ -38,7 +38,4 @@ export const AreaModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  Area.hasMany(CityIndustrySalary, { foreignKey: 'area_code' })
-  CityIndustrySalary.belongsTo(Area, { foreignKey: 'area_code' })
-  Area.belongsTo(State, { foreignKey: 'state_code' })
 }

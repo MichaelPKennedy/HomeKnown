@@ -68,6 +68,4 @@ export const CityMonthlyWeatherCountyModel = (sequelize: Sequelize) => {
       ]
     }
   )
-
-  CityMonthlyWeatherCounty.belongsTo(City, { foreignKey: 'city_id' })
 }

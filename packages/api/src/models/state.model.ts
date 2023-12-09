@@ -45,6 +45,4 @@ export const StateModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  State.hasMany(StateIndustrySalary, { foreignKey: 'state_code' })
-  StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
 }

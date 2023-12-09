@@ -715,6 +715,4 @@ export const MonthlyRentCitiesModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-
-  MonthlyRentCities.belongsTo(City, { foreignKey: 'city_id' })
 }

@@ -40,7 +40,4 @@ export const LandMarkModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-
-  LandMark.belongsTo(MTFCC, { foreignKey: 'MTFCC', as: 'MTFCCAssociation' })
-  MTFCC.hasMany(LandMark, { foreignKey: 'MTFCC', as: 'LandMarks' })
 }

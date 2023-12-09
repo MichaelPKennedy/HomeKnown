@@ -69,5 +69,4 @@ export const CityModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-  City.belongsTo(Area, { foreignKey: 'area_code' })
 }

@@ -715,6 +715,4 @@ export const HomePriceModel = (sequelize: Sequelize) => {
       timestamps: false
     }
   )
-
-  HomePrice.belongsTo(City, { foreignKey: 'city_id' })
 }

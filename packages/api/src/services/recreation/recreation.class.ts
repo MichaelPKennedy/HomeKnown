@@ -1,7 +1,7 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
-import { point, distance } from '@turf/turf'
+import { RecreationalInterestMappings } from './constants'
 
 export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
 
@@ -27,90 +27,6 @@ type RecreationalInterestKey =
 
 type RecreationalInterestMappings = {
   [key in RecreationalInterestKey]: string[]
-}
-
-const RecreationalInterestMappings = {
-  mountains: ['Mountain Peak', 'Mountain', 'Hiking Trail', 'Hiking Spot'],
-  nationalParks: [
-    'National Park',
-    'State Park',
-    'Park',
-    'National Park for the Performing Arts',
-    'National Preserve',
-    'Scenic Area',
-    'National Grassland',
-    'National Reserve',
-    'Wilderness Area',
-    'National Recreation Area'
-  ],
-  forests: ['National Forest', 'Rainforest'],
-  waterfrontViews: [
-    'National Seashore',
-    'Beach',
-    'National Lakeshore',
-    'Lake',
-    'Great Lake',
-    'Lakes',
-    'Reservoir',
-    'Bay',
-    'Inlet',
-    'River',
-    'Fjord',
-    'Lake System',
-    'Lake Region',
-    'National River'
-  ],
-  scenicDrives: ['Scenic Drive', 'Parkway'],
-  historicSites: [
-    'Historic Site',
-    'Historical Park',
-    'Historical Site',
-    'Ranch',
-    'Historic Landmark',
-    'Historic Trail',
-    'Landmark',
-    'Center',
-    'Battlefields Memorial',
-    'Heritage Area',
-    'Memorial Park',
-    'Heritage Corridor',
-    'National Military Park',
-    'National Battlefield',
-    'National Historical Park'
-  ],
-  monuments: ['National Monument', 'National Memorial', 'Mountain Memorial', 'Memorial', 'Monument'],
-  museums: ['Museum', 'National Museum'],
-  naturalWonders: [
-    'Natural Arch',
-    'Waterfall',
-    'Viewpoint',
-    'Granite Dome',
-    'Slot Canyon',
-    'Valley',
-    'Estuary',
-    'Cave'
-  ],
-  rockClimbing: ['Climbing Area'],
-  waterSports: [
-    'National Riverway',
-    'National Scenic River',
-    'Scenic River',
-    'National Lakeshore',
-    'Lake',
-    'Great Lake',
-    'Lakes',
-    'Bay',
-    'Lake System',
-    'Lake Region',
-    'National River'
-  ],
-  beach: ['Beach'],
-  diverseFloraFauna: ['Botanical Garden'],
-  birdWatching: [],
-  zoos: ['Zoo', 'Wildlife Reserve'],
-  winterSports: ['Ski Resort'],
-  stargazing: ['Observatory'],
-  amusementParks: ['Amusement Park']
 }
 
 function haversineDistance(lat1: any, lon1: any, lat2: any, lon2: any) {

@@ -38,7 +38,4 @@ export const CountyModel = (sequelize: Sequelize) => {
       ]
     }
   )
-
-  County.belongsTo(State, { foreignKey: 'state_code' })
-  County.hasMany(City, { foreignKey: 'county_fips' })
 }

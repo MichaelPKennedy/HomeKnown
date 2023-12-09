@@ -115,7 +115,4 @@ export const CrimeStatsModel = (sequelize: Sequelize) => {
       ]
     }
   )
-
-  CrimeStats.belongsTo(County, { foreignKey: 'stcofips' })
-  CrimeStats.belongsTo(State, { foreignKey: 'fips_st' })
 }

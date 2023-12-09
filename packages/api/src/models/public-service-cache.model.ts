@@ -114,6 +114,4 @@ export const PublicServiceCacheModel = (sequelize: Sequelize) => {
       ]
     }
   )
-
-  PublicServiceCache.belongsTo(City, { foreignKey: 'city_id' })
 }
