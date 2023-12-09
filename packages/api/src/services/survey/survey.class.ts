@@ -1,9 +1,11 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
-import type { Survey, SurveyData, SurveyPatch, SurveyQuery } from './survey.schema'
+import type { SurveyData, SurveyPatch, WeightKeys, RecreationalInterestKeys } from './survey.schema'
+import { surveyDataValidator, RecreationalInterestMappings } from './survey.schema'
 import { Op } from 'sequelize'
+import { calculateDistance } from '../../utils'
 
-export type { Survey, SurveyData, SurveyPatch, SurveyQuery }
+export type { SurveyData, SurveyPatch }
 
 interface QueryParams {
   query: string
@@ -11,162 +13,6 @@ interface QueryParams {
 export interface SurveyParams extends Params {
   query?: QueryParams
 }
-
-export interface SurveyFormData {
-  data: {
-    snowPreference?: 'none' | 'light' | 'heavy'
-    rainPreference?: 'dry' | 'regular'
-    minSalary?: number
-    jobLevel?: 'entry-level' | 'senior' | 'both'
-    selectedJobs?: { naics: string; occ: string }[]
-    livingPreference?: 'city' | 'suburb' | 'rural'
-    recreationalInterests?: string[]
-    publicServices?: string[]
-    scenery?: string[]
-    searchRadius?: number
-    housingType?: 'rent' | 'buy'
-    homeMin?: number
-    homeMax?: number
-    rentMin?: number
-    rentMax?: number
-    temperatureData: [
-      { month: 'Jan'; temp?: number },
-      { month: 'Feb'; temp?: number },
-      { month: 'Mar'; temp?: number },
-      { month: 'Apr'; temp?: number },
-      { month: 'May'; temp?: number },
-      { month: 'Jun'; temp?: number },
-      { month: 'Jul'; temp?: number },
-      { month: 'Aug'; temp?: number },
-      { month: 'Sep'; temp?: number },
-      { month: 'Oct'; temp?: number },
-      { month: 'Nov'; temp?: number },
-      { month: 'Dec'; temp?: number }
-    ]
-    weights: {
-      costOfLivingWeight?: number
-      recreationalActivitiesWeight?: number
-      weatherWeight?: number
-      jobOpportunityWeight?: number
-      publicServicesWeight?: number
-      crimeRateWeight?: number
-      sceneryWeight?: number
-      airQualityWeight?: number
-      totalAvailablePoints?: number
-    }
-  }
-}
-type RecreationalInterestKey =
-  | 'mountains'
-  | 'nationalParks'
-  | 'forests'
-  | 'waterfrontViews'
-  | 'scenicDrives'
-  | 'historicSites'
-  | 'monuments'
-  | 'museums'
-  | 'naturalWonders'
-  | 'rockClimbing'
-  | 'waterSports'
-  | 'beach'
-  | 'diverseFloraFauna'
-  | 'birdWatching'
-  | 'zoos'
-  | 'winterSports'
-  | 'stargazing'
-  | 'amusementParks'
-
-type RecreationalInterestMappings = {
-  [key in RecreationalInterestKey]: string[]
-}
-
-const RecreationalInterestMappings = {
-  mountains: ['Mountain Peak', 'Mountain', 'Hiking Trail', 'Hiking Spot'],
-  nationalParks: [
-    'National Park',
-    'State Park',
-    'Park',
-    'National Park for the Performing Arts',
-    'National Preserve',
-    'Scenic Area',
-    'National Grassland',
-    'National Reserve',
-    'Wilderness Area',
-    'National Recreation Area'
-  ],
-  forests: ['National Forest', 'Rainforest'],
-  waterfrontViews: [
-    'National Seashore',
-    'Beach',
-    'National Lakeshore',
-    'Lake',
-    'Great Lake',
-    'Lakes',
-    'Reservoir',
-    'Bay',
-    'Inlet',
-    'River',
-    'Fjord',
-    'Lake System',
-    'Lake Region',
-    'National River'
-  ],
-  scenicDrives: ['Scenic Drive', 'Parkway'],
-  historicSites: [
-    'Historic Site',
-    'Historical Park',
-    'Historical Site',
-    'Ranch',
-    'Historic Landmark',
-    'Historic Trail',
-    'Landmark',
-    'Center',
-    'Battlefields Memorial',
-    'Heritage Area',
-    'Memorial Park',
-    'Heritage Corridor',
-    'National Military Park',
-    'National Battlefield',
-    'National Historical Park'
-  ],
-  monuments: ['National Monument', 'National Memorial', 'Mountain Memorial', 'Memorial', 'Monument'],
-  museums: ['Museum', 'National Museum'],
-  naturalWonders: [
-    'Natural Arch',
-    'Waterfall',
-    'Viewpoint',
-    'Granite Dome',
-    'Slot Canyon',
-    'Valley',
-    'Estuary',
-    'Cave'
-  ],
-  rockClimbing: ['Climbing Area'],
-  waterSports: [
-    'National Riverway',
-    'National Scenic River',
-    'Scenic River',
-    'National Lakeshore',
-    'Lake',
-    'Great Lake',
-    'Lakes',
-    'Bay',
-    'Lake System',
-    'Lake Region',
-    'National River'
-  ],
-  beach: ['Beach'],
-  diverseFloraFauna: ['Botanical Garden'],
-  birdWatching: [],
-  zoos: ['Zoo', 'Wildlife Reserve'],
-  winterSports: ['Ski Resort'],
-  stargazing: ['Observatory'],
-  amusementParks: ['Amusement Park']
-}
-
-type Weights = SurveyFormData['data']['weights']
-type WeightKey = keyof Weights
-
 export class SurveyService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -176,55 +22,11 @@ export class SurveyService implements ServiceMethods<any> {
     this.sequelize = sequelizeClient
   }
 
-  scoreCities(
-    job: any,
-    weather: any,
-    recreation: any,
-    publicServices: any,
-    crime: any,
-    scenery: any,
-    airQuality: any,
-    housing: any,
-    weights: any,
-    recreationFormData: any,
-    jobFormData: any
-  ): any {
-    const cityScores = new Map<number, number>()
-
-    const categories = [
-      { data: job?.topCities, weight: weights.jobOpportunityWeight },
-      { data: weather, weight: weights.weatherWeight },
-      { data: recreation, weight: weights.recreationalActivitiesWeight },
-      { data: housing, weight: weights.costOfLivingWeight },
-      { data: publicServices, weight: weights.publicServicesWeight },
-      { data: scenery, weight: weights.sceneryWeight },
-      { data: airQuality, weight: weights.airQualityWeight },
-      { data: crime, weight: weights.crimeRateWeight }
-    ]
-
-    categories.forEach((category) => {
-      category.data?.forEach((city: any) => {
-        if (!city?.ranking) {
-          return
-        }
-        const normalizedScore = 301 - city?.ranking
-        const weightedScore = normalizedScore * (category.weight || 0)
-        cityScores.set(city.city_id, (cityScores.get(city.city_id) || 0) + weightedScore)
-      })
-    })
-
-    const sortedCities = Array.from(cityScores)
-      .map(([city_id, score]) => ({ city_id, score }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10)
-
-    // Get detailed information for the top cities
-    const citiesWithDetails = this.getCityDetails(sortedCities, recreationFormData, jobFormData)
-
-    return citiesWithDetails
-  }
-
-  async create(data: SurveyFormData, params?: SurveyParams): Promise<any> {
+  async create(data: SurveyData, params?: SurveyParams): Promise<any> {
+    const validData = surveyDataValidator(data)
+    if (!validData) {
+      throw new Error('Invalid survey data')
+    }
     const jobData = this.parseJobData(data)
     const weatherData = this.parseWeatherData(data)
     const recreationData = this.parseRecreationData(data)
@@ -235,10 +37,10 @@ export class SurveyService implements ServiceMethods<any> {
     const airQualityData = {}
     const weights = data.data.weights
 
-    let apiPromises: { [key in WeightKey]?: Promise<any> } = {}
+    let apiPromises: { [key in WeightKeys]?: Promise<any> } = {}
 
     // Add API call promises based on weights
-    const addApiCall = (weightKey: WeightKey, apiCall: (data: any) => Promise<any>, parsedData: any) => {
+    const addApiCall = (weightKey: WeightKeys, apiCall: (data: any) => Promise<any>, parsedData: any) => {
       if (weights[weightKey] && weights[weightKey]! > 0) {
         apiPromises[weightKey] = apiCall(parsedData)
       }
@@ -289,7 +91,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parseJobData(data: SurveyFormData): any {
+  parseJobData(data: SurveyData): any {
     const { minSalary, jobLevel, selectedJobs } = data.data
 
     return {
@@ -299,7 +101,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parseWeatherData(data: SurveyFormData): any {
+  parseWeatherData(data: SurveyData): any {
     const { temperatureData, snowPreference, rainPreference } = data.data
 
     return {
@@ -309,7 +111,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parseHousingData(data: SurveyFormData): any {
+  parseHousingData(data: SurveyData): any {
     const { housingType, homeMin, homeMax, rentMin, rentMax } = data.data
 
     return {
@@ -321,7 +123,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parsePublicServicesData(data: SurveyFormData): any {
+  parsePublicServicesData(data: SurveyData): any {
     const { searchRadius, publicServices } = data.data
 
     return {
@@ -330,7 +132,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parseSceneryData(data: SurveyFormData): any {
+  parseSceneryData(data: SurveyData): any {
     const { searchRadius, scenery } = data.data
 
     return {
@@ -339,7 +141,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  parseRecreationData(data: SurveyFormData): any {
+  parseRecreationData(data: SurveyData): any {
     const { recreationalInterests, searchRadius } = data.data
 
     return {
@@ -467,6 +269,54 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
+  scoreCities(
+    job: any,
+    weather: any,
+    recreation: any,
+    publicServices: any,
+    crime: any,
+    scenery: any,
+    airQuality: any,
+    housing: any,
+    weights: any,
+    recreationFormData: any,
+    jobFormData: any
+  ): any {
+    const cityScores = new Map<number, number>()
+
+    const categories = [
+      { data: job?.topCities, weight: weights.jobOpportunityWeight },
+      { data: weather, weight: weights.weatherWeight },
+      { data: recreation, weight: weights.recreationalActivitiesWeight },
+      { data: housing, weight: weights.costOfLivingWeight },
+      { data: publicServices, weight: weights.publicServicesWeight },
+      { data: scenery, weight: weights.sceneryWeight },
+      { data: airQuality, weight: weights.airQualityWeight },
+      { data: crime, weight: weights.crimeRateWeight }
+    ]
+
+    categories.forEach((category) => {
+      category.data?.forEach((city: any) => {
+        if (!city?.ranking) {
+          return
+        }
+        const normalizedScore = 301 - city?.ranking
+        const weightedScore = normalizedScore * (category.weight || 0)
+        cityScores.set(city.city_id, (cityScores.get(city.city_id) || 0) + weightedScore)
+      })
+    })
+
+    const sortedCities = Array.from(cityScores)
+      .map(([city_id, score]) => ({ city_id, score }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 10)
+
+    // Get detailed information for the top cities
+    const citiesWithDetails = this.getCityDetails(sortedCities, recreationFormData, jobFormData)
+
+    return citiesWithDetails
+  }
+
   async getCityDetails(cities: any, recreation: any, job: any): Promise<any> {
     let { recreationalInterests, searchRadius } = recreation
     if (typeof recreationalInterests === 'string') {
@@ -529,7 +379,7 @@ export class SurveyService implements ServiceMethods<any> {
 
     const landmarkTypes = (
       Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
-    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey])
+    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKeys])
 
     const landmarks = await this.sequelize.models.LandMarks.findAll({
       where: { Type: landmarkTypes }
@@ -539,7 +389,7 @@ export class SurveyService implements ServiceMethods<any> {
       const { Latitude: cityLatitude, Longitude: cityLongitude } = city
 
       const landmarkPromises = landmarks.map(async (landmark: any) => {
-        const distance = await this.calculateDistance(
+        const distance = await calculateDistance(
           cityLatitude,
           cityLongitude,
           landmark.Latitude,
@@ -587,21 +437,6 @@ export class SurveyService implements ServiceMethods<any> {
     const sortedCities = cityDetails.sort((a, b) => b.score - a.score)
 
     return sortedCities
-  }
-
-  async calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): Promise<number> {
-    const R = 6371 // Radius of the Earth in kilometers
-    const dLat = (lat2 - lat1) * (Math.PI / 180)
-    const dLon = (lon2 - lon1) * (Math.PI / 180)
-    const a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(lat1 * (Math.PI / 180)) *
-        Math.cos(lat2 * (Math.PI / 180)) *
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2)
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-    const d = R * c // Distance in kilometers
-    return d * 0.621371 // Convert to miles
   }
 
   async find(params: SurveyParams): Promise<any[] | Paginated<any>> {
