@@ -2,3 +2,4 @@
 **/*.json
 !/config/default-example.json
 !/config/production.json
+lib/*
