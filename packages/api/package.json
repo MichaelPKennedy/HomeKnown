@@ -28,7 +28,7 @@
     "lib": "src",
     "test": "test"
   },
-  "main": "src/index.js",
+  "main": "lib/src/index.js",
   "scripts": {
     "dev": "nodemon -x ts-node src/index.ts",
     "compile": "tsc",
