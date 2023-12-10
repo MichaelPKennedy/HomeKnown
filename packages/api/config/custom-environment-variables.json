@@ -11,11 +11,6 @@
     "entity": "AUTHENTICATION_ENTITY",
     "service": "AUTHENTICATION_SERVICE",
     "entityId": "AUTHENTICATION_ENTITY_ID",
-    "authStrategies": [
-      "JWT_STRATEGY",
-      "LOCAL_STRATEGY",
-      "CUSTOM_STRATEGY"
-    ],
     "oauth": {
       "redirect": "OAUTH_REDIRECT",
       "google": {
@@ -23,15 +18,11 @@
         "clientSecret": "GOOGLE_CLIENT_SECRET",
         "successRedirect": "GOOGLE_SUCCESS_REDIRECT",
         "failureRedirect": "GOOGLE_FAILURE_REDIRECT",
-        "scope": ["PROFILE_SCOPE", "OPENID_SCOPE", "EMAIL_SCOPE"],
         "strategy": "GOOGLE_STRATEGY",
         "callbackURL": "GOOGLE_CALLBACK_URL"
       }
     },
     "jwtOptions": {
-      "header": {
-        "typ": "JWT_ACCESS_TYPE"
-      },
       "audience": "AUDIENCE_URL",
       "issuer": "JWT_ISSUER",
       "algorithm": "JWT_ALGORITHM",
@@ -46,4 +37,5 @@
       "passwordField": "PASSWORD_FIELD"
     }
   }
+  
 }
