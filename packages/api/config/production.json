@@ -22,7 +22,7 @@
               "successRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com",
               "failureRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
               "strategy": "google",
-              "callbackURL": "https://homeknown-client-c396f526d6b7.herokuapp.com/auth/google/callback"
+              "callbackURL": "https://homeknown-api-4fe050b813af.herokuapp.com/auth/google/callback"
             }
         },
         "local": {
