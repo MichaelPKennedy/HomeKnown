@@ -18,7 +18,11 @@
           },
         "oauth": {
             "google": {
-              "scope": ["profile", "openid", "email"]
+              "scope": ["profile", "openid", "email"],
+              "successRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com",
+              "failureRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
+              "strategy": "google",
+              "callbackURL": "https://homeknown-client-c396f526d6b7.herokuapp.com/auth/google/callback"
             }
         },
         "local": {

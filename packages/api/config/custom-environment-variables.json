@@ -15,11 +15,7 @@
       "redirect": "OAUTH_REDIRECT",
       "google": {
         "clientID": "GOOGLE_CLIENT_ID",
-        "clientSecret": "GOOGLE_CLIENT_SECRET",
-        "successRedirect": "GOOGLE_SUCCESS_REDIRECT",
-        "failureRedirect": "GOOGLE_FAILURE_REDIRECT",
-        "strategy": "GOOGLE_STRATEGY",
-        "callbackURL": "GOOGLE_CALLBACK_URL"
+        "clientSecret": "GOOGLE_CLIENT_SECRET"
       }
     }
   }
