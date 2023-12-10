@@ -12,6 +12,8 @@ import express, {
 import configuration from '@feathersjs/configuration'
 import socketio from '@feathersjs/socketio'
 import { Sequelize } from 'sequelize'
+const session = require('express-session')
+const oauth = require('@feathersjs/authentication-oauth')
 
 import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
@@ -52,6 +54,16 @@ app.use(json())
 app.use(urlencoded({ extended: true }))
 // Host the public folder
 app.use('/', serveStatic(app.get('public')))
+
+//session middleware for google oauth
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    store: new session.MemoryStore()
+  })
+)
 
 const databaseConfig = require('../../config/databaseConfig.js')[process.env.NODE_ENV || 'development']
 const sequelize = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
@@ -163,6 +175,7 @@ app.configure(
   })
 )
 app.configure(authentication)
+app.configure(oauth())
 app.configure(services)
 app.configure(channels)
 

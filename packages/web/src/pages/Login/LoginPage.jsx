@@ -5,6 +5,8 @@ import styles from "./LoginPage.module.css";
 import { toast } from "react-toastify";
 import client from "../../feathersClient.js";
 
+const GOOGLE_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_CALLBACK_URL}&response_type=code&scope=profile email openid&access_type=offline&prompt=consent`;
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [login, setLogin] = useState("");
@@ -16,6 +18,10 @@ const LoginPage = () => {
       localStorage.removeItem("showRegisterSuccessToast");
     }
   }, []);
+
+  const handleGoogleLogin = () => {
+    window.location.href = GOOGLE_OAUTH_URL;
+  };
 
   if (localStorage.getItem("authToken")) {
     navigate("/");
@@ -79,6 +85,18 @@ const LoginPage = () => {
               Login
             </Button>
           </Form>
+        </Card.Body>
+      </Card>
+      <Card className={styles.card}>
+        <Card.Body>
+          <Button
+            variant="danger"
+            type="button"
+            className={styles.submitButton}
+            onClick={handleGoogleLogin}
+          >
+            Login with Google
+          </Button>
         </Card.Body>
       </Card>
       <Card className={styles.card}>

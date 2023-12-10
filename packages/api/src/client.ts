@@ -7,6 +7,9 @@ import type { AuthenticationClientOptions } from '@feathersjs/authentication-cli
 import { userClient } from './services/users/users.shared'
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
 
+import { userClient } from './services/users/users.shared'
+export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
+
 import { forecastClient } from './services/forecast/forecast.shared'
 export type {
   Forecast,
@@ -100,6 +103,7 @@ export const createClient = <Configuration = any,>(
   client.configure(sceneryClient)
   client.configure(airQualityClient)
   client.configure(forecastClient)
+  client.configure(userClient)
   client.configure(userClient)
   return client
 }
