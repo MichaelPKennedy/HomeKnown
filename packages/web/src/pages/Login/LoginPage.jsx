@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import { toast } from "react-toastify";
+import client from "../../feathersClient.js";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,27 +22,18 @@ const LoginPage = () => {
     return null;
   }
 
-  const apiUrl =
-    process.env.NODE_ENV === "production"
-      ? process.env.REACT_APP_API_URL
-      : "http://localhost:3030/";
-
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch(`${apiUrl}login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          login: login,
-          password: password,
-        }),
+      const response = await client.service("/authentication").create({
+        strategy: "local",
+        login: login,
+        password: password,
       });
+      console.log("response", response);
 
-      if (response.ok) {
-        const { accessToken } = await response.json();
+      if (response.accessToken) {
+        const { accessToken } = response.authentication;
         localStorage.setItem("authToken", accessToken);
         localStorage.setItem("showLoginSuccessToast", "true");
         window.location.href = "/";
@@ -49,7 +41,7 @@ const LoginPage = () => {
         toast.error("Incorrect Username or Password");
       }
     } catch (error) {
-      console.error("Network error:", error);
+      console.error("Authentication error:", error);
     }
   };
 

@@ -1,32 +1,31 @@
+// For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
+
 import type { Application } from '../../declarations'
-import { UsersService } from './users.class'
-import { usersPath, usersMethods } from './users.shared'
-import { usersHooks } from './users.hooks'
-import { Request, Response, NextFunction } from 'express'
+import { UserService } from './users.class'
+import { userPath, userMethods } from './users.shared'
+import { userHooks } from './users.hooks'
 
-export const users = (app: Application) => {
+export * from './users.class'
+export * from './users.schema'
+
+// A configure function that registers the service and its hooks via `app.configure`
+export const user = (app: Application) => {
+  // Register our service on the Feathers application
   const sequelizeClient = app.get('sequelizeClient' as any)
-  const usersService = new UsersService(app, sequelizeClient)
-
-  app.use(usersPath, usersService)
+  app.use(userPath, new UserService(app, sequelizeClient), {
+    // A list of all methods this service exposes externally
+    methods: userMethods,
+    // You can add additional custom events to be sent to clients here
+    events: []
+  })
 
   // Initialize hooks
-  app.service(usersPath).hooks(usersHooks)
-
-  // custom login endpoint
-  app.post('/login', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const accessToken = await usersService.login(req.body)
-      res.json(accessToken)
-    } catch (error: any) {
-      res.status(401).json({ error: error.message })
-    }
-  })
+  app.service(userPath).hooks(userHooks)
 }
 
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    [usersPath]: UsersService
+    [userPath]: UserService
   }
 }

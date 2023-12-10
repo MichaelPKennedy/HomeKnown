@@ -46,7 +46,8 @@
     "@feathersjs/adapter-commons": "^5.0.8",
     "@feathersjs/authentication": "^5.0.11",
     "@feathersjs/authentication-client": "^5.0.11",
-    "@feathersjs/authentication-local": "^5.0.11",
+    "@feathersjs/authentication-local": "^5.0.12",
+    "@feathersjs/authentication-oauth": "^5.0.12",
     "@feathersjs/configuration": "^5.0.8",
     "@feathersjs/errors": "^5.0.8",
     "@feathersjs/express": "^5.0.8",
@@ -66,6 +67,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "feathers-hooks-common": "^8.1.1",
+    "feathers-sequelize": "^7.0.3",
     "jsonwebtoken": "^9.0.2",
     "knex": "^2.5.1",
     "mysql": "^2.18.1",
@@ -73,9 +75,9 @@
     "react-autosuggest": "^10.1.0",
     "sequelize": "^6.33.0",
     "sequelize-typescript": "^2.1.5",
+    "typescript": "^5.1.6",
     "use-long-press": "^3.2.0",
-    "winston": "^3.10.0",
-    "typescript": "^5.1.6"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.8",
