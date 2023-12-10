@@ -67,6 +67,7 @@
     "config": "^3.3.9",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "express-session": "^1.17.3",
     "feathers-hooks-common": "^8.1.1",
     "feathers-sequelize": "^7.0.3",
     "jsonwebtoken": "^9.0.2",
