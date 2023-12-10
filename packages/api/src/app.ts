@@ -55,16 +55,6 @@ app.use(urlencoded({ extended: true }))
 // Host the public folder
 app.use('/', serveStatic(app.get('public')))
 
-//session middleware for google oauth
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: true,
-    store: new session.MemoryStore()
-  })
-)
-
 const databaseConfig = require('../../config/databaseConfig.js')[process.env.NODE_ENV || 'development']
 const sequelize = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, {
   host: databaseConfig.host,
