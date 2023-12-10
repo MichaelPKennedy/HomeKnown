@@ -4,7 +4,8 @@
         "authStrategies": [
             "jwt",
             "local",
-            "custom"
+            "custom",
+            "google"
         ],
         "jwtOptions": {
             "header": {
