@@ -1,17 +1,5 @@
 {
-  "host": "localhost",
-  "port": 3030,
-  "public": "./public/",
-  "origins": [
-    "http://localhost:3030",
-    "http://localhost:3000"
-  ],
-  "paginate": {
-    "default": 10,
-    "max": 50
-  },
   "sequelize": {
-    "dialect": "mysql",
     "host": "DB_HOST",
     "database": "DB_NAME",
     "username": "DB_USER",
@@ -20,42 +8,42 @@
   },
   "authentication": {
     "secret": "SECRET_KEY",
-    "entity": "user",
-    "service": "users",
-    "entityId": "user_id",
+    "entity": "AUTHENTICATION_ENTITY",
+    "service": "AUTHENTICATION_SERVICE",
+    "entityId": "AUTHENTICATION_ENTITY_ID",
     "authStrategies": [
-      "jwt",
-      "local",
-      "custom"
+      "JWT_STRATEGY",
+      "LOCAL_STRATEGY",
+      "CUSTOM_STRATEGY"
     ],
     "oauth": {
-      "redirect": "http://localhost:3000",
+      "redirect": "OAUTH_REDIRECT",
       "google": {
         "clientID": "GOOGLE_CLIENT_ID",
         "clientSecret": "GOOGLE_CLIENT_SECRET",
-        "successRedirect": "http://localhost:3000",
-        "failureRedirect": "http://localhost:3000/login",
-        "scope": ["profile", "openid", "email"],
-        "strategy": "google",
-        "callbackURL": "http://localhost:3000/auth/google/callback"
+        "successRedirect": "GOOGLE_SUCCESS_REDIRECT",
+        "failureRedirect": "GOOGLE_FAILURE_REDIRECT",
+        "scope": ["PROFILE_SCOPE", "OPENID_SCOPE", "EMAIL_SCOPE"],
+        "strategy": "GOOGLE_STRATEGY",
+        "callbackURL": "GOOGLE_CALLBACK_URL"
       }
     },
     "jwtOptions": {
       "header": {
-        "typ": "access"
+        "typ": "JWT_ACCESS_TYPE"
       },
-      "audience": "http://localhost:3000",
-      "issuer": "feathers",
-      "algorithm": "HS256",
-      "expiresIn": "1d"
+      "audience": "AUDIENCE_URL",
+      "issuer": "JWT_ISSUER",
+      "algorithm": "JWT_ALGORITHM",
+      "expiresIn": "JWT_EXPIRES"
     },
     "local": {
-      "usernameField": "login",
-      "passwordField": "password"
+      "usernameField": "USERNAME_FIELD",
+      "passwordField": "PASSWORD_FIELD"
     },
     "custom": {
-      "usernameField": "login",
-      "passwordField": "password"
+      "usernameField": "USERNAME_FIELD",
+      "passwordField": "PASSWORD_FIELD"
     }
   }
 }
