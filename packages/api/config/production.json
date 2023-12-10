@@ -9,17 +9,25 @@
         ],
         "jwtOptions": {
             "header": {
-                "typ": "JWT_ACCESS_TYPE"
+              "typ": "access"
             },
-            "audience": "AUDIENCE_URL",
-            "issuer": "JWT_ISSUER",
-            "algorithm": "JWT_ALGORITHM",
-            "passwordField": "PASSWORD_FIELD"
-        },
+            "audience": "https://homeknown-client-c396f526d6b7.herokuapp.com/",
+            "issuer": "feathers",
+            "algorithm": "HS256",
+            "expiresIn": "1d"
+          },
         "oauth": {
             "google": {
               "scope": ["profile", "openid", "email"]
             }
-        }
+        },
+        "local": {
+            "usernameField": "login",
+            "passwordField": "password"
+          },
+          "custom": {
+            "usernameField": "login",
+            "passwordField": "password"
+          }
     }
 }

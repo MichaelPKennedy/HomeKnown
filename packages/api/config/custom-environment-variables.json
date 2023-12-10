@@ -21,21 +21,6 @@
         "strategy": "GOOGLE_STRATEGY",
         "callbackURL": "GOOGLE_CALLBACK_URL"
       }
-    },
-    "jwtOptions": {
-      "audience": "AUDIENCE_URL",
-      "issuer": "JWT_ISSUER",
-      "algorithm": "JWT_ALGORITHM",
-      "expiresIn": "JWT_EXPIRES"
-    },
-    "local": {
-      "usernameField": "USERNAME_FIELD",
-      "passwordField": "PASSWORD_FIELD"
-    },
-    "custom": {
-      "usernameField": "USERNAME_FIELD",
-      "passwordField": "PASSWORD_FIELD"
     }
   }
-  
 }
