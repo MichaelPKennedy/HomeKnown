@@ -7,9 +7,6 @@ import type { AuthenticationClientOptions } from '@feathersjs/authentication-cli
 import { userClient } from './services/users/users.shared'
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
 
-import { userClient } from './services/users/users.shared'
-export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
-
 import { forecastClient } from './services/forecast/forecast.shared'
 export type {
   Forecast,
@@ -82,7 +79,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
