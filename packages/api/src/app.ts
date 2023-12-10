@@ -165,7 +165,6 @@ app.configure(
   })
 )
 app.configure(authentication)
-app.configure(oauth())
 app.configure(services)
 app.configure(channels)
 
