@@ -1,3 +1,24 @@
 {
-    "public": "public"
+    "public": "public",
+    "authentication":{
+        "authStrategies": [
+            "jwt",
+            "local",
+            "custom"
+        ],
+        "jwtOptions": {
+            "header": {
+                "typ": "JWT_ACCESS_TYPE"
+            },
+            "audience": "AUDIENCE_URL",
+            "issuer": "JWT_ISSUER",
+            "algorithm": "JWT_ALGORITHM",
+            "passwordField": "PASSWORD_FIELD"
+        },
+        "oauth": {
+            "google": {
+              "scope": ["profile", "openid", "email"]
+            }
+        }
+    }
 }
