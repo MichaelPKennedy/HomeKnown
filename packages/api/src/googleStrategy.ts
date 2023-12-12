@@ -1,7 +1,7 @@
 import { OAuthStrategy } from '@feathersjs/authentication-oauth'
 import { Application, Params } from '@feathersjs/feathers'
 import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authentication'
-import jwt from 'jsonwebtoken'
+import _ from 'lodash'
 import qs from 'qs'
 
 import axios from 'axios'
@@ -138,7 +138,10 @@ class GoogleStrategy extends OAuthStrategy {
 
   // Update an entity
   async updateEntity(entity: any, profile: GoogleProfile, params: Params) {
-    return super.updateEntity(entity, profile, params)
+    const id = entity[this.entityId]
+    const data = await this.getEntityData(profile, entity, params)
+
+    return this.app.service('users').patch(id, data, _.omit(params, 'query'))
   }
 
   // Get an entity
