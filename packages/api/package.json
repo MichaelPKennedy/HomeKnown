@@ -40,8 +40,7 @@
     "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
     "bundle:client": "npm run compile && npm pack --pack-destination ./public",
     "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make",
-    "postinstall": "npm install axios"
+    "migrate:make": "knex migrate:make"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.8",
@@ -62,7 +61,7 @@
     "@turf/turf": "^6.5.0",
     "@types/sequelize": "^4.28.15",
     "@uidotdev/usehooks": "^2.4.0",
-    "axios": "^1.6.2",
+    "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "config": "^3.3.9",
@@ -84,7 +83,6 @@
     "typescript": "^5.1.6",
     "use-long-press": "^3.2.0",
     "winston": "^3.10.0",
-    "@types/axios": "^0.14.0",
     "@types/bcryptjs": "^2.4.6"
   },
   "devDependencies": {
@@ -94,7 +92,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20.4.8",
     "@types/passport-google-oauth20": "^2.0.14",
-    "axios": "^1.6.2",
+    "axios": "^1.6.0",
     "cross-env": "^7.0.3",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
