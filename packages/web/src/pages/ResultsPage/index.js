@@ -67,10 +67,10 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           </button>
         </div>
       )}
+      <div className="mb-4 mt-4 text-center">
+        <h4>Top Results</h4>
+      </div>
       <div className={styles.resultsPage}>
-        <div className="mb-4">
-          <h4>Top Results</h4>
-        </div>
         {topTen.length > 0 ? (
           topTen.map((city, index) => renderCityData(city, index))
         ) : (

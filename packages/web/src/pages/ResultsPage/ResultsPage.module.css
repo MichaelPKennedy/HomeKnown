@@ -337,7 +337,7 @@ a:active {
   outline: none;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 1200px) {
   .cityContainer {
     align-items: center; /* Vertically center items in the container */
     justify-content: space-between; /* Spreads out the children */
@@ -345,8 +345,6 @@ a:active {
     max-width: 1200px;
     margin-bottom: 30px;
     padding: 30px;
-    padding-right: 100px;
-    padding-left: 100px;
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -357,11 +355,16 @@ a:active {
   }
 
   .cityImage {
-    /* Set a specific width and height for the image or make it responsive */
-    height: 300px; /* Example fixed width, adjust as necessary */ /* Maintains the aspect ratio */
-    width: 500px;
-    object-fit: cover; /* Ensures the image covers the area */
+    height: 250px;
+    width: 400px;
+    object-fit: cover;
     border-radius: 15px;
+  }
+
+  .resultsPage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
   }
 }
 
