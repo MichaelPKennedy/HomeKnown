@@ -13,10 +13,11 @@ import {
   userPatchResolver,
   userQueryResolver
 } from './users.schema'
+import googleAuthentication from './hooks/google-authentication'
 
 export const userHooks = {
   around: {
-    all: [schemaHooks.resolveExternal(userExternalResolver), schemaHooks.resolveResult(userResolver)],
+    all: [schemaHooks.resolveResult(userResolver)],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
     create: [],
@@ -29,11 +30,11 @@ export const userHooks = {
     find: [],
     get: [],
     create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],
-    patch: [schemaHooks.validateData(userPatchValidator), schemaHooks.resolveData(userPatchResolver)],
+    patch: [],
     remove: []
   },
   after: {
-    all: []
+    all: [googleAuthentication]
   },
   error: {
     all: []

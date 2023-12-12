@@ -4,6 +4,7 @@ import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import { toast } from "react-toastify";
 import client from "../../feathersClient.js";
+import queryString from "query-string";
 
 const GOOGLE_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_CALLBACK_URL}&response_type=code&scope=profile email openid&access_type=offline&prompt=consent`;
 
@@ -17,16 +18,22 @@ const LoginPage = () => {
       toast.success("You are now registered. Please log in to continue.");
       localStorage.removeItem("showRegisterSuccessToast");
     }
+    const { access_token } = queryString.parse(window.location.search);
+    if (access_token) {
+      localStorage.setItem("authToken", access_token);
+      localStorage.setItem("showLoginSuccessToast", "true");
+    }
   }, []);
 
   const handleGoogleLogin = () => {
     window.location.href = GOOGLE_OAUTH_URL;
   };
 
-  if (localStorage.getItem("authToken")) {
-    navigate("/");
-    return null;
-  }
+  useEffect(() => {
+    if (localStorage.getItem("authToken")) {
+      navigate("/");
+    }
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();

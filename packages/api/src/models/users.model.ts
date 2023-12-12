@@ -12,12 +12,17 @@ export const UsersModel = (sequelize: Sequelize) => {
       },
       username: {
         type: DataTypes.STRING(50),
-        allowNull: false,
+        allowNull: true,
+        unique: true
+      },
+      googleId: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
         unique: true
       },
       password: {
         type: DataTypes.STRING(100),
-        allowNull: false
+        allowNull: true
       },
       primary_email: {
         type: DataTypes.STRING(50),

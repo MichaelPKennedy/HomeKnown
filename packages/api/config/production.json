@@ -17,12 +17,13 @@
             "expiresIn": "1d"
           },
         "oauth": {
+            "redirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
             "google": {
               "scope": ["profile", "openid", "email"],
-              "successRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com",
+              "successRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
               "failureRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
               "strategy": "google",
-              "callbackURL": "https://homeknown-api-4fe050b813af.herokuapp.com/auth/google/callback"
+              "callbackURL": "https://homeknown-api-4fe050b813af.herokuapp.com/oauth/google/callback"
             }
         },
         "local": {

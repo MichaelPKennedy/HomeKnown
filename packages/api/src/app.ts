@@ -13,7 +13,7 @@ import configuration from '@feathersjs/configuration'
 import socketio from '@feathersjs/socketio'
 import { Sequelize } from 'sequelize'
 const session = require('express-session')
-const oauth = require('@feathersjs/authentication-oauth')
+const { oauth } = require('@feathersjs/authentication-oauth')
 
 import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
@@ -165,6 +165,7 @@ app.configure(
   })
 )
 app.configure(authentication)
+app.configure(oauth({}))
 app.configure(services)
 app.configure(channels)
 
