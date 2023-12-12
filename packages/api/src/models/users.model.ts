@@ -15,6 +15,14 @@ export const UsersModel = (sequelize: Sequelize) => {
         allowNull: true,
         unique: true
       },
+      first_name: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+      },
+      last_name: {
+        type: DataTypes.STRING(100),
+        allowNull: true
+      },
       googleId: {
         type: DataTypes.STRING(255),
         allowNull: true,
@@ -28,6 +36,11 @@ export const UsersModel = (sequelize: Sequelize) => {
         type: DataTypes.STRING(50),
         unique: true,
         defaultValue: null
+      },
+      phone: {
+        type: DataTypes.STRING(100),
+        allowNull: true,
+        unique: true
       },
       created_at: {
         type: DataTypes.DATE,

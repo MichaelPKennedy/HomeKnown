@@ -10,6 +10,8 @@ interface GoogleProfile {
   id: string
   email: string
   name: string
+  given_name: string
+  family_name: string
   picture: string
 }
 
@@ -17,6 +19,8 @@ interface User {
   id: number
   username: string
   primary_email: string
+  first_name: string
+  last_name: string
   password: string
 }
 
@@ -55,7 +59,9 @@ class GoogleStrategy extends OAuthStrategy {
     return {
       ...super.getEntityData(profile, existingEntity, params),
       primary_email: profile.email,
-      googleId: profile.id
+      googleId: profile.id,
+      first_name: profile.given_name,
+      last_name: profile.family_name
       // Add more fields as needed
     }
   }

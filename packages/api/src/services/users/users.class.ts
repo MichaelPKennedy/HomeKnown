@@ -36,12 +36,14 @@ export class UserService implements ServiceMethods<any> {
   }
 
   async create(data: any, params?: UserParams): Promise<any> {
-    const { username, password, primary_email, googleId } = data
+    const { username, password, primary_email, googleId, first_name, last_name } = data
 
     if (googleId) {
       const user = await this.sequelize.models.Users.create({
         googleId,
-        primary_email
+        primary_email,
+        first_name,
+        last_name
       })
       return user
     } else {
@@ -49,7 +51,9 @@ export class UserService implements ServiceMethods<any> {
       const user = await this.sequelize.models.Users.create({
         username,
         password,
-        primary_email
+        primary_email,
+        first_name,
+        last_name
       })
 
       const { password: _, ...userWithoutPassword } = user.get({ plain: true })
