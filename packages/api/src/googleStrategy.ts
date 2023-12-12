@@ -4,7 +4,7 @@ import { AuthenticationResult, AuthenticationRequest } from '@feathersjs/authent
 import jwt from 'jsonwebtoken'
 import qs from 'qs'
 
-const axios = require('axios')
+import axios from 'axios'
 
 interface GoogleProfile {
   id: string
