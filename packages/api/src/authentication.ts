@@ -23,7 +23,7 @@ export const authentication = (app: Application) => {
 
   authentication.register('jwt', new JWTStrategy())
   authentication.register('local', new CustomStrategy(app, sequelize))
-  authentication.register('google', new GoogleStrategy(app))
+  authentication.register('google', new GoogleStrategy(app, sequelize))
 
   app.use('authentication', authentication)
 }

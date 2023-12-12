@@ -13,10 +13,22 @@ interface GoogleProfile {
   picture: string
 }
 
+interface User {
+  id: number
+  username: string
+  primary_email: string
+  password: string
+}
+
 class GoogleStrategy extends OAuthStrategy {
-  // Constructor to initialize the strategy
-  constructor(app: Application) {
+  app: Application
+  sequelize: any
+  entity: string
+  constructor(app: Application, sequelizeClient: any) {
     super()
+    this.app = app
+    this.sequelize = sequelizeClient
+    this.entity = 'users'
   }
 
   // Get the configuration for this strategy
@@ -108,9 +120,9 @@ class GoogleStrategy extends OAuthStrategy {
   }
 
   // Find an entity
-  async findEntity(profile: GoogleProfile, params: Params) {
+  async findEntity(profile: GoogleProfile, params: Params): Promise<User | null> {
     const query = await this.getEntityQuery(profile, params)
-    const result = await this.entityService.find({
+    const result = await this.app.service('users').find({
       ...params,
       query
     })
