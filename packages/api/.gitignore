@@ -3,4 +3,4 @@
 !/config/default-example.json
 !/config/custom-environment-variables.json
 !/config/production.json
-lib/*
+/lib

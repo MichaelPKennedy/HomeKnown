@@ -59,6 +59,7 @@
     "@feathersjs/typebox": "^5.0.8",
     "@google-cloud/storage": "^7.6.0",
     "@turf/turf": "^6.5.0",
+    "@types/bcryptjs": "^2.4.6",
     "@types/sequelize": "^4.28.15",
     "@uidotdev/usehooks": "^2.4.0",
     "axios": "^1.6.0",
@@ -75,6 +76,7 @@
     "knex": "^3.1.0",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.1",
+    "node-fetch": "^3.3.2",
     "passport-google-oauth20": "^2.0.0",
     "qs": "^6.11.2",
     "react-autosuggest": "^10.1.0",
@@ -82,8 +84,7 @@
     "sequelize-typescript": "^2.1.5",
     "typescript": "^5.1.6",
     "use-long-press": "^3.2.0",
-    "winston": "^3.10.0",
-    "@types/bcryptjs": "^2.4.6"
+    "winston": "^3.10.0"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.8",
