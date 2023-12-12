@@ -62,6 +62,7 @@
     "@turf/turf": "^6.5.0",
     "@types/sequelize": "^4.28.15",
     "@uidotdev/usehooks": "^2.4.0",
+    "axios": "^1.6.2",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "config": "^3.3.9",
@@ -73,7 +74,6 @@
     "google-auth-library": "^9.4.1",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
-    "axios": "^1.6.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.1",
     "passport-google-oauth20": "^2.0.0",
@@ -83,7 +83,9 @@
     "sequelize-typescript": "^2.1.5",
     "typescript": "^5.1.6",
     "use-long-press": "^3.2.0",
-    "winston": "^3.10.0"
+    "winston": "^3.10.0",
+    "@types/axios": "^0.14.0",
+    "@types/bcryptjs": "^2.4.6"
   },
   "devDependencies": {
     "@feathersjs/cli": "^5.0.8",
