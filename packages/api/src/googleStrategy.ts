@@ -138,7 +138,7 @@ class GoogleStrategy extends OAuthStrategy {
 
   // Update an entity
   async updateEntity(entity: any, profile: GoogleProfile, params: Params) {
-    const id = entity[this.entityId]
+    const id = entity.user_id
     const data = await this.getEntityData(profile, entity, params)
 
     return this.app.service('users').patch(id, data, _.omit(params, 'query'))
