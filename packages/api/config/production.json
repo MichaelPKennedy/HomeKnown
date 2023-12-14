@@ -11,17 +11,17 @@
             "header": {
               "typ": "access"
             },
-            "audience": "https://homeknown-client-c396f526d6b7.herokuapp.com/",
+            "audience": "https://www.homeknown.app/",
             "issuer": "feathers",
             "algorithm": "HS256",
             "expiresIn": "1d"
           },
         "oauth": {
-            "redirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
+            "redirect": "https://www.homeknown.app/login",
             "google": {
               "scope": ["profile", "openid", "email"],
-              "successRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
-              "failureRedirect": "https://homeknown-client-c396f526d6b7.herokuapp.com/login",
+              "successRedirect": "https://www.homeknown.app/login",
+              "failureRedirect": "https://www.homeknown.app/login",
               "strategy": "google",
               "callbackURL": "https://homeknown-api-4fe050b813af.herokuapp.com/oauth/google/callback"
             }

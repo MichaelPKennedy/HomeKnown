@@ -112,7 +112,7 @@ class GoogleStrategy extends OAuthStrategy {
   async getRedirect(data: any, params: Params) {
     let redirectUrl
     if (process.env.NODE_ENV === 'production') {
-      redirectUrl = 'https://homeknown-client-c396f526d6b7.herokuapp.com/login'
+      redirectUrl = 'https://www.homeknown.app/login'
     } else {
       redirectUrl = 'http://localhost:3000/login'
     }
