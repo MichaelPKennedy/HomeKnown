@@ -30,7 +30,7 @@
   },
   "main": "lib/src/index.js",
   "scripts": {
-    "dev": "nodemon -x ts-node src/index.ts",
+    "dev": "nodemon -x node lib/src/index.js",
     "compile": "tsc",
     "build": "tsc",
     "heroku-postbuild": "npm run build",

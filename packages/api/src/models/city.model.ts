@@ -55,6 +55,10 @@ export const CityModel = (sequelize: Sequelize) => {
       cost_index: {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: true
+      },
+      state_code: {
+        type: DataTypes.INTEGER,
+        allowNull: true
       }
     },
     {
