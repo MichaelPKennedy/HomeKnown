@@ -15,7 +15,7 @@ export interface SurveyParams extends Params {
 }
 
 const years: string[] = []
-for (let year = 2021; year <= 2023; year++) {
+for (let year = 2019; year <= 2023; year++) {
   ;[
     'january',
     'february',
