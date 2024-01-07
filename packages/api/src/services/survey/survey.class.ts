@@ -13,6 +13,27 @@ interface QueryParams {
 export interface SurveyParams extends Params {
   query?: QueryParams
 }
+
+const years: string[] = []
+for (let year = 2018; year <= 2023; year++) {
+  ;[
+    'january',
+    'february',
+    'march',
+    'april',
+    'may',
+    'june',
+    'july',
+    'august',
+    'september',
+    'october',
+    'november',
+    'december'
+  ].forEach((month) => {
+    years.push(`${month}_${year}`)
+  })
+}
+
 export class SurveyService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -337,16 +358,15 @@ export class SurveyService implements ServiceMethods<any> {
           model: this.sequelize.models.CityDemographics
         },
         {
-          model: this.sequelize.models.PublicServiceCache
-        },
-        {
           model: this.sequelize.models.CityMonthlyWeatherCounty
         },
         {
-          model: this.sequelize.models.HomePrice
+          model: this.sequelize.models.HomePrice,
+          attributes: years
         },
         {
-          model: this.sequelize.models.MonthlyRentCities
+          model: this.sequelize.models.MonthlyRentCities,
+          attributes: years
         },
         {
           model: this.sequelize.models.Area,
