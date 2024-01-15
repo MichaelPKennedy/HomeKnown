@@ -55,8 +55,11 @@ const NavBar = () => {
               Settings
             </button>
             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <Link className="dropdown-item" to="/privacy-policy">
+              <Link className="dropdown-item mb-2" to="/privacy-policy">
                 Privacy Policy
+              </Link>
+              <Link className="dropdown-item" to="/terms-of-service">
+                Terms of Service
               </Link>
             </div>
           </li>

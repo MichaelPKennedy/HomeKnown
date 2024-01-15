@@ -22,8 +22,7 @@ import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Login/RegisterPage";
 import LoggedOut from "./pages/Login/LoggedOut";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-
-// Create a client
+import TermsOfService from "./pages/TermsOfService";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -36,7 +35,6 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // Log the error or handle it in a way that suits your app
     console.error(error, errorInfo);
   }
 
@@ -55,7 +53,7 @@ const HTML5toTouch = {
     },
     {
       backend: TouchBackend,
-      options: { enableMouseEvents: true }, // Note that you can call your backends with options
+      options: { enableMouseEvents: true },
       preview: false,
       transition: TouchTransition,
     },
@@ -82,6 +80,7 @@ root.render(
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/signed-out" element={<LoggedOut />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
               </Routes>
               <ToastContainer />
             </Router>
