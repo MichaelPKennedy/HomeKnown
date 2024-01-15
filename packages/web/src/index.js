@@ -21,6 +21,7 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Login/RegisterPage";
 import LoggedOut from "./pages/Login/LoggedOut";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Create a client
 
@@ -80,6 +81,7 @@ root.render(
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/signed-out" element={<LoggedOut />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               </Routes>
               <ToastContainer />
             </Router>

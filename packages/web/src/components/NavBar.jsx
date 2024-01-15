@@ -44,6 +44,22 @@ const NavBar = () => {
           </li> */}
         </ul>
         <ul className="navbar-nav ml-auto mr-1">
+          <li className="nav-item dropdown mr-4">
+            <button
+              className="nav-link btn btn-link dropdown-toggle"
+              id="navbarDropdown"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Settings
+            </button>
+            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+              <Link className="dropdown-item" to="/privacy-policy">
+                Privacy Policy
+              </Link>
+            </div>
+          </li>
           {isLoggedIn ? (
             <li className="nav-item">
               <button className="nav-link btn btn-link" onClick={handleLogout}>

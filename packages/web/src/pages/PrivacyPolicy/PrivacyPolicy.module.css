@@ -1,0 +1,89 @@
+.privacyPolicyContainer {
+  margin: 20px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.subHeading {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.paragraph {
+  text-align: justify;
+  line-height: 1.6;
+}
+
+.section {
+  margin-bottom: 20px;
+}
+
+.privacyPolicyContent {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+.privacyPolicyContent h2 {
+  margin-top: 20px;
+}
+
+.privacyPolicyContent ol {
+  counter-reset: section;
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.privacyPolicyContent ol li {
+  margin-bottom: 10px;
+  counter-increment: section;
+}
+
+.privacyPolicyContent ol li::before {
+  content: counter(section) ". ";
+  font-weight: bold;
+}
+
+.privacyPolicyContent ul {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+.privacyPolicyContent ul li {
+  position: relative;
+}
+
+.privacyPolicyContent ul li::before {
+  content: "";
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background-color: #000;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.orderedList {
+  list-style-type: decimal; /* Default ordered list style */
+  padding-left: 20px; /* Add indentation */
+}
+
+.unorderedList {
+  list-style-type: disc; /* Default unordered list style */
+  padding-left: 20px; /* Add indentation */
+}
+
+.unorderedList li {
+  margin-bottom: 5px; /* Space between list items */
+}
+
+.orderedList li {
+  margin-bottom: 5px; /* Space between list items */
+}
