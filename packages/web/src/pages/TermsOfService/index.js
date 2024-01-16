@@ -19,9 +19,10 @@ const TermsOfService = () => {
         <h2 className={styles.subHeading}>Use of Data</h2>
         <p className={styles.paragraph}>
           The data provided by our application is sourced from publicly
-          available government databases. You are not permitted to download this
-          data directly from our application. However, you are free to use the
-          results of your searches for your own purposes.
+          available government databases as well as third party sources. You are
+          not permitted to download this data directly from our application.
+          However, you are free to use the results of your searches for your own
+          purposes.
         </p>
       </section>
 
@@ -115,7 +116,7 @@ const TermsOfService = () => {
         <h2 className={styles.subHeading}>Contact Information</h2>
         <p className={styles.paragraph}>
           If you have any questions about these Terms, please contact us at
-          [contact@example.com].
+          [kennedy01mike@gmail.com].
         </p>
       </section>
     </div>

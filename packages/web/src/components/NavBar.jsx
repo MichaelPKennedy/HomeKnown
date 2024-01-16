@@ -58,8 +58,11 @@ const NavBar = () => {
               <Link className="dropdown-item mb-2" to="/privacy-policy">
                 Privacy Policy
               </Link>
-              <Link className="dropdown-item" to="/terms-of-service">
+              <Link className="dropdown-item mb-2" to="/terms-of-service">
                 Terms of Service
+              </Link>
+              <Link className="dropdown-item" to="/data-sources">
+                Our Data Sources
               </Link>
             </div>
           </li>

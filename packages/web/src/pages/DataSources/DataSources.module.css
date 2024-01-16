@@ -1,0 +1,32 @@
+.dataSourcesContainer {
+  margin: 20px;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sourceList {
+  list-style-type: none; /* Removes default list styling */
+  padding: 0;
+}
+
+.sourceList li {
+  margin-bottom: 10px; /* Space between list items */
+}
+
+.sourceList li a {
+  color: #007bff; /* Link color, adjust as needed */
+  text-decoration: none;
+}
+
+.sourceList li a:hover {
+  text-decoration: underline;
+}
+
+.sourceList strong {
+  font-weight: bold;
+}

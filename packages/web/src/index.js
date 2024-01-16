@@ -23,6 +23,7 @@ import RegisterPage from "./pages/Login/RegisterPage";
 import LoggedOut from "./pages/Login/LoggedOut";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import DataSources from "./pages/DataSources";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -81,6 +82,7 @@ root.render(
                 <Route path="/signed-out" element={<LoggedOut />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/data-sources" element={<DataSources />} />
               </Routes>
               <ToastContainer />
             </Router>
