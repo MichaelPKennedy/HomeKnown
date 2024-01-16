@@ -36,7 +36,7 @@ const CookieConsent = () => {
       </p>
 
       <a href="/privacy-policy">Click to see our Privacy Policy</a>
-      <button className="ml-4" onClick={handleAccept}>
+      <button className="ml-4 mt-2" onClick={handleAccept}>
         Accept
       </button>
     </div>
