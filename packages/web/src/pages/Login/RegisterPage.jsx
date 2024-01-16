@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import client from "../../feathersClient.js";
@@ -11,12 +11,18 @@ const RegisterPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const handleRegister = async (event) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
+      return;
+    }
+
+    if (!agreedToTerms) {
+      alert("Please agree to the terms of service and privacy policy.");
       return;
     }
 
@@ -75,6 +81,21 @@ const RegisterPage = () => {
                 placeholder="Confirm Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formBasicCheckbox">
+              <Form.Check
+                className="mt-3"
+                type="checkbox"
+                label={
+                  <span>
+                    I agree to the{" "}
+                    <Link to="/terms-of-service">Terms of Service</Link> and{" "}
+                    <Link to="/privacy-policy">Privacy Policy</Link>
+                  </span>
+                }
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
               />
             </Form.Group>
 
