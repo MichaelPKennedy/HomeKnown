@@ -104,6 +104,11 @@ const LoginPage = () => {
           >
             Login with Google
           </Button>
+          <p className={`mt-2 mb-0 ${styles.termsOfService}`}>
+            By signing in with Google, you agree to our{" "}
+            <a href="/terms-of-service"> Terms of Service</a> and
+            <a href="/privacy-policy"> Privacy Policy.</a>
+          </p>
         </Card.Body>
       </Card>
       <Card className={styles.card}>

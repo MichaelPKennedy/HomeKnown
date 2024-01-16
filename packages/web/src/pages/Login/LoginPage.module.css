@@ -70,4 +70,6 @@ body {
   }
 }
 
-/* Add more media queries as needed for different breakpoints */
+.termsOfService {
+  font-size: 14px;
+}
