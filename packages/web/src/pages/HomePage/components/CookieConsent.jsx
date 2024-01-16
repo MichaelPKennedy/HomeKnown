@@ -34,7 +34,11 @@ const CookieConsent = () => {
         We use cookies to improve your experience on our site. By continuing to
         use our site, you accept our use of cookies.
       </p>
-      <button onClick={handleAccept}>Accept</button>
+
+      <a href="/privacy-policy">Click to see our Privacy Policy</a>
+      <button className="ml-4" onClick={handleAccept}>
+        Accept
+      </button>
     </div>
   );
 };
