@@ -1,5 +1,3 @@
-/* GoogleButton.module.css */
-
 .materialButton {
   user-select: none;
   -moz-user-select: none;
@@ -96,7 +94,7 @@
     0 1px 3px 1px rgba(60, 64, 67, 0.15);
   box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3),
     0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  background-color: rgba(0, 29, 53, 0.08); /* Semi-transparent background */
+  background-color: rgba(0, 29, 53, 0.08);
 }
 
 .materialbuttonstate:hover {
@@ -116,12 +114,12 @@
 }
 
 .materialButton:hover::after {
-  background-color: rgba(0, 29, 53, 0.08); /* Semi-transparent overlay */
+  background-color: rgba(0, 29, 53, 0.08);
 }
 
 .materialButtonIcon,
 .materialButtonContents {
-  position: relative; /* Make sure these are above the pseudo-element */
+  position: relative;
 }
 
 .materialButton:focus {
