@@ -1,16 +1,17 @@
 // NavBar.js
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import styles from "./NavBar.module.css";
+import { AuthContext } from "../AuthContext";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("authToken");
+  const { logout } = useContext(AuthContext);
 
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    // Redirect to home page or login page
+    logout();
     navigate("/signed-out");
   };
 
