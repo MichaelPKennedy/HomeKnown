@@ -1,14 +1,10 @@
 import React, { useEffect } from "react";
 import styles from "./ResultsPage.module.css";
-import StateSalaryChart from "./components/StateSalaryChart";
-import StateSalaryTable from "./components/StateSalaryTable";
-import CitySalaryChart from "./components/CitySalaryChart";
-import CitySalaryTable from "./components/CitySalaryTable";
-import RecreationMap from "./components/RecreationMap";
-import TemperatureGraph from "./components/TemperatureGraph";
-import CityWeatherGraph from "./components/CityWeatherGraph";
+import { Button } from "react-bootstrap";
 import { useLocation, Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -16,6 +12,35 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleHeartClick = (cityId) => {
+    // Function to handle the logic when the heart is clicked
+    console.log(`Heart clicked for city id: ${cityId}`);
+    // Add your logic to handle the favorite action here
+  };
+
+  function HeartIcon({ onClick, className }) {
+    return (
+      <button
+        onClick={onClick}
+        className={className}
+        style={{
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 258.06 245.35"
+          className={styles.heartIcon}
+        >
+          <path d="M128.63,224.63h0C31.13,160.97-24.54,73.83,16.81,24.63,29.25,9.83,49.84,4.73,68.57,4.73s37.46,6.63,51.76,19.9l8.3,7.72,8.31-7.72c28.58-26.54,80.79-31.05,103.51,0,38.1,52.08,2.02,119.1-111.82,200Z" />
+        </svg>
+      </button>
+    );
+  }
 
   const renderCityData = (city, index) => {
     return (
@@ -25,6 +50,10 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           key={city.city_id}
           state={{ city }}
         >
+          <HeartIcon
+            onClick={() => handleHeartClick(city.city_id)}
+            className={styles.heartButton}
+          />
           <div className={styles.cityDetails}>
             {" "}
             {/* New wrapper for text */}

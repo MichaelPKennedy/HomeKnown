@@ -1,3 +1,4 @@
+import { userCities } from './user-cities/user-cities'
 import { user } from './users/users'
 import { forecast } from './forecast/forecast'
 import { airQuality } from './air-quality/air-quality'
@@ -14,6 +15,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(userCities)
   app.configure(user)
   app.configure(forecast)
   app.configure(airQuality)

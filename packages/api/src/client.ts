@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { userCitiesClient } from './services/user-cities/user-cities.shared'
+export type {
+  UserCities,
+  UserCitiesData,
+  UserCitiesQuery,
+  UserCitiesPatch
+} from './services/user-cities/user-cities.shared'
+
 import { userClient } from './services/users/users.shared'
 export type { User, UserData, UserQuery, UserPatch } from './services/users/users.shared'
 
@@ -79,7 +87,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any>(
+export const createClient = <Configuration = any,>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -102,5 +110,6 @@ export const createClient = <Configuration = any>(
   client.configure(forecastClient)
   client.configure(userClient)
   client.configure(userClient)
+  client.configure(userCitiesClient)
   return client
 }

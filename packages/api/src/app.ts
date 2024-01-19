@@ -116,6 +116,8 @@ const LandMark = sequelize.models.LandMark
 const MTFCC = sequelize.models.MTFCC
 const StateIndustrySalary = sequelize.models.StateIndustrySalary
 const Weather = sequelize.models.Weather
+const UserCities = sequelize.models.UserCities
+const Users = sequelize.models.Users
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -135,6 +137,8 @@ City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
 City.hasMany(HomePrice, { foreignKey: 'city_id' })
 City.hasMany(MonthlyRentCities, { foreignKey: 'city_id' })
 City.belongsTo(Area, { foreignKey: 'area_code' })
+UserCities.belongsTo(Users, { foreignKey: 'user_id' })
+UserCities.belongsTo(City, { foreignKey: 'city_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
 CityMonthlyWeatherCounty.belongsTo(City, { foreignKey: 'city_id' })
