@@ -27,6 +27,7 @@ export const UserCitiesModel = (sequelize: Sequelize) => {
     {
       sequelize,
       tableName: 'UserCities',
+      modelName: 'UserCities',
       timestamps: true
     }
   )

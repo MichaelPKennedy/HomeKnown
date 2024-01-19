@@ -19,7 +19,7 @@ export const userHooks = {
   around: {
     all: [schemaHooks.resolveResult(userResolver)],
     find: [authenticate('jwt')],
-    get: [authenticate('jwt')],
+    get: [],
     create: [],
     update: [authenticate('jwt')],
     patch: [authenticate('jwt')],

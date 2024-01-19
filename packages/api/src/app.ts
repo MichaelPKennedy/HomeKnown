@@ -44,6 +44,7 @@ import { CityDemographicsModel } from './models/city-demographics.model'
 import { MonthlyRentCitiesModel } from './models/monthly-rent-cities.model'
 import { HomePriceModel } from './models/home-price.model'
 import { UsersModel } from './models/users.model'
+import { UserCitiesModel } from './models/user-cities.model'
 
 const app: Application = express(feathers())
 
@@ -96,6 +97,7 @@ CityDemographicsModel(sequelize)
 MonthlyRentCitiesModel(sequelize)
 HomePriceModel(sequelize)
 UsersModel(sequelize)
+UserCitiesModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area

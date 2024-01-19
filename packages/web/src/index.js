@@ -24,6 +24,7 @@ import LoggedOut from "./pages/Login/LoggedOut";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DataSources from "./pages/DataSources";
+import { AuthProvider } from "./AuthContext";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -69,24 +70,29 @@ root.render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <DndProvider backend={MultiBackend} options={HTML5toTouch}>
-          <CityDataProvider>
-            <Router>
-              <NavBar />
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/search" element={<SearchPage />} />
-                <Route path="/results" element={<ResultsPage />} />
-                <Route path="/results/:cityId" element={<City />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route path="/signed-out" element={<LoggedOut />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-                <Route path="/data-sources" element={<DataSources />} />
-              </Routes>
-              <ToastContainer />
-            </Router>
-          </CityDataProvider>
+          <AuthProvider>
+            <CityDataProvider>
+              <Router>
+                <NavBar />
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/search" element={<SearchPage />} />
+                  <Route path="/results" element={<ResultsPage />} />
+                  <Route path="/results/:cityId" element={<City />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/signed-out" element={<LoggedOut />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route
+                    path="/terms-of-service"
+                    element={<TermsOfService />}
+                  />
+                  <Route path="/data-sources" element={<DataSources />} />
+                </Routes>
+                <ToastContainer />
+              </Router>
+            </CityDataProvider>
+          </AuthProvider>
         </DndProvider>
       </QueryClientProvider>
     </ErrorBoundary>

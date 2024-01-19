@@ -4,10 +4,10 @@ export const userCitiesHooks = {
     all: [],
     find: [],
     get: [],
-    create: [disallow('external')],
+    create: [],
     update: [disallow('external')],
     patch: [disallow('external')],
-    remove: [disallow('external')]
+    remove: []
   },
   after: {
     all: [],

@@ -32,7 +32,16 @@ export class UserService implements ServiceMethods<any> {
   }
 
   async get(id: Id, params?: UserParams): Promise<any> {
-    throw new Error('Method not implemented.')
+    const user = await this.sequelize.models.Users.findOne({
+      where: { user_id: id }
+    })
+
+    if (!user) {
+      throw new Error('User not found.')
+    }
+
+    const { password: _, ...userWithoutPassword } = user.get({ plain: true })
+    return userWithoutPassword
   }
 
   async create(data: any, params?: UserParams): Promise<any> {

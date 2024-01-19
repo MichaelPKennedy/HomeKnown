@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
@@ -7,10 +7,13 @@ import client from "../../feathersClient.js";
 import queryString from "query-string";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
 
+import { AuthContext } from "../../AuthContext";
+
 const LoginPage = () => {
   const navigate = useNavigate();
-  const [login, setLogin] = useState("");
+  const [loginField, setLoginField] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(AuthContext);
 
   useEffect(() => {
     if (localStorage.getItem("showRegisterSuccessToast") === "true") {
@@ -35,15 +38,11 @@ const LoginPage = () => {
     try {
       const response = await client.service("/authentication").create({
         strategy: "local",
-        login: login,
+        login: loginField,
         password: password,
       });
-      console.log("response", response);
-
-      if (response.accessToken) {
-        const { accessToken } = response.authentication;
-        localStorage.setItem("authToken", accessToken);
-        localStorage.setItem("showLoginSuccessToast", "true");
+      if (response.accessToken && response.users) {
+        login(response.accessToken, response.users);
         window.location.href = "/";
       } else {
         toast.error("Incorrect Username or Password");
@@ -63,8 +62,8 @@ const LoginPage = () => {
               <Form.Label>User Name</Form.Label>
               <Form.Control
                 placeholder="Enter username or email"
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
+                value={loginField}
+                onChange={(e) => setLoginField(e.target.value)}
               />
             </Form.Group>
 

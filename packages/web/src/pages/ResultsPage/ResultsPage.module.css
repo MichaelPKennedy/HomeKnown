@@ -191,29 +191,22 @@
   pointer-events: all;
 }
 
-/* Apply gradient background to the chart */
-.graphContainer {
-  /* Add other styles as needed */
-}
-
 .barSnow,
 .barRain {
   filter: drop-shadow(3px 3px 5px rgba(0, 0, 0.5, 0.6));
 }
 
-/* Apply a 3D effect to lines */
 .lineHigh {
   stroke: red;
   stroke-width: 2;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2)); /* Add shadow */
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
 }
 .lineLow {
   stroke: steelblue;
   stroke-width: 2;
-  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2)); /* Add shadow */
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.2));
 }
 
-/* Apply smooth transitions */
 .lineHigh,
 .lineLow {
   transition: stroke-width 0.3s ease-in-out;
@@ -221,7 +214,7 @@
 
 .lineHigh:hover,
 .lineLow:hover {
-  stroke-width: 3; /* Increase width on hover */
+  stroke-width: 3;
   transition: stroke-width 0.3s ease-in-out;
 }
 
@@ -273,19 +266,19 @@
 .btnPreferences::after {
   content: "";
   position: absolute;
-  bottom: -10px; /* Adjust as needed */
+  bottom: -10px;
   left: 50%;
 
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #01697c; /* Arrow color */
+  border-top: 5px solid #01697c;
 }
 
 .cityContainer {
   display: flex;
-  flex-direction: column; /* Align items horizontally */
-  align-items: center; /* Vertically center items in the container */
-  justify-content: space-between; /* Spreads out the children */
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   text-align: center;
   width: 100%;
   max-width: 1200px;
@@ -301,29 +294,25 @@
 }
 
 .cityImage {
-  /* Set a specific width and height for the image or make it responsive */
-  height: 200px; /* Example fixed width, adjust as necessary */ /* Maintains the aspect ratio */
+  height: 200px;
   width: 330px;
-  object-fit: cover; /* Ensures the image covers the area */
+  object-fit: cover;
   border-radius: 15px;
   margin-top: 20px;
 }
 
 .cityImage:hover {
-  transform: scale(1.05); /* Slightly enlarge the image on hover */
+  transform: scale(1.05);
   transition: transform 0.3s ease-in-out;
-  /* Other styles */
 }
 
 a,
 a:visited,
 a:hover {
-  /* Targets links and visited links */
-  color: inherit; /* This makes the link color the same as the parent text color */
-  text-decoration: none; /* Removes the underline */
+  color: inherit;
+  text-decoration: none;
 }
 
-/* If you want to remove styles for a specific class, ensure your <a> tag has that class */
 .text,
 .text:visited,
 .text:hover {
@@ -331,7 +320,6 @@ a:hover {
   text-decoration: none;
 }
 
-/* To remove the outline that appears when the link is focused or active */
 a:focus,
 a:active {
   outline: none;
@@ -339,8 +327,8 @@ a:active {
 
 @media screen and (min-width: 1200px) {
   .cityContainer {
-    align-items: center; /* Vertically center items in the container */
-    justify-content: space-between; /* Spreads out the children */
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
     max-width: 1200px;
     margin-bottom: 30px;
@@ -450,7 +438,6 @@ a:active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* This is for the header or any titles on the page */
 .pageTitle {
   font-size: 24px;
   color: #333;
@@ -458,7 +445,6 @@ a:active {
   margin: 20px 0;
 }
 
-/* Styling for any buttons you might have */
 .button {
   padding: 10px 20px;
   background-color: #007bff;
@@ -468,7 +454,7 @@ a:active {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-/* Utility classes for margins and padding */
+
 .mt-20 {
   margin-top: 20px;
 }
@@ -487,21 +473,23 @@ a:active {
 .heartButton:hover {
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
   position: absolute;
   top: 10px;
   right: 10px;
   outline: none;
+  margin: 5px;
 }
 
 .heartIcon {
   fill: none;
   stroke: #231f20;
   stroke-miterlimit: 10;
-  stroke-width: 10px;
-  width: 24px; /* Adjust as needed */
-  height: 24px; /* Adjust as needed */
+  stroke-width: 15px;
+  width: 20px;
+  height: 20px;
+  margin: 5;
+  padding: 5;
 }
 
 /* Responsive design */
