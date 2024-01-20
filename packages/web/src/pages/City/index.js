@@ -108,9 +108,9 @@ function City() {
   return (
     <div className={styles.cityPage}>
       <div className={styles.headerContainer}>
-        <h1 className="mb-0">
+        <h3 className="mb-0">
           {city.city_name}, {city.state_name}
-        </h1>
+        </h3>
         <HeartIcon
           onClick={() => handleHeartClick(cityId)}
           className={styles.heartButton}
