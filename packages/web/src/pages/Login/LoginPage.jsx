@@ -13,7 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [loginField, setLoginField] = useState("");
   const [password, setPassword] = useState("");
-  const { login, googleLogin, isLoggedIn } = useContext(AuthContext);
+  const { login, googleLogin } = useContext(AuthContext);
 
   useEffect(() => {
     if (localStorage.getItem("showRegisterSuccessToast") === "true") {
