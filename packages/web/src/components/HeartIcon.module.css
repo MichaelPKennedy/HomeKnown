@@ -1,0 +1,10 @@
+.heartIcon {
+  fill: none;
+  stroke: #231f20;
+  stroke-miterlimit: 10;
+  stroke-width: 15px;
+  width: 20px;
+  height: 20px;
+  margin: 5;
+  padding: 5;
+}

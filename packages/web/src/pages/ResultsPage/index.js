@@ -3,6 +3,8 @@ import client from "../../feathersClient";
 import styles from "./ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
+import HeartIcon from "../../components/HeartIcon";
+import LoginModal from "../../components/LoginModal";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -55,33 +57,6 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
     }
   };
 
-  function HeartIcon({ onClick, className, isSaved }) {
-    const fillColor = isSaved ? "black" : "none";
-    return (
-      <button
-        onClick={onClick}
-        className={className}
-        style={{
-          background: "none",
-          border: "none",
-          padding: 0,
-          cursor: "pointer",
-        }}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 271.06 242.62"
-          className={styles.heartIcon}
-        >
-          <path
-            fill={fillColor}
-            d="M135.13,231.13h0C37.63,167.47-18.04,80.33,23.31,31.13c12.44-14.8,33.03-19.9,51.76-19.9s37.46,6.63,51.76,19.9l8.3,7.72,8.31-7.72c28.58-26.54,80.79-31.05,103.51,0,38.1,52.08,2.02,119.1-111.82,200Z"
-          />
-        </svg>
-      </button>
-    );
-  }
-
   const renderCityData = (city, index) => {
     const isCitySaved = savedCities?.includes(city.city_id);
     return (
@@ -122,42 +97,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           </Link>
         )}
         {showLoginModal && (
-          <div className="modal show" tabIndex="-1" style={{ display: "flex" }}>
-            <div
-              className="modal-dialog"
-              style={{ display: "flex", alignItems: "center", width: "100%" }}
-            >
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title">Login Required</h5>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    onClick={() => setShowLoginModal(false)}
-                  >
-                    x
-                  </button>
-                </div>
-                <div className="modal-body">
-                  <p>You must be logged in to save locations.</p>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={() => setShowLoginModal(false)}
-                  >
-                    Close
-                  </button>
-                  <Link className="nav-link" to="/login">
-                    <button type="button" className="btn btn-primary">
-                      Login
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
+          <LoginModal onClose={() => setShowLoginModal(false)} />
         )}
       </div>
     );

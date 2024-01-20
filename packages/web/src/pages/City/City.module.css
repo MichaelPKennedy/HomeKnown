@@ -108,3 +108,21 @@
   animation: rotateSun 10s linear infinite;
   font-size: 48px; /* Adjust size as needed */
 }
+
+.heartButton,
+.heartButton:focus,
+.heartButton:hover {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  margin: 5px;
+}
+
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 15px;
+  margin-bottom: 15px;
+}
