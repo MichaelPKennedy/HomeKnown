@@ -13,22 +13,17 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [loginField, setLoginField] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(AuthContext);
+  const { login, googleLogin, isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     if (localStorage.getItem("showRegisterSuccessToast") === "true") {
       toast.success("You are now registered. Please log in to continue.");
       localStorage.removeItem("showRegisterSuccessToast");
     }
-    const { access_token } = queryString.parse(window.location.search);
-    if (access_token) {
-      localStorage.setItem("authToken", access_token);
+    const { access_token, user_id } = queryString.parse(window.location.search);
+    if (access_token && user_id) {
       localStorage.setItem("showLoginSuccessToast", "true");
-    }
-  }, []);
-
-  useEffect(() => {
-    if (localStorage.getItem("authToken")) {
+      googleLogin(access_token, user_id);
       navigate("/");
     }
   }, []);

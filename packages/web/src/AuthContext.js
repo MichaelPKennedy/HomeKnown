@@ -7,18 +7,18 @@ export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const fetchUserData = async (userId) => {
-      try {
-        const response = await client.service("users").get(userId);
-        setUser(response);
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        logout();
-      }
-    };
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await client.service("users").get(userId);
+      setUser(response);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      logout();
+    }
+  };
 
+  useEffect(() => {
     const token = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
     if (token && userId) {
@@ -31,8 +31,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("userId", userData.user_id);
     setIsLoggedIn(true);
     setUser(userData);
-    console.log("logged in");
-    console.log("userData", userData);
+  };
+
+  const googleLogin = (token, user_id) => {
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("userId", user_id);
+    fetchUserData(user_id);
   };
 
   const logout = () => {
@@ -43,7 +47,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isLoggedIn, user, login, googleLogin, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

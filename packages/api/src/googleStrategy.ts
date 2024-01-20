@@ -116,9 +116,9 @@ class GoogleStrategy extends OAuthStrategy {
     } else {
       redirectUrl = 'http://localhost:3000/login'
     }
-
+    const { user_id } = data.dataValues
     const query = data.accessToken
-      ? { access_token: data.accessToken }
+      ? { access_token: data.accessToken, user_id }
       : { error: 'OAuth Authentication not successful' }
 
     const separator = redirectUrl.endsWith('?') ? '' : '?'
