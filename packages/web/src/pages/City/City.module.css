@@ -126,3 +126,15 @@
   gap: 10px;
   margin-bottom: 15px;
 }
+
+.header {
+  margin-bottom: 0px;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+@media (min-width: 1000px) {
+  .header {
+    font-size: 28px;
+  }
+}

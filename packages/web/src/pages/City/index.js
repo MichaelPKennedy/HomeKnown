@@ -28,6 +28,10 @@ function City() {
     HomePrice: homePriceData,
     MonthlyRent: rentPriceData,
   } = city;
+  let state = city.state_name;
+  if (state === "District of Columbia") {
+    state = "DC";
+  }
 
   const homePrice = homePriceData.map(
     ({
@@ -108,9 +112,9 @@ function City() {
   return (
     <div className={styles.cityPage}>
       <div className={styles.headerContainer}>
-        <h3 className="mb-0">
-          {city.city_name}, {city.state_name}
-        </h3>
+        <p className={styles.header}>
+          {city.city_name}, {state}
+        </p>
         <HeartIcon
           onClick={() => handleHeartClick(cityId)}
           className={styles.heartButton}
