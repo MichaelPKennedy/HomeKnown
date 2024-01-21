@@ -6,10 +6,13 @@ const CityDataContext = createContext();
 export const useCityData = () => useContext(CityDataContext);
 
 export const CityDataProvider = ({ children }) => {
-  const [cityData, setCityData] = useState(null);
+  const [cityData, setCityData] = useState([]);
+  const [userCityData, setUserCityData] = useState([]);
 
   return (
-    <CityDataContext.Provider value={{ cityData, setCityData }}>
+    <CityDataContext.Provider
+      value={{ cityData, setCityData, userCityData, setUserCityData }}
+    >
       {children}
     </CityDataContext.Provider>
   );
