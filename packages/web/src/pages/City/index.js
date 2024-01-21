@@ -10,15 +10,18 @@ import HousingChart from "./components/HousingChart";
 import WeatherForecast from "./components/WeatherForecast";
 import HeartIcon from "../../components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
+import { useCityData } from "../../utils/CityDataContext";
 import client from "../../feathersClient";
 import LoginModal from "../../components/LoginModal";
 
 function City() {
   const location = useLocation();
   const { city } = location.state;
-  const [savedCities, setSavedCities] = useState([]);
+  const { userCityData, addCity, removeCity } = useCityData();
   const cityId = city.city_id;
-  const isCitySaved = savedCities?.includes(cityId);
+  const isCitySaved = userCityData.some(
+    (savedCity) => savedCity.city_id === cityId
+  );
   const { isLoggedIn, user } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const {
@@ -64,50 +67,21 @@ function City() {
   const startYear = 2010;
   const endYear = 2023;
 
-  const fetchSavedCities = async () => {
-    try {
-      const response = await client
-        .service("user-cities")
-        .find({ query: { user_id: user?.user_id } });
-      const cityIds = response.data;
-      setSavedCities(cityIds);
-    } catch (error) {
-      console.error("Error fetching saved cities:", error);
-    }
-  };
-
-  const handleHeartClick = async (cityId) => {
+  const handleHeartClick = async () => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
       return;
     }
-    try {
-      if (savedCities.includes(cityId)) {
-        await client
-          .service("user-cities")
-          .remove(cityId, { query: { user_id: user?.user_id } });
-        setSavedCities((prev) => prev.filter((id) => id !== cityId));
-      } else {
-        await client
-          .service("user-cities")
-          .create({ user_id: user?.user_id, city_id: cityId });
-        setSavedCities((prev) => [...prev, cityId]);
-      }
-    } catch (error) {
-      console.error("Error updating saved city:", error);
+    if (isCitySaved) {
+      await removeCity(cityId);
+    } else {
+      await addCity(cityId);
     }
   };
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      return;
-    }
-    fetchSavedCities();
-  }, [user, isLoggedIn]);
 
   return (
     <div className={styles.cityPage}>

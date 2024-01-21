@@ -482,7 +482,18 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async get(id: Id, params?: SurveyParams): Promise<any> {
-    throw new Error('Method not implemented.')
+    try {
+      const cityDetails = await this.getCityDetails([{ city_id: id }])
+
+      if (!cityDetails || cityDetails.length === 0) {
+        throw new Error('City not found')
+      }
+
+      return cityDetails
+    } catch (error) {
+      console.error('Error fetching city details:', error)
+      throw new Error('Error fetching city details')
+    }
   }
 
   async update(id: NullableId, data: any, params?: SurveyParams): Promise<any> {

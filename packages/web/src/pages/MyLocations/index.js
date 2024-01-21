@@ -7,7 +7,7 @@ import { useCityData } from "../../utils/CityDataContext";
 
 const MyLocations = () => {
   const { isLoggedIn, user } = useContext(AuthContext);
-  const { setUserCityData, userCityData } = useCityData();
+  const { userCityData } = useCityData();
   const [allStatesOpen, setAllStatesOpen] = useState(true);
 
   const groupCitiesByState = (cities) => {
@@ -29,25 +29,6 @@ const MyLocations = () => {
     setOpenStates(newState);
     setAllStatesOpen(!allStatesOpen);
   };
-
-  const fetchCityData = async () => {
-    try {
-      const response = await client
-        .service("survey")
-        .find({ query: { user_id: user.user_id } });
-      console.log("cities response find method", response);
-      setUserCityData(response);
-    } catch (error) {
-      console.error("Error fetching saved cities:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (!isLoggedIn || userCityData.length > 0) {
-      return;
-    }
-    fetchCityData();
-  }, [user]);
 
   const [citiesByState, setCitiesByState] = useState({});
   const [openStates, setOpenStates] = useState({});
@@ -71,7 +52,10 @@ const MyLocations = () => {
 
   const renderCityData = (city) => {
     return (
-      <div className={styles.cityContainer} key={city.city_id}>
+      <div
+        className={styles.cityContainer}
+        key={`my-locations-${city.city_id}`}
+      >
         <Link
           to={`/results/${city.city_id}`}
           key={city.city_id}

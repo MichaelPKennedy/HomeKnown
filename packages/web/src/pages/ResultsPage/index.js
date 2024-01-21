@@ -5,62 +5,39 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import HeartIcon from "../../components/HeartIcon";
 import LoginModal from "../../components/LoginModal";
+import { useCityData } from "../../utils/CityDataContext";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
   const { isLoggedIn, user } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [savedCities, setSavedCities] = useState([]);
+  const { userCityData, addCity, removeCity } = useCityData();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      return;
-    }
-    fetchSavedCities();
-  }, [user, isLoggedIn]);
-
-  const fetchSavedCities = async () => {
-    try {
-      const response = await client
-        .service("user-cities")
-        .find({ query: { user_id: user?.user_id } });
-      const cityIds = response.data;
-      setSavedCities(cityIds);
-    } catch (error) {
-      console.error("Error fetching saved cities:", error);
-    }
-  };
 
   const handleHeartClick = async (cityId) => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
       return;
     }
-    try {
-      if (savedCities.includes(cityId)) {
-        await client
-          .service("user-cities")
-          .remove(cityId, { query: { user_id: user?.user_id } });
-        setSavedCities((prev) => prev.filter((id) => id !== cityId));
-      } else {
-        await client
-          .service("user-cities")
-          .create({ user_id: user?.user_id, city_id: cityId });
-        setSavedCities((prev) => [...prev, cityId]);
-      }
-    } catch (error) {
-      console.error("Error updating saved city:", error);
+    const isCitySaved = userCityData.some(
+      (savedCity) => savedCity.city_id === cityId
+    );
+    if (isCitySaved) {
+      await removeCity(cityId);
+    } else {
+      await addCity(cityId);
     }
   };
 
   const renderCityData = (city, index) => {
-    const isCitySaved = savedCities?.includes(city.city_id);
+    const isCitySaved = userCityData.some(
+      (savedCity) => savedCity.city_id === city.city_id
+    );
     return (
-      <div className={styles.cityContainer} key={city.city_id}>
+      <div className={styles.cityContainer} key={`results-${city.city_id}`}>
         <HeartIcon
           onClick={() => handleHeartClick(city.city_id)}
           className={styles.heartButton}
