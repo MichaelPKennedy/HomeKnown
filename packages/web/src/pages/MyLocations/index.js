@@ -6,6 +6,9 @@ import { useCityData } from "../../utils/CityDataContext";
 const MyLocations = () => {
   const { userCityData } = useCityData();
   const [allStatesOpen, setAllStatesOpen] = useState(true);
+  const [selectedStates, setSelectedStates] = useState(new Set());
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [tempSelectedStates, setTempSelectedStates] = useState(new Set());
 
   const groupCitiesByState = (cities) => {
     return cities.reduce((acc, city) => {
@@ -19,12 +22,23 @@ const MyLocations = () => {
   };
 
   const toggleAllStates = () => {
-    const newState = {};
-    Object.keys(citiesByState).forEach((state) => {
-      newState[state] = !allStatesOpen;
+    setOpenStates((prev) => {
+      const newState = { ...prev };
+      selectedStates.forEach((state) => {
+        if (newState.hasOwnProperty(state)) {
+          newState[state] = allStatesOpen;
+        }
+      });
+      return newState;
     });
-    setOpenStates(newState);
     setAllStatesOpen(!allStatesOpen);
+  };
+
+  const handleStateSelection = (event) => {
+    const selectedOptions = Array.from(event.target.selectedOptions).map(
+      (o) => o.value
+    );
+    setSelectedStates(new Set(selectedOptions));
   };
 
   const [citiesByState, setCitiesByState] = useState({});
@@ -45,6 +59,14 @@ const MyLocations = () => {
 
   const toggleState = (state) => {
     setOpenStates((prev) => ({ ...prev, [state]: !prev[state] }));
+  };
+
+  const toggleSelectAllStates = () => {
+    if (selectedStates.size === Object.keys(citiesByState).length) {
+      setSelectedStates(new Set());
+    } else {
+      setSelectedStates(new Set(Object.keys(citiesByState)));
+    }
   };
 
   const renderCityData = (city) => {
@@ -89,6 +111,26 @@ const MyLocations = () => {
     <div className={styles.myLocationsContainer}>
       <div className={styles.resultsContainer}>
         <h1 className={styles.resultsHeader}>My Locations</h1>
+        <button
+          onClick={toggleSelectAllStates}
+          className={`btn ${styles.selectAllButton}`}
+        >
+          {selectedStates.size === Object.keys(citiesByState).length
+            ? "Deselect All"
+            : "Select All"}
+        </button>
+        <select
+          multiple
+          value={[...selectedStates]}
+          onChange={handleStateSelection}
+          className={styles.stateSelect}
+        >
+          {Object.keys(citiesByState).map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
         <div className={styles.resultsList}>
           <button
             onClick={toggleAllStates}
@@ -96,23 +138,25 @@ const MyLocations = () => {
           >
             Toggle All
           </button>
-          {Object.keys(citiesByState).map((state) => (
-            <div key={state} className={styles.resultsList}>
-              <button
-                onClick={() => toggleState(state)}
-                className={styles.stateDropdownButton}
-              >
-                {state}
-              </button>
-              {openStates[state] && (
-                <div className={styles.myLocationsList}>
-                  {citiesByState[state].map((city, index) =>
-                    renderCityData(city, index)
-                  )}
-                </div>
-              )}
-            </div>
-          ))}
+          {Object.keys(citiesByState)
+            .filter((state) => selectedStates.has(state))
+            .map((state) => (
+              <div key={state} className={styles.resultsList}>
+                <button
+                  onClick={() => toggleState(state)}
+                  className={styles.stateDropdownButton}
+                >
+                  {state}
+                </button>
+                {openStates[state] && (
+                  <div className={styles.myLocationsList}>
+                    {citiesByState[state].map((city, index) =>
+                      renderCityData(city, index)
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
         </div>
       </div>
     </div>
