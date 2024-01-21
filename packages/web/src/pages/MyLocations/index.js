@@ -1,12 +1,9 @@
-import React, { useEffect, useState, useContext } from "react";
-import client from "../../feathersClient";
+import React, { useEffect, useState } from "react";
 import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../AuthContext";
 import { useCityData } from "../../utils/CityDataContext";
 
 const MyLocations = () => {
-  const { isLoggedIn, user } = useContext(AuthContext);
   const { userCityData } = useCityData();
   const [allStatesOpen, setAllStatesOpen] = useState(true);
 

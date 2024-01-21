@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import client from "../../feathersClient";
 import styles from "./ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
@@ -9,9 +8,9 @@ import { useCityData } from "../../utils/CityDataContext";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const { userCityData, addCity, removeCity } = useCityData();
+  const { userCityIds, addCity, removeCity } = useCityData();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,9 +21,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
       setShowLoginModal(true);
       return;
     }
-    const isCitySaved = userCityData.some(
-      (savedCity) => savedCity.city_id === cityId
-    );
+    const isCitySaved = userCityIds.some((id) => id === cityId);
     if (isCitySaved) {
       await removeCity(cityId);
     } else {
@@ -33,9 +30,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   };
 
   const renderCityData = (city, index) => {
-    const isCitySaved = userCityData.some(
-      (savedCity) => savedCity.city_id === city.city_id
-    );
+    const isCitySaved = userCityIds.some((id) => id === city.city_id);
     return (
       <div className={styles.cityContainer} key={`results-${city.city_id}`}>
         <HeartIcon

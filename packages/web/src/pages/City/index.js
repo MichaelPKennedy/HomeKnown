@@ -11,7 +11,6 @@ import WeatherForecast from "./components/WeatherForecast";
 import HeartIcon from "../../components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
 import { useCityData } from "../../utils/CityDataContext";
-import client from "../../feathersClient";
 import LoginModal from "../../components/LoginModal";
 
 function City() {
@@ -22,7 +21,7 @@ function City() {
   const isCitySaved = userCityData.some(
     (savedCity) => savedCity.city_id === cityId
   );
-  const { isLoggedIn, user } = useContext(AuthContext);
+  const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const {
     Jobs: jobs,
