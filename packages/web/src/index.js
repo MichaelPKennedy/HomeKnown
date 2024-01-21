@@ -13,6 +13,7 @@ import HomePage from "./pages/HomePage";
 import SearchPage from "./pages/SearchPage";
 import ResultsPage from "./pages/ResultsPage";
 import City from "./pages/City";
+import MyLocations from "./pages/MyLocations";
 import NavBar from "./components/NavBar";
 import { DndProvider } from "react-dnd";
 import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
@@ -79,6 +80,8 @@ root.render(
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/results" element={<ResultsPage />} />
                   <Route path="/results/:cityId" element={<City />} />
+                  <Route path="/city/:cityId" element={<City />} />
+                  <Route path="/my-locations" element={<MyLocations />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />
                   <Route path="/signed-out" element={<LoggedOut />} />

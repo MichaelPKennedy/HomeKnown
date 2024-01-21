@@ -14,6 +14,13 @@ export interface SurveyParams extends Params {
   query?: QueryParams
 }
 
+export interface FindParams extends Params {
+  query: {
+    user_id: number
+    filter: string
+  }
+}
+
 const years: string[] = []
 for (let year = 2019; year <= 2023; year++) {
   ;[
@@ -458,8 +465,20 @@ export class SurveyService implements ServiceMethods<any> {
     return cityDetails
   }
 
-  async find(params: SurveyParams): Promise<any[] | Paginated<any>> {
-    return []
+  async find(params: FindParams): Promise<any> {
+    const { user_id, filter } = params.query
+    const userCitiesService = this.app.service('user-cities')
+    const userCities = await userCitiesService.find({
+      query: {
+        user_id: user_id.toString()
+      }
+    })
+    const cities = userCities.data.map((city: any) => {
+      return { city_id: city }
+    })
+    const cityDetails = await this.getCityDetails(cities)
+
+    return cityDetails
   }
 
   async get(id: Id, params?: SurveyParams): Promise<any> {
