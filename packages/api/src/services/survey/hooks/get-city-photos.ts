@@ -11,7 +11,7 @@ const getCityPhoto: Hook<Application, SurveyService> = async (
   const bucketName = 'city-photos'
   const bucket = storage.bucket(bucketName)
 
-  const cities = context.result?.topTen ?? []
+  const cities = context.result?.topTen || context.result || []
 
   for (const city of cities) {
     const prefix = `${city.city_id}-`

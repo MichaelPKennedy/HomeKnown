@@ -45,9 +45,18 @@ const NavBar = () => {
           </li> */}
         </ul>
         <ul className="navbar-nav ml-auto mr-1">
+          {isLoggedIn && (
+            <li className="nav-item mr-4">
+              <Link to="/my-locations">
+                <button className={`nav-link btn btn-link`}>
+                  My Locations
+                </button>
+              </Link>
+            </li>
+          )}
           <li className="nav-item dropdown mr-4">
             <button
-              className="nav-link btn btn-link dropdown-toggle"
+              className={`nav-link btn btn-link dropdown-toggle`}
               id="navbarDropdown"
               data-toggle="dropdown"
               aria-haspopup="true"
@@ -69,7 +78,10 @@ const NavBar = () => {
           </li>
           {isLoggedIn ? (
             <li className="nav-item">
-              <button className="nav-link btn btn-link" onClick={handleLogout}>
+              <button
+                className={`nav-link btn btn-link`}
+                onClick={handleLogout}
+              >
                 Logout
               </button>
             </li>

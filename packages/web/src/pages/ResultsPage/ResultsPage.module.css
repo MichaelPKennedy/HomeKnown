@@ -46,7 +46,7 @@
 /* Styling the chart and table containers */
 .chart,
 .table {
-  width: 90%;
+  width: 100%;
   margin-bottom: 30px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -241,6 +241,13 @@
   padding: 20px;
 }
 
+.myLocationsList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;
+}
+
 .btnPreferences {
   position: relative;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -349,10 +356,15 @@ a:active {
     border-radius: 15px;
   }
 
-  .resultsPage {
+  .resultsPage,
+  .myLocationsList {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
+  }
+
+  .myLocationsList {
+    padding: 20px;
   }
 }
 
@@ -491,4 +503,75 @@ a:active {
   .graphContainer {
     max-width: 100%;
   }
+}
+
+/* MyLocationsPage specific*/
+
+.myLocationsContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+@media screen and (min-width: 1000px) {
+  .myLocationsContainer {
+    width: 70%;
+    margin: auto;
+  }
+}
+
+.stateDropdownButton {
+  text-align: center;
+  margin: auto;
+  width: 100%;
+  height: 45px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 10px;
+  font-weight: normal;
+  background-color: #01697c;
+  color: white;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.stateDropdownButton:hover {
+  background-color: #01697cd2; /* Changes background on hover, optional */
+  color: white; /* Changes text color on hover, optional */
+}
+
+.stateDropdownButton:focus {
+  outline: none;
+}
+
+.toggleAllButton {
+  width: 115px;
+  height: 45px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 10px;
+  font-weight: normal;
+  background-color: transparent; /* Makes the inside of the button transparent */
+  color: #01697c; /* Sets the text color, use your desired color */
+  border: 1px solid #01697c; /* Sets the border color and width */
+  padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
+  border-radius: 4px; /* Optional: Rounds the corners of the button */
+  transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
+}
+
+.toggleAllButton:hover {
+  background-color: transparent; /* Changes background on hover, optional */
+}
+
+.toggleAllButton:focus,
+.toggleAllButton:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.resultsHeader {
+  margin-top: 20px;
 }
