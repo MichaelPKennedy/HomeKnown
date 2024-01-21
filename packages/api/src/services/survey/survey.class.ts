@@ -338,12 +338,22 @@ export class SurveyService implements ServiceMethods<any> {
     return citiesWithDetails
   }
 
-  async getCityDetails(cities: any, recreation: any, job: any): Promise<any> {
-    let { recreationalInterests, searchRadius } = recreation
-    if (typeof recreationalInterests === 'string') {
-      recreationalInterests = [recreationalInterests]
+  async getCityDetails(cities: any, recreation?: any, job?: any): Promise<any> {
+    let searchRadius = 50
+    let selectedJobs = []
+    let landmarkTypes = [] as string[]
+
+    if (recreation) {
+      const { recreationalInterests } = recreation
+      searchRadius = recreation.searchRadius || searchRadius
+      landmarkTypes = (
+        Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
+      ).flatMap((interest) => RecreationalInterestMappings[interest as RecreationalInterestKeys])
     }
-    const { selectedJobs } = job
+
+    if (job) {
+      selectedJobs = job.selectedJobs || []
+    }
 
     // Get the raw city details
     const cityDetailsRaw = await this.sequelize.models.City.findAll({
@@ -380,50 +390,40 @@ export class SurveyService implements ServiceMethods<any> {
       ]
     })
 
-    const areaCodes = cityDetailsRaw.map((cityDetail: any) => cityDetail.area_code)
+    let jobData = [] as any[]
+    if (selectedJobs.length > 0) {
+      const areaCodes = cityDetailsRaw.map((cityDetail: any) => cityDetail.area_code)
+      jobData = await this.sequelize.models.CityIndustrySalary.findAll({
+        where: {
+          area_code: { [Op.in]: areaCodes },
+          occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
+        }
+      })
+    }
 
-    const jobData = await this.sequelize.models.CityIndustrySalary.findAll({
-      where: {
-        area_code: { [Op.in]: areaCodes },
-        occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
-      }
-    })
-
-    const jobDataByCity = jobData.reduce((acc: { [key: number]: any }, job: any) => {
-      if (!acc[job.area_code]) {
-        acc[job.area_code] = []
-      }
-      acc[job.area_code].push(job)
-      return acc
-    }, {})
-
-    const landmarkTypes = (
-      Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
-    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKeys])
-
-    const landmarks = await this.sequelize.models.LandMarks.findAll({
-      where: { Type: landmarkTypes }
+    let landmarks = await this.sequelize.models.LandMarks.findAll({
+      where: landmarkTypes.length > 0 ? { Type: landmarkTypes } : {}
     })
 
     const cityDetailsPromises = cityDetailsRaw.map(async (city: any) => {
       const { Latitude: cityLatitude, Longitude: cityLongitude } = city
+      const cityJobs = jobData.filter((job) => job.area_code === city.area_code)
 
-      const landmarkPromises = landmarks.map(async (landmark: any) => {
-        const distance = await calculateDistance(
-          cityLatitude,
-          cityLongitude,
-          landmark.Latitude,
-          landmark.Longitude
-        )
-        return distance <= searchRadius ? landmark : null
-      })
+      const landmarkDetails = await Promise.all(
+        landmarks.map(async (landmark: any) => {
+          const distance = await calculateDistance(
+            cityLatitude,
+            cityLongitude,
+            landmark.Latitude,
+            landmark.Longitude
+          )
+          return distance <= searchRadius ? { ...landmark, distance } : null
+        })
+      )
 
-      const cityJobs = jobDataByCity[city.area_code] || []
-
-      const nearbyLandmarks = (await Promise.all(landmarkPromises)).filter((l) => l !== null)
+      const nearbyLandmarks = landmarkDetails.filter((l) => l !== null)
 
       return {
-        score: cities.find((c: any) => c.city_id === city.city_id)?.score,
         city_id: city.city_id,
         city_name: city.city_name,
         county_name: city.County?.county_name,
@@ -443,20 +443,19 @@ export class SurveyService implements ServiceMethods<any> {
         MonthlyRent: city.MonthlyRentCities,
         Jobs: cityJobs,
         Weather: city.CityMonthlyWeatherCounties,
-        Recreation: nearbyLandmarks.map((landmark: any) => ({
-          Location: landmark.Location,
-          Type: landmark.Type,
-          Latitude: landmark.Latitude,
-          Longitude: landmark.Longitude
+        Recreation: nearbyLandmarks.map((landmark) => ({
+          Location: landmark.dataValues.Location,
+          Type: landmark.dataValues.Type,
+          Latitude: landmark.dataValues.Latitude,
+          Longitude: landmark.dataValues.Longitude,
+          Distance: landmark.distance
         }))
       }
     })
 
     const cityDetails = await Promise.all(cityDetailsPromises)
 
-    const sortedCities = cityDetails.sort((a, b) => b.score - a.score)
-
-    return sortedCities
+    return cityDetails
   }
 
   async find(params: SurveyParams): Promise<any[] | Paginated<any>> {
