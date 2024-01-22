@@ -5,40 +5,26 @@ import { useCityData } from "../../utils/CityDataContext";
 
 const MyLocations = () => {
   const { userCityData } = useCityData();
-  const [allStatesOpen, setAllStatesOpen] = useState(true);
   const [selectedStates, setSelectedStates] = useState(new Set());
+  const [allStatesOpen, setAllStatesOpen] = useState(true);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [tempSelectedStates, setTempSelectedStates] = useState(new Set());
 
   const groupCitiesByState = (cities) => {
-    return cities.reduce((acc, city) => {
+    const groupedCities = {};
+    const initialOpenStates = {};
+
+    cities.forEach((city) => {
       const state = city.state_name;
-      if (!acc[state]) {
-        acc[state] = [];
+      if (!groupedCities[state]) {
+        groupedCities[state] = [];
+        initialOpenStates[state] = true;
       }
-      acc[state].push(city);
-      return acc;
-    }, {});
-  };
-
-  const toggleAllStates = () => {
-    setOpenStates((prev) => {
-      const newState = { ...prev };
-      selectedStates.forEach((state) => {
-        if (newState.hasOwnProperty(state)) {
-          newState[state] = allStatesOpen;
-        }
-      });
-      return newState;
+      groupedCities[state].push(city);
     });
-    setAllStatesOpen(!allStatesOpen);
-  };
 
-  const handleStateSelection = (event) => {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(
-      (o) => o.value
-    );
-    setSelectedStates(new Set(selectedOptions));
+    setOpenStates(initialOpenStates);
+    return groupedCities;
   };
 
   const [citiesByState, setCitiesByState] = useState({});
@@ -49,11 +35,9 @@ const MyLocations = () => {
       const groupedCities = groupCitiesByState(userCityData);
       setCitiesByState(groupedCities);
 
-      const initialOpenStates = {};
-      Object.keys(groupedCities).forEach((state) => {
-        initialOpenStates[state] = true;
-      });
-      setOpenStates(initialOpenStates);
+      const allStates = new Set(Object.keys(groupedCities));
+      setSelectedStates(allStates);
+      setTempSelectedStates(allStates);
     }
   }, [userCityData]);
 
@@ -62,49 +46,50 @@ const MyLocations = () => {
   };
 
   const toggleSelectAllStates = () => {
-    if (selectedStates.size === Object.keys(citiesByState).length) {
-      setSelectedStates(new Set());
+    if (tempSelectedStates.size === Object.keys(citiesByState).length) {
+      setTempSelectedStates(new Set());
     } else {
-      setSelectedStates(new Set(Object.keys(citiesByState)));
+      setTempSelectedStates(new Set(Object.keys(citiesByState)));
     }
   };
 
-  const renderCityData = (city) => {
-    return (
-      <div
-        className={styles.cityContainer}
-        key={`my-locations-${city.city_id}`}
-      >
-        <Link
-          to={`/results/${city.city_id}`}
-          key={city.city_id}
-          state={{ city }}
-        >
-          <div className={styles.cityDetails}>
-            <h4 className={styles.header}>
-              {city.city_name}, {city.state_name}
-            </h4>
-            <h6 className={styles.text}>County: {city.county_name}</h6>
-            <h6 className={styles.text}>
-              Population: {city?.Population?.pop_2022 || "N/A"}
-            </h6>
-          </div>
-        </Link>
-        {city.photoUrl && (
-          <Link
-            to={`/results/${city.city_id}`}
-            key={city.city_id}
-            state={{ city }}
-          >
-            <img
-              src={city.photoUrl}
-              alt={`View of ${city.city_name}`}
-              className={styles.cityImage}
-            />
-          </Link>
-        )}
-      </div>
-    );
+  const toggleFilterVisibility = () => {
+    setIsFilterVisible(!isFilterVisible);
+  };
+
+  const handleCheckboxChange = (event) => {
+    const state = event.target.name;
+    const isChecked = event.target.checked;
+    setTempSelectedStates((prev) => {
+      const newSet = new Set(prev);
+      if (isChecked) {
+        newSet.add(state);
+      } else {
+        newSet.delete(state);
+      }
+      return newSet;
+    });
+  };
+
+  const toggleAllStates = () => {
+    const newState = !allStatesOpen;
+    setOpenStates((prev) => {
+      const newOpenStates = { ...prev };
+      Object.keys(citiesByState).forEach((state) => {
+        newOpenStates[state] = newState;
+      });
+      return newOpenStates;
+    });
+    setAllStatesOpen(newState);
+  };
+
+  const applyFilter = () => {
+    setSelectedStates(tempSelectedStates);
+    setIsFilterVisible(false);
+  };
+
+  const selectOnlyThisState = (selectedState) => {
+    setTempSelectedStates(new Set([selectedState]));
   };
 
   return (
@@ -112,36 +97,57 @@ const MyLocations = () => {
       <div className={styles.resultsContainer}>
         <h1 className={styles.resultsHeader}>My Locations</h1>
         <button
-          onClick={toggleSelectAllStates}
-          className={`btn ${styles.selectAllButton}`}
+          onClick={toggleFilterVisibility}
+          className={styles.filterButton}
         >
-          {selectedStates.size === Object.keys(citiesByState).length
-            ? "Deselect All"
-            : "Select All"}
+          Select Filters
         </button>
-        <select
-          multiple
-          value={[...selectedStates]}
-          onChange={handleStateSelection}
-          className={styles.stateSelect}
-        >
-          {Object.keys(citiesByState).map((state) => (
-            <option key={state} value={state}>
-              {state}
-            </option>
-          ))}
-        </select>
+        {isFilterVisible && (
+          <div className={styles.filterOptions}>
+            <button
+              onClick={toggleSelectAllStates}
+              className={`btn ${styles.selectAllButton}`}
+            >
+              {tempSelectedStates.size === Object.keys(citiesByState).length
+                ? "Deselect All"
+                : "Select All"}
+            </button>
+            {Object.keys(citiesByState).map((state) => (
+              <div key={state} className={styles.checkboxContainer}>
+                <input
+                  type="checkbox"
+                  id={`checkbox-${state}`}
+                  name={state}
+                  checked={tempSelectedStates.has(state)}
+                  onChange={handleCheckboxChange}
+                />
+                <label className={styles.label} htmlFor={`checkbox-${state}`}>
+                  {state}
+                </label>
+                <button
+                  onClick={() => selectOnlyThisState(state)}
+                  className={`${styles.selectOnlyButton} float-right`}
+                >
+                  Only
+                </button>
+              </div>
+            ))}
+            <button onClick={applyFilter} className={styles.applyButton}>
+              Save and Apply
+            </button>
+          </div>
+        )}
         <div className={styles.resultsList}>
           <button
             onClick={toggleAllStates}
             className={`btn float-right ${styles.toggleAllButton}`}
           >
-            Toggle All
+            {allStatesOpen ? "Close All" : "Open All"}
           </button>
           {Object.keys(citiesByState)
             .filter((state) => selectedStates.has(state))
             .map((state) => (
-              <div key={state} className={styles.resultsList}>
+              <div key={state} className={styles.stateSection}>
                 <button
                   onClick={() => toggleState(state)}
                   className={styles.stateDropdownButton}
@@ -150,9 +156,43 @@ const MyLocations = () => {
                 </button>
                 {openStates[state] && (
                   <div className={styles.myLocationsList}>
-                    {citiesByState[state].map((city, index) =>
-                      renderCityData(city, index)
-                    )}
+                    {citiesByState[state].map((city, index) => (
+                      <div
+                        className={styles.cityContainer}
+                        key={`my-locations-${city.city_id}`}
+                      >
+                        <Link
+                          to={`/results/${city.city_id}`}
+                          key={city.city_id}
+                          state={{ city }}
+                        >
+                          <div className={styles.cityDetails}>
+                            <h4 className={styles.header}>
+                              {city.city_name}, {city.state_name}
+                            </h4>
+                            <h6 className={styles.text}>
+                              County: {city.county_name}
+                            </h6>
+                            <h6 className={styles.text}>
+                              Population: {city?.Population?.pop_2022 || "N/A"}
+                            </h6>
+                          </div>
+                        </Link>
+                        {city.photoUrl && (
+                          <Link
+                            to={`/results/${city.city_id}`}
+                            key={city.city_id}
+                            state={{ city }}
+                          >
+                            <img
+                              src={city.photoUrl}
+                              alt={`View of ${city.city_name}`}
+                              className={styles.cityImage}
+                            />
+                          </Link>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
