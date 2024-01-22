@@ -142,7 +142,7 @@ const MyLocations = () => {
             onClick={toggleAllStates}
             className={`btn float-right ${styles.toggleAllButton}`}
           >
-            {allStatesOpen ? "Close All" : "Open All"}
+            {allStatesOpen ? "Close All" : "Expand All"}
           </button>
           {Object.keys(citiesByState)
             .filter((state) => selectedStates.has(state))

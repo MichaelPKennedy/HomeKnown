@@ -547,12 +547,12 @@ a:active {
 }
 
 .toggleAllButton {
-  width: 115px;
+  width: 120px;
   height: 45px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   font-weight: normal;
   background-color: transparent; /* Makes the inside of the button transparent */
   color: #01697c; /* Sets the text color, use your desired color */
@@ -589,6 +589,7 @@ a:active {
 .selectAllButton {
   display: block;
   margin: 10px 0;
+  margin-bottom: 20px;
   padding: 8px 16px;
   width: 150px;
   background-color: #01697c;
@@ -598,16 +599,17 @@ a:active {
 }
 
 .filterButton {
-  margin-bottom: 20px;
+  margin-top: 15px;
 }
 
 .filterOptions {
   display: flex;
   flex-direction: column;
   padding: 10px;
+  margin-bottom: 30px;
+  margin-top: 15px;
   background-color: #f5f5f5;
   border: 1px solid #ccc;
-  margin-bottom: 10px;
 }
 
 .filterOptions label {
@@ -618,6 +620,7 @@ a:active {
   background-color: #01697c;
   color: white;
   padding: 8px 16px;
+  margin-top: 10px;
   width: 200px;
   border: none;
   cursor: pointer;
@@ -632,7 +635,6 @@ a:active {
 }
 
 .label {
-  width: 300px;
 }
 
 .checkboxContainer {
