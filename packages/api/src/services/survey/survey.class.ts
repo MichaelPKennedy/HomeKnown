@@ -386,9 +386,13 @@ export class SurveyService implements ServiceMethods<any> {
           attributes: years
         },
         {
+          model: this.sequelize.models.State,
+          attributes: ['state']
+        },
+        {
           model: this.sequelize.models.Area,
           attributes: ['area_title'],
-          include: [{ model: this.sequelize.models.State }, { model: this.sequelize.models.AirQuality }]
+          include: [{ model: this.sequelize.models.AirQuality }]
         },
         {
           model: this.sequelize.models.County,
@@ -434,7 +438,7 @@ export class SurveyService implements ServiceMethods<any> {
         city_id: city.city_id,
         city_name: city.city_name,
         county_name: city.County?.county_name,
-        state_name: city.Area?.State.state,
+        state_name: city.State?.state,
         latitude: cityLatitude,
         longitude: cityLongitude,
         Population: {

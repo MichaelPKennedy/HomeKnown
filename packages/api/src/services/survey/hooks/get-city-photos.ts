@@ -21,7 +21,7 @@ const getCityPhoto: Hook<Application, SurveyService> = async (
       const photoUrl = `https://storage.googleapis.com/${bucketName}/${files[0].name}`
       city.photoUrl = photoUrl
     } else {
-      city.photoUrl = null
+      city.photoUrl = `https://storage.googleapis.com/${bucketName}/logo2.png`
     }
   }
 

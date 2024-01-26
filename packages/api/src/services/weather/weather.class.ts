@@ -75,7 +75,7 @@ export class WeatherService implements ServiceMethods<any> {
 
       if (monthData.temp !== undefined) {
         whereCondition.avg_temp = {
-          [Op.between]: [monthData.temp - 30, monthData.temp + 30]
+          [Op.between]: [monthData.temp - 0.2, monthData.temp + 0.2]
         }
       }
 
@@ -83,17 +83,45 @@ export class WeatherService implements ServiceMethods<any> {
     })
 
     try {
-      const monthlyResults = await Promise.all(
+      const countyResults = await Promise.all(
         whereConditions.map(async (condition) => {
-          return await this.sequelize.models.CityMonthlyWeatherCounty.findAll({
-            where: condition
+          return await this.sequelize.models.CountyMonthlyWeather.findAll({
+            where: condition,
+            attributes: ['avg_temp', 'precip', 'month'],
+            include: [
+              {
+                model: this.sequelize.models.County,
+                include: [
+                  {
+                    model: this.sequelize.models.City,
+                    attributes: ['city_id']
+                  }
+                ]
+              }
+            ]
           })
         })
       )
 
-      const flattenedResults = monthlyResults.flat()
+      const flattenedCountyResults = countyResults.flat()
+
+      // Fetch city-level snow data
+      const cityIds = flattenedCountyResults.reduce((acc, county) => {
+        county.County.Cities.forEach((city: any) => acc.add(city.city_id))
+        return acc
+      }, new Set())
+
+      const cityResultsWithSnow = await this.sequelize.models.CityMonthlyWeatherCounty.findAll({
+        where: {
+          city_id: Array.from(cityIds),
+          year: 2022
+        },
+        attributes: ['city_id', 'snow', 'month']
+      })
+
       const scoredResults = await this.scoreResults(
-        flattenedResults,
+        flattenedCountyResults,
+        cityResultsWithSnow,
         temperatureData,
         snowPreference,
         rainPreference
@@ -115,7 +143,7 @@ export class WeatherService implements ServiceMethods<any> {
       const topCities = rankedResults.slice(0, 300)
 
       if (topCities.length < 10) {
-        console.log('obtained less than 10 cities from weather')
+        console.log('Obtained less than 10 cities from weather')
       }
 
       return topCities
@@ -126,28 +154,31 @@ export class WeatherService implements ServiceMethods<any> {
   }
 
   async scoreResults(
-    results: any[],
+    countyResults: any[],
+    cityResultsWithSnow: any[],
     temperatureData: WeatherParams['temperatureData'],
     snowPreference?: string,
     rainPreference?: string
   ): Promise<any[]> {
-    // Group by city_id and calculate total snow and rain for the year
-    const groupedResults = results.reduce((acc, curr) => {
-      const cityData = curr.dataValues
-
-      if (!acc[cityData.city_id]) {
-        acc[cityData.city_id] = {
-          city_id: cityData.city_id,
-          snow: 0,
-          rain: 0,
-          monthlyData: []
+    // Group county results by city_id
+    const groupedResults = countyResults.reduce((acc, curr) => {
+      curr.County.Cities.forEach((city: any) => {
+        if (!acc[city.city_id]) {
+          acc[city.city_id] = {
+            city_id: city.city_id,
+            rain: 0,
+            snow: 0,
+            monthlyData: []
+          }
         }
-      }
 
-      acc[cityData.city_id].snow += parseFloat(cityData.snow) || 0
-      acc[cityData.city_id].rain += parseFloat(cityData.rain) || 0
-      acc[cityData.city_id].monthlyData.push(cityData)
-
+        // Aggregating rain data and monthly data for each city
+        acc[city.city_id].rain += parseFloat(curr.precip) || 0
+        acc[city.city_id].monthlyData.push({
+          month: curr.month,
+          avg_temp: curr.avg_temp
+        })
+      })
       return acc
     }, {})
 
@@ -161,38 +192,34 @@ export class WeatherService implements ServiceMethods<any> {
         const monthResult = city.monthlyData.find((m: any) => m.month === monthNumber)
         if (monthResult && monthData.temp !== undefined) {
           const tempDiff = Math.abs(parseFloat(monthResult.avg_temp) - monthData.temp)
-          if (tempDiff <= 2) {
-            score += 15
-          } else if (tempDiff <= 5) {
-            score += 10
-          } else if (tempDiff <= 10) {
-            score += 5
-          } else if (tempDiff >= 25) {
-            score -= 15
-          } else if (tempDiff >= 20) {
-            score -= 10
-          } else if (tempDiff >= 15) {
-            score -= 5
-          }
+          score += this.calculateTemperatureScore(tempDiff)
         }
       })
 
-      if (snowPreference) {
-        const snow = this.getSnowScore(city.snow, snowPreference)
-        if (snow > 0) {
-          console.log('snow score', snow)
-        }
-        score += snow
-      }
-
       if (rainPreference) {
         score += this.getRainScore(city.rain, rainPreference)
+      }
+
+      // Find city-level snow data
+      const citySnowData = cityResultsWithSnow.find((c) => c.city_id === city.city_id)
+      if (citySnowData && snowPreference) {
+        score += this.getSnowScore(citySnowData.snow, snowPreference)
       }
 
       return { ...city, score }
     })
 
     return scoredResults
+  }
+
+  calculateTemperatureScore(tempDiff: number): number {
+    if (tempDiff <= 2) return 15
+    if (tempDiff <= 5) return 10
+    if (tempDiff <= 10) return 5
+    if (tempDiff >= 25) return -15
+    if (tempDiff >= 20) return -10
+    if (tempDiff >= 15) return -5
+    return 0
   }
 
   getSnowScore(totalSnow: number, preference: string): number {

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
 import { Area } from './area.model'
+import { State } from './state.model'
 import { PublicServiceCache } from './public-service-cache.model'
 
 export class City extends Model {}
@@ -58,7 +59,11 @@ export const CityModel = (sequelize: Sequelize) => {
       },
       state_code: {
         type: DataTypes.INTEGER,
-        allowNull: true
+        allowNull: true,
+        references: {
+          model: State,
+          key: 'state_code'
+        }
       }
     },
     {
