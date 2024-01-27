@@ -25,6 +25,7 @@ const ResultsMap = (city) => {
     <MapContainer
       center={[city.latitude, city.longitude]}
       zoom={5}
+      scrollWheelZoom={false}
       className={styles.resultsMap}
     >
       <FixMapSize />

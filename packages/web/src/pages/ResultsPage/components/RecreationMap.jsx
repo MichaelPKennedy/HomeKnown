@@ -144,6 +144,7 @@ const RecreationMap = (data) => {
       <MapContainer
         center={[data.latitude, data.longitude]}
         zoom={9}
+        scrollWheelZoom={false}
         className={styles.map}
       >
         <FixMapSize />
