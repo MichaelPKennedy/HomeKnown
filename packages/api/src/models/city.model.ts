@@ -57,6 +57,9 @@ export const CityModel = (sequelize: Sequelize) => {
         type: DataTypes.DECIMAL(5, 2),
         allowNull: true
       },
+      city_description: {
+        type: DataTypes.TEXT
+      },
       state_code: {
         type: DataTypes.INTEGER,
         allowNull: true,

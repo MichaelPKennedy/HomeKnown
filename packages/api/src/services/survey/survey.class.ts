@@ -464,6 +464,7 @@ export class SurveyService implements ServiceMethods<any> {
           pop_2021: city.pop_2021,
           pop_2022: city.pop_2022
         },
+        description: city.city_description,
         AirQuality: city.Area?.AirQuality,
         CityDemographics: city.CityDemographic,
         PublicServices: city.PublicServiceCache,
