@@ -16,6 +16,8 @@ import { CityDataProvider } from "../../utils/CityDataContext";
 
 function City() {
   const location = useLocation();
+
+  const { city } = location?.state || {};
   const {
     setCityId,
     userCityData,
@@ -31,6 +33,8 @@ function City() {
 
   const { cityId } = useParams();
 
+  const currentCity = city ? city : cityData;
+
   useEffect(() => {
     if (cityId) {
       setCityId(cityId);
@@ -43,17 +47,18 @@ function City() {
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  if (isLoading) return <div>Loading city data...</div>;
+  if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
-  if (!cityData) return <div>No city data available.</div>;
+  if (!cityData && !currentCity) return <div>No city data available.</div>;
+
   const {
     Jobs: jobs,
     AirQuality: airQuality,
     CityDemographics: demographics,
     HomePrice: homePriceData,
     MonthlyRent: rentPriceData,
-  } = cityData;
-  let state = cityData.state_name;
+  } = currentCity;
+  let state = currentCity.state_name;
   if (state === "District of Columbia") {
     state = "DC";
   }
@@ -83,9 +88,9 @@ function City() {
     }) => rest
   );
 
-  console.log("city", cityData);
+  console.log("city", currentCity);
 
-  const weatherData = cityData.Weather;
+  const weatherData = currentCity.Weather;
   const startYear = 2010;
   const endYear = 2023;
 
@@ -106,7 +111,7 @@ function City() {
       <div className={styles.cityPage}>
         <div className={styles.headerContainer}>
           <p className={styles.header}>
-            {cityData?.city_name}, {state}
+            {currentCity?.city_name}, {state}
           </p>
           <HeartIcon
             onClick={() => handleHeartClick(cityId)}
@@ -121,7 +126,7 @@ function City() {
           endYear={endYear}
           dataType="weather"
         />
-        <WeatherForecast {...cityData} />
+        <WeatherForecast {...currentCity} />
         {jobs && <JobData jobs={jobs} />}
         {airQuality && <AirQualityChart airQualityData={airQuality} />}
         {demographics && <DemographicsTable data={demographics} />}
