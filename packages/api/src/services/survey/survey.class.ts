@@ -4,6 +4,8 @@ import type { SurveyData, SurveyPatch, WeightKeys, RecreationalInterestKeys } fr
 import { surveyDataValidator, RecreationalInterestMappings } from './survey.schema'
 import { Op } from 'sequelize'
 import { calculateDistance } from '../../utils'
+const NodeCache = require('node-cache')
+const myCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 })
 
 export type { SurveyData, SurveyPatch }
 
@@ -470,7 +472,14 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   async find(params: FindParams): Promise<any> {
-    const { user_id, filter } = params.query
+    const { user_id } = params.query
+    const cacheKey = `cityDetails_${user_id}`
+    const cachedData = myCache.get(cacheKey)
+
+    if (cachedData) {
+      return cachedData
+    }
+
     const userCitiesService = this.app.service('user-cities')
     const userCities = await userCitiesService.find({
       query: {
@@ -482,16 +491,27 @@ export class SurveyService implements ServiceMethods<any> {
     })
     const cityDetails = await this.getCityDetails(cities)
 
+    myCache.set(cacheKey, cityDetails)
+
     return cityDetails
   }
 
   async get(id: Id, params?: SurveyParams): Promise<any> {
     try {
+      const cacheKey = `cityDetails_${id}`
+      const cachedData = myCache.get(cacheKey)
+
+      if (cachedData) {
+        return cachedData
+      }
+
       const cityDetails = await this.getCityDetails([{ city_id: id }])
 
       if (!cityDetails || cityDetails.length === 0) {
         throw new Error('City not found')
       }
+
+      myCache.set(cacheKey, cityDetails)
 
       return cityDetails
     } catch (error) {
