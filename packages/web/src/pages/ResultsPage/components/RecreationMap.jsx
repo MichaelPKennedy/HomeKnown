@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { useCityData } from "../../../utils/CityDataContext";
 import ReactDOMServer from "react-dom/server";
-import L from "leaflet"; // Importing base leaflet library
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import styles from "../ResultsPage.module.css";
 import {
@@ -131,10 +133,12 @@ const FixMapSize = () => {
   return null;
 };
 
-const RecreationMap = (data) => {
+const RecreationMap = () => {
+  const { cityId } = useParams();
+  const { cityData, isLoading, error } = useCityData();
   const [activeLandmarkId, setActiveLandmarkId] = React.useState(null);
 
-  const { Recreation: recreation } = data;
+  const { Recreation: recreation } = cityData;
 
   return (
     <Card className={styles.card}>
@@ -142,7 +146,7 @@ const RecreationMap = (data) => {
         <h4>Recreation</h4>
       </Card.Header>
       <MapContainer
-        center={[data.latitude, data.longitude]}
+        center={[cityData.latitude, cityData.longitude]}
         zoom={9}
         scrollWheelZoom={false}
         className={styles.map}
@@ -153,7 +157,7 @@ const RecreationMap = (data) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
         <Circle
-          center={[data.latitude, data.longitude]}
+          center={[cityData.latitude, cityData.longitude]}
           radius={80467} // 50 miles in meters
           color="black"
           fillColor="green"
@@ -161,7 +165,7 @@ const RecreationMap = (data) => {
           opacity={0.2}
         />
         <Marker
-          position={[data.latitude, data.longitude]}
+          position={[cityData.latitude, cityData.longitude]}
           icon={
             new L.DivIcon({
               className: styles.cityMarker,
@@ -176,15 +180,15 @@ const RecreationMap = (data) => {
         >
           <Tooltip
             direction="top"
-            permanent={activeLandmarkId === data.city_id}
+            permanent={activeLandmarkId === cityData.city_id}
           >
             <div
               className={styles.tooltipLabel}
-              onMouseOver={() => setActiveLandmarkId(data.city_id)}
+              onMouseOver={() => setActiveLandmarkId(cityData.city_id)}
               onMouseOut={() => setActiveLandmarkId(null)}
             >
               <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-              <span>{data.city_name}</span>
+              <span>{cityData.city_name}</span>
             </div>
           </Tooltip>
         </Marker>

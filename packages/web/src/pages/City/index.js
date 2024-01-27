@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, Outlet } from "react-router-dom";
 import styles from "./City.module.css";
 import RecreationMap from "../ResultsPage/components/RecreationMap";
 import ReusableChart from "./components/ReusableChart";
@@ -12,25 +12,48 @@ import HeartIcon from "../../components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
 import { useCityData } from "../../utils/CityDataContext";
 import LoginModal from "../../components/LoginModal";
+import { CityDataProvider } from "../../utils/CityDataContext";
 
 function City() {
   const location = useLocation();
-  const { city } = location.state;
-  const { userCityData, addCity, removeCity } = useCityData();
-  const cityId = city.city_id;
+  const {
+    setCityId,
+    userCityData,
+    addCity,
+    removeCity,
+    cityData,
+    isLoading,
+    error,
+  } = useCityData();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const { cityId } = useParams();
+
+  useEffect(() => {
+    if (cityId) {
+      setCityId(cityId);
+    }
+  }, [cityId]);
+
   const isCitySaved = userCityData.some(
     (savedCity) => savedCity.city_id === cityId
   );
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  if (isLoading) return <div>Loading city data...</div>;
+  if (error) return <div>Error loading city data: {error.message}</div>;
+  if (!cityData) return <div>No city data available.</div>;
   const {
     Jobs: jobs,
     AirQuality: airQuality,
     CityDemographics: demographics,
     HomePrice: homePriceData,
     MonthlyRent: rentPriceData,
-  } = city;
-  let state = city.state_name;
+  } = cityData;
+  let state = cityData.state_name;
   if (state === "District of Columbia") {
     state = "DC";
   }
@@ -60,9 +83,9 @@ function City() {
     }) => rest
   );
 
-  console.log("city", city);
+  console.log("city", cityData);
 
-  const weatherData = city.Weather;
+  const weatherData = cityData.Weather;
   const startYear = 2010;
   const endYear = 2023;
 
@@ -78,41 +101,39 @@ function City() {
     }
   };
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
-    <div className={styles.cityPage}>
-      <div className={styles.headerContainer}>
-        <p className={styles.header}>
-          {city.city_name}, {state}
-        </p>
-        <HeartIcon
-          onClick={() => handleHeartClick(cityId)}
-          className={styles.heartButton}
-          isSaved={isCitySaved}
+    <CityDataProvider>
+      <div className={styles.cityPage}>
+        <div className={styles.headerContainer}>
+          <p className={styles.header}>
+            {cityData?.city_name}, {state}
+          </p>
+          <HeartIcon
+            onClick={() => handleHeartClick(cityId)}
+            className={styles.heartButton}
+            isSaved={isCitySaved}
+          />
+        </div>
+        <ReusableChart
+          data={weatherData}
+          label="Average Temperature"
+          startYear={startYear}
+          endYear={endYear}
+          dataType="weather"
         />
+        <WeatherForecast {...cityData} />
+        {jobs && <JobData jobs={jobs} />}
+        {airQuality && <AirQualityChart airQualityData={airQuality} />}
+        {demographics && <DemographicsTable data={demographics} />}
+        {homePrice.length > 0 && rentPrice.length > 0 && (
+          <HousingChart housingData={homePrice} rentData={rentPrice} />
+        )}
+        {showLoginModal && (
+          <LoginModal onClose={() => setShowLoginModal(false)} />
+        )}
       </div>
-      <RecreationMap {...city} />
-      <ReusableChart
-        data={weatherData}
-        label="Average Temperature"
-        startYear={startYear}
-        endYear={endYear}
-        dataType="weather"
-      />
-      <WeatherForecast {...city} />
-      {jobs && <JobData jobs={jobs} />}
-      {airQuality && <AirQualityChart airQualityData={airQuality} />}
-      {demographics && <DemographicsTable data={demographics} />}
-      {homePrice.length > 0 && rentPrice.length > 0 && (
-        <HousingChart housingData={homePrice} rentData={rentPrice} />
-      )}
-      {showLoginModal && (
-        <LoginModal onClose={() => setShowLoginModal(false)} />
-      )}
-    </div>
+      <Outlet />
+    </CityDataProvider>
   );
 }
 

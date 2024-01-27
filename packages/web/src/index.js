@@ -26,6 +26,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DataSources from "./pages/DataSources";
 import { AuthProvider } from "./AuthContext";
+import RecreationMap from "./pages/ResultsPage/components/RecreationMap";
+import ReusableChart from "./pages/City/components/ReusableChart";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -79,8 +81,14 @@ root.render(
                   <Route path="/" element={<HomePage />} />
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/results" element={<ResultsPage />} />
-                  <Route path="/results/:cityId" element={<City />} />
-                  <Route path="/city/:cityId" element={<City />} />
+                  <Route path="/results/:cityId" element={<City />}>
+                    <Route path="recreation" element={<RecreationMap />} />
+                    <Route path="weather" element={<ReusableChart />} />
+                  </Route>
+                  <Route path="/city/:cityId" element={<City />}>
+                    <Route path="recreation" element={<RecreationMap />} />
+                    <Route path="weather" element={<ReusableChart />} />
+                  </Route>
                   <Route path="/my-locations" element={<MyLocations />} />
                   <Route path="/login" element={<LoginPage />} />
                   <Route path="/register" element={<RegisterPage />} />

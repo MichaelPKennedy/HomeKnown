@@ -1,18 +1,33 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
+import { useQuery } from "react-query";
 import { AuthContext } from "../AuthContext";
 import client from "../feathersClient";
 const CityDataContext = createContext();
 
 export const useCityData = () => useContext(CityDataContext);
 
+const fetchCityData = async (cityId) => {
+  const response = await client.service("survey").get(cityId);
+  console.log("response from context", response);
+  return response[0];
+};
+
 export const CityDataProvider = ({ children }) => {
-  const [cityData, setCityData] = useState([]);
   const [userCityData, setUserCityData] = useState([]);
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
+  const [cityId, setCityId] = useState(null);
+
+  const {
+    data: cityData,
+    isLoading,
+    error,
+  } = useQuery(["cityData", cityId], () => fetchCityData(cityId), {
+    enabled: !!cityId,
+  });
 
   useEffect(() => {
-    const fetchCityData = async () => {
+    const fetchUserCityData = async () => {
       if (isLoggedIn && user) {
         try {
           const [cityIdsResponse, surveyResponse] = await Promise.all([
@@ -29,7 +44,7 @@ export const CityDataProvider = ({ children }) => {
       }
     };
 
-    fetchCityData();
+    fetchUserCityData();
   }, [user, isLoggedIn]);
 
   const addCity = async (cityId) => {
@@ -64,12 +79,14 @@ export const CityDataProvider = ({ children }) => {
     <CityDataContext.Provider
       value={{
         cityData,
-        setCityData,
         userCityData,
         userCityIds,
         setUserCityData,
         addCity,
         removeCity,
+        setCityId,
+        isLoading,
+        error,
       }}
     >
       {children}
