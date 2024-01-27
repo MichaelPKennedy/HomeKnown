@@ -15,14 +15,15 @@ export const CityDataProvider = ({ children }) => {
     const fetchCityData = async () => {
       if (isLoggedIn && user) {
         try {
-          const cityIds = await client
-            .service("user-cities")
-            .find({ query: { user_id: user.user_id } });
-          setUserCityIds(cityIds.data);
-          const response = await client
-            .service("survey")
-            .find({ query: { user_id: user.user_id } });
-          setUserCityData(response);
+          const [cityIdsResponse, surveyResponse] = await Promise.all([
+            client
+              .service("user-cities")
+              .find({ query: { user_id: user.user_id } }),
+            client.service("survey").find({ query: { user_id: user.user_id } }),
+          ]);
+
+          setUserCityIds(cityIdsResponse.data);
+          setUserCityData(surveyResponse);
         } catch (error) {
           console.error("Error fetching saved cities:", error);
         }
