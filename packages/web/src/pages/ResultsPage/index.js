@@ -6,6 +6,7 @@ import HeartIcon from "../../components/HeartIcon";
 import LoginModal from "../../components/LoginModal";
 import { useCityData } from "../../utils/CityDataContext";
 import ResultsMap from "./components/ResultsMap";
+import LargeResultsMap from "./components/LargeResultsMap";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -85,6 +86,9 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
         ) : (
           <p>No cities to display</p>
         )}
+      </div>
+      <div className={styles.largeMapContainer}>
+        <LargeResultsMap cities={topTen}></LargeResultsMap>
       </div>
     </div>
   );
