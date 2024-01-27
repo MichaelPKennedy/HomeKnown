@@ -72,6 +72,7 @@ export class AirQualityService implements ServiceMethods<any> {
       }
       return {
         city_id: cityData.city_id,
+        county: cityData.county_fips,
         totalPollutantScore: cityScore.totalPollutantScore,
         ranking: cityScore.ranking
       }

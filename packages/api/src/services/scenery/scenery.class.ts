@@ -64,6 +64,7 @@ export class SceneryService implements ServiceMethods<any> {
 
       return {
         city_id: cityWithCount?.City?.dataValues?.city_id,
+        county: cityWithCount?.City?.dataValues?.county_fips,
         count
       }
     })

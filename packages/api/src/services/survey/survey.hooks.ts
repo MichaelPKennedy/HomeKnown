@@ -13,9 +13,9 @@ export const surveyHooks = {
   },
   after: {
     all: [],
-    find: [getCityPhoto],
-    get: [getCityPhoto],
-    create: [getCityPhoto],
+    find: [],
+    get: [],
+    create: [],
     update: [],
     patch: [],
     remove: []

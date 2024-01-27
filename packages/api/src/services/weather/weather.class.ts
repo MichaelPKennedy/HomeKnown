@@ -94,7 +94,7 @@ export class WeatherService implements ServiceMethods<any> {
                 include: [
                   {
                     model: this.sequelize.models.City,
-                    attributes: ['city_id']
+                    attributes: ['city_id', 'county_fips']
                   }
                 ]
               }
@@ -166,6 +166,7 @@ export class WeatherService implements ServiceMethods<any> {
         if (!acc[city.city_id]) {
           acc[city.city_id] = {
             city_id: city.city_id,
+            county: city.county_fips,
             rain: 0,
             snow: 0,
             monthlyData: []

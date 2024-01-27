@@ -75,7 +75,7 @@ export class IndustryService implements ServiceMethods<any> {
     })
     //for top cities, get the cities that are associated with the area_code for that city
     const topCities = await this.sequelize.models.City.findAll({
-      attributes: ['city_id', 'area_code'],
+      attributes: ['city_id', 'area_code', 'county_fips'],
       where: {
         area_code: topAreas.map((city: any) => city.area_code)
       }
@@ -87,6 +87,7 @@ export class IndustryService implements ServiceMethods<any> {
         const relatedCities = topCities.filter((c: any) => c.area_code === city.area_code)
         return relatedCities.map((cityData: any) => ({
           city_id: cityData.city_id,
+          county: cityData.county_fips,
           avg_salary: city.dataValues.avg_salary,
           avg_hourly: city.dataValues.avg_hourly
         }))

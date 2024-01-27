@@ -34,6 +34,7 @@ export class PublicServicesService implements ServiceMethods<any> {
     }
 
     const citiesWithCounts = await this.sequelize.models.City.findAll({
+      attributes: ['city_id', 'county_fips'],
       include: [
         {
           model: this.sequelize.models.PublicServiceCache,
@@ -52,6 +53,7 @@ export class PublicServicesService implements ServiceMethods<any> {
 
       return {
         city_id: cityWithCount.city_id,
+        county: cityWithCount.county_fips,
         count
       }
     })

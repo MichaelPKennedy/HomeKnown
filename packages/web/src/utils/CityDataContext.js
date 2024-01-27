@@ -21,7 +21,6 @@ export const CityDataProvider = ({ children }) => {
               .find({ query: { user_id: user.user_id } }),
             client.service("survey").find({ query: { user_id: user.user_id } }),
           ]);
-
           setUserCityIds(cityIdsResponse.data);
           setUserCityData(surveyResponse);
         } catch (error) {

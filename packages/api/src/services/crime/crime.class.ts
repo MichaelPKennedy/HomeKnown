@@ -23,6 +23,12 @@ export class CrimeService implements ServiceMethods<any> {
         where: {
           [Op.and]: [{ crime_score: { [Op.ne]: null } }, { city_id: { [Op.ne]: null } }]
         },
+        include: [
+          {
+            model: this.sequelize.models.City,
+            attributes: ['county_fips']
+          }
+        ],
         order: [['crime_score', 'ASC']],
         limit: 300
       })
@@ -40,6 +46,7 @@ export class CrimeService implements ServiceMethods<any> {
           ranking,
           city: crimeRate.dataValues.city,
           city_id: crimeRate.dataValues.city_id,
+          county: crimeRate.dataValues.City.county_fips,
           state: crimeRate.dataValues.state,
           crime_score: crimeRate.dataValues.crime_score
         }

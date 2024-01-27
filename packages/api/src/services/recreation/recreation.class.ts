@@ -127,6 +127,7 @@ export class RecreationService implements ServiceMethods<any> {
 
     const topCities = rankedCities.slice(0, 300).map((entry) => ({
       city_id: entry.city.city_id,
+      county: entry.city.county_fips,
       ranking: entry.ranking,
       nearbyLandmarks: entry.nearbyLandmarks
     }))

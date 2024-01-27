@@ -313,6 +313,7 @@ export class SurveyService implements ServiceMethods<any> {
     jobFormData: any
   ): any {
     const cityScores = new Map<number, number>()
+    const highestScoredCityPerCounty = new Map<string, any>()
 
     const categories = [
       { data: job?.topCities, weight: weights.jobOpportunityWeight },
@@ -330,19 +331,34 @@ export class SurveyService implements ServiceMethods<any> {
         if (!city?.ranking) {
           return
         }
-        const normalizedScore = 301 - city?.ranking
+        const normalizedScore = 301 - city.ranking
         const weightedScore = normalizedScore * (category.weight || 0)
-        cityScores.set(city.city_id, (cityScores.get(city.city_id) || 0) + weightedScore)
+        const currentScore = (cityScores.get(city.city_id) || 0) + weightedScore
+        cityScores.set(city.city_id, currentScore)
+
+        // Updating the highest scored city per county
+        const county = city.county
+        const currentHighest = highestScoredCityPerCounty.get(county)
+        if (!currentHighest || currentScore > currentHighest.score) {
+          highestScoredCityPerCounty.set(county, { city_id: city.city_id, score: currentScore })
+        }
       })
     })
 
-    const sortedCities = Array.from(cityScores)
-      .map(([city_id, score]) => ({ city_id, score }))
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10)
+    let finalCities
+    if (highestScoredCityPerCounty.size > 10) {
+      finalCities = Array.from(highestScoredCityPerCounty.values())
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+    } else {
+      finalCities = Array.from(cityScores)
+        .map(([city_id, score]) => ({ city_id, score }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 10)
+    }
 
     // Get detailed information for the top cities
-    const citiesWithDetails = this.getCityDetails(sortedCities, recreationFormData, jobFormData)
+    const citiesWithDetails = this.getCityDetails(finalCities, recreationFormData, jobFormData)
 
     return citiesWithDetails
   }
