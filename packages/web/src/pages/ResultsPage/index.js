@@ -5,6 +5,7 @@ import { AuthContext } from "../../AuthContext";
 import HeartIcon from "../../components/HeartIcon";
 import LoginModal from "../../components/LoginModal";
 import { useCityData } from "../../utils/CityDataContext";
+import ResultsMap from "./components/ResultsMap";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -55,19 +56,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
             </h6>
           </div>
         </Link>
-        {city.photoUrl && (
-          <Link
-            to={`/results/${city.city_id}`}
-            key={city.city_id}
-            state={{ city }}
-          >
-            <img
-              src={city.photoUrl}
-              alt={`View of ${city.city_name}`}
-              className={styles.cityImage}
-            />
-          </Link>
-        )}
+        <ResultsMap {...city}></ResultsMap>
         {showLoginModal && (
           <LoginModal onClose={() => setShowLoginModal(false)} />
         )}

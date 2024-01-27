@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
+import ResultsMap from "../ResultsPage/components/ResultsMap";
 
 const MyLocations = () => {
   const { userCityData } = useCityData();
@@ -178,19 +179,7 @@ const MyLocations = () => {
                             </h6>
                           </div>
                         </Link>
-                        {city.photoUrl && (
-                          <Link
-                            to={`/results/${city.city_id}`}
-                            key={city.city_id}
-                            state={{ city }}
-                          >
-                            <img
-                              src={city.photoUrl}
-                              alt={`View of ${city.city_name}`}
-                              className={styles.cityImage}
-                            />
-                          </Link>
-                        )}
+                        <ResultsMap {...city}></ResultsMap>
                       </div>
                     ))}
                   </div>
