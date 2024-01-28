@@ -5,6 +5,7 @@ import styles from "./SideBar.module.css";
 const SideBar = () => {
   const location = useLocation();
   const { cityId } = useParams();
+  const { city } = location.state || {};
 
   const isActive = (path) => {
     if (path === `/results/${cityId}`) {
@@ -24,6 +25,7 @@ const SideBar = () => {
       >
         <Link
           to={`/results/${cityId}`}
+          state={{ city }}
           className={linkClass(`/results/${cityId}`)}
         >
           Overview
@@ -31,21 +33,31 @@ const SideBar = () => {
 
         <Link
           to={`/results/${cityId}/recreation`}
+          state={{ city }}
           className={linkClass("/recreation")}
         >
           Recreation
         </Link>
         <Link
           to={`/results/${cityId}/weather`}
+          state={{ city }}
           className={linkClass("/weather")}
         >
           Weather
         </Link>
         <Link
           to={`/results/${cityId}/housing`}
+          state={{ city }}
           className={linkClass("/housing")}
         >
           Housing
+        </Link>
+        <Link
+          to={`/results/${cityId}/job-industry`}
+          state={{ city }}
+          className={linkClass("/job-industry")}
+        >
+          Job Industry
         </Link>
       </div>
 
@@ -54,6 +66,7 @@ const SideBar = () => {
           <li className="nav-item">
             <Link
               to={`/results/${cityId}`}
+              state={{ city }}
               className={linkClass(`/results/${cityId}`)}
             >
               Overview
@@ -62,6 +75,7 @@ const SideBar = () => {
           <li className="nav-item">
             <Link
               to={`/results/${cityId}/recreation`}
+              state={{ city }}
               className={linkClass("/recreation")}
             >
               Recreation
@@ -70,6 +84,7 @@ const SideBar = () => {
           <li className="nav-item">
             <Link
               to={`/results/${cityId}/weather`}
+              state={{ city }}
               className={linkClass("/weather")}
             >
               Weather
@@ -78,9 +93,19 @@ const SideBar = () => {
           <li>
             <Link
               to={`/results/${cityId}/housing`}
+              state={{ city }}
               className={linkClass("/housing")}
             >
               Housing
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={`/results/${cityId}/job-industry`}
+              state={{ city }}
+              className={linkClass("/job-industry")}
+            >
+              Job Industry
             </Link>
           </li>
         </ul>

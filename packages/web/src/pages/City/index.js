@@ -64,31 +64,6 @@ function City() {
     state = "DC";
   }
 
-  const homePrice = homePriceData.map(
-    ({
-      city_id,
-      city_name,
-      county,
-      id,
-      abbrev,
-      state_abbrev,
-      metro,
-      ...rest
-    }) => rest
-  );
-  const rentPrice = rentPriceData.map(
-    ({
-      city_id,
-      city_name,
-      county,
-      id,
-      abbrev,
-      state_abbrev,
-      metro,
-      ...rest
-    }) => rest
-  );
-
   console.log("city", currentCity);
 
   const handleHeartClick = async () => {
@@ -108,7 +83,6 @@ function City() {
   };
 
   return (
-    //     {jobs && <JobData jobs={jobs} />}
     //     {airQuality && <AirQualityChart airQualityData={airQuality} />}
     //     {demographics && <DemographicsTable data={demographics} />}
     //     {showLoginModal && (

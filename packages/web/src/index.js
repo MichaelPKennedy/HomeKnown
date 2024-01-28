@@ -30,6 +30,7 @@ import RecreationMap from "./pages/ResultsPage/components/RecreationMap";
 import Weather from "./pages/City/components/Weather";
 import Housing from "./pages/City/components/Housing";
 import Overview from "./pages/City/components/Overview";
+import Industry from "./pages/City/components/Industry";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -88,6 +89,7 @@ root.render(
                     <Route path="recreation" element={<RecreationMap />} />
                     <Route path="weather" element={<Weather />} />
                     <Route path="housing" element={<Housing />} />
+                    <Route path="job-industry" element={<Industry />} />
                   </Route>
                   <Route path="/city/:cityId" element={<City />}>
                     <Route path="recreation" element={<RecreationMap />} />
