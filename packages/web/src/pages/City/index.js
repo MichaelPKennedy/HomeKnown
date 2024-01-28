@@ -43,7 +43,7 @@ function City() {
   }, [cityId]);
 
   const isCitySaved = userCityData.some(
-    (savedCity) => savedCity.city_id === cityId
+    (savedCity) => savedCity.city_id === Number(cityId)
   );
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -102,9 +102,9 @@ function City() {
       return;
     }
     if (isCitySaved) {
-      await removeCity(cityId);
+      await removeCity(Number(cityId));
     } else {
-      await addCity(cityId);
+      await addCity(Number(cityId));
     }
   };
 
@@ -133,34 +133,36 @@ function City() {
     //   </div>
     //   <Outlet />
     // </CityDataProvider>
-    <CityDataProvider>
-      <div className="container-fluid">
-        <div className="row">
-          <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
-            <SideBar cityId={cityId} />
-          </div>
-          <main className={`col-md-9 col-12 ms-sm-auto px-md-4`}>
-            <div className={styles.headerContainer}>
-              <button
-                onClick={handleBackToResults}
-                className={`btn btn-secondary ${styles.backButton}`}
-              >
-                Back to Results
-              </button>
-              <p className={styles.header}>
-                {currentCity?.city_name}, {state}
-              </p>
-              <HeartIcon
-                onClick={() => handleHeartClick(cityId)}
-                className={styles.heartButton}
-                isSaved={isCitySaved}
-              />
-            </div>
-            <Outlet />
-          </main>
+
+    <div className="container-fluid">
+      <div className="row">
+        <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
+          <SideBar cityId={cityId} />
         </div>
+        <main className={`col-md-9 col-12 ms-sm-auto px-md-4`}>
+          <div className={styles.headerContainer}>
+            <button
+              onClick={handleBackToResults}
+              className={`btn btn-secondary ${styles.backButton}`}
+            >
+              Back to Results
+            </button>
+            <p className={styles.header}>
+              {currentCity?.city_name}, {state}
+            </p>
+            <HeartIcon
+              onClick={() => handleHeartClick(cityId)}
+              className={styles.heartButton}
+              isSaved={isCitySaved}
+            />
+          </div>
+          <Outlet />
+        </main>
       </div>
-    </CityDataProvider>
+      {showLoginModal && (
+        <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
+    </div>
   );
 }
 
