@@ -1,5 +1,4 @@
 .sidebar {
-  height: 100vh; /* Full height */
   top: 0; /* Stay at the top */
   left: 0;
   bottom: 0;
@@ -19,4 +18,23 @@
 .sidebar a.active {
   background-color: #007bff;
   color: white;
+}
+
+@media (min-width: 768px) {
+  .sidebar {
+    height: 100vh; /* Full height */
+  }
+}
+
+.activeLink {
+  background-color: #007bff;
+  color: white;
+}
+
+.mobileNav {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 0;
 }

@@ -1,18 +1,15 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useParams, Outlet, useNavigate } from "react-router-dom";
 import styles from "./City.module.css";
-import ReusableChart from "./components/ReusableChart";
 import JobData from "./components/JobData";
 import AirQualityChart from "./components/AirQualityChart";
 import DemographicsTable from "./components/DemographicsTable";
 import HousingChart from "./components/HousingChart";
-import WeatherForecast from "./components/WeatherForecast";
 import HeartIcon from "../../components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
-import { useCityData, CityDataProvider } from "../../utils/CityDataContext";
+import { useCityData } from "../../utils/CityDataContext";
 import LoginModal from "../../components/LoginModal";
 import SideBar from "./components/SideBar";
-import Overview from "./components/Overview";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -115,14 +112,6 @@ function City() {
   };
 
   return (
-    //     <ReusableChart
-    //       data={weatherData}
-    //       label="Average Temperature"
-    //       startYear={startYear}
-    //       endYear={endYear}
-    //       dataType="weather"
-    //     />
-    //     <WeatherForecast {...currentCity} />
     //     {jobs && <JobData jobs={jobs} />}
     //     {airQuality && <AirQualityChart airQualityData={airQuality} />}
     //     {demographics && <DemographicsTable data={demographics} />}
@@ -147,7 +136,7 @@ function City() {
               onClick={handleBackToResults}
               className={`btn btn-secondary ${styles.backButton}`}
             >
-              <FontAwesomeIcon icon={faAngleLeft} /> Back to Results
+              <FontAwesomeIcon icon={faAngleLeft} /> Results
             </button>
             <p className={styles.header}>
               {currentCity?.city_name}, {state}

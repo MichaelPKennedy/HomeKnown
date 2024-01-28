@@ -12,11 +12,21 @@ const fetchCityData = async (cityId) => {
   return response[0];
 };
 
+const fetchWeatherForecast = async ({ queryKey }) => {
+  const [_key, { latitude, longitude }] = queryKey;
+  const data = await client
+    .service("forecast")
+    .find({ query: { latitude, longitude } });
+  return data;
+};
+
 export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
 
   const {
     data: cityData,
@@ -24,6 +34,21 @@ export const CityDataProvider = ({ children }) => {
     error,
   } = useQuery(["cityData", cityId], () => fetchCityData(cityId), {
     enabled: !!cityId,
+  });
+
+  useEffect(() => {
+    if (cityData) {
+      setLatitude(cityData.latitude);
+      setLongitude(cityData.longitude);
+    }
+  }, [cityData]);
+
+  const {
+    data: weatherForecast,
+    isLoading: isForecastLoading,
+    error: forecastError,
+  } = useQuery(["weatherData", { latitude, longitude }], fetchWeatherForecast, {
+    enabled: !!latitude && !!longitude,
   });
 
   useEffect(() => {
@@ -81,12 +106,15 @@ export const CityDataProvider = ({ children }) => {
         cityData,
         userCityData,
         userCityIds,
+        weatherForecast,
         setUserCityData,
         addCity,
         removeCity,
         setCityId,
         isLoading,
         error,
+        isForecastLoading,
+        forecastError,
       }}
     >
       {children}

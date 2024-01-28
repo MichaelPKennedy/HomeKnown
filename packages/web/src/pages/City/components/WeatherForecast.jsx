@@ -1,27 +1,10 @@
-import React, { useState, useEffect } from "react";
-import client from "../../../feathersClient";
+import React from "react";
 import styles from "../City.module.css";
 import { Card, Table } from "react-bootstrap";
+import { useCityData } from "../../../utils/CityDataContext";
 
 const WeatherForecast = (city) => {
-  const [weatherData, setWeatherData] = useState(null);
-
-  const { latitude, longitude } = city;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await client
-          .service("forecast")
-          .find({ query: { latitude, longitude } });
-        setWeatherData(data);
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { weatherForecast, isForecastLoading, forecastError } = useCityData();
 
   const getWeatherIcon = (main) => {
     switch (main) {
@@ -40,9 +23,11 @@ const WeatherForecast = (city) => {
     }
   };
 
-  if (!weatherData) {
+  if (isForecastLoading) {
     return <div>Loading...</div>;
   }
+
+  const { currentWeather } = weatherForecast || {};
 
   return (
     <Card className={styles.card}>
@@ -50,28 +35,28 @@ const WeatherForecast = (city) => {
         <h4>Weather Right Now</h4>
       </Card.Header>
       <p style={{ fontSize: "150px" }} className="mb-0">
-        {getWeatherIcon(weatherData?.weather?.[0]?.main)}{" "}
+        {getWeatherIcon(currentWeather?.weather?.[0]?.main)}{" "}
       </p>
       <Table responsive="sm">
         <tbody>
           <tr>
             <td>
-              <p>{weatherData?.weather?.[0]?.main}</p>
+              <p>{currentWeather?.weather?.[0]?.main}</p>
             </td>
           </tr>
           <tr>
             <td>
-              <p>Temperature: {weatherData?.main.temp}°F</p>
+              <p>Temperature: {currentWeather?.main.temp}°F</p>
             </td>
           </tr>
           <tr>
             <td>
-              <p>Humidity: {weatherData?.main.humidity}%</p>
+              <p>Humidity: {currentWeather?.main.humidity}%</p>
             </td>
           </tr>
           <tr>
             <td>
-              <p>Wind Speed: {weatherData?.wind.speed} m/s</p>
+              <p>Wind Speed: {currentWeather?.wind.speed} m/s</p>
             </td>
           </tr>
         </tbody>
