@@ -31,6 +31,8 @@ import Weather from "./pages/City/components/Weather";
 import Housing from "./pages/City/components/Housing";
 import Overview from "./pages/City/components/Overview";
 import Industry from "./pages/City/components/Industry";
+import AirQuality from "./pages/City/components/AirQuality";
+import Demographics from "./pages/City/components/Demographics";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -90,10 +92,16 @@ root.render(
                     <Route path="weather" element={<Weather />} />
                     <Route path="housing" element={<Housing />} />
                     <Route path="job-industry" element={<Industry />} />
+                    <Route path="air-quality" element={<AirQuality />} />
+                    <Route path="demographics" element={<Demographics />} />
                   </Route>
                   <Route path="/city/:cityId" element={<City />}>
                     <Route path="recreation" element={<RecreationMap />} />
                     <Route path="weather" element={<Weather />} />
+                    <Route path="housing" element={<Housing />} />
+                    <Route path="job-industry" element={<Industry />} />
+                    <Route path="air-quality" element={<AirQuality />} />
+                    <Route path="demographics" element={<Demographics />} />
                   </Route>
                   <Route path="/my-locations" element={<MyLocations />} />
                   <Route path="/login" element={<LoginPage />} />

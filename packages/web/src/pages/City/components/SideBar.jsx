@@ -59,6 +59,20 @@ const SideBar = () => {
         >
           Job Industry
         </Link>
+        <Link
+          to={`/results/${cityId}/air-quality`}
+          state={{ city }}
+          className={linkClass("/air-quality")}
+        >
+          Air Quality
+        </Link>
+        <Link
+          to={`/results/${cityId}/demographics`}
+          state={{ city }}
+          className={linkClass("/demographics")}
+        >
+          Demographics
+        </Link>
       </div>
 
       <div className={`d-none d-md-block bg-light p-3 ${styles.sidebar}`}>
@@ -106,6 +120,26 @@ const SideBar = () => {
               className={linkClass("/job-industry")}
             >
               Job Industry
+            </Link>
+          </li>
+          <li>
+            {" "}
+            <Link
+              to={`/results/${cityId}/air-quality`}
+              state={{ city }}
+              className={linkClass("/air-quality")}
+            >
+              Air Quality
+            </Link>
+          </li>
+          <li>
+            {" "}
+            <Link
+              to={`/results/${cityId}/demographics`}
+              state={{ city }}
+              className={linkClass("/demographics")}
+            >
+              Demographics
             </Link>
           </li>
         </ul>

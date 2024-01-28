@@ -1,10 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useParams, Outlet, useNavigate } from "react-router-dom";
 import styles from "./City.module.css";
-import JobData from "./components/JobData";
-import AirQualityChart from "./components/AirQualityChart";
-import DemographicsTable from "./components/DemographicsTable";
-import HousingChart from "./components/HousingChart";
 import HeartIcon from "../../components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
 import { useCityData } from "../../utils/CityDataContext";
@@ -46,19 +42,11 @@ function City() {
   );
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const isMainRoute = location.pathname === `/results/${cityId}`;
 
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
-  const {
-    Jobs: jobs,
-    AirQuality: airQuality,
-    CityDemographics: demographics,
-    HomePrice: homePriceData,
-    MonthlyRent: rentPriceData,
-  } = currentCity;
   let state = currentCity.state_name;
   if (state === "District of Columbia") {
     state = "DC";
@@ -83,15 +71,6 @@ function City() {
   };
 
   return (
-    //     {airQuality && <AirQualityChart airQualityData={airQuality} />}
-    //     {demographics && <DemographicsTable data={demographics} />}
-    //     {showLoginModal && (
-    //       <LoginModal onClose={() => setShowLoginModal(false)} />
-    //     )}
-    //   </div>
-    //   <Outlet />
-    // </CityDataProvider>
-
     <div className="container-fluid">
       <div className="row">
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
