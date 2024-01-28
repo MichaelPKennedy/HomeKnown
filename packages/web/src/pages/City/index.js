@@ -13,6 +13,8 @@ import { useCityData, CityDataProvider } from "../../utils/CityDataContext";
 import LoginModal from "../../components/LoginModal";
 import SideBar from "./components/SideBar";
 import Overview from "./components/Overview";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 
 function City() {
   const location = useLocation();
@@ -145,7 +147,7 @@ function City() {
               onClick={handleBackToResults}
               className={`btn btn-secondary ${styles.backButton}`}
             >
-              Back to Results
+              <FontAwesomeIcon icon={faAngleLeft} /> Back to Results
             </button>
             <p className={styles.header}>
               {currentCity?.city_name}, {state}
