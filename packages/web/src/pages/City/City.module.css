@@ -10,6 +10,17 @@
   width: 75%;
 }
 
+.container {
+  height: 100%;
+  margin-left: 200px;
+}
+
+@media (min-width: 768px) {
+  .navContainer {
+    max-width: 250px;
+  }
+}
+
 .card {
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -119,12 +130,18 @@
   margin: 5px;
 }
 
+.backButton {
+  margin-right: 20px;
+}
+
 .headerContainer {
   display: flex;
   align-items: center;
   justify-content: start;
   gap: 10px;
   margin-bottom: 15px;
+  margin-left: 10px;
+  text-align: center;
 }
 
 .header {

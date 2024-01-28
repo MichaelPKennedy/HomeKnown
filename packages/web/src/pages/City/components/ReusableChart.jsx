@@ -69,13 +69,7 @@ const datalabelsPlugin = {
 // Add plugin to ChartJS instance
 ChartJS.register(datalabelsPlugin);
 
-const ReusableChartComponent = ({
-  data,
-  label,
-  startYear,
-  endYear,
-  dataType,
-}) => {
+const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
   const [selectedYear, setSelectedYear] = useState(2022);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [chartType, setChartType] = useState("temperature");
@@ -311,4 +305,4 @@ const ReusableChartComponent = ({
   );
 };
 
-export default ReusableChartComponent;
+export default ReusableChart;

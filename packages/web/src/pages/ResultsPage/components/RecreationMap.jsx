@@ -1,6 +1,6 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useCityData } from "../../../utils/CityDataContext";
+import React, { useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import { useCityData, CityDataProvider } from "../../../utils/CityDataContext";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -134,96 +134,112 @@ const FixMapSize = () => {
 };
 
 const RecreationMap = () => {
+  const location = useLocation();
+  const { city } = location?.state || {};
   const { cityId } = useParams();
-  const { cityData, isLoading, error } = useCityData();
+  const { cityData, isLoading, error, setCityId } = useCityData();
   const [activeLandmarkId, setActiveLandmarkId] = React.useState(null);
+
+  const currentCity = city ? city : cityData;
+
+  useEffect(() => {
+    if (cityId) {
+      setCityId(cityId);
+    }
+  }, [cityId]);
+
+  if (isLoading && !currentCity) return <div>Loading city data...</div>;
+  if (error) return <div>Error loading city data: {error.message}</div>;
+  if (!cityData && !currentCity) return <div>No city data available.</div>;
 
   const { Recreation: recreation } = cityData;
 
   return (
-    <Card className={styles.card}>
-      <Card.Header>
-        <h4>Recreation</h4>
-      </Card.Header>
-      <MapContainer
-        center={[cityData.latitude, cityData.longitude]}
-        zoom={9}
-        scrollWheelZoom={false}
-        className={styles.map}
-      >
-        <FixMapSize />
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Circle
+    <CityDataProvider>
+      <Card className={styles.card}>
+        <Card.Header>
+          <h4>Recreation</h4>
+        </Card.Header>
+        <MapContainer
           center={[cityData.latitude, cityData.longitude]}
-          radius={80467} // 50 miles in meters
-          color="black"
-          fillColor="green"
-          fillOpacity={0.1}
-          opacity={0.2}
-        />
-        <Marker
-          position={[cityData.latitude, cityData.longitude]}
-          icon={
-            new L.DivIcon({
-              className: styles.cityMarker,
-              html: ReactDOMServer.renderToString(
-                <div>
-                  <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
-                </div>
-              ),
-              iconSize: [30, 30],
-            })
-          }
+          zoom={9}
+          scrollWheelZoom={false}
+          className={styles.map}
         >
-          <Tooltip
-            direction="top"
-            permanent={activeLandmarkId === cityData.city_id}
-          >
-            <div
-              className={styles.tooltipLabel}
-              onMouseOver={() => setActiveLandmarkId(cityData.city_id)}
-              onMouseOut={() => setActiveLandmarkId(null)}
-            >
-              <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-              <span>{cityData.city_name}</span>
-            </div>
-          </Tooltip>
-        </Marker>
-        {recreation.map((landmark, index) => (
+          <FixMapSize />
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Circle
+            center={[cityData.latitude, cityData.longitude]}
+            radius={80467} // 50 miles in meters
+            color="black"
+            fillColor="green"
+            fillOpacity={0.1}
+            opacity={0.2}
+          />
           <Marker
-            key={`${landmark.Location}-${index}`}
-            position={[landmark.Latitude, landmark.Longitude]}
-            className={styles.markerLabel}
+            position={[cityData.latitude, cityData.longitude]}
             icon={
               new L.DivIcon({
-                className: styles.tooltipIcon,
-                html: getTypeIcon(landmark.Type),
-                iconSize: [40, 40],
+                className: styles.cityMarker,
+                html: ReactDOMServer.renderToString(
+                  <div>
+                    <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                  </div>
+                ),
+                iconSize: [30, 30],
               })
             }
-            eventHandlers={{
-              mouseover: () => setActiveLandmarkId(landmark.id),
-              mouseout: () => setActiveLandmarkId(null),
-            }}
           >
-            <Tooltip open={activeLandmarkId === landmark.id}>
+            <Tooltip
+              direction="top"
+              permanent={activeLandmarkId === cityData.city_id}
+            >
               <div
                 className={styles.tooltipLabel}
-                style={{
-                  maxWidth: "400px",
-                  whiteSpace: "normal",
-                }}
+                onMouseOver={() => setActiveLandmarkId(cityData.city_id)}
+                onMouseOut={() => setActiveLandmarkId(null)}
               >
-                {landmark.Location} - {landmark.Type}
+                <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
+                <span>{cityData.city_name}</span>
               </div>
             </Tooltip>
           </Marker>
-        ))}
-      </MapContainer>
-    </Card>
+          {recreation.map((landmark, index) => (
+            <Marker
+              key={`${landmark.Location}-${index}`}
+              position={[landmark.Latitude, landmark.Longitude]}
+              className={styles.markerLabel}
+              icon={
+                new L.DivIcon({
+                  className: styles.tooltipIcon,
+                  html: getTypeIcon(landmark.Type),
+                  iconSize: [40, 40],
+                })
+              }
+              eventHandlers={{
+                mouseover: () => setActiveLandmarkId(landmark.id),
+                mouseout: () => setActiveLandmarkId(null),
+              }}
+            >
+              <Tooltip open={activeLandmarkId === landmark.id}>
+                <div
+                  className={styles.tooltipLabel}
+                  style={{
+                    maxWidth: "400px",
+                    whiteSpace: "normal",
+                  }}
+                >
+                  {landmark.Location} - {landmark.Type}
+                </div>
+              </Tooltip>
+            </Marker>
+          ))}
+        </MapContainer>
+      </Card>
+    </CityDataProvider>
   );
 };
 

@@ -1,0 +1,22 @@
+.sidebar {
+  height: 100vh; /* Full height */
+  top: 0; /* Stay at the top */
+  left: 0;
+  bottom: 0;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 20px;
+  background-color: #f5f5f5;
+  z-index: 900;
+}
+
+.sidebar a {
+  display: block;
+  color: black;
+  padding: 10px;
+  text-decoration: none;
+}
+
+.sidebar a.active {
+  background-color: #007bff;
+  color: white;
+}
