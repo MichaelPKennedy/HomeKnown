@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useCityData } from "../../../utils/CityDataContext";
-import WeatherForecast from "./WeatherForecast";
+import WeatherForecast from "../components/WeatherForecast";
 
 const Overview = () => {
   const location = useLocation();

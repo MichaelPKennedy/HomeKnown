@@ -27,12 +27,12 @@ import TermsOfService from "./pages/TermsOfService";
 import DataSources from "./pages/DataSources";
 import { AuthProvider } from "./AuthContext";
 import RecreationMap from "./pages/ResultsPage/components/RecreationMap";
-import Weather from "./pages/City/components/Weather";
-import Housing from "./pages/City/components/Housing";
-import Overview from "./pages/City/components/Overview";
-import Industry from "./pages/City/components/Industry";
-import AirQuality from "./pages/City/components/AirQuality";
-import Demographics from "./pages/City/components/Demographics";
+import Weather from "./pages/City/pages/Weather";
+import Housing from "./pages/City/pages/Housing";
+import Overview from "./pages/City/pages/Overview";
+import Industry from "./pages/City/pages/Industry";
+import AirQuality from "./pages/City/pages/AirQuality";
+import Demographics from "./pages/City/pages/Demographics";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

@@ -1,20 +1,21 @@
 import React from "react";
 import { useCityData } from "../../../utils/CityDataContext";
 import { useLocation } from "react-router-dom";
-import AirQualityChart from "./AirQualityChart";
+import JobData from "../components/JobData";
 
-const AirQuality = () => {
+const Industry = () => {
   const location = useLocation();
   const { cityData, isLoading, error } = useCityData();
 
   const { city } = location?.state || {};
+  console.log("city in jobs", city);
   const currentCity = city ? city : cityData;
-  const { AirQuality: airQuality } = currentCity || {};
-
+  const { Jobs: jobs } = currentCity || {};
+  console.log(jobs);
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
-  return <>{airQuality && <AirQualityChart airQualityData={airQuality} />}</>;
+  return <>{jobs && <JobData jobs={jobs} />}</>;
 };
 
-export default AirQuality;
+export default Industry;

@@ -1,21 +1,30 @@
 import React from "react";
 import { useCityData } from "../../../utils/CityDataContext";
 import { useLocation } from "react-router-dom";
-import JobData from "./JobData";
+import ReusableChart from "../components/ReusableChart";
 
-const Industry = () => {
+const Weather = () => {
   const location = useLocation();
   const { cityData, isLoading, error } = useCityData();
+  const startYear = 2010;
+  const endYear = 2023;
 
   const { city } = location?.state || {};
-  console.log("city in jobs", city);
   const currentCity = city ? city : cityData;
-  const { Jobs: jobs } = currentCity || {};
-  console.log(jobs);
+  const weatherData = currentCity.Weather;
+
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
-  return <>{jobs && <JobData jobs={jobs} />}</>;
+  return (
+    <ReusableChart
+      data={weatherData}
+      label="Average Temperature"
+      startYear={startYear}
+      endYear={endYear}
+      dataType="weather"
+    />
+  );
 };
 
-export default Industry;
+export default Weather;

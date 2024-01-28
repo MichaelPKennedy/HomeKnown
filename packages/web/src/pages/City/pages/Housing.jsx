@@ -1,7 +1,7 @@
 import React from "react";
 import { useCityData } from "../../../utils/CityDataContext";
 import { useLocation } from "react-router-dom";
-import HousingChart from "./HousingChart";
+import HousingChart from "../components/HousingChart";
 
 const Housing = () => {
   const location = useLocation();
