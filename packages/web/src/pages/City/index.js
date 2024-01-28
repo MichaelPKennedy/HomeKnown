@@ -91,10 +91,6 @@ function City() {
 
   console.log("city", currentCity);
 
-  const weatherData = currentCity.Weather;
-  const startYear = 2010;
-  const endYear = 2023;
-
   const handleHeartClick = async () => {
     if (!isLoggedIn) {
       setShowLoginModal(true);
@@ -115,9 +111,6 @@ function City() {
     //     {jobs && <JobData jobs={jobs} />}
     //     {airQuality && <AirQualityChart airQualityData={airQuality} />}
     //     {demographics && <DemographicsTable data={demographics} />}
-    //     {homePrice.length > 0 && rentPrice.length > 0 && (
-    //       <HousingChart housingData={homePrice} rentData={rentPrice} />
-    //     )}
     //     {showLoginModal && (
     //       <LoginModal onClose={() => setShowLoginModal(false)} />
     //     )}

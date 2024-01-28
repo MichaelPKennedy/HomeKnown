@@ -41,6 +41,12 @@ const SideBar = () => {
         >
           Weather
         </Link>
+        <Link
+          to={`/results/${cityId}/housing`}
+          className={linkClass("/housing")}
+        >
+          Housing
+        </Link>
       </div>
 
       <div className={`d-none d-md-block bg-light p-3 ${styles.sidebar}`}>
@@ -67,6 +73,14 @@ const SideBar = () => {
               className={linkClass("/weather")}
             >
               Weather
+            </Link>
+          </li>
+          <li>
+            <Link
+              to={`/results/${cityId}/housing`}
+              className={linkClass("/housing")}
+            >
+              Housing
             </Link>
           </li>
         </ul>
