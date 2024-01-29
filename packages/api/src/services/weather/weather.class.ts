@@ -111,17 +111,22 @@ export class WeatherService implements ServiceMethods<any> {
         return acc
       }, new Set())
 
-      const cityResultsWithSnow = await this.sequelize.models.CityMonthlyWeatherCounty.findAll({
+      const citySnow = await this.sequelize.models.CitySnowCache.findAll({
         where: {
           city_id: Array.from(cityIds),
           year: 2022
         },
-        attributes: ['city_id', 'snow', 'month']
+        attributes: ['city_id', 'total_snow']
       })
+
+      const citySnowDataMap = citySnow.reduce((acc: any, curr: any) => {
+        acc[curr.city_id] = curr.total_snow / 5
+        return acc
+      }, {})
 
       const scoredResults = await this.scoreResults(
         flattenedCountyResults,
-        cityResultsWithSnow,
+        citySnowDataMap,
         temperatureData,
         snowPreference,
         rainPreference
@@ -155,7 +160,7 @@ export class WeatherService implements ServiceMethods<any> {
 
   async scoreResults(
     countyResults: any[],
-    cityResultsWithSnow: any[],
+    citySnowDataMap: any[],
     temperatureData: WeatherParams['temperatureData'],
     snowPreference?: string,
     rainPreference?: string
@@ -201,10 +206,9 @@ export class WeatherService implements ServiceMethods<any> {
         score += this.getRainScore(city.rain, rainPreference)
       }
 
-      // Find city-level snow data
-      const citySnowData = cityResultsWithSnow.find((c) => c.city_id === city.city_id)
-      if (citySnowData && snowPreference) {
-        score += this.getSnowScore(citySnowData.snow, snowPreference)
+      if (snowPreference) {
+        const averageSnow = citySnowDataMap[city.city_id] || 0
+        score += this.getSnowScore(averageSnow, snowPreference)
       }
 
       return { ...city, score }

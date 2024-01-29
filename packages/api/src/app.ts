@@ -46,6 +46,7 @@ import { MonthlyRentCitiesModel } from './models/monthly-rent-cities.model'
 import { HomePriceModel } from './models/home-price.model'
 import { UsersModel } from './models/users.model'
 import { UserCitiesModel } from './models/user-cities.model'
+import { CitySnowCacheModel } from './models/city-snow-cache.model'
 
 const app: Application = express(feathers())
 
@@ -100,6 +101,7 @@ MonthlyRentCitiesModel(sequelize)
 HomePriceModel(sequelize)
 UsersModel(sequelize)
 UserCitiesModel(sequelize)
+CitySnowCacheModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -111,6 +113,7 @@ const CrimeStatsCity = sequelize.models.CrimeStatsCity
 const CrimeStats = sequelize.models.CrimeStats
 const CityDemographics = sequelize.models.CityDemographics
 const CityMonthlyWeatherCounty = sequelize.models.CityMonthlyWeatherCounty
+const CitySnowCache = sequelize.models.CitySnowCache
 const CountyMonthlyWeather = sequelize.models.CountyMonthlyWeather
 const CityIndustrySalary = sequelize.models.CityIndustrySalary
 const HomePrice = sequelize.models.HomePrice
@@ -142,6 +145,7 @@ City.hasOne(CityDemographics, { foreignKey: 'city_id' })
 City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
 City.hasMany(HomePrice, { foreignKey: 'city_id' })
 City.hasMany(MonthlyRentCities, { foreignKey: 'city_id' })
+City.hasMany(CitySnowCache, { foreignKey: 'city_id' })
 City.belongsTo(Area, { foreignKey: 'area_code' })
 UserCities.belongsTo(Users, { foreignKey: 'user_id' })
 UserCities.belongsTo(City, { foreignKey: 'city_id' })
