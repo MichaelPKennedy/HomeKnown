@@ -1,6 +1,7 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Recreation, RecreationData, RecreationPatch, RecreationQuery } from './recreation.schema'
+import { Op } from 'sequelize'
 import { RecreationalInterestMappings } from './constants'
 
 export type { Recreation, RecreationData, RecreationPatch, RecreationQuery }
@@ -57,86 +58,92 @@ export class RecreationService implements ServiceMethods<any> {
     this.sequelize = sequelizeClient
   }
 
-  async find(params: RecreationParams): Promise<any[] | Paginated<any>> {
+  async find(params: any): Promise<any> {
     const { recreationalInterests } = params.query
+    const interests = Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
 
-    const landmarkTypes = (
-      Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
-    ).flatMap((interest: any) => RecreationalInterestMappings[interest as RecreationalInterestKey])
-
-    const landmarks = await this.sequelize.models.LandMarks.findAll({
-      where: { Type: landmarkTypes }
-    })
-
-    const cities = await this.sequelize.models.City.findAll({})
-
-    const cityRankings: {
-      city: any
-      closestDistance: number
-      landmarkCount: number
-      nearbyLandmarks: any[]
-    }[] = []
-
-    cities.forEach((city: any) => {
-      let closestDistance = Infinity
-      let landmarkCount = 0
-      const nearbyLandmarks: any[] = []
-
-      landmarks.forEach((landmark: any) => {
-        const currentDistance = haversineDistance(
-          city.Latitude,
-          city.Longitude,
-          landmark.Latitude,
-          landmark.Longitude
-        )
-
-        if (currentDistance < closestDistance) {
-          closestDistance = currentDistance
+    const initialRankings = await this.sequelize.models.CityPlacesCache.findAll({
+      where: {
+        place_type: { [Op.in]: interests }
+      },
+      attributes: [
+        'city_id',
+        [this.sequelize.fn('SUM', this.sequelize.col('place_count')), 'totalPlaceCount']
+      ],
+      include: [
+        {
+          model: this.sequelize.models.City,
+          attributes: ['city_name', 'county_fips']
         }
-
-        if (currentDistance <= 50) {
-          landmarkCount++
-          nearbyLandmarks.push(landmark)
-        }
-      })
-
-      if (landmarkCount > 0) {
-        cityRankings.push({ city, closestDistance, landmarkCount, nearbyLandmarks })
-      }
+      ],
+      group: ['city_id'],
+      order: [[this.sequelize.literal('totalPlaceCount'), 'DESC']],
+      limit: 1000
     })
 
-    cityRankings.sort((a, b) => b.landmarkCount - a.landmarkCount || a.closestDistance - b.closestDistance)
+    const cityIds = initialRankings.map((ranking: any) => ranking.getDataValue('city_id'))
 
-    let ranking = 1
-    let previousLandmarkCount = 0
-    let tieRank = 1
-
-    const rankedCities = cityRankings.map((entry, index) => {
-      if (previousLandmarkCount !== entry.landmarkCount) {
-        previousLandmarkCount = entry.landmarkCount
-        ranking = tieRank
-      }
-
-      tieRank++
-
-      return {
-        ...entry,
-        ranking
-      }
+    const detailedCounts = await this.sequelize.models.CityPlacesCache.findAll({
+      where: {
+        city_id: { [Op.in]: cityIds },
+        place_type: { [Op.in]: interests }
+      },
+      attributes: ['city_id', 'place_type', 'place_count']
     })
 
-    const topCities = rankedCities.slice(0, 300).map((entry) => ({
-      city_id: entry.city.city_id,
-      county: entry.city.county_fips,
-      ranking: entry.ranking,
-      nearbyLandmarks: entry.nearbyLandmarks
+    const countsMap = detailedCounts.reduce((acc: any, item: any) => {
+      const { city_id, place_type, place_count } = item.get({ plain: true })
+      acc[city_id] = acc[city_id] || { totalPlaceCount: 0, diversityScore: 0, placeTypes: new Set() }
+      acc[city_id].totalPlaceCount += place_count
+      if (place_count > 0) {
+        acc[city_id].placeTypes.add(place_type)
+        acc[city_id].diversityScore = acc[city_id].placeTypes.size
+      }
+      return acc
+    }, {})
+
+    let rankings = Object.keys(countsMap).map((city_id) => ({
+      city_id,
+      ...countsMap[city_id],
+      diversityScore: countsMap[city_id].diversityScore,
+      totalPlaceCount: countsMap[city_id].totalPlaceCount
     }))
 
-    if (topCities.length < 10) {
-      console.log('Obtained less than 10 cities for recreation')
-    }
+    rankings.sort((a, b) => b.diversityScore - a.diversityScore || b.totalPlaceCount - a.totalPlaceCount)
 
-    return topCities
+    let currentRank = 1
+    rankings.forEach((city, index, array) => {
+      if (index > 0) {
+        if (
+          city.diversityScore === array[index - 1].diversityScore &&
+          city.totalPlaceCount === array[index - 1].totalPlaceCount
+        ) {
+          city.ranking = array[index - 1].ranking
+        } else {
+          city.ranking = currentRank
+        }
+      } else {
+        city.ranking = currentRank
+      }
+      if (index < array.length - 1) {
+        if (
+          city.diversityScore !== array[index + 1].diversityScore ||
+          city.totalPlaceCount !== array[index + 1].totalPlaceCount
+        ) {
+          currentRank = index + 2
+        }
+      }
+    })
+
+    // Prepare the final output
+    const finalOutput = rankings.slice(0, 300).map((city) => ({
+      city_id: city.city_id,
+      city_name: city.City.city_name,
+      county: city.City.county_fips,
+      ranking: city.ranking
+    }))
+
+    return finalOutput
   }
 
   async get(id: Id, params?: RecreationParams): Promise<any> {
