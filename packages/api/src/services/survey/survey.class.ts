@@ -299,7 +299,7 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  scoreCities(
+  async scoreCities(
     job: any,
     weather: any,
     recreation: any,
@@ -311,7 +311,7 @@ export class SurveyService implements ServiceMethods<any> {
     weights: any,
     recreationFormData: any,
     jobFormData: any
-  ): any {
+  ): Promise<any> {
     const cityScores = new Map<number, number>()
     const highestScoredCityPerCounty = new Map<string, any>()
 
@@ -357,9 +357,14 @@ export class SurveyService implements ServiceMethods<any> {
         .slice(0, 10)
     }
 
-    // Get detailed information for the top cities
-    const citiesWithDetails = this.getCityDetails(finalCities, recreationFormData, jobFormData)
+    let citiesWithDetails = await this.getCityDetails(finalCities, recreationFormData, jobFormData)
 
+    // ensure cities are still correctly ordered after processing
+    citiesWithDetails = finalCities.map(({ city_id }) =>
+      citiesWithDetails.find((city: any) => {
+        return city.city_id === Number(city_id)
+      })
+    )
     return citiesWithDetails
   }
 
@@ -430,27 +435,9 @@ export class SurveyService implements ServiceMethods<any> {
       })
     }
 
-    let landmarks = await this.sequelize.models.LandMarks.findAll({
-      where: landmarkTypes.length > 0 ? { Type: landmarkTypes } : {}
-    })
-
     const cityDetailsPromises = cityDetailsRaw.map(async (city: any) => {
       const { Latitude: cityLatitude, Longitude: cityLongitude } = city
       const cityJobs = jobData.filter((job) => job.area_code === city.area_code)
-
-      const landmarkDetails = await Promise.all(
-        landmarks.map(async (landmark: any) => {
-          const distance = await calculateDistance(
-            cityLatitude,
-            cityLongitude,
-            landmark.Latitude,
-            landmark.Longitude
-          )
-          return distance <= searchRadius ? { ...landmark, distance } : null
-        })
-      )
-
-      const nearbyLandmarks = landmarkDetails.filter((l) => l !== null)
 
       return {
         city_id: city.city_id,
@@ -472,14 +459,7 @@ export class SurveyService implements ServiceMethods<any> {
         HomePrice: city.HomePrices,
         MonthlyRent: city.MonthlyRentCities,
         Jobs: cityJobs,
-        Weather: city.CityMonthlyWeatherCounties,
-        Recreation: nearbyLandmarks.map((landmark) => ({
-          Location: landmark.dataValues.Location,
-          Type: landmark.dataValues.Type,
-          Latitude: landmark.dataValues.Latitude,
-          Longitude: landmark.dataValues.Longitude,
-          Distance: landmark.distance
-        }))
+        Weather: city.CityMonthlyWeatherCounties
       }
     })
 

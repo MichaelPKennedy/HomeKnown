@@ -13,7 +13,7 @@ const Recreation = () => {
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
-  return <>{currentCity.Recreation && <RecreationMap data={currentCity} />}</>;
+  return <>{currentCity && <RecreationMap data={currentCity} />}</>;
 };
 
 export default Recreation;
