@@ -17,6 +17,7 @@ import WeatherPreferences from "./WeatherPreferences.jsx";
 import RecreationalPreferences from "./RecreationalPreferences.jsx";
 import PopulationPreferences from "./PopulationPreferences";
 import ResultsPage from "../../ResultsPage";
+import { useCityData } from "../../../utils/CityDataContext";
 
 const initialFormData = {
   snowPreference: "none",
@@ -64,6 +65,7 @@ const initialFormData = {
 const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const resultsRef = useRef(null);
+  const { setUserPreferences } = useCityData();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -202,6 +204,7 @@ const LivingPreferenceForm = () => {
       if (response) {
         console.log("Response from survey:", response);
         setLoading(false);
+        setUserPreferences(formData);
         setSurveyResults(response);
         setShowForm(false);
         // Save the results and form state to sessionStorage

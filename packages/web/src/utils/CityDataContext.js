@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import { AuthContext } from "../AuthContext";
+import { fetchDataForPreference } from "../pages/ResultsPage/constants";
 import client from "../feathersClient";
 const CityDataContext = createContext();
 
@@ -22,11 +23,36 @@ const fetchWeatherForecast = async ({ queryKey }) => {
 
 export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
+  const [userPreferences, setUserPreferences] = useState({});
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [recInterestsData, setRecInterestsData] = useState(null);
+
+  const fetchRecInterestsForCity = async ({ queryKey }) => {
+    const [_key, city] = queryKey;
+    const interests = userPreferences?.recreationalInterests || [];
+    console.log("interests", interests);
+    let results = {};
+    console.log("in rec interests function");
+    for (let interest of interests) {
+      try {
+        const elements = await fetchDataForPreference(interest, city);
+        console.log("elements", elements);
+        results[interest] = elements;
+      } catch (error) {
+        console.error(
+          `Error fetching ${interest} for city ${city.name}:`,
+          error
+        );
+        results[interest] = [];
+      }
+    }
+
+    return results;
+  };
 
   const {
     data: cityData,
@@ -50,6 +76,20 @@ export const CityDataProvider = ({ children }) => {
   } = useQuery(["weatherData", { latitude, longitude }], fetchWeatherForecast, {
     enabled: !!latitude && !!longitude,
   });
+
+  const {
+    data: userRecInterests,
+    isLoading: userRecInterestsLoading,
+    error: userRecInterestsError,
+  } = useQuery(["recreation", cityData], fetchRecInterestsForCity, {
+    enabled: !!cityId && !!cityData,
+  });
+
+  useEffect(() => {
+    if (userRecInterests) {
+      setRecInterestsData(recInterestsData);
+    }
+  }, [userRecInterests]);
 
   useEffect(() => {
     const fetchUserCityData = async () => {
@@ -115,6 +155,11 @@ export const CityDataProvider = ({ children }) => {
         error,
         isForecastLoading,
         forecastError,
+        userPreferences,
+        setUserPreferences,
+        userRecInterests,
+        userRecInterestsLoading,
+        userRecInterestsError,
       }}
     >
       {children}

@@ -1,4 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useQuery, useQueryClient } from "react-query";
+import axios from "axios";
 import { useParams, useLocation } from "react-router-dom";
 import { useCityData, CityDataProvider } from "../../../utils/CityDataContext";
 import ReactDOMServer from "react-dom/server";
@@ -16,18 +18,15 @@ import {
 } from "react-leaflet";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faMountain,
   faTree,
-  faWater,
-  faUmbrellaBeach,
-  faMapMarkerAlt,
+  faMountain,
+  faHiking,
   faArchway,
   faTint,
   faBinoculars,
-  faHiking,
+  faUmbrellaBeach,
   faLandmark,
   faMonument,
-  faPaw,
   faTractor,
   faMusic,
   faUniversity,
@@ -35,87 +34,85 @@ import {
   faBuilding,
   faLeaf,
   faFrog,
+  faPaw,
   faLaugh,
   faSnowboarding,
   faSatellite,
   faStar,
+  faFish,
+  faSwimmer,
+  faDumbbell,
+  faWineBottle,
+  faSpa,
+  faGolfBall,
+  faShoppingCart,
+  faTheaterMasks,
+  faCampground,
+  faBicycle,
+  faPizzaSlice,
+  faCocktail,
+  faPalette,
+  faCameraRetro,
+  faSkating,
+  faRunning,
+  faSwimmingPool,
+  faAnchor,
+  faDrum,
+  faBasketballBall,
+  faFutbol,
+  faHotTub,
+  faCarrot,
+  faWater,
+  faMapMarkerAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { Card } from "react-bootstrap";
+import { Card, Button, Modal, Form } from "react-bootstrap";
 
 const placeToIconMap = {
-  "National Park": faTree,
-  "Mountain Peak": faMountain,
-  "Hiking Trail": faHiking,
-  "National Monument": faLandmark,
-  "Historic Site": faMonument,
-  "National Recreation Area": faTree,
-  "National Seashore": faWater,
-  "Natural Arch": faArchway,
-  Waterfall: faTint,
-  Viewpoint: faBinoculars,
-  "Hiking Spot": faHiking,
-  Mountain: faMountain,
-  "Granite Dome": faMountain,
-  "Slot Canyon": faMountain,
-  "National Memorial": faMonument,
-  "Mountain Memorial": faMountain,
-  Valley: faMountain,
-  "Historical Park": faLandmark,
-  "National Riverway": faWater,
-  Rainforest: faTree,
-  "National Forest": faTree,
-  Beach: faUmbrellaBeach,
-  "State Park": faTree,
-  Volcano: faMountain,
-  "National Lakeshore": faWater,
-  "Wilderness Area": faTree,
-  "National Reserve": faTree,
-  "National Grassland": faTree,
-  "Scenic Area": faTree,
-  "National Preserve": faTree,
-  "National Scenic River": faWater,
-  "National Historical Park": faLandmark,
-  "National Battlefield": faLandmark,
-  "National River": faWater,
-  Memorial: faMonument,
-  Park: faTree,
-  "Historical Site": faLandmark,
-  Ranch: faTractor,
-  "Historic Landmark": faLandmark,
-  Monument: faMonument,
-  "National Military Park": faLandmark,
-  "National Park for the Performing Arts": faMusic,
-  "Heritage Corridor": faLandmark,
-  Museum: faUniversity,
-  "Scenic River": faWater,
-  "Historic Trail": faHiking,
-  "Memorial Park": faMonument,
-  "Heritage Area": faLandmark,
-  Estuary: faWater,
-  "National Museum": faUniversity,
-  "Battlefields Memorial": faLandmark,
-  Parkway: faRoad,
-  Center: faBuilding,
-  Lake: faWater,
-  "Great Lake": faWater,
-  Lakes: faWater,
-  Reservoir: faWater,
-  Bay: faWater,
-  Inlet: faWater,
-  River: faWater,
-  "Lake Region": faWater,
-  Fjord: faWater,
-  "Lake System": faWater,
-  "Botanical Garden": faLeaf,
-  "Scenic Drive": faRoad,
-  "Wildlife Reserve": faFrog,
-  Cave: faMountain,
-  "Climbing Area": faMountain,
-  Zoo: faPaw,
-  "Amusement Park": faLaugh,
-  "Ski Resort": faSnowboarding,
-  Observatory: faSatellite,
-  Landmark: faLandmark,
+  restaurants: faPizzaSlice,
+  beaches: faUmbrellaBeach,
+  lakes: faWater,
+  bars: faCocktail,
+  mountains: faMountain,
+  hikingTrails: faHiking,
+  caves: faArchway,
+  monuments: faLandmark,
+  archaeologicalSites: faCameraRetro,
+  museums: faUniversity,
+  waterfalls: faTint,
+  forests: faTree,
+  skiResorts: faSnowboarding,
+  nationalParks: faTree,
+  botanicalGardens: faLeaf,
+  rivers: faWater,
+  sportsCentres: faBasketballBall,
+  swimmingFacilities: faSwimmer,
+  climbingCentres: faMountain,
+  tennisCentres: faFutbol,
+  crossCountrySkiAreas: faSkating,
+  rockClimbing: faMountain,
+  zoos: faPaw,
+  wildlifeReserves: faFrog,
+  artGalleries: faPalette,
+  aquariums: faFish,
+  parks: faLeaf,
+  bicycleTrails: faBicycle,
+  musicVenues: faMusic,
+  farmersMarkets: faCarrot,
+  golfCourses: faGolfBall,
+  spasAndWellnessCenters: faSpa,
+  vineyards: faWineBottle,
+  hotAirBalloonRides: faHotTub,
+  artStudios: faPalette,
+  yogaStudios: faRunning,
+  fitnessGyms: faDumbbell,
+  danceStudios: faTheaterMasks,
+  racecourses: faRunning,
+  swimmingPoolFacilities: faSwimmingPool,
+  shoppingCenters: faShoppingCart,
+  amusementParks: faLaugh,
+  telescopeObservatories: faSatellite,
+  planetariums: faStar,
+  nightclubs: faMusic,
 };
 
 const getTypeIcon = (type) => {
@@ -133,35 +130,67 @@ const FixMapSize = () => {
   return null;
 };
 
-const RecreationMap = () => {
-  const location = useLocation();
-  const { city } = location?.state || {};
-  const { cityId } = useParams();
-  const { cityData, isLoading, error, setCityId } = useCityData();
-  const [activeLandmarkId, setActiveLandmarkId] = React.useState(null);
-
-  const currentCity = city ? city : cityData;
+const RecreationMap = ({ data }) => {
+  const [showFilterModal, setShowFilterModal] = useState(false);
+  const [filters, setFilters] = useState({});
+  const [tempFilters, setTempFilters] = useState({});
+  const { userRecInterests } = useCityData();
 
   useEffect(() => {
-    if (cityId) {
-      setCityId(cityId);
+    console.log("recreational Interests from context", userRecInterests);
+  }, [userRecInterests]);
+
+  const handleFilterModalToggle = () => {
+    setShowFilterModal(!showFilterModal);
+    if (!showFilterModal) {
+      setTempFilters(filters);
     }
-  }, [cityId]);
+  };
 
-  if (isLoading && !currentCity) return <div>Loading city data...</div>;
-  if (error) return <div>Error loading city data: {error.message}</div>;
-  if (!cityData && !currentCity) return <div>No city data available.</div>;
+  const setOnlyFilter = (type) => {
+    setTempFilters((prev) =>
+      Object.keys(prev).reduce((acc, key) => {
+        acc[key] = key === type;
+        return acc;
+      }, {})
+    );
+  };
 
-  const { Recreation: recreation } = cityData;
+  const applyFilters = () => {
+    setFilters(tempFilters);
+    localStorage.setItem("recreationFilters", JSON.stringify(tempFilters));
+    setShowFilterModal(false);
+  };
+
+  useEffect(() => {
+    const storedFilters = localStorage.getItem("recreationFilters");
+    if (storedFilters) {
+      setFilters(JSON.parse(storedFilters));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userRecInterests && !filters) {
+      const newFilters = Object.keys(userRecInterests).reduce((acc, key) => {
+        acc[key] = true;
+        return acc;
+      }, {});
+
+      setFilters(newFilters);
+    }
+  }, [userRecInterests]);
 
   return (
     <CityDataProvider>
       <Card className={styles.card}>
         <Card.Header>
           <h4>Recreation</h4>
+          <Button variant="primary" onClick={handleFilterModalToggle}>
+            Filter Preferences
+          </Button>
         </Card.Header>
         <MapContainer
-          center={[cityData.latitude, cityData.longitude]}
+          center={[data.latitude, data.longitude]}
           zoom={9}
           scrollWheelZoom={false}
           className={styles.map}
@@ -172,73 +201,104 @@ const RecreationMap = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
           <Circle
-            center={[cityData.latitude, cityData.longitude]}
-            radius={80467} // 50 miles in meters
+            center={[data.latitude, data.longitude]}
+            radius={50000} // 50 km in meters
             color="black"
             fillColor="green"
             fillOpacity={0.1}
             opacity={0.2}
           />
           <Marker
-            position={[cityData.latitude, cityData.longitude]}
+            position={[data.latitude, data.longitude]}
             icon={
               new L.DivIcon({
                 className: styles.cityMarker,
                 html: ReactDOMServer.renderToString(
-                  <div>
-                    <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
-                  </div>
+                  <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
                 ),
                 iconSize: [30, 30],
               })
             }
           >
-            <Tooltip
-              direction="top"
-              permanent={activeLandmarkId === cityData.city_id}
-            >
-              <div
-                className={styles.tooltipLabel}
-                onMouseOver={() => setActiveLandmarkId(cityData.city_id)}
-                onMouseOut={() => setActiveLandmarkId(null)}
-              >
-                <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-                <span>{cityData.city_name}</span>
-              </div>
+            <Tooltip direction="top" offset={[0, 0]} opacity={1}>
+              {data.city_name}
             </Tooltip>
           </Marker>
-          {recreation.map((landmark, index) => (
-            <Marker
-              key={`${landmark.Location}-${index}`}
-              position={[landmark.Latitude, landmark.Longitude]}
-              className={styles.markerLabel}
-              icon={
-                new L.DivIcon({
-                  className: styles.tooltipIcon,
-                  html: getTypeIcon(landmark.Type),
-                  iconSize: [40, 40],
-                })
+          {userRecInterests &&
+            Object.entries(userRecInterests).map(([type, elements]) => {
+              if (filters[type]) {
+                return elements.map((element, index) => {
+                  const position = element.center
+                    ? [element.center.lat, element.center.lon]
+                    : [element.lat, element.lon];
+                  return (
+                    <Marker
+                      key={`${type}-${index}`}
+                      position={position}
+                      icon={
+                        new L.DivIcon({
+                          className: styles.marker,
+                          html: getTypeIcon(type),
+                          iconSize: [30, 30],
+                        })
+                      }
+                    >
+                      <Tooltip direction="top" offset={[0, 0]} opacity={1}>
+                        {element.tags.name || type}
+                      </Tooltip>
+                    </Marker>
+                  );
+                });
+              } else {
+                return null;
               }
-              eventHandlers={{
-                mouseover: () => setActiveLandmarkId(landmark.id),
-                mouseout: () => setActiveLandmarkId(null),
-              }}
-            >
-              <Tooltip open={activeLandmarkId === landmark.id}>
-                <div
-                  className={styles.tooltipLabel}
-                  style={{
-                    maxWidth: "400px",
-                    whiteSpace: "normal",
-                  }}
-                >
-                  {landmark.Location} - {landmark.Type}
-                </div>
-              </Tooltip>
-            </Marker>
-          ))}
+            })}
         </MapContainer>
       </Card>
+      <Modal show={showFilterModal} onHide={handleFilterModalToggle}>
+        <Modal.Header closeButton>
+          <Modal.Title>Filter Recreational Interests</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {Object.keys(filters).length === 0 ? (
+            <p>No recreational interests selected.</p>
+          ) : (
+            Object.keys(tempFilters).map((type) => (
+              <div key={type} className="d-flex align-items-center mb-2">
+                <Form.Check
+                  type="checkbox"
+                  id={`checkbox-${type}`}
+                  label={
+                    type.charAt(0).toUpperCase() +
+                    type.slice(1).replaceAll(/([A-Z])/g, " $1")
+                  }
+                  checked={tempFilters[type]}
+                  onChange={() =>
+                    setTempFilters((prev) => ({ ...prev, [type]: !prev[type] }))
+                  }
+                  className="flex-grow-1"
+                />
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={() => setOnlyFilter(type)}
+                >
+                  Only
+                </Button>
+              </div>
+            ))
+          )}
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowFilterModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={applyFilters}>
+            Save and Apply
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </CityDataProvider>
   );
 };

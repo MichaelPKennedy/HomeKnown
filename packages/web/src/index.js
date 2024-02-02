@@ -26,7 +26,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DataSources from "./pages/DataSources";
 import { AuthProvider } from "./AuthContext";
-import RecreationMap from "./pages/ResultsPage/components/RecreationMap";
+import Recreation from "./pages/City/pages/Recreation";
 import Weather from "./pages/City/pages/Weather";
 import Housing from "./pages/City/pages/Housing";
 import Overview from "./pages/City/pages/Overview";
@@ -88,7 +88,7 @@ root.render(
                   <Route path="/results" element={<ResultsPage />} />
                   <Route path="/results/:cityId" element={<City />}>
                     <Route index element={<Overview />} />
-                    <Route path="recreation" element={<RecreationMap />} />
+                    <Route path="recreation" element={<Recreation />} />
                     <Route path="weather" element={<Weather />} />
                     <Route path="housing" element={<Housing />} />
                     <Route path="job-industry" element={<Industry />} />
@@ -96,7 +96,7 @@ root.render(
                     <Route path="demographics" element={<Demographics />} />
                   </Route>
                   <Route path="/city/:cityId" element={<City />}>
-                    <Route path="recreation" element={<RecreationMap />} />
+                    <Route path="recreation" element={<Recreation />} />
                     <Route path="weather" element={<Weather />} />
                     <Route path="housing" element={<Housing />} />
                     <Route path="job-industry" element={<Industry />} />

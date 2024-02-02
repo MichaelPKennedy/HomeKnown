@@ -128,7 +128,87 @@ export class IndustryService implements ServiceMethods<any> {
   }
 
   async get(id: Id, params?: IndustryParams): Promise<any> {
-    throw new Error('Method not implemented.')
+    const { Op } = require('sequelize')
+    const sequelize = require('./path/to/your/sequelize/instance') // Adjust this path
+
+    async function getCityJobData(areaCode, selectedJobs, nearby) {
+      let jobData = []
+
+      // Attempt to find job data directly only if nearby is false
+      if (!nearby) {
+        jobData = await sequelize.models.CityIndustrySalary.findAll({
+          where: {
+            area_code: areaCode,
+            occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
+          }
+        })
+
+        // Return the job data if found
+        if (jobData.length > 0) {
+          return jobData
+        }
+      }
+
+      // If nearby is true or no direct job data was found, find the closest city with job data
+      const closestAreaCode = await findClosestCityWithJobData(areaCode, selectedJobs)
+
+      // Fetch job data for the closest city
+      if (closestAreaCode) {
+        jobData = await sequelize.models.CityIndustrySalary.findAll({
+          where: {
+            area_code: closestAreaCode,
+            occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
+          }
+        })
+      }
+
+      return jobData
+    }
+
+    async function findClosestCityWithJobData(latitude, longitude, selectedJobs) {
+      const citiesWithJobs = await sequelize.models.City.findAll({
+        include: [
+          {
+            model: sequelize.models.CityIndustrySalary,
+            where: {
+              occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
+            }
+          }
+        ]
+      })
+
+      let closestCity = null
+      let shortestDistance = Infinity
+
+      citiesWithJobs.forEach((city) => {
+        const distance = calculateHaversineDistance(latitude, longitude, city.Latitude, city.Longitude)
+        if (distance < shortestDistance) {
+          shortestDistance = distance
+          closestCity = city
+        }
+      })
+
+      return closestCity ? closestCity.area_code : null
+    }
+
+    function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371 // Earth's radius in kilometers
+      const dLat = degreesToRadians(lat2 - lat1)
+      const dLon = degreesToRadians(lon2 - lon1)
+      const a =
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(degreesToRadians(lat1)) *
+          Math.cos(degreesToRadians(lat2)) *
+          Math.sin(dLon / 2) *
+          Math.sin(dLon / 2)
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
+      const distance = R * c // Distance in kilometers
+      return distance
+    }
+
+    function degreesToRadians(degrees) {
+      return degrees * (Math.PI / 180)
+    }
   }
 
   async create(data: any, params?: IndustryParams): Promise<any> {
