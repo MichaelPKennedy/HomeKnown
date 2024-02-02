@@ -30,21 +30,6 @@ type RecreationalInterestMappings = {
   [key in RecreationalInterestKey]: string[]
 }
 
-function haversineDistance(lat1: any, lon1: any, lat2: any, lon2: any) {
-  const R = 6371 // Radius of the Earth in kilometers
-  const dLat = (lat2 - lat1) * (Math.PI / 180)
-  const dLon = (lon2 - lon1) * (Math.PI / 180)
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(lat1 * (Math.PI / 180)) *
-      Math.cos(lat2 * (Math.PI / 180)) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-  const d = R * c // Distance in kilometers
-  return d * 0.621371 // Convert to miles
-}
-
 export interface RecreationParams extends Params {
   query: RecreationQuery
 }
@@ -81,6 +66,15 @@ export class RecreationService implements ServiceMethods<any> {
       limit: 1000
     })
 
+    const cityDataMap = initialRankings.reduce((acc: any, item: any) => {
+      const cityID = item.getDataValue('city_id')
+      acc[cityID] = {
+        city_name: item.City.city_name,
+        county_fips: item.City.county_fips
+      }
+      return acc
+    }, {})
+
     const cityIds = initialRankings.map((ranking: any) => ranking.getDataValue('city_id'))
 
     const detailedCounts = await this.sequelize.models.CityPlacesCache.findAll({
@@ -106,7 +100,9 @@ export class RecreationService implements ServiceMethods<any> {
       city_id,
       ...countsMap[city_id],
       diversityScore: countsMap[city_id].diversityScore,
-      totalPlaceCount: countsMap[city_id].totalPlaceCount
+      totalPlaceCount: countsMap[city_id].totalPlaceCount,
+      city_name: cityDataMap[city_id].city_name,
+      county_fips: cityDataMap[city_id].county_fips
     }))
 
     rankings.sort((a, b) => b.diversityScore - a.diversityScore || b.totalPlaceCount - a.totalPlaceCount)
@@ -138,8 +134,8 @@ export class RecreationService implements ServiceMethods<any> {
     // Prepare the final output
     const finalOutput = rankings.slice(0, 300).map((city) => ({
       city_id: city.city_id,
-      city_name: city.City.city_name,
-      county: city.City.county_fips,
+      city_name: city.city_name,
+      county: city.county_fips,
       ranking: city.ranking
     }))
 
