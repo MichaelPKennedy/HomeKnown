@@ -33,7 +33,11 @@ export const CityDataProvider = ({ children }) => {
 
   const fetchRecInterestsForCity = async ({ queryKey }) => {
     const [_key, city] = queryKey;
-    const interests = userPreferences?.recreationalInterests || [];
+    const savedFormData = JSON.parse(sessionStorage.getItem("formData"));
+    const interests =
+      userPreferences?.recreationalInterests ||
+      savedFormData?.recreationalInterests ||
+      [];
     console.log("interests", interests);
     let results = {};
     console.log("in rec interests function");
