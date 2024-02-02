@@ -16,12 +16,12 @@ const RecreationalPreferences = ({ formData, handleCheckboxChange }) => {
       "hikingTrails",
       "caves",
       "skiResorts",
-      "rockClimbing",
+      "outdoorRockClimbing",
       "crossCountrySkiAreas",
-      "climbingCentres",
-      "tennisCentres",
+      "indoorClimbingCentres",
+      "outdoorTennisCentres",
       "sportsCentres",
-      "swimmingFacilities",
+      "indoorSwimmingFacilities",
       "golfCourses",
       "hotAirBalloonRides",
       "bicycleTrails",
@@ -50,7 +50,7 @@ const RecreationalPreferences = ({ formData, handleCheckboxChange }) => {
       "nightclubs",
     ],
     "Astronomy and Exploration": ["telescopeObservatories", "planetariums"],
-    "Water Activities": ["rivers", "swimmingPoolFacilities"],
+    "Water Activities": ["rivers"],
   };
 
   return (

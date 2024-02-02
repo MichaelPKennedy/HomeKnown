@@ -14,6 +14,23 @@ export interface IndustryParams extends Params {
   }
 }
 
+export interface IndustryGetParams extends Params {
+  query?: {
+    nearby: boolean
+    area_code: number
+    selectedJobs: string[]
+    latitude: number
+    longitude: number
+  }
+}
+
+type City = {
+  city_id?: number
+  area_code?: number
+  Latitude?: number
+  Longitude?: number
+}
+
 export class IndustryService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -127,88 +144,77 @@ export class IndustryService implements ServiceMethods<any> {
     } as any
   }
 
-  async get(id: Id, params?: IndustryParams): Promise<any> {
-    const { Op } = require('sequelize')
-    const sequelize = require('./path/to/your/sequelize/instance') // Adjust this path
-
-    async function getCityJobData(areaCode, selectedJobs, nearby) {
-      let jobData = []
-
-      // Attempt to find job data directly only if nearby is false
-      if (!nearby) {
-        jobData = await sequelize.models.CityIndustrySalary.findAll({
-          where: {
-            area_code: areaCode,
-            occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
-          }
-        })
-
-        // Return the job data if found
-        if (jobData.length > 0) {
-          return jobData
-        }
-      }
-
-      // If nearby is true or no direct job data was found, find the closest city with job data
-      const closestAreaCode = await findClosestCityWithJobData(areaCode, selectedJobs)
-
-      // Fetch job data for the closest city
-      if (closestAreaCode) {
-        jobData = await sequelize.models.CityIndustrySalary.findAll({
-          where: {
-            area_code: closestAreaCode,
-            occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
-          }
-        })
-      }
-
-      return jobData
-    }
-
-    async function findClosestCityWithJobData(latitude, longitude, selectedJobs) {
-      const citiesWithJobs = await sequelize.models.City.findAll({
-        include: [
-          {
-            model: sequelize.models.CityIndustrySalary,
-            where: {
-              occ_code: { [Op.in]: selectedJobs.map((job) => job.occ_code) }
+  async findClosestCityWithJobData(latitude: any, longitude: any, selectedJobs: any) {
+    const closestCity = await this.sequelize.models.City.findOne({
+      attributes: ['area_code', 'Longitude', 'Latitude'],
+      include: [
+        {
+          model: this.sequelize.models.Area,
+          include: [
+            {
+              model: this.sequelize.models.CityIndustrySalary,
+              where: {
+                occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
+              }
             }
-          }
+          ]
+        }
+      ],
+      order: [
+        [
+          this.sequelize.fn(
+            'SQRT',
+            this.sequelize.literal(`POW(${latitude} - Latitude, 2) + POW(${longitude} - Longitude, 2)`)
+          ),
+          'ASC'
         ]
-      })
+      ],
+      limit: 1
+    })
 
-      let closestCity = null
-      let shortestDistance = Infinity
+    return closestCity ? closestCity.area_code : null
+  }
 
-      citiesWithJobs.forEach((city) => {
-        const distance = calculateHaversineDistance(latitude, longitude, city.Latitude, city.Longitude)
-        if (distance < shortestDistance) {
-          shortestDistance = distance
-          closestCity = city
+  async get(id: Id, params?: IndustryGetParams): Promise<any> {
+    const queryData = params?.query
+
+    if (!queryData) {
+      throw new Error('No query data provided.')
+    }
+    const { nearby, area_code, selectedJobs, latitude, longitude } = queryData
+    console.log(Array.isArray(selectedJobs))
+
+    let jobData = []
+
+    // Attempt to find job data directly only if nearby is false
+    if (!nearby) {
+      jobData = await this.sequelize.models.CityIndustrySalary.findAll({
+        where: {
+          area_code,
+          occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
         }
       })
 
-      return closestCity ? closestCity.area_code : null
+      // Return the job data if found
+      if (jobData.length > 0) {
+        return jobData
+      }
     }
 
-    function calculateHaversineDistance(lat1, lon1, lat2, lon2) {
-      const R = 6371 // Earth's radius in kilometers
-      const dLat = degreesToRadians(lat2 - lat1)
-      const dLon = degreesToRadians(lon2 - lon1)
-      const a =
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(degreesToRadians(lat1)) *
-          Math.cos(degreesToRadians(lat2)) *
-          Math.sin(dLon / 2) *
-          Math.sin(dLon / 2)
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-      const distance = R * c // Distance in kilometers
-      return distance
+    // If nearby is true or no direct job data was found, find the closest city with job data
+    const closestAreaCode = await this.findClosestCityWithJobData(latitude, longitude, selectedJobs)
+
+    // Fetch job data for the closest city
+    if (closestAreaCode) {
+      jobData = await this.sequelize.models.CityIndustrySalary.findAll({
+        where: {
+          area_code: closestAreaCode,
+          occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
+        }
+      })
     }
 
-    function degreesToRadians(degrees) {
-      return degrees * (Math.PI / 180)
-    }
+    return jobData
   }
 
   async create(data: any, params?: IndustryParams): Promise<any> {

@@ -15,7 +15,14 @@ const Industry = () => {
   console.log("city in jobs", city);
   const currentCity = city ? city : cityData;
   const { Jobs: jobs } = currentCity || {};
-  const { city_id, chosenJob1, chosenJob2 } = cityData;
+  const {
+    city_id,
+    chosenJob1,
+    chosenJob2,
+    Latitude: latitude,
+    Longitude: longitude,
+    area_code,
+  } = cityData;
 
   useEffect(() => {
     const fetchIndustryData = async () => {
@@ -23,10 +30,15 @@ const Industry = () => {
         setLoadingIndustry(true);
         try {
           const query = {
-            city_id,
-            jobs: [chosenJob1, chosenJob2].filter(Boolean),
+            nearby: true,
+            area_code,
+            latitude,
+            longitude,
+            selectedJobs: [chosenJob1, chosenJob2].filter(Boolean),
           };
-          const response = await client.service("industry").get({ query });
+          const response = await client
+            .service("industry")
+            .get(city_id, { query });
           setIndustryData(response);
         } catch (err) {
           setIndustryError(err);
