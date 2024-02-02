@@ -568,7 +568,7 @@ export const fetchDataForPreference = async (type, city) => {
 
   try {
     const response = await axios.post(
-      "http://overpass-api.de/api/interpreter",
+      "https://overpass-api.de/api/interpreter",
       query
     );
     return response.data.elements;
