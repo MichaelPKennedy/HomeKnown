@@ -183,22 +183,28 @@ const RecreationMap = ({ data }) => {
 
   return (
     <CityDataProvider>
+      {userRecInterestsLoading ? (
+        <div className="d-flex align-items-center mb-4 mt-4">
+          <button className={`${styles.filterBtn} float-left`} disabled>
+            Filter Preferences
+          </button>
+          <div className="d-flex align-items-center ml-3">
+            <p className="mb-0 mr-1">Locations Loading...</p>
+            <Spinner animation="border" size="sm" />
+          </div>
+        </div>
+      ) : (
+        <div className="d-flex align-items-center mb-4 mt-4">
+          <button
+            className={`${styles.filterBtn} float-left`}
+            variant="primary"
+            onClick={handleFilterModalToggle}
+          >
+            Filter Preferences
+          </button>
+        </div>
+      )}
       <Card className={styles.card}>
-        <Card.Header>
-          <h4>Recreation</h4>
-          {userRecInterestsLoading ? (
-            <>
-              <Button variant="primary" disabled>
-                Filter Preferences
-              </Button>
-              <Spinner animation="border" size="sm" className="ml-2" />
-            </>
-          ) : (
-            <Button variant="primary" onClick={handleFilterModalToggle}>
-              Filter Preferences
-            </Button>
-          )}
-        </Card.Header>
         <MapContainer
           center={[data.latitude, data.longitude]}
           zoom={9}

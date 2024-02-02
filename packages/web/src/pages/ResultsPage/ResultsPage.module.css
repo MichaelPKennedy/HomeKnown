@@ -21,16 +21,33 @@
   transition: all 0.3s ease;
 }
 
+.btnDropdown:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.filterBtn {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: white;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filterBtn:hover {
+  background-color: #01697c;
+  color: white;
+}
+
 @media (max-width: 1000px) {
   .btnContainer {
     padding-left: 20px;
     padding-right: 20px;
   }
-}
-
-.btnDropdown:hover {
-  background-color: #01697c;
-  color: white;
 }
 
 .btnPreferences:hover {
@@ -434,6 +451,10 @@ a:active {
   padding: 15px;
   text-align: center;
   margin-bottom: 40px;
+}
+
+.cardHeader {
+  background-color: transparent;
 }
 
 .tableContainer {

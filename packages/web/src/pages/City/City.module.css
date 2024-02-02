@@ -130,25 +130,66 @@
   margin: 5px;
 }
 
-.backButton {
-  margin-right: 20px;
-  min-width: 100px;
+@media (min-width: 768px) {
+  .backButton {
+    margin-right: 20px;
+    min-width: 100px;
+  }
 }
 
-.headerContainer {
+.backButton {
+  min-width: 100px;
+  background-color: transparent;
+  color: black;
+  border: none;
+}
+
+@media (max-width: 767px) {
+  .backButton {
+    margin-left: 0;
+    padding-left: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 10px;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    text-align: center;
+    margin-top: 15px;
+  }
+}
+
+.cityName {
   display: flex;
   align-items: center;
-  justify-content: start;
-  gap: 10px;
-  margin-bottom: 15px;
-  margin-left: 10px;
+  justify-content: center;
   text-align: center;
-  margin-top: 15px;
+  gap: 10px;
+}
+
+@media (max-width: 767px) {
+  .cityName {
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+}
+
+@media (min-width: 768px) {
+  .header {
+    margin-bottom: 0px;
+    font-size: 24px;
+    font-weight: 500;
+  }
 }
 
 .header {
   margin-bottom: 0px;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 500;
 }
 

@@ -82,16 +82,18 @@ function City() {
               onClick={handleBackToResults}
               className={`btn btn-secondary ${styles.backButton}`}
             >
-              <FontAwesomeIcon icon={faAngleLeft} /> Results
+              <FontAwesomeIcon icon={faAngleLeft} /> Back to Results
             </button>
-            <p className={styles.header}>
-              {currentCity?.city_name}, {state}
-            </p>
-            <HeartIcon
-              onClick={() => handleHeartClick(cityId)}
-              className={styles.heartButton}
-              isSaved={isCitySaved}
-            />
+            <div className={styles.cityName}>
+              <p className={styles.header}>
+                {currentCity?.city_name}, {state}
+              </p>
+              <HeartIcon
+                onClick={() => handleHeartClick(cityId)}
+                className={styles.heartButton}
+                isSaved={isCitySaved}
+              />
+            </div>
           </div>
           <Outlet />
         </main>
