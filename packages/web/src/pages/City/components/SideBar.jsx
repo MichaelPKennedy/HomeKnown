@@ -21,7 +21,7 @@ const SideBar = () => {
   return (
     <div>
       <div
-        className={`nav-pills d-md-none d-flex justify-content-around bg-light p-3 ${styles.mobileNav}`}
+        className={`nav-pills d-md-none d-flex bg-light p-3 ${styles.mobileNav}`}
       >
         <Link
           to={`/results/${cityId}`}
@@ -30,7 +30,6 @@ const SideBar = () => {
         >
           Overview
         </Link>
-
         <Link
           to={`/results/${cityId}/recreation`}
           state={{ city }}
