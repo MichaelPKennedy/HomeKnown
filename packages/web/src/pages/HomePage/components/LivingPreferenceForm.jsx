@@ -208,6 +208,7 @@ const LivingPreferenceForm = () => {
         setSurveyResults(response);
         setShowForm(false);
         // Save the results and form state to sessionStorage
+        localStorage.removeItem("recreationFilters");
         sessionStorage.setItem("surveyResults", JSON.stringify(response));
         sessionStorage.setItem("formData", JSON.stringify(formData));
       }

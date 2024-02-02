@@ -6,6 +6,7 @@ import { useCityData, CityDataProvider } from "../../../utils/CityDataContext";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { Spinner } from "react-bootstrap";
 import styles from "../ResultsPage.module.css";
 import {
   MapContainer,
@@ -134,7 +135,7 @@ const RecreationMap = ({ data }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filters, setFilters] = useState({});
   const [tempFilters, setTempFilters] = useState({});
-  const { userRecInterests } = useCityData();
+  const { userRecInterests, userRecInterestsLoading } = useCityData();
 
   useEffect(() => {
     console.log("recreational Interests from context", userRecInterests);
@@ -170,12 +171,12 @@ const RecreationMap = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (userRecInterests && !filters) {
+    if (userRecInterests) {
       const newFilters = Object.keys(userRecInterests).reduce((acc, key) => {
         acc[key] = true;
         return acc;
       }, {});
-
+      console.log("setting filters", newFilters);
       setFilters(newFilters);
     }
   }, [userRecInterests]);
@@ -185,9 +186,18 @@ const RecreationMap = ({ data }) => {
       <Card className={styles.card}>
         <Card.Header>
           <h4>Recreation</h4>
-          <Button variant="primary" onClick={handleFilterModalToggle}>
-            Filter Preferences
-          </Button>
+          {userRecInterestsLoading ? (
+            <>
+              <Button variant="primary" disabled>
+                Filter Preferences
+              </Button>
+              <Spinner animation="border" size="sm" className="ml-2" />
+            </>
+          ) : (
+            <Button variant="primary" onClick={handleFilterModalToggle}>
+              Filter Preferences
+            </Button>
+          )}
         </Card.Header>
         <MapContainer
           center={[data.latitude, data.longitude]}

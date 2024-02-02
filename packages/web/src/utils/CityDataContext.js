@@ -9,7 +9,6 @@ export const useCityData = () => useContext(CityDataContext);
 
 const fetchCityData = async (cityId) => {
   const response = await client.service("survey").get(cityId);
-  console.log("response from context", response);
   return response[0];
 };
 
@@ -29,7 +28,6 @@ export const CityDataProvider = ({ children }) => {
   const [cityId, setCityId] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [recInterestsData, setRecInterestsData] = useState(null);
 
   const fetchRecInterestsForCity = async ({ queryKey }) => {
     const [_key, city] = queryKey;
@@ -38,13 +36,10 @@ export const CityDataProvider = ({ children }) => {
       userPreferences?.recreationalInterests ||
       savedFormData?.recreationalInterests ||
       [];
-    console.log("interests", interests);
     let results = {};
-    console.log("in rec interests function");
     for (let interest of interests) {
       try {
         const elements = await fetchDataForPreference(interest, city);
-        console.log("elements", elements);
         results[interest] = elements;
       } catch (error) {
         console.error(
@@ -88,12 +83,6 @@ export const CityDataProvider = ({ children }) => {
   } = useQuery(["recreation", cityData], fetchRecInterestsForCity, {
     enabled: !!cityId && !!cityData,
   });
-
-  useEffect(() => {
-    if (userRecInterests) {
-      setRecInterestsData(recInterestsData);
-    }
-  }, [userRecInterests]);
 
   useEffect(() => {
     const fetchUserCityData = async () => {
