@@ -152,6 +152,9 @@ export const SurveyFormDataSchema = Type.Object({
   rainPreference: Type.Optional(Type.Union([Type.Literal('dry'), Type.Literal('regular')])),
   minSalary1: Type.Optional(Type.Number()),
   minSalary2: Type.Optional(Type.Number()),
+  minPopulation: Type.Optional(Type.Number()),
+  maxPopulation: Type.Optional(Type.Number()),
+  includedStates: Type.Optional(Type.Array(Type.Number())),
   jobLevel: Type.Optional(
     Type.Union([Type.Literal('entry-level'), Type.Literal('senior'), Type.Literal('both')])
   ),

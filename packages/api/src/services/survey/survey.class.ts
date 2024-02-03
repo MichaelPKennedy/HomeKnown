@@ -64,7 +64,7 @@ export class SurveyService implements ServiceMethods<any> {
     const publicServicesData = this.parsePublicServicesData(data)
     const sceneryData = this.parseSceneryData(data)
     const crimeData = {}
-    const airQualityData = {}
+    const airQualityData = this.parseAirQualityData(data)
     const weights = data.data.weights
 
     let apiPromises: { [key in WeightKeys]?: Promise<any> } = {}
@@ -172,6 +172,16 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
+  parseAirQualityData(data: SurveyData): any {
+    const { minPopulation, maxPopulation, includedStates } = data.data
+
+    return {
+      minPopulation,
+      maxPopulation,
+      includedStates
+    }
+  }
+
   parseRecreationData(data: SurveyData): any {
     const { recreationalInterests, searchRadius } = data.data
 
@@ -274,11 +284,12 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  async getAirQualityResponse(): Promise<any> {
+  async getAirQualityResponse(data: any): Promise<any> {
     const airQualityService = this.app.service('air-quality')
+    const { minPopulation, maxPopulation, includedStates } = data
     try {
       const response = await airQualityService.find({
-        query: {}
+        query: { minPopulation, maxPopulation, includedStates }
       })
       return response
     } catch (error) {

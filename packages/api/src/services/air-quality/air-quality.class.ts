@@ -4,7 +4,20 @@ import type { Application } from '../../declarations'
 
 export type { AirQuality, AirQualityData, AirQualityPatch, AirQualityQuery }
 
-export interface AirQualityParams extends Params {}
+const { Sequelize } = require('sequelize')
+const Op = Sequelize.Op
+
+export interface AirQualityParams extends Params {
+  query?: { minPopulation: number; maxPopulation: number; includedStates: number[] }
+}
+
+type WhereCondition = {
+  area_code: any
+  pop_2022: {}
+  state_code?: {
+    [key: string]: number[]
+  }
+}
 
 export class AirQualityService implements ServiceMethods<any> {
   app: Application
@@ -17,6 +30,11 @@ export class AirQualityService implements ServiceMethods<any> {
 
   async find(params: AirQualityParams): Promise<any[] | Paginated<any>> {
     const { sequelize } = this
+
+    if (!params.query) {
+      throw new Error('Query parameters are missing!')
+    }
+    const { minPopulation, maxPopulation, includedStates } = params.query
 
     // Calculate a score for each city based on air quality. Lower values for pollutants is better.
     const citiesRankedByAirQuality = await sequelize.models.AirQuality.findAll({
@@ -60,8 +78,31 @@ export class AirQualityService implements ServiceMethods<any> {
     })
 
     const areaCodes = citiesWithPollutantScoresAndRanking.map((c: any) => c.area_code)
+
+    let whereCondition: WhereCondition = {
+      area_code: areaCodes,
+      pop_2022: {}
+    }
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      whereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      whereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      whereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      whereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
+
     const cities = await sequelize.models.City.findAll({
-      where: { area_code: areaCodes }
+      where: whereCondition
     })
 
     const rankedCitiesWithIds = citiesWithPollutantScoresAndRanking.map((cityScore: any) => {
@@ -78,9 +119,9 @@ export class AirQualityService implements ServiceMethods<any> {
       }
     })
 
-    rankedCitiesWithIds.filter((c: any) => c !== null)
+    const filteredRankedCities = rankedCitiesWithIds.filter((c: any) => c !== null)
 
-    return rankedCitiesWithIds
+    return filteredRankedCities
   }
 
   async get(id: Id, params?: AirQualityParams): Promise<any> {
