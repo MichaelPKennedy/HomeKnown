@@ -204,11 +204,14 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseRecreationData(data: SurveyData): any {
-    const { recreationalInterests, searchRadius } = data.data
+    const { recreationalInterests, searchRadius, minPopulation, maxPopulation, includedStates } = data.data
 
     return {
       recreationalInterests,
-      searchRadius
+      searchRadius,
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 

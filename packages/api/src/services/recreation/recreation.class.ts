@@ -34,6 +34,13 @@ export interface RecreationParams extends Params {
   query: RecreationQuery
 }
 
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
+  }
+}
+
 export class RecreationService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -44,8 +51,27 @@ export class RecreationService implements ServiceMethods<any> {
   }
 
   async find(params: any): Promise<any> {
-    const { recreationalInterests } = params.query
+    const { recreationalInterests, minPopulation, maxPopulation, includedStates } = params.query
     const interests = Array.isArray(recreationalInterests) ? recreationalInterests : [recreationalInterests]
+
+    let cityWhereCondition: CityWhereCondition = {}
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
 
     const initialRankings = await this.sequelize.models.CityPlacesCache.findAll({
       where: {
@@ -58,7 +84,8 @@ export class RecreationService implements ServiceMethods<any> {
       include: [
         {
           model: this.sequelize.models.City,
-          attributes: ['city_name', 'county_fips']
+          attributes: ['city_name', 'county_fips'],
+          where: cityWhereCondition
         }
       ],
       group: ['city_id'],
