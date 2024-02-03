@@ -143,14 +143,18 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseHousingData(data: SurveyData): any {
-    const { housingType, homeMin, homeMax, rentMin, rentMax } = data.data
+    const { housingType, homeMin, homeMax, rentMin, rentMax, minPopulation, maxPopulation, includedStates } =
+      data.data
 
     return {
       housingType,
       homeMin,
       homeMax,
       rentMin,
-      rentMax
+      rentMax,
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 

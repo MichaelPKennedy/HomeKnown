@@ -19,7 +19,28 @@ interface StateAttributes {
 export type { Housing, HousingData, HousingPatch, HousingQuery }
 
 export interface HousingParams extends Params {
-  query?: { housingType: 'rent' | 'buy'; homeMin: number; homeMax: number; rentMin: number; rentMax: number }
+  query?: {
+    housingType: 'rent' | 'buy'
+    homeMin: number
+    homeMax: number
+    rentMin: number
+    rentMax: number
+    minPopulation: number
+    maxPopulation: number
+    includedStates: number[]
+  }
+}
+
+type CityWhereCondition = {
+  [key: string]: {
+    [Op.gte]: number
+    [Op.lte]: number
+  }
+} & {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
+  }
 }
 
 export class HousingService implements ServiceMethods<any> {
@@ -47,18 +68,38 @@ export class HousingService implements ServiceMethods<any> {
     if (!params.query) {
       throw new Error('Query parameters are missing!')
     }
-    const { homeMin, homeMax, rentMin, rentMax, housingType } = params.query
+    const { homeMin, homeMax, rentMin, rentMax, housingType, minPopulation, maxPopulation, includedStates } =
+      params.query
     const priceType = housingType === 'rent' ? 'currentRentPrice' : 'currentHomePrice'
     const min = housingType === 'rent' ? rentMin : homeMin
     const max = housingType === 'rent' ? rentMax : homeMax
 
+    let cityWhereCondition: CityWhereCondition = {
+      [priceType]: {
+        [Op.gte]: min,
+        [Op.lte]: max
+      }
+    }
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
+
     const cities = await City.findAll({
-      where: {
-        [priceType]: {
-          [Op.gte]: min,
-          [Op.lte]: max
-        }
-      },
+      where: cityWhereCondition,
       attributes: ['city_id', 'area_code', 'county_fips', priceType],
       include: [
         {
