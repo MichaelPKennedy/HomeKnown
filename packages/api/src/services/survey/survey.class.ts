@@ -122,13 +122,17 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseJobData(data: SurveyData): any {
-    const { minSalary1, minSalary2, jobLevel, selectedJobs } = data.data
+    const { minSalary1, minSalary2, jobLevel, selectedJobs, minPopulation, maxPopulation, includedStates } =
+      data.data
 
     return {
       minSalary1,
       minSalary2,
       jobLevel,
-      selectedJobs
+      selectedJobs,
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 

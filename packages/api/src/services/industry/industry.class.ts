@@ -12,6 +12,9 @@ export interface IndustryParams extends Params {
     minSalary1: number
     minSalary2: number
     jobLevel: 'entry-level' | 'senior' | 'both'
+    minPopulation: number
+    maxPopulation: number
+    includedStates: number[]
   }
 }
 
@@ -32,6 +35,14 @@ type City = {
   Longitude?: number
 }
 
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
+  }
+  area_code: number[]
+}
+
 export class IndustryService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -48,7 +59,8 @@ export class IndustryService implements ServiceMethods<any> {
       throw new Error('No query data provided.')
     }
     console.log('queryData', queryData)
-    const { selectedJobs, minSalary1, minSalary2, jobLevel } = queryData
+    const { selectedJobs, minSalary1, minSalary2, jobLevel, minPopulation, maxPopulation, includedStates } =
+      queryData
 
     if (!selectedJobs || selectedJobs.length === 0) {
       throw new Error('No selected jobs provided.')
@@ -95,12 +107,31 @@ export class IndustryService implements ServiceMethods<any> {
       })
     }
 
+    let cityWhereCondition: CityWhereCondition = {
+      area_code: topAreas.map((city: any) => city.area_code)
+    }
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
+
     //for top cities, get the cities that are associated with the area_code for that city
     const topCities = await this.sequelize.models.City.findAll({
       attributes: ['city_id', 'area_code', 'county_fips'],
-      where: {
-        area_code: topAreas.map((city: any) => city.area_code)
-      }
+      where: cityWhereCondition
     })
 
     const topCitiesWithSalary = topAreas
