@@ -29,7 +29,7 @@ const JobPreferences = ({
       <div className={`form-group ${styles.formGroup}`}>
         <h4 className="pb-2">Job Industry</h4>
         <label htmlFor="job">
-          What's your current profession or job title?
+          What's your current profession or job title? Enter up to 2 job titles.
         </label>
         <Autosuggest
           suggestions={suggestions}
@@ -44,6 +44,7 @@ const JobPreferences = ({
             placeholder: "Enter job title...",
             value: searchTerm,
             onChange: (_, { newValue }) => setSearchTerm(newValue),
+            disabled: formData.selectedJobs.length >= 2,
           }}
         />
 
@@ -65,20 +66,46 @@ const JobPreferences = ({
         </div>
 
         {/* Minimum Salary Input */}
-        <label htmlFor="minSalary">
-          What's the minimum salary you'd be willing to accept?
-        </label>
-        <input
-          type="number"
-          name="minSalary"
-          value={formData.minSalary || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, minSalary: e.target.value })
-          }
-          className={`form-control`}
-          id="minSalary"
-          placeholder="Enter minimum acceptable salary"
-        />
+
+        {formData.selectedJobs[0] && (
+          <>
+            <label htmlFor="minSalary1">
+              What's the minimum salary you'd be willing to accept for{" "}
+              {formData.selectedJobs[0].occ_title}?
+            </label>
+            <input
+              type="number"
+              name="minSalary1"
+              value={formData.minSalary1 || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, minSalary1: e.target.value })
+              }
+              className={`form-control`}
+              id="minSalary1"
+              placeholder="Enter minimum acceptable salary"
+            />
+          </>
+        )}
+
+        {formData.selectedJobs[1] && (
+          <>
+            <label htmlFor="minSalary2">
+              What's the minimum salary you'd be willing to accept for{" "}
+              {formData.selectedJobs[1].occ_title}?
+            </label>
+            <input
+              type="number"
+              name="minSalary2"
+              value={formData.minSalary2 || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, minSalary2: e.target.value })
+              }
+              className={`form-control`}
+              id="minSalary2"
+              placeholder="Enter minimum acceptable salary"
+            />
+          </>
+        )}
       </div>
     )
   );

@@ -9,7 +9,8 @@ export type { Industry, IndustryData, IndustryPatch, IndustryQuery }
 export interface IndustryParams extends Params {
   query?: {
     selectedJobs: { occ_title: string; occ_code: string }[]
-    minSalary: number
+    minSalary1: number
+    minSalary2: number
     jobLevel: 'entry-level' | 'senior' | 'both'
   }
 }
@@ -47,49 +48,53 @@ export class IndustryService implements ServiceMethods<any> {
       throw new Error('No query data provided.')
     }
     console.log('queryData', queryData)
-    const { selectedJobs, minSalary, jobLevel } = queryData
+    const { selectedJobs, minSalary1, minSalary2, jobLevel } = queryData
 
     if (!selectedJobs || selectedJobs.length === 0) {
       throw new Error('No selected jobs provided.')
     }
 
     const occ_codes = selectedJobs.map((job: any) => job.occ_code)
+    let whereClause: any
+    let topAreas
 
-    let whereClause: any = {
-      occ_code: { [Op.in]: occ_codes },
-      average_salary: {
-        [Op.gte]: minSalary
+    if (selectedJobs.length === 1) {
+      // Use original logic when only one job is selected
+      whereClause = {
+        occ_code: { [Op.in]: occ_codes },
+        average_salary: { [Op.gte]: minSalary1 } // Assuming minSalary1 applies to the single job
       }
+
+      topAreas = await this.queryTopAreas(whereClause)
+    } else if (selectedJobs.length === 2) {
+      // When two jobs are provided, find areas that meet the requirements for both jobs
+      const areasForFirstJob = await this.getAreasForJob(selectedJobs[0].occ_code, minSalary1)
+      const areasForSecondJob = await this.getAreasForJob(selectedJobs[1].occ_code, minSalary2)
+
+      // Find overlapping areas
+      const commonAreaCodes = areasForFirstJob.filter((areaCode) => areasForSecondJob.includes(areaCode))
+
+      // If no common areas, return empty or handle accordingly
+      if (commonAreaCodes.length === 0) {
+        return [] // Or handle as needed
+      }
+
+      topAreas = await this.sequelize.models.CityIndustrySalary.findAll({
+        where: {
+          occ_code: { [Op.in]: occ_codes },
+          area_code: { [Op.in]: commonAreaCodes }
+        },
+        attributes: [
+          'area_code',
+          [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_salary')), 'avg_salary'],
+          [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_hourly')), 'avg_hourly']
+        ],
+        group: ['area_code'],
+        order: [[this.sequelize.col('avg_salary'), 'DESC']],
+        limit: 300
+      })
     }
 
-    // Adjusting for job level
-    if (jobLevel === 'entry-level') {
-      whereClause['average_salary'] = {
-        [Op.lte]: this.sequelize.col('h_median')
-      }
-    } else if (jobLevel === 'senior') {
-      whereClause['average_salary'] = {
-        [Op.gt]: this.sequelize.col('h_median')
-      }
-    }
-
-    //get top cities
-    const CityIndustrySalary = this.sequelize.models.CityIndustrySalary
-    const Area = this.sequelize.models.Area
-
-    const topAreas = await CityIndustrySalary.findAll({
-      where: {
-        ...whereClause
-      },
-      attributes: [
-        'area_code',
-        [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_salary')), 'avg_salary'],
-        [this.sequelize.fn('AVG', this.sequelize.col('CityIndustrySalary.average_hourly')), 'avg_hourly']
-      ],
-      group: ['area_code'],
-      order: [[this.sequelize.col('avg_salary'), 'DESC']],
-      limit: 300
-    })
     //for top cities, get the cities that are associated with the area_code for that city
     const topCities = await this.sequelize.models.City.findAll({
       attributes: ['city_id', 'area_code', 'county_fips'],
@@ -98,7 +103,6 @@ export class IndustryService implements ServiceMethods<any> {
       }
     })
 
-    //map the cities to their salary
     const topCitiesWithSalary = topAreas
       .map((city: any) => {
         const relatedCities = topCities.filter((c: any) => c.area_code === city.area_code)
@@ -144,6 +148,38 @@ export class IndustryService implements ServiceMethods<any> {
     } as any
   }
 
+  async queryTopAreas(whereClause: any): Promise<any[]> {
+    const CityIndustrySalary = this.sequelize.models.CityIndustrySalary
+
+    return await CityIndustrySalary.findAll({
+      where: whereClause,
+      attributes: [
+        'area_code',
+        [this.sequelize.fn('AVG', this.sequelize.col('average_salary')), 'avg_salary'],
+        [this.sequelize.fn('AVG', this.sequelize.col('average_hourly')), 'avg_hourly']
+      ],
+      group: ['area_code'],
+      order: [[this.sequelize.col('avg_salary'), 'DESC']],
+      limit: 300
+    })
+  }
+
+  async getAreasForJob(occ_code: string, minSalary: number): Promise<string[]> {
+    const CityIndustrySalary = this.sequelize.models.CityIndustrySalary
+
+    const areas = await CityIndustrySalary.findAll({
+      where: {
+        occ_code: occ_code,
+        average_salary: { [Op.gte]: minSalary }
+      },
+      attributes: ['area_code'],
+      group: ['area_code']
+    })
+
+    // Extract area codes from the query results
+    return areas.map((area: any) => area.get('area_code'))
+  }
+
   async findClosestCityWithJobData(latitude: any, longitude: any, selectedJobs: any) {
     const closestCity = await this.sequelize.models.City.findOne({
       attributes: ['area_code', 'Longitude', 'Latitude'],
@@ -186,7 +222,6 @@ export class IndustryService implements ServiceMethods<any> {
 
     let jobData = []
 
-    // Attempt to find job data directly only if nearby is false
     if (!nearby) {
       jobData = await this.sequelize.models.CityIndustrySalary.findAll({
         where: {
@@ -195,16 +230,13 @@ export class IndustryService implements ServiceMethods<any> {
         }
       })
 
-      // Return the job data if found
       if (jobData.length > 0) {
         return jobData
       }
     }
 
-    // If nearby is true or no direct job data was found, find the closest city with job data
     const closestAreaCode = await this.findClosestCityWithJobData(latitude, longitude, selectedJobs)
 
-    // Fetch job data for the closest city
     if (closestAreaCode) {
       jobData = await this.sequelize.models.CityIndustrySalary.findAll({
         where: {

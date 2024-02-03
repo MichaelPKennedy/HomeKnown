@@ -122,10 +122,11 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseJobData(data: SurveyData): any {
-    const { minSalary, jobLevel, selectedJobs } = data.data
+    const { minSalary1, minSalary2, jobLevel, selectedJobs } = data.data
 
     return {
-      minSalary,
+      minSalary1,
+      minSalary2,
       jobLevel,
       selectedJobs
     }
@@ -431,7 +432,13 @@ export class SurveyService implements ServiceMethods<any> {
         where: {
           area_code: { [Op.in]: areaCodes },
           occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
-        }
+        },
+        include: [
+          {
+            model: this.sequelize.models.Occupation,
+            attributes: ['occ_title']
+          }
+        ]
       })
     }
 

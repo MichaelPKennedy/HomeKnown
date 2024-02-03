@@ -70,7 +70,7 @@ const JobData = ({ jobs }) => {
       {jobs.map((job) => (
         <Card key={job.id} className={styles.jobCard}>
           <Card.Header>
-            <h4>Industry</h4>
+            <h4>{job.Occupation.occ_title}</h4>
           </Card.Header>
           <div className={styles.basicInfoContainer}>
             <div className={styles.basicInfoItem}>
