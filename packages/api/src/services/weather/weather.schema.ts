@@ -53,7 +53,10 @@ export const weatherAdditionalQueryProperties = Type.Object(
         temp: Type.Optional(Type.Number())
       }),
       { minItems: 12, maxItems: 12 }
-    )
+    ),
+    minPopulation: Type.Optional(Type.Number()),
+    maxPopulation: Type.Optional(Type.Number()),
+    includedStates: Type.Optional(Type.Array(Type.Number()))
   },
   { additionalProperties: false }
 )

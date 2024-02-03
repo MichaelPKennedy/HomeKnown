@@ -24,6 +24,9 @@ export interface WeatherParams extends Params {
     { month: string; temp?: number },
     { month: string; temp?: number }
   ]
+  minPopulation: number
+  maxPopulation: number
+  includedStates: number[]
 }
 const monthToNumber: { [key: string]: number } = {
   Jan: 1,
@@ -44,6 +47,13 @@ type WhereCondition = {
   [key: string]: any
 }
 
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
+  }
+}
+
 export class WeatherService implements ServiceMethods<any> {
   app: Application
   sequelize: any
@@ -60,7 +70,8 @@ export class WeatherService implements ServiceMethods<any> {
       throw new Error('Invalid query data provided.')
     }
 
-    const { snowPreference, rainPreference, temperatureData } = queryData
+    const { snowPreference, rainPreference, temperatureData, minPopulation, maxPopulation, includedStates } =
+      queryData
 
     const whereConditions: WhereCondition[] = temperatureData.map((monthData) => {
       const monthNumber = monthToNumber[monthData.month]
@@ -75,12 +86,31 @@ export class WeatherService implements ServiceMethods<any> {
 
       if (monthData.temp !== undefined) {
         whereCondition.avg_temp = {
-          [Op.between]: [monthData.temp - 0.2, monthData.temp + 0.2]
+          [Op.between]: [monthData.temp - 35, monthData.temp + 35]
         }
       }
 
       return whereCondition
     })
+
+    let cityWhereCondition: CityWhereCondition = {}
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
 
     try {
       const countyResults = await Promise.all(
@@ -91,10 +121,13 @@ export class WeatherService implements ServiceMethods<any> {
             include: [
               {
                 model: this.sequelize.models.County,
+                required: true,
                 include: [
                   {
                     model: this.sequelize.models.City,
-                    attributes: ['city_id', 'county_fips']
+                    attributes: ['city_id', 'county_fips'],
+                    where: cityWhereCondition,
+                    required: true
                   }
                 ]
               }
