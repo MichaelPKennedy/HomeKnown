@@ -163,11 +163,14 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parsePublicServicesData(data: SurveyData): any {
-    const { searchRadius, publicServices } = data.data
+    const { searchRadius, publicServices, minPopulation, maxPopulation, includedStates } = data.data
 
     return {
       searchRadius,
-      publicServices
+      publicServices,
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 
@@ -272,11 +275,15 @@ export class SurveyService implements ServiceMethods<any> {
 
   async getPublicServicesResponse(data: any): Promise<any> {
     const publicServicesService = this.app.service('public-services')
+    const { publicServices, searchRadius, minPopulation, maxPopulation, includedStates } = data
     try {
       const response = await publicServicesService.find({
         query: {
-          publicServices: data.publicServices,
-          searchRadius: data.searchRadius
+          publicServices,
+          searchRadius,
+          minPopulation,
+          maxPopulation,
+          includedStates
         }
       })
       return response

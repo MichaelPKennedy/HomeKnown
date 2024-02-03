@@ -7,12 +7,25 @@ import type {
   PublicServicesQuery
 } from './public-services.schema'
 
+const { Sequelize } = require('sequelize')
+const Op = Sequelize.Op
+
 export type { PublicServices, PublicServicesData, PublicServicesPatch, PublicServicesQuery }
 
 export interface PublicServicesParams extends Params {
   query?: {
     publicServices?: string[]
     searchRadius?: number
+    minPopulation: number
+    maxPopulation: number
+    includedStates: number[]
+  }
+}
+
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
   }
 }
 
@@ -26,11 +39,35 @@ export class PublicServicesService implements ServiceMethods<any> {
   }
 
   async find(params: PublicServicesParams): Promise<any[] | Paginated<any>> {
+    if (!params.query) {
+      throw new Error('Query parameters are missing!')
+    }
+
+    const { minPopulation, maxPopulation, includedStates } = params?.query
     let publicServicesArray = params.query?.publicServices || []
     const radius = params.query?.searchRadius || 10
 
     if (typeof publicServicesArray === 'string') {
       publicServicesArray = [publicServicesArray]
+    }
+
+    let cityWhereCondition: CityWhereCondition = {}
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
     }
 
     const citiesWithCounts = await this.sequelize.models.City.findAll({
@@ -41,7 +78,8 @@ export class PublicServicesService implements ServiceMethods<any> {
           as: 'PublicServiceCache',
           attributes: publicServicesArray.map((service: string) => `${service}${radius}`)
         }
-      ]
+      ],
+      where: cityWhereCondition
     })
 
     const cityScores = citiesWithCounts.map((cityWithCount: any) => {
