@@ -63,7 +63,7 @@ export class SurveyService implements ServiceMethods<any> {
     const housingData = this.parseHousingData(data)
     const publicServicesData = this.parsePublicServicesData(data)
     const sceneryData = this.parseSceneryData(data)
-    const crimeData = {}
+    const crimeData = this.parseCrimeData(data)
     const airQualityData = this.parseAirQualityData(data)
     const weights = data.data.weights
 
@@ -169,6 +169,16 @@ export class SurveyService implements ServiceMethods<any> {
     return {
       searchRadius,
       scenery
+    }
+  }
+
+  parseCrimeData(data: SurveyData): any {
+    const { minPopulation, maxPopulation, includedStates } = data.data
+
+    return {
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 
@@ -298,11 +308,12 @@ export class SurveyService implements ServiceMethods<any> {
     }
   }
 
-  async getCrimeResponse(): Promise<any> {
+  async getCrimeResponse(data: any): Promise<any> {
     const crimeService = this.app.service('crime')
+    const { minPopulation, maxPopulation, includedStates } = data
     try {
       const response = await crimeService.find({
-        query: {}
+        query: { minPopulation, maxPopulation, includedStates }
       })
       return response
     } catch (error) {

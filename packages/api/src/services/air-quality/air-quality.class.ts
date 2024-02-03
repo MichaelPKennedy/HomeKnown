@@ -13,7 +13,7 @@ export interface AirQualityParams extends Params {
 
 type WhereCondition = {
   area_code: any
-  pop_2022: {}
+  pop_2022?: {}
   state_code?: {
     [key: string]: number[]
   }
@@ -80,8 +80,7 @@ export class AirQualityService implements ServiceMethods<any> {
     const areaCodes = citiesWithPollutantScoresAndRanking.map((c: any) => c.area_code)
 
     let whereCondition: WhereCondition = {
-      area_code: areaCodes,
-      pop_2022: {}
+      area_code: areaCodes
     }
 
     if (minPopulation >= 0 && maxPopulation >= 0) {

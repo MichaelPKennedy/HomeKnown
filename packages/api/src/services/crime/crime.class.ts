@@ -5,7 +5,16 @@ import { Op } from 'sequelize'
 
 export type { Crime, CrimeData, CrimePatch, CrimeQuery }
 
-export interface CrimeParams extends Params {}
+export interface CrimeParams extends Params {
+  query?: { minPopulation: number; maxPopulation: number; includedStates: number[] }
+}
+
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
+  }
+}
 
 export class CrimeService implements ServiceMethods<any> {
   app: Application
@@ -17,6 +26,30 @@ export class CrimeService implements ServiceMethods<any> {
   }
 
   async find(params: CrimeParams): Promise<any[] | Paginated<any>> {
+    if (!params.query) {
+      throw new Error('Query parameters are missing!')
+    }
+    const { minPopulation, maxPopulation, includedStates } = params.query
+
+    let cityWhereCondition: CityWhereCondition = {}
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
+
     try {
       const crimeRates = await this.sequelize.models.CrimeStatsCity.findAll({
         attributes: ['crime_score', 'city', 'state', 'city_id'],
@@ -26,7 +59,8 @@ export class CrimeService implements ServiceMethods<any> {
         include: [
           {
             model: this.sequelize.models.City,
-            attributes: ['county_fips']
+            attributes: ['county_fips'],
+            where: cityWhereCondition
           }
         ],
         order: [['crime_score', 'ASC']],
