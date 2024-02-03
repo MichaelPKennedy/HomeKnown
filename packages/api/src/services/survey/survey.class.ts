@@ -175,11 +175,14 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseSceneryData(data: SurveyData): any {
-    const { searchRadius, scenery } = data.data
+    const { searchRadius, scenery, minPopulation, maxPopulation, includedStates } = data.data
 
     return {
       searchRadius,
-      scenery
+      scenery,
+      minPopulation,
+      maxPopulation,
+      includedStates
     }
   }
 
@@ -298,11 +301,15 @@ export class SurveyService implements ServiceMethods<any> {
 
   async getSceneryResponse(data: any): Promise<any> {
     const sceneryService = this.app.service('scenery')
+    const { scenery, searchRadius, minPopulation, maxPopulation, includedStates } = data
     try {
       const response = await sceneryService.find({
         query: {
-          scenery: data.scenery,
-          searchRadius: data.searchRadius
+          scenery,
+          searchRadius,
+          minPopulation,
+          maxPopulation,
+          includedStates
         }
       })
       return response

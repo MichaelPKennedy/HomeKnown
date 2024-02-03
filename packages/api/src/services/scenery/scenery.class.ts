@@ -1,13 +1,23 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Scenery, SceneryData, SceneryPatch, SceneryQuery } from './scenery.schema'
-
+import { Op } from 'sequelize'
 export type { Scenery, SceneryData, SceneryPatch, SceneryQuery }
 
 export interface SceneryParams extends Params {
   query?: {
     scenery?: string[]
     searchRadius?: number
+    minPopulation: number
+    maxPopulation: number
+    includedStates: number[]
+  }
+}
+
+type CityWhereCondition = {
+  pop_2022?: {}
+  state_code?: {
+    [key: string]: number[]
   }
 }
 
@@ -21,6 +31,30 @@ export class SceneryService implements ServiceMethods<any> {
   }
 
   async find(params: SceneryParams): Promise<any[] | Paginated<any>> {
+    if (!params.query) {
+      throw new Error('Query parameters are missing!')
+    }
+    const { minPopulation, maxPopulation, includedStates } = params.query
+
+    let cityWhereCondition: CityWhereCondition = {}
+
+    if (minPopulation >= 0 && maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = {
+        [Op.gte]: minPopulation,
+        [Op.lte]: maxPopulation
+      }
+    } else if (minPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.gte]: minPopulation }
+    } else if (maxPopulation >= 0) {
+      cityWhereCondition.pop_2022 = { [Op.lte]: maxPopulation }
+    }
+
+    if (includedStates?.length > 0) {
+      cityWhereCondition.state_code = {
+        [Op.in]: includedStates
+      }
+    }
+
     let sceneryArray = params.query?.scenery || []
     const radius = Number(params.query?.searchRadius) || 10
 
@@ -46,7 +80,8 @@ export class SceneryService implements ServiceMethods<any> {
     const citiesWithCounts = await this.sequelize.models.CitySceneryCache.findAll({
       include: [
         {
-          model: this.sequelize.models.City
+          model: this.sequelize.models.City,
+          where: cityWhereCondition
         }
       ],
       attributes: {
