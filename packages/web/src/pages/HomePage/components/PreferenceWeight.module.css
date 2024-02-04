@@ -146,3 +146,7 @@
   animation-iteration-count: infinite;
   animation-timing-function: ease-in-out;
 }
+
+.toggleAllButton {
+  margin: 10px;
+}

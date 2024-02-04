@@ -38,13 +38,27 @@ const StateSelection = ({ formData, setFormData }) => {
     });
   };
 
+  const toggleAllStates = () => {
+    setFormData({
+      ...formData,
+      includedStates: allSelected ? Object.keys(statesMapping).map(Number) : [],
+    });
+  };
+
   return (
     <div className={`form-group ${styles.formGroup}`}>
       <h4 className="pb-3">State Preferences</h4>
       <p className="mb-3">Select the states you're interested in:</p>
       <div className={styles.collapsibleSections}>
-        <details open>
+        <details>
           <summary>States</summary>
+          <button
+            type="button"
+            onClick={toggleAllStates}
+            className={`${styles.btnDropdown} m-2`}
+          >
+            Select All States
+          </button>
           {Object.entries(statesMapping).map(([stateCode, stateName]) => (
             <div
               className={styles.formCheck}

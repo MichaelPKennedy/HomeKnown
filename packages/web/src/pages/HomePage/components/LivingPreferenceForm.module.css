@@ -138,12 +138,12 @@
   margin-bottom: 20px;
   margin-right: 20px;
   font-weight: normal;
-  background-color: transparent; /* Makes the inside of the button transparent */
-  color: #01697c; /* Sets the text color, use your desired color */
-  border: 1px solid #01697c; /* Sets the border color and width */
-  padding: 8px 16px; /* Optional: Adjusts the padding inside the button */
-  border-radius: 4px; /* Optional: Rounds the corners of the button */
-  transition: all 0.3s ease; /* Optional: Smooth transition for hover effects */
+  background-color: transparent;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .btnContainer {
