@@ -1,4 +1,5 @@
 const { disallow } = require('feathers-hooks-common')
+import nearbyIndustryData from './hooks/nearby-industry-data'
 
 export const surveyHooks = {
   before: {
@@ -14,7 +15,7 @@ export const surveyHooks = {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [nearbyIndustryData],
     update: [],
     patch: [],
     remove: []

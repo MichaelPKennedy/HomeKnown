@@ -422,7 +422,7 @@ export class SurveyService implements ServiceMethods<any> {
 
   async getCityDetails(cities: any, recreation?: any, job?: any): Promise<any> {
     let searchRadius = 50
-    let selectedJobs = []
+    let selectedJobs = [] as any[]
     let landmarkTypes = [] as string[]
 
     if (recreation) {
@@ -517,6 +517,7 @@ export class SurveyService implements ServiceMethods<any> {
         HomePrice: city.HomePrices,
         MonthlyRent: city.MonthlyRentCities,
         Jobs: cityJobs,
+        selectedJobs,
         Weather: city.CityMonthlyWeatherCounties
       }
     })
