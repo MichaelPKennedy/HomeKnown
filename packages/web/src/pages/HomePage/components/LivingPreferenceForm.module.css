@@ -460,3 +460,62 @@ details .formCheck {
 .radio {
   margin-right: 20px;
 }
+
+/* Population Preferences */
+.populationRangeContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.populationRangeItem {
+  text-align: center;
+  cursor: pointer;
+}
+
+.populationRangeButton {
+  display: flex;
+  padding: 10px;
+  border: 0.5px solid black;
+  border-radius: 15px;
+  background-color: transparent;
+  transition: background-color 0.3s;
+  height: 75px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.populationRangeText {
+  font-size: 14px;
+}
+
+.popBoxContainer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.populationRangeButton.selected {
+  background-color: #01697c;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .populationRangeButton {
+  }
+}
+
+@media (max-width: 480px) {
+  .populationRangeButton {
+  }
+}
+
+/* State Preference Section */
+.onlyButton {
+  background-color: lightgray;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}

@@ -19,7 +19,7 @@ const WeatherPreferences = ({
       </div>
 
       <div className={`form-group ${styles.formGroup}`}>
-        <h4>Precipitation Preferences</h4>
+        <h4>Precipitation</h4>
         {hasColdMonth() && (
           <div className={`form-group ${styles.formGroup}`}>
             {/* Snow Preference */}

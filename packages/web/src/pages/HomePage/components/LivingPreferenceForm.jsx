@@ -16,6 +16,7 @@ import SceneryPreferences from "./SceneryPreferences.jsx";
 import WeatherPreferences from "./WeatherPreferences.jsx";
 import RecreationalPreferences from "./RecreationalPreferences.jsx";
 import PopulationPreferences from "./PopulationPreferences";
+import StatePreferences from "./StatePreferences";
 import ResultsPage from "../../ResultsPage";
 import { useCityData } from "../../../utils/CityDataContext";
 
@@ -27,6 +28,9 @@ const initialFormData = {
   publicServices: [],
   scenery: [],
   searchRadius: 50,
+  minPopulation: null,
+  maxPopulation: null,
+  includedStates: [],
   minSalary1: null,
   minSalary2: null,
   jobLevel: "",
@@ -92,6 +96,10 @@ const LivingPreferenceForm = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    console.log("states selected", formData.includedStates);
+  }, [formData]);
+
   const validateForm = () => {
     let isValid = true;
     let errorMessage = "";
@@ -101,6 +109,10 @@ const LivingPreferenceForm = () => {
       errorMessage = "Please allocate all available points for preferences.";
     }
 
+    if (!formData.minPopulation || !formData.maxPopulation) {
+      isValid = false;
+      errorMessage = "Please select a valid population range.";
+    }
     if (
       formData.weights.jobOpportunityWeight > 0 &&
       formData.selectedJobs.length === 0
@@ -384,37 +396,6 @@ const LivingPreferenceForm = () => {
                   setFormData={setFormData}
                 />
               )}
-
-              {(formData.weights.sceneryWeight > 0 ||
-                formData.weights.recreationalActivitiesWeight > 0 ||
-                formData.weights.publicServicesWeight > 0) && (
-                <div
-                  className={`form-group ${styles.slider} ${styles.formGroup}`}
-                >
-                  <label htmlFor="searchRadius">
-                    <h4>Select Search Radius (miles)</h4>
-                    <p className={`mb-2 ${styles.par}`}>
-                      This will apply for recreation, public services, and
-                      scenery preferences.
-                    </p>
-                  </label>
-                  <Slider
-                    min={10}
-                    max={50}
-                    step={5}
-                    value={formData.searchRadius}
-                    onChange={(value) => {
-                      setFormData((prevState) => ({
-                        ...prevState,
-                        searchRadius: value,
-                      }));
-                    }}
-                  />
-                  <div className="mt-2">
-                    {formData.searchRadius || 10} miles
-                  </div>
-                </div>
-              )}
               {formData.weights.recreationalActivitiesWeight > 0 && (
                 <RecreationalPreferences
                   formData={formData}
@@ -443,10 +424,18 @@ const LivingPreferenceForm = () => {
                   hasColdMonth={hasColdMonth}
                 />
               )}
-              {/* <PopulationPreferences
-                formData={formData}
-                handleInputChange={handleInputChange}
-              /> */}
+              {formData.weights.totalAvailablePoints < 8 && (
+                <>
+                  <PopulationPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                  <StatePreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </>
+              )}
               {showSubmitButton && (
                 <div className="d-flex justify-content-start">
                   <button

@@ -138,7 +138,7 @@
 
 /* Map in main results page */
 .resultsMap {
-  height: 300px;
+  height: 270px;
   width: 100%;
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Shadow */
