@@ -52,8 +52,6 @@ function City() {
     state = "DC";
   }
 
-  console.log("city", currentCity);
-
   const handleHeartClick = async () => {
     if (!isLoggedIn) {
       setShowLoginModal(true);

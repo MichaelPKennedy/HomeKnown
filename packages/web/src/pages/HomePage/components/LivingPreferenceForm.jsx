@@ -96,10 +96,6 @@ const LivingPreferenceForm = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    console.log("states selected", formData.includedStates);
-  }, [formData]);
-
   const validateForm = () => {
     let isValid = true;
     let errorMessage = "";
@@ -215,7 +211,6 @@ const LivingPreferenceForm = () => {
         .service("survey")
         .create({ data: formData });
       if (response) {
-        console.log("Response from survey:", response);
         setLoading(false);
         setUserPreferences(formData);
         setSurveyResults(response);

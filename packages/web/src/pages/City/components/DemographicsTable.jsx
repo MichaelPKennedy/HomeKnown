@@ -3,8 +3,6 @@ import { Card } from "react-bootstrap";
 import styles from "../City.module.css";
 
 const DemographicsTable = ({ data }) => {
-  console.log("in table", data);
-
   // Filter out id and cityId
   const filteredData = Object.entries(data).filter(
     ([key]) => key !== "id" && key !== "city_id"

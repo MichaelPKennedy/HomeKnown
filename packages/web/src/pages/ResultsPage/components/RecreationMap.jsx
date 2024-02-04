@@ -137,10 +137,6 @@ const RecreationMap = ({ data }) => {
   const [tempFilters, setTempFilters] = useState({});
   const { userRecInterests, userRecInterestsLoading } = useCityData();
 
-  useEffect(() => {
-    console.log("recreational Interests from context", userRecInterests);
-  }, [userRecInterests]);
-
   const handleFilterModalToggle = () => {
     setShowFilterModal(!showFilterModal);
     if (!showFilterModal) {
@@ -176,7 +172,6 @@ const RecreationMap = ({ data }) => {
         acc[key] = true;
         return acc;
       }, {});
-      console.log("setting filters", newFilters);
       setFilters(newFilters);
     }
   }, [userRecInterests]);

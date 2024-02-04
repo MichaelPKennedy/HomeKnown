@@ -58,7 +58,7 @@ export class IndustryService implements ServiceMethods<any> {
     if (!queryData) {
       throw new Error('No query data provided.')
     }
-    console.log('queryData', queryData)
+
     const { selectedJobs, minSalary1, minSalary2, jobLevel, minPopulation, maxPopulation, includedStates } =
       queryData
 
@@ -249,7 +249,6 @@ export class IndustryService implements ServiceMethods<any> {
       throw new Error('No query data provided.')
     }
     const { nearby, area_code, selectedJobs, latitude, longitude } = queryData
-    console.log(Array.isArray(selectedJobs))
 
     let jobData = []
 
