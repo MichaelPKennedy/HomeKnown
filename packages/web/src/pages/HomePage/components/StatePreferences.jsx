@@ -3,7 +3,7 @@ import { statesMapping } from "../constants";
 import styles from "./LivingPreferenceForm.module.css";
 
 const StateSelection = ({ formData, setFormData }) => {
-  const allSelected = formData.includedStates.length === 0;
+  const allSelected = formData?.includedStates?.length === 0;
 
   const handleCheckboxChange = (event) => {
     const { checked, value } = event.target;
@@ -78,7 +78,7 @@ const StateSelection = ({ formData, setFormData }) => {
                   onChange={handleCheckboxChange}
                   checked={
                     allSelected ||
-                    formData.includedStates.includes(parseInt(stateCode))
+                    formData?.includedStates?.includes(parseInt(stateCode))
                   }
                 />
                 <label

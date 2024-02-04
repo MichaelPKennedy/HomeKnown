@@ -40,7 +40,15 @@ export const CityDataProvider = ({ children }) => {
     for (let interest of interests) {
       try {
         const elements = await fetchDataForPreference(interest, city);
-        results[interest] = elements;
+        let namedElements;
+        if (elements.length > 500) {
+          namedElements = elements
+            .filter((el) => el.tags && el.tags.name)
+            .slice(0, 500);
+        } else {
+          namedElements = elements;
+        }
+        results[interest] = namedElements;
       } catch (error) {
         console.error(
           `Error fetching ${interest} for city ${city.name}:`,
