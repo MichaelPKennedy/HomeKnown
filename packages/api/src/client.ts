@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { stripeWebhookClient } from './services/stripe-webhook/stripe-webhook.shared'
+export type {
+  StripeWebhook,
+  StripeWebhookData,
+  StripeWebhookQuery,
+  StripeWebhookPatch
+} from './services/stripe-webhook/stripe-webhook.shared'
+
 import { userCitiesClient } from './services/user-cities/user-cities.shared'
 export type {
   UserCities,
@@ -111,5 +119,6 @@ export const createClient = <Configuration = any,>(
   client.configure(userClient)
   client.configure(userClient)
   client.configure(userCitiesClient)
+  client.configure(stripeWebhookClient)
   return client
 }
