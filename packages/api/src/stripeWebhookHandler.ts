@@ -1,6 +1,28 @@
 import { Request, Response } from 'express'
 const stripe = require('stripe')(process.env.STRIPE_TEST_SK)
 const endpointSecret = process.env.TEST_STRIPE_ENDPOINT_SECRET
+import sgMail from '@sendgrid/mail'
+const process = require('process')
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '')
+
+interface EmailOptions {
+  to: string
+  from: string
+  subject: string
+  text: string
+  html: string
+}
+
+export const sendEmail = async (options: EmailOptions): Promise<void> => {
+  try {
+    await sgMail.send(options)
+    console.log('Email sent')
+  } catch (error) {
+    console.error('Error sending email:', error)
+    throw error
+  }
+}
 
 export const handleStripeWebhook = (request: Request, response: Response) => {
   const sig = request.headers['stripe-signature']
@@ -473,6 +495,23 @@ export const handleStripeWebhook = (request: Request, response: Response) => {
     case 'payment_intent.succeeded':
       const paymentIntentSucceeded = event.data.object
       console.log('succeeded payment intent')
+      //TODO: Send confirmation email
+      //   const emailOptions = {
+      //     to: 'customer@example.com', // Replace with your customer's email address
+      //     from: 'your-email@example.com', // Replace with your verified sender email
+      //     subject: 'Subscription Confirmation',
+      //     text: 'You are now subscribed!',
+      //     html: '<strong>You are now subscribed!</strong>'
+      //   }
+
+      //   // Call the sendEmail function with the defined options
+      //   sendEmail(emailOptions)
+      //     .then(() => {
+      //       console.log('Email successfully sent!')
+      //     })
+      //     .catch((error) => {
+      //       console.error('Failed to send email:', error)
+      //     })
       break
     case 'payment_link.created':
       const paymentLinkCreated = event.data.object

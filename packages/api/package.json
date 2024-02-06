@@ -58,6 +58,7 @@
     "@feathersjs/transport-commons": "^5.0.8",
     "@feathersjs/typebox": "^5.0.8",
     "@google-cloud/storage": "^7.6.0",
+    "@sendgrid/mail": "^8.1.0",
     "@turf/turf": "^6.5.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/sequelize": "^4.28.15",
