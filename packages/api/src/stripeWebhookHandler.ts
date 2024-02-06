@@ -1,8 +1,8 @@
 import { Request, Response } from 'express'
+const process = require('process')
 const stripe = require('stripe')(process.env.STRIPE_TEST_SK)
 const endpointSecret = process.env.TEST_STRIPE_ENDPOINT_SECRET
 import sgMail from '@sendgrid/mail'
-const process = require('process')
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '')
 
