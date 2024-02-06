@@ -14,6 +14,7 @@ import socketio from '@feathersjs/socketio'
 import { Sequelize } from 'sequelize'
 const session = require('express-session')
 const { oauth } = require('@feathersjs/authentication-oauth')
+const bodyParser = require('body-parser')
 
 import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
@@ -177,6 +178,11 @@ State.hasMany(Weather, { foreignKey: 'state_code' })
 State.hasMany(City, { foreignKey: 'state_code' })
 StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
 Weather.belongsTo(State, { foreignKey: 'state_code' })
+
+app.use('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), (req, res, next) => {
+  req.feathers.rawBody = req.body
+  next()
+})
 
 // Configure services and real-time functionality
 app.configure(rest())

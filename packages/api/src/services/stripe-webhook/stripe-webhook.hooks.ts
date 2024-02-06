@@ -1,9 +1,11 @@
+import verifyStripeSignature from './hooks/verify-stripe-signature'
+
 export const stripeWebhookHooks = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [verifyStripeSignature],
     update: [],
     patch: [],
     remove: []

@@ -64,6 +64,7 @@
     "@uidotdev/usehooks": "^2.4.0",
     "axios": "^1.6.0",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
     "compression": "^1.7.4",
     "config": "^3.3.9",
     "cors": "^2.8.5",
@@ -83,6 +84,7 @@
     "react-autosuggest": "^10.1.0",
     "sequelize": "^6.33.0",
     "sequelize-typescript": "^2.1.5",
+    "stripe": "^14.15.0",
     "typescript": "^5.1.6",
     "use-long-press": "^3.2.0",
     "winston": "^3.10.0"
