@@ -4,14 +4,6 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
-import { stripeWebhookClient } from './services/stripe-webhook/stripe-webhook.shared'
-export type {
-  StripeWebhook,
-  StripeWebhookData,
-  StripeWebhookQuery,
-  StripeWebhookPatch
-} from './services/stripe-webhook/stripe-webhook.shared'
-
 import { userCitiesClient } from './services/user-cities/user-cities.shared'
 export type {
   UserCities,
@@ -95,7 +87,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any,>(
+export const createClient = <Configuration = any>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -119,6 +111,5 @@ export const createClient = <Configuration = any,>(
   client.configure(userClient)
   client.configure(userClient)
   client.configure(userCitiesClient)
-  client.configure(stripeWebhookClient)
   return client
 }

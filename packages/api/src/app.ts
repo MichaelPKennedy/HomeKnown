@@ -14,7 +14,10 @@ import socketio from '@feathersjs/socketio'
 import { Sequelize } from 'sequelize'
 const session = require('express-session')
 const { oauth } = require('@feathersjs/authentication-oauth')
-const bodyParser = require('body-parser')
+const process = require('process')
+const plainExpress = require('express')
+
+import { handleStripeWebhook } from './stripeWebhookHandler'
 
 import type { Application } from './declarations'
 import { configurationValidator } from './configuration'
@@ -52,6 +55,8 @@ import { CityPlacesCacheModel } from './models/city-places-cache.model'
 
 const app: Application = express(feathers())
 
+app.post('/stripe-webhook', plainExpress.raw({ type: 'application/json' }), handleStripeWebhook)
+
 // Load app configuration
 app.configure(configuration(configurationValidator))
 app.use(cors())
@@ -74,7 +79,7 @@ sequelize
   .then(() => {
     console.log('Connection has been established successfully.')
   })
-  .catch((err) => {
+  .catch((err: any) => {
     console.error('Unable to connect to the database:', err)
   })
 
@@ -178,11 +183,6 @@ State.hasMany(Weather, { foreignKey: 'state_code' })
 State.hasMany(City, { foreignKey: 'state_code' })
 StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
 Weather.belongsTo(State, { foreignKey: 'state_code' })
-
-app.use('/stripe-webhook', bodyParser.raw({ type: 'application/json' }), (req, res, next) => {
-  req.feathers.rawBody = req.body
-  next()
-})
 
 // Configure services and real-time functionality
 app.configure(rest())
