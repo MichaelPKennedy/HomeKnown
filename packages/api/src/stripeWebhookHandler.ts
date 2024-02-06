@@ -1,7 +1,8 @@
+import { Request, Response } from 'express'
 const stripe = require('stripe')(process.env.STRIPE_TEST_SK)
 const endpointSecret = process.env.TEST_STRIPE_ENDPOINT_SECRET
 
-export const handleStripeWebhook = (request: any, response: any) => {
+export const handleStripeWebhook = (request: Request, response: Response) => {
   const sig = request.headers['stripe-signature']
 
   let event
