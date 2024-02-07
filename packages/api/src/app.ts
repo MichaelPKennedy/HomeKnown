@@ -52,6 +52,8 @@ import { UsersModel } from './models/users.model'
 import { UserCitiesModel } from './models/user-cities.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
+import { CountyAverageTempModel } from './models/city-average-temp'
+import c from 'config'
 
 const app: Application = express(feathers())
 
@@ -110,6 +112,7 @@ UsersModel(sequelize)
 UserCitiesModel(sequelize)
 CitySnowCacheModel(sequelize)
 CityPlacesCacheModel(sequelize)
+CountyAverageTempModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -135,6 +138,7 @@ const Weather = sequelize.models.Weather
 const UserCities = sequelize.models.UserCities
 const Users = sequelize.models.Users
 const CityPlacesCache = sequelize.models.CityPlacesCache
+const CountyAverageTemp = sequelize.models.CountyAverageTemp
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -172,6 +176,8 @@ CrimeStats.belongsTo(County, { foreignKey: 'stcofips' })
 CrimeStats.belongsTo(State, { foreignKey: 'fips_st' })
 County.belongsTo(State, { foreignKey: 'state_code' })
 County.hasMany(City, { foreignKey: 'county_fips' })
+County.hasMany(CountyAverageTemp, { foreignKey: 'county_fips' })
+CountyAverageTemp.belongsTo(County, { foreignKey: 'county_fips' })
 CountyMonthlyWeather.belongsTo(City, { foreignKey: 'county_fips' })
 HomePrice.belongsTo(City, { foreignKey: 'city_id' })
 LandMark.belongsTo(MTFCC, { foreignKey: 'MTFCC', as: 'MTFCCAssociation' })
