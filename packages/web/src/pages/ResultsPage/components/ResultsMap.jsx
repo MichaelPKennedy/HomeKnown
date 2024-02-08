@@ -25,6 +25,7 @@ const ResultsMap = (city) => {
     <MapContainer
       center={[city.latitude, city.longitude]}
       zoom={5}
+      dragging={false}
       scrollWheelZoom={false}
       className={styles.resultsMap}
     >
