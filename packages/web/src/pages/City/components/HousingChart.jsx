@@ -23,8 +23,14 @@ ChartJS.register(
   Legend
 );
 
-const ReusablePriceChartComponent = ({ housingData, rentData }) => {
-  const [dataType, setDataType] = useState("homePrice");
+const ReusablePriceChartComponent = ({ housingData = [], rentData = [] }) => {
+  let defaultType = "homePrice";
+  if (housingData?.length > 0) {
+    defaultType = "homePrice";
+  } else if (rentData?.length > 0) {
+    defaultType = "rentPrice";
+  }
+  const [dataType, setDataType] = useState(defaultType);
   const [chartData, setChartData] = useState({ labels: [], datasets: [] });
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [mostRecentPrice, setMostRecentPrice] = useState(null);
@@ -39,7 +45,12 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
   }, []);
 
   useEffect(() => {
-    const data = dataType === "homePrice" ? housingData[0] : rentData[0];
+    const data = dataType === "homePrice" ? housingData?.[0] : rentData?.[0];
+    if (!data) {
+      setChartData({ labels: [], datasets: [] });
+      setMostRecentPrice(null);
+      return;
+    }
 
     // Sort the keys (month_year) in descending order to process the most recent first
     const sortedKeys = Object.keys(data).sort((a, b) => b.localeCompare(a));
@@ -102,15 +113,20 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
       ],
     });
 
-    setMostRecentPrice({
-      label: mostRecentLabel,
-      value: mostRecentValue,
-    });
+    setMostRecentPrice(
+      mostRecentValue
+        ? {
+            label: mostRecentLabel,
+            value: mostRecentValue,
+          }
+        : null
+    );
   }, [housingData, rentData, dataType]);
 
   const handleDataTypeChange = (event) => {
     setDataType(event.target.value);
   };
+
   const chartOptions = {
     maintainAspectRatio: false,
     responsive: true,
@@ -165,7 +181,6 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
             if (value >= 100000) {
               return value / 1000 + "k";
             } else {
-              //return value with proper commas
               return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
           },
@@ -182,7 +197,6 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
       {mostRecentPrice && (
         <div className="mt-4">
           <strong>Current Average Price: </strong>
-
           {mostRecentPrice.value
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
@@ -192,13 +206,18 @@ const ReusablePriceChartComponent = ({ housingData, rentData }) => {
         <div className={styles.buttonContainer}>
           <select
             onChange={handleDataTypeChange}
+            value={dataType}
             className={`form-select ${styles.btnDropdown}`}
           >
             <option value="homePrice">Home Price</option>
             <option value="rentPrice">Rent Price</option>
           </select>
         </div>
-        <Line data={chartData} options={chartOptions} />
+        {chartData.datasets.length > 0 ? (
+          <Line data={chartData} options={chartOptions} />
+        ) : (
+          <p>No data available</p>
+        )}
       </div>
     </Card>
   );
