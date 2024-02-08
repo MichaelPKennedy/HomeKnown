@@ -2,10 +2,25 @@ import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Card, Button } from "react-bootstrap";
 import styles from "./JobData.module.css";
+import { statesMapping } from "../../HomePage/constants";
 
 const JobData = ({ jobs }) => {
   const [wageType, setWageType] = useState("hourly");
 
+  const { closestCity } = jobs?.[0] || {};
+
+  if (jobs.length < 1) {
+    return (
+      <div>
+        No job data currently available within 50 miles of this location
+      </div>
+    );
+  }
+
+  let closestCityStateName = "";
+  if (closestCity) {
+    closestCityStateName = statesMapping[closestCity.state_code];
+  }
   const chartOptions = {
     plugins: {
       datalabels: {
@@ -67,6 +82,16 @@ const JobData = ({ jobs }) => {
 
   return (
     <div className={styles.jobDataContainer}>
+      {closestCity && (
+        <p>
+          Job data was unavailable for this city. This data is taken from{" "}
+          {closestCity.city_name}, {closestCityStateName}
+          {", "}
+          the closest city within 50 miles with available data. This data was
+          not factored into the scoring process and is displayed only to give an
+          idea of the job market in the area.
+        </p>
+      )}
       {jobs.map((job) => (
         <Card key={job.id} className={styles.jobCard}>
           <Card.Header>

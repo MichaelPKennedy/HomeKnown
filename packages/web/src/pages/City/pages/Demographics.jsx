@@ -11,6 +11,10 @@ const Demographics = () => {
   const currentCity = city ? city : cityData;
   const { CityDemographics: demographics } = currentCity || {};
 
+  if (!demographics || demographics?.length === 0) {
+    return <div>No demographic data available for this location</div>;
+  }
+
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;

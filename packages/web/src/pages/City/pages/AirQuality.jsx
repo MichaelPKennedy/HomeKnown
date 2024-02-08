@@ -11,6 +11,10 @@ const AirQuality = () => {
   const currentCity = city ? city : cityData;
   const { AirQuality: airQuality } = currentCity || {};
 
+  if (!airQuality || airQuality?.length === 0) {
+    return <div>No air quality data available for this location</div>;
+  }
+
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;

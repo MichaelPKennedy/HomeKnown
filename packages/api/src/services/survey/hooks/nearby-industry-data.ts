@@ -1,5 +1,4 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
-import { Storage } from '@google-cloud/storage'
 import { Application } from '../../../declarations'
 import { SurveyService } from '../survey.class'
 
@@ -7,11 +6,27 @@ const nearbyIndustryData: Hook<Application, SurveyService> = async (
   context: HookContext<Application, SurveyService>
 ): Promise<HookContext<Application, SurveyService>> => {
   const cities = context.result?.topTen || context.result || []
-
   for (const city of cities) {
-    console.log('city', city)
-    //TODO: Check city.Jobs array city.selectedJobs, if any jobs are missing, call the industry GET method with nearby param set to true
+    if (city.Jobs.length > 0) {
+      continue
+    }
+    const { latitude, longitude, selectedJobs } = city
+
+    const queryData = {
+      nearby: true,
+      selectedJobs,
+      latitude: parseFloat(latitude),
+      longitude: parseFloat(longitude)
+    }
+
+    try {
+      const jobData = await context.app.service('industry').get(city.city_id, { query: queryData })
+      city.Jobs = jobData
+    } catch (error) {
+      console.error('Error fetching industry data for city:', city.city_name, error)
+    }
   }
+
   return context
 }
 

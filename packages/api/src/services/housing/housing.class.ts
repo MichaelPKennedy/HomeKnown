@@ -31,6 +31,15 @@ export interface HousingParams extends Params {
   }
 }
 
+export interface HousingGetParams extends Params {
+  query?: {
+    nearby: boolean
+    latitude: number
+    longitude: number
+    includedStates: number[]
+  }
+}
+
 type CityWhereCondition = {
   [key: string]: {
     [Op.gte]: number
@@ -147,8 +156,49 @@ export class HousingService implements ServiceMethods<any> {
     return finalRankedCities
   }
 
-  async get(id: Id, params?: HousingParams): Promise<any> {
-    throw new Error('Method not implemented.')
+  async get(id: number, params?: HousingGetParams): Promise<any> {
+    if (!params?.query) {
+      throw new Error('No query data provided.')
+    }
+
+    const { nearby, latitude, longitude } = params.query
+
+    let housingData = []
+
+    if (nearby) {
+      const closestCity = await this.findClosestCityWithHousingData(latitude, longitude)
+
+      if (closestCity) {
+        const {
+          city_name: closestCityName,
+          city_id: closestCityId,
+          state_code: closestCityState
+        } = closestCity
+
+        housingData = await this.fetchHousingData(closestCityId)
+      }
+    } else {
+      housingData = await this.fetchHousingData(id)
+    }
+
+    return housingData.map((data: any) => {
+      return data
+    })
+  }
+
+  async fetchHousingData(city_id: number): Promise<any[]> {
+    //TODO: Find and return HomePrice object and MonthlyRent object
+    return []
+  }
+
+  async fetchHousingDataBasedOnParams(query: HousingQuery): Promise<any[]> {
+    //TODO: Implement
+    return []
+  }
+
+  async findClosestCityWithHousingData(latitude: number, longitude: number): Promise<any> {
+    //TODO: Implement logic similar to findClosestCityWithJobData
+    return {}
   }
 
   async create(data: any, params?: HousingParams): Promise<any> {

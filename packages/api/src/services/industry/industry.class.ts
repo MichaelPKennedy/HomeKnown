@@ -21,7 +21,7 @@ export interface IndustryParams extends Params {
 export interface IndustryGetParams extends Params {
   query?: {
     nearby: boolean
-    area_code: number
+    area_code?: number
     selectedJobs: string[]
     latitude: number
     longitude: number
@@ -207,39 +207,42 @@ export class IndustryService implements ServiceMethods<any> {
       group: ['area_code']
     })
 
-    // Extract area codes from the query results
     return areas.map((area: any) => area.get('area_code'))
   }
 
-  async findClosestCityWithJobData(latitude: any, longitude: any, selectedJobs: any) {
-    const closestCity = await this.sequelize.models.City.findOne({
-      attributes: ['area_code', 'Longitude', 'Latitude'],
-      include: [
-        {
-          model: this.sequelize.models.Area,
-          include: [
-            {
-              model: this.sequelize.models.CityIndustrySalary,
-              where: {
-                occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
-              }
-            }
-          ]
-        }
-      ],
-      order: [
-        [
-          this.sequelize.fn(
-            'SQRT',
-            this.sequelize.literal(`POW(${latitude} - Latitude, 2) + POW(${longitude} - Longitude, 2)`)
-          ),
-          'ASC'
-        ]
-      ],
-      limit: 1
-    })
+  async findClosestCityWithJobData(latitude: any, longitude: any, occCodes: any) {
+    const query = `SELECT City.area_code, City.Longitude, City.Latitude, City.city_id, City.city_name, City.state_code,
+    (3959 * acos(
+        cos(radians(:latitude)) *
+        cos(radians(City.Latitude)) *
+        cos(radians(City.Longitude) - radians(:longitude)) +
+        sin(radians(:latitude)) *
+        sin(radians(City.Latitude))
+    )) AS distance
+    FROM City
+    INNER JOIN Area ON City.area_code = Area.area_code
+    INNER JOIN CityIndustrySalary ON Area.area_code = CityIndustrySalary.area_code
+    WHERE CityIndustrySalary.occ_code IN (:occCodes)
+    HAVING distance <= 50
+    ORDER BY distance ASC
+    LIMIT 1;
+    `
+    const replacements = {
+      occCodes,
+      latitude,
+      longitude
+    }
 
-    return closestCity ? closestCity.area_code : null
+    try {
+      const [results, metadata] = await this.sequelize.query(query, {
+        replacements,
+        type: this.sequelize.QueryTypes.SELECT
+      })
+      return results || null
+    } catch (error) {
+      console.error('Error finding closest city with job data:', error)
+      return null
+    }
   }
 
   async get(id: Id, params?: IndustryGetParams): Promise<any> {
@@ -252,12 +255,20 @@ export class IndustryService implements ServiceMethods<any> {
 
     let jobData = []
 
+    const occCodes = selectedJobs.map((job: any) => job.occ_code)
+
     if (!nearby) {
       jobData = await this.sequelize.models.CityIndustrySalary.findAll({
         where: {
           area_code,
-          occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
-        }
+          occ_code: { [Op.in]: occCodes }
+        },
+        include: [
+          {
+            model: this.sequelize.models.Occupation,
+            attributes: ['occ_title']
+          }
+        ]
       })
 
       if (jobData.length > 0) {
@@ -265,16 +276,37 @@ export class IndustryService implements ServiceMethods<any> {
       }
     }
 
-    const closestAreaCode = await this.findClosestCityWithJobData(latitude, longitude, selectedJobs)
+    const closestArea = await this.findClosestCityWithJobData(latitude, longitude, occCodes)
+    const {
+      area_code: closestAreaCode,
+      city_name: closestCityName,
+      city_id: closestCityId,
+      state_code: closestCityState
+    } = closestArea
 
     if (closestAreaCode) {
       jobData = await this.sequelize.models.CityIndustrySalary.findAll({
         where: {
           area_code: closestAreaCode,
-          occ_code: { [Op.in]: selectedJobs.map((job: any) => job.occ_code) }
-        }
+          occ_code: { [Op.in]: occCodes }
+        },
+        include: [
+          {
+            model: this.sequelize.models.Occupation,
+            attributes: ['occ_title']
+          }
+        ]
       })
     }
+
+    jobData = jobData.map((job: any) => {
+      job.dataValues.closestCity = {
+        city_id: closestCityId,
+        city_name: closestCityName,
+        state_code: closestCityState
+      }
+      return job
+    })
 
     return jobData
   }
