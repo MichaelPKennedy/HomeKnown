@@ -160,7 +160,7 @@ export class RecreationService implements ServiceMethods<any> {
 
     // Prepare the final output
     const finalOutput = rankings.slice(0, 10000).map((city) => ({
-      city_id: city.city_id,
+      city_id: Number(city.city_id),
       city_name: city.city_name,
       county: city.county_fips,
       ranking: city.ranking

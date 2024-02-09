@@ -133,7 +133,7 @@ export class HousingService implements ServiceMethods<any> {
         }
       })
       .sort((a: any, b: any) => a.rank - b.rank)
-      .slice(0, 5000)
+      .slice(0, 10000)
 
     let ranking = 1
     let previousRank = rankedCities[0]?.rank
