@@ -364,18 +364,18 @@ export class SurveyService implements ServiceMethods<any> {
     recreationFormData: any,
     jobFormData: any
   ): Promise<any> {
-    const cityScores = new Map<number, number>()
+    const cityScores = new Map<number, { score: number; categories: string[] }>()
     const highestScoredCityPerCounty = new Map<string, any>()
 
     const categories = [
-      { data: job?.topCities, weight: weights.jobOpportunityWeight },
-      { data: weather, weight: weights.weatherWeight },
-      { data: recreation, weight: weights.recreationalActivitiesWeight },
-      { data: housing, weight: weights.costOfLivingWeight },
-      { data: publicServices, weight: weights.publicServicesWeight },
-      { data: scenery, weight: weights.sceneryWeight },
-      { data: airQuality, weight: weights.airQualityWeight },
-      { data: crime, weight: weights.crimeRateWeight }
+      { data: job?.topCities, weight: weights.jobOpportunityWeight, name: 'jobs' },
+      { data: weather, weight: weights.weatherWeight, name: 'weather' },
+      { data: recreation, weight: weights.recreationalActivitiesWeight, name: 'recreation' },
+      { data: housing, weight: weights.costOfLivingWeight, name: 'housing' },
+      { data: publicServices, weight: weights.publicServicesWeight, name: 'publicServices' },
+      { data: scenery, weight: weights.sceneryWeight, name: 'scenery' },
+      { data: airQuality, weight: weights.airQualityWeight, name: 'airQuality' },
+      { data: crime, weight: weights.crimeRateWeight, name: 'crime' }
     ]
 
     categories.forEach((category) => {
@@ -383,31 +383,41 @@ export class SurveyService implements ServiceMethods<any> {
         if (!city?.ranking) {
           return
         }
-        const normalizedScore = 5001 - city.ranking
+        const normalizedScore = 10001 - city.ranking
         const weightedScore = normalizedScore * (category.weight || 0)
-        const currentScore = (cityScores.get(city.city_id) || 0) + weightedScore
-        cityScores.set(city.city_id, currentScore)
+        let cityData = cityScores.get(city.city_id) || { score: 0, categories: [] }
+        cityData.score += weightedScore
+        if (!cityData.categories.includes(category.name)) {
+          cityData.categories.push(category.name)
+        }
+        cityScores.set(city.city_id, cityData)
 
         // Updating the highest scored city per county
-        const county = city.county
-        const currentHighest = highestScoredCityPerCounty.get(county)
-        if (!currentHighest || currentScore > currentHighest.score) {
-          highestScoredCityPerCounty.set(county, { city_id: city.city_id, score: currentScore })
+        const county = city.county || city.county_fips || '999'
+        let currentHighest = highestScoredCityPerCounty.get(county)
+        if (!currentHighest || cityData.score > currentHighest.score) {
+          highestScoredCityPerCounty.set(county, {
+            city_id: city.city_id,
+            score: cityData.score,
+            categories: cityData.categories
+          })
         }
       })
     })
 
-    let finalCities
-    if (highestScoredCityPerCounty.size > 10) {
-      finalCities = Array.from(highestScoredCityPerCounty.values())
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10)
-    } else {
-      finalCities = Array.from(cityScores)
-        .map(([city_id, score]) => ({ city_id, score }))
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 10)
-    }
+    const resultsByCounty = Array.from(highestScoredCityPerCounty.values())
+    let finalCities = resultsByCounty.length > 10 ? resultsByCounty : Array.from(cityScores.values())
+
+    finalCities.sort((a, b) => {
+      const categoriesA = a.categories.length
+      const categoriesB = b.categories.length
+      if (categoriesA === categoriesB) {
+        return b.score - a.score
+      }
+      return categoriesB - categoriesA
+    })
+
+    finalCities = finalCities.slice(0, 10)
 
     let citiesWithDetails = await this.getCityDetails(finalCities, recreationFormData, jobFormData)
 

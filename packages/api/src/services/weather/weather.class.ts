@@ -189,7 +189,7 @@ export class WeatherService implements ServiceMethods<any> {
         return { ranking: rank, ...result, score: result.score }
       })
 
-      const topCities = rankedResults.slice(0, 5000)
+      const topCities = rankedResults.slice(0, 10000)
 
       if (topCities.length < 10) {
         console.log('Obtained less than 10 cities from weather')

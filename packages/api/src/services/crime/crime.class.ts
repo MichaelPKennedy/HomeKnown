@@ -64,7 +64,7 @@ export class CrimeService implements ServiceMethods<any> {
           }
         ],
         order: [['crime_score', 'ASC']],
-        limit: 5000
+        limit: 10000
       })
 
       let ranking = 1

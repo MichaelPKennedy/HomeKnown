@@ -90,7 +90,7 @@ export class RecreationService implements ServiceMethods<any> {
       ],
       group: ['city_id'],
       order: [[this.sequelize.literal('totalPlaceCount'), 'DESC']],
-      limit: 5000
+      limit: 10000
     })
 
     const cityDataMap = initialRankings.reduce((acc: any, item: any) => {
@@ -159,7 +159,7 @@ export class RecreationService implements ServiceMethods<any> {
     })
 
     // Prepare the final output
-    const finalOutput = rankings.slice(0, 5000).map((city) => ({
+    const finalOutput = rankings.slice(0, 10000).map((city) => ({
       city_id: city.city_id,
       city_name: city.city_name,
       county: city.county_fips,

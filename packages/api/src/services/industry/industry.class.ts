@@ -103,7 +103,7 @@ export class IndustryService implements ServiceMethods<any> {
         ],
         group: ['area_code'],
         order: [[this.sequelize.col('avg_salary'), 'DESC']],
-        limit: 5000
+        limit: 10000
       })
     }
 
@@ -145,7 +145,7 @@ export class IndustryService implements ServiceMethods<any> {
         }))
       })
       .flat()
-      .slice(0, 5000)
+      .slice(0, 10000)
 
     const sortedCitiesWithSalary = topCitiesWithSalary.sort((a: any, b: any) => b.avg_salary - a.avg_salary)
 
@@ -191,7 +191,7 @@ export class IndustryService implements ServiceMethods<any> {
       ],
       group: ['area_code'],
       order: [[this.sequelize.col('avg_salary'), 'DESC']],
-      limit: 5000
+      limit: 10000
     })
   }
 
@@ -277,12 +277,16 @@ export class IndustryService implements ServiceMethods<any> {
     }
 
     const closestArea = await this.findClosestCityWithJobData(latitude, longitude, occCodes)
+
+    if (!closestArea) {
+      return []
+    }
     const {
       area_code: closestAreaCode,
       city_name: closestCityName,
       city_id: closestCityId,
       state_code: closestCityState
-    } = closestArea
+    } = closestArea || {}
 
     if (closestAreaCode) {
       jobData = await this.sequelize.models.CityIndustrySalary.findAll({
