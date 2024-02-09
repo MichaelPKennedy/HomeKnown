@@ -103,7 +103,7 @@ export class IndustryService implements ServiceMethods<any> {
         ],
         group: ['area_code'],
         order: [[this.sequelize.col('avg_salary'), 'DESC']],
-        limit: 300
+        limit: 5000
       })
     }
 
@@ -145,7 +145,7 @@ export class IndustryService implements ServiceMethods<any> {
         }))
       })
       .flat()
-      .slice(0, 300)
+      .slice(0, 5000)
 
     const sortedCitiesWithSalary = topCitiesWithSalary.sort((a: any, b: any) => b.avg_salary - a.avg_salary)
 
@@ -191,7 +191,7 @@ export class IndustryService implements ServiceMethods<any> {
       ],
       group: ['area_code'],
       order: [[this.sequelize.col('avg_salary'), 'DESC']],
-      limit: 300
+      limit: 5000
     })
   }
 

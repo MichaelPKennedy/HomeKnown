@@ -383,7 +383,7 @@ export class SurveyService implements ServiceMethods<any> {
         if (!city?.ranking) {
           return
         }
-        const normalizedScore = 301 - city.ranking
+        const normalizedScore = 5001 - city.ranking
         const weightedScore = normalizedScore * (category.weight || 0)
         const currentScore = (cityScores.get(city.city_id) || 0) + weightedScore
         cityScores.set(city.city_id, currentScore)

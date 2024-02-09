@@ -64,10 +64,10 @@ export class CrimeService implements ServiceMethods<any> {
           }
         ],
         order: [['crime_score', 'ASC']],
-        limit: 300
+        limit: 5000
       })
 
-      let ranking = 1 // Start ranking at 1
+      let ranking = 1
       let previousCrimeScore = crimeRates[0]?.dataValues?.crime_score
 
       const rankedCrimeRates = crimeRates.map((crimeRate: any) => {

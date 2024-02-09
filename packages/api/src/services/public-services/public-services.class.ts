@@ -96,7 +96,7 @@ export class PublicServicesService implements ServiceMethods<any> {
       }
     })
 
-    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 300)
+    const sortedCities = cityScores.sort((a: any, b: any) => b.count - a.count).slice(0, 5000)
 
     let ranking = 1
     let previousCount = sortedCities[0]?.count || 0
