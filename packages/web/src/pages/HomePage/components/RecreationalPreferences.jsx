@@ -28,7 +28,6 @@ const RecreationalPreferences = ({ formData, handleCheckboxChange }) => {
     ],
     "Culture and History": [
       "monuments",
-      "archaeologicalSites",
       "museums",
       "artGalleries",
       "historicSites",

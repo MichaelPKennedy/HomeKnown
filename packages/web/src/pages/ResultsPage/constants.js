@@ -96,7 +96,7 @@ export const fetchDataForPreference = async (type, city) => {
       );
       out center;`;
       break;
-    case "archaeologicalSites":
+    case "historicSites":
       query = `
       [out:json][timeout:25];
       (

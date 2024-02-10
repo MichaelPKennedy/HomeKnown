@@ -77,7 +77,7 @@ const placeToIconMap = {
   hikingTrails: faHiking,
   caves: faArchway,
   monuments: faLandmark,
-  archaeologicalSites: faCameraRetro,
+  historicSites: faCameraRetro,
   museums: faUniversity,
   waterfalls: faTint,
   forests: faTree,
