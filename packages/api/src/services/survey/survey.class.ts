@@ -364,7 +364,7 @@ export class SurveyService implements ServiceMethods<any> {
     recreationFormData: any,
     jobFormData: any
   ): Promise<any> {
-    const cityScores = new Map<number, { score: number; categories: string[] }>()
+    const cityScores = new Map<number, any>()
     const highestScoredCityPerCounty = new Map<string, any>()
 
     const categories = [
@@ -385,7 +385,7 @@ export class SurveyService implements ServiceMethods<any> {
         }
         const normalizedScore = 10001 - city.ranking
         const weightedScore = normalizedScore * (category.weight || 0)
-        let cityData = cityScores.get(city.city_id) || { score: 0, categories: [] }
+        let cityData = cityScores.get(city.city_id) || { city_id: city.city_id, score: 0, categories: [] }
         cityData.score += weightedScore
         if (!cityData.categories.includes(category.name)) {
           cityData.categories.push(category.name)

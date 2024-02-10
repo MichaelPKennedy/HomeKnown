@@ -7,7 +7,7 @@ const nearbyIndustryData: Hook<Application, SurveyService> = async (
 ): Promise<HookContext<Application, SurveyService>> => {
   const cities = context.result?.topTen || context.result || []
   for (const city of cities) {
-    if (city.Jobs.length > 0 || !city.selectedJobs || city.selectedJobs.length === 0) {
+    if (city?.Jobs.length > 0 || !city?.selectedJobs || city?.selectedJobs.length === 0) {
       continue
     }
     const { latitude, longitude, selectedJobs } = city
