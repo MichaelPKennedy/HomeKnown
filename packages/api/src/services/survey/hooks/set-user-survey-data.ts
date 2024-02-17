@@ -170,7 +170,7 @@ const setUserSurveyData: Hook<Application, SurveyService> = async (
     precipitation: surveyData.precipitation === 'regular',
     snow: surveyData.snowPreference === 'regular' || surveyData.snowPreference === 'heavy',
     pop_min: surveyData.minPopulation === -1 ? 0 : surveyData.minPopulation,
-    pop_max: surveyData.maxPopulation,
+    pop_max: surveyData.maxPopulation === -1 ? 10000000 : surveyData.maxPopulation,
     homeMin: surveyData.homeMin,
     homeMax: surveyData.homeMax,
     rentMin: surveyData.rentMin,
