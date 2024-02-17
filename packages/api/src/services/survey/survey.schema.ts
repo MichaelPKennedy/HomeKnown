@@ -177,7 +177,8 @@ export const SurveyFormDataSchema = Type.Object({
 
 // Schema for creating new entries
 export const surveyDataSchema = Type.Object({
-  data: SurveyFormDataSchema
+  data: SurveyFormDataSchema,
+  user_id: Type.Number()
 })
 export type Weights = Static<typeof WeightsSchema>
 export type WeightKeys = keyof Static<typeof WeightsSchema>

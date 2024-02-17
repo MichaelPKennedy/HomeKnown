@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { toast } from "react-toastify";
 import styles from "./LivingPreferenceForm.module.css";
 import "./Slider.css";
@@ -19,6 +19,7 @@ import PopulationPreferences from "./PopulationPreferences";
 import StatePreferences from "./StatePreferences";
 import ResultsPage from "../../ResultsPage";
 import { useCityData } from "../../../utils/CityDataContext";
+import { AuthContext } from "../../../AuthContext";
 
 const initialFormData = {
   snowPreference: "none",
@@ -71,6 +72,7 @@ const LivingPreferenceForm = () => {
   const [formData, setFormData] = useState(initialFormData);
   const resultsRef = useRef(null);
   const { setUserPreferences } = useCityData();
+  const { isLoggedIn, user } = useContext(AuthContext);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
@@ -207,9 +209,10 @@ const LivingPreferenceForm = () => {
     }
     setLoading(true);
     try {
+      const userId = isLoggedIn ? user?.user_id : null;
       const response = await client
         .service("survey")
-        .create({ data: formData });
+        .create({ data: formData, user_id: userId });
       if (response) {
         setLoading(false);
         setUserPreferences(formData);

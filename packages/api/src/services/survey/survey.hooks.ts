@@ -1,12 +1,13 @@
 const { disallow } = require('feathers-hooks-common')
 import nearbyIndustryData from './hooks/nearby-industry-data'
+import setUserSurveyData from './hooks/set-user-survey-data'
 
 export const surveyHooks = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [setUserSurveyData],
     update: [disallow('external')],
     patch: [disallow('external')],
     remove: [disallow('external')]
