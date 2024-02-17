@@ -49,11 +49,11 @@ import { CityDemographicsModel } from './models/city-demographics.model'
 import { MonthlyRentCitiesModel } from './models/monthly-rent-cities.model'
 import { HomePriceModel } from './models/home-price.model'
 import { UsersModel } from './models/users.model'
+import { UserSurveysModel } from './models/user-surveys.model'
 import { UserCitiesModel } from './models/user-cities.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
 import { CountyAverageTempModel } from './models/city-average-temp'
-import c from 'config'
 
 const app: Application = express(feathers())
 
@@ -110,6 +110,7 @@ MonthlyRentCitiesModel(sequelize)
 HomePriceModel(sequelize)
 UsersModel(sequelize)
 UserCitiesModel(sequelize)
+UserSurveysModel(sequelize)
 CitySnowCacheModel(sequelize)
 CityPlacesCacheModel(sequelize)
 CountyAverageTempModel(sequelize)
@@ -136,6 +137,7 @@ const MTFCC = sequelize.models.MTFCC
 const StateIndustrySalary = sequelize.models.StateIndustrySalary
 const Weather = sequelize.models.Weather
 const UserCities = sequelize.models.UserCities
+const UserSurveys = sequelize.models.UserSurveys
 const Users = sequelize.models.Users
 const CityPlacesCache = sequelize.models.CityPlacesCache
 const CountyAverageTemp = sequelize.models.CountyAverageTemp
@@ -162,7 +164,10 @@ City.hasMany(CitySnowCache, { foreignKey: 'city_id' })
 City.hasMany(CityPlacesCache, { foreignKey: 'city_id' })
 City.belongsTo(Area, { foreignKey: 'area_code' })
 UserCities.belongsTo(Users, { foreignKey: 'user_id' })
+UserSurveys.belongsTo(Users, { foreignKey: 'user_id' })
 UserCities.belongsTo(City, { foreignKey: 'city_id' })
+Users.hasMany(UserCities, { foreignKey: 'user_id' })
+Users.hasMany(UserSurveys, { foreignKey: 'user_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
 CityPlacesCache.belongsTo(City, { foreignKey: 'city_id' })
