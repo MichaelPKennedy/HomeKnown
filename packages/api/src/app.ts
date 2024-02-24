@@ -50,6 +50,7 @@ import { MonthlyRentCitiesModel } from './models/monthly-rent-cities.model'
 import { HomePriceModel } from './models/home-price.model'
 import { UsersModel } from './models/users.model'
 import { UserSurveysModel } from './models/user-surveys.model'
+import { GuestSurveysModel } from './models/guest-surveys.model'
 import { UserCitiesModel } from './models/user-cities.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
@@ -111,6 +112,7 @@ HomePriceModel(sequelize)
 UsersModel(sequelize)
 UserCitiesModel(sequelize)
 UserSurveysModel(sequelize)
+GuestSurveysModel(sequelize)
 CitySnowCacheModel(sequelize)
 CityPlacesCacheModel(sequelize)
 CountyAverageTempModel(sequelize)

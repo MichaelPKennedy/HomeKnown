@@ -1,23 +1,14 @@
 import { DataTypes, Model, Sequelize } from 'sequelize'
-import { Users } from './users.model'
 
-export class UserSurveys extends Model {}
+export class GuestSurveys extends Model {}
 
-export const UserSurveysModel = (sequelize: Sequelize) => {
-  UserSurveys.init(
+export const GuestSurveysModel = (sequelize: Sequelize) => {
+  GuestSurveys.init(
     {
       Id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
-      },
-      user_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-          model: Users,
-          key: 'user_id'
-        }
       },
       costOfLivingWeight: {
         type: DataTypes.INTEGER,
@@ -166,8 +157,8 @@ export const UserSurveysModel = (sequelize: Sequelize) => {
     },
     {
       sequelize,
-      modelName: 'UserSurveys',
-      tableName: 'UserSurveys',
+      modelName: 'GuestSurveys',
+      tableName: 'GuestSurveys',
       timestamps: true,
       paranoid: true
     }

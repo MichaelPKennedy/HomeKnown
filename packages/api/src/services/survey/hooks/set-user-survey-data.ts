@@ -141,7 +141,6 @@ const setUserSurveyData: Hook<Application, SurveyService> = async (
 
   const transformedData = {
     ...regionBooleans,
-    user_id: user_id,
     costOfLivingWeight: weights.costOfLivingWeight || 0,
     recreationWeight: weights.recreationalActivitiesWeight || 0,
     weatherWeight: weights.weatherWeight || 0,
@@ -171,17 +170,41 @@ const setUserSurveyData: Hook<Application, SurveyService> = async (
     snow: surveyData.snowPreference === 'regular' || surveyData.snowPreference === 'heavy',
     pop_min: surveyData.minPopulation === -1 ? 0 : surveyData.minPopulation,
     pop_max: surveyData.maxPopulation === -1 ? 10000000 : surveyData.maxPopulation,
-    homeMin: surveyData.homeMin,
-    homeMax: surveyData.homeMax,
-    rentMin: surveyData.rentMin,
-    rentMax: surveyData.rentMax
+    homeMin: null,
+    homeMax: null,
+    rentMin: null,
+    rentMax: null
+  }
+
+  if (surveyData.housingType === 'rent') {
+    transformedData.rentMin = surveyData.rentMin
+    transformedData.rentMax = surveyData.rentMax
+  } else if (surveyData.housingType === 'buy') {
+    transformedData.homeMin = surveyData.homeMin
+    transformedData.homeMax = surveyData.homeMax
+  }
+
+  let finalData = {}
+  if (user_id) {
+    finalData = {
+      ...transformedData,
+      user_id
+    }
+  } else {
+    finalData = {
+      ...transformedData
+    }
   }
 
   try {
     const sequelizeClient = context.app.get('sequelizeClient' as any)
-    const userSurveysModel = sequelizeClient.model('UserSurveys')
-
-    await userSurveysModel.create(transformedData)
+    const UserSurveysModel = sequelizeClient.model('UserSurveys')
+    const GuestSurveysModel = sequelizeClient.model('GuestSurveys')
+    if (user_id) {
+      await UserSurveysModel.create(finalData)
+    } else {
+      await GuestSurveysModel.create(finalData)
+    }
   } catch (error) {
     console.error('Error inserting UserSurvey data:', error)
   }
