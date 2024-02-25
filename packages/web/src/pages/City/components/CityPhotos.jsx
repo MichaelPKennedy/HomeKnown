@@ -1,6 +1,7 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
+import { Blurhash } from "react-blurhash";
 import styles from "./swiperStyles.module.css";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -25,7 +26,24 @@ const CityPhotos = ({ photos }) => {
     >
       {photos.map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
-          <img src={photo.url} alt={photo.alt} className={styles.photo} />
+          <div className={styles.blurHashPlaceholder}>
+            <Blurhash
+              hash={photo.blurHash}
+              width="100%"
+              height="100%"
+              resolutionX={32}
+              resolutionY={32}
+              punch={1}
+            />
+          </div>
+          <img
+            src={photo.url}
+            alt={photo.alt}
+            className={styles.photo}
+            onLoad={(e) => {
+              e.target.previousSibling.style.display = "none";
+            }}
+          />
           <p>
             Photo by{" "}
             <a

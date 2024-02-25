@@ -5,6 +5,7 @@ interface CityPhoto {
   url: string
   navigationUrl: string
   alt: string
+  blurHash: string
   attribution: {
     photographer: string
     photographerUrl: string

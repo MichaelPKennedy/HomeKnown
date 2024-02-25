@@ -18,6 +18,8 @@ export interface PhotosParams extends Params {
 interface CityPhoto {
   url: string
   navigationUrl: string
+  alt: string
+  blurHash: string
   attribution: {
     photographer: string
     photographerUrl: string
@@ -184,6 +186,7 @@ export class PhotosService implements ServiceMethods<any> {
           url: photo.urls.full,
           navigationUrl: photo.links.html,
           alt: photo.alt_description,
+          blurHash: photo.blur_hash,
           attribution: {
             photographer: photo.user.name,
             photographerUrl: photo.user.links.html
