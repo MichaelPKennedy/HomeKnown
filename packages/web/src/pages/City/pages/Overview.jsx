@@ -20,9 +20,11 @@ const Overview = () => {
 
   return (
     <div className="container">
-      <div className={styles.cityPhotos}>
-        <CityPhotos photos={photos} />
-      </div>
+      {photos?.length > 0 && (
+        <div className={styles.cityPhotos}>
+          <CityPhotos photos={photos} />
+        </div>
+      )}
       <div className="row">
         <div className="col-md-12">
           <h5>About</h5>
