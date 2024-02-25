@@ -12,6 +12,22 @@ const fetchCityData = async (cityId) => {
   return response[0];
 };
 
+const fetchPhotos = async (city) => {
+  try {
+    const photos = await client.service("photos").find({
+      query: {
+        city_id: city.city_id,
+        cityName: city.city_name,
+        stateName: city.state_name,
+      },
+    });
+    return photos;
+  } catch (error) {
+    console.error("Error fetching photos:", error);
+    return [];
+  }
+};
+
 const fetchWeatherForecast = async ({ queryKey }) => {
   const [_key, { latitude, longitude }] = queryKey;
   const data = await client
@@ -65,9 +81,20 @@ export const CityDataProvider = ({ children }) => {
     data: cityData,
     isLoading,
     error,
-  } = useQuery(["cityData", cityId], () => fetchCityData(cityId), {
-    enabled: !!cityId,
-  });
+  } = useQuery(
+    ["cityData", cityId],
+    async () => {
+      const cityInfo = await fetchCityData(cityId);
+      if (!cityInfo.photos) {
+        const photos = await fetchPhotos(cityInfo);
+        return { ...cityInfo, photos };
+      }
+      return cityInfo;
+    },
+    {
+      enabled: !!cityId,
+    }
+  );
 
   useEffect(() => {
     if (cityData) {

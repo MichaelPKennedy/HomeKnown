@@ -1,14 +1,10 @@
 const { disallow } = require('feathers-hooks-common')
-import nearbyIndustryData from './hooks/nearby-industry-data'
-import setUserSurveyData from './hooks/set-user-survey-data'
-import getCityPhoto from './hooks/get-city-photos'
-
-export const surveyHooks = {
+export const photosHooks = {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [setUserSurveyData],
+    create: [disallow('external')],
     update: [disallow('external')],
     patch: [disallow('external')],
     remove: [disallow('external')]
@@ -17,7 +13,7 @@ export const surveyHooks = {
     all: [],
     find: [],
     get: [],
-    create: [nearbyIndustryData, getCityPhoto],
+    create: [],
     update: [],
     patch: [],
     remove: []

@@ -11,6 +11,7 @@ const Overview = () => {
   const { cityData, isLoading, error } = useCityData();
 
   const currentCity = city ? city : cityData;
+  const { photos } = currentCity || {};
   const { description } = currentCity || {};
 
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
@@ -20,7 +21,7 @@ const Overview = () => {
   return (
     <div className="container">
       <div className={styles.cityPhotos}>
-        <CityPhotos cityPhotos={["7ENJ1_WG9Ho", "OFMeC2lpCco"]} />
+        <CityPhotos photos={photos} />
       </div>
       <div className="row">
         <div className="col-md-12">

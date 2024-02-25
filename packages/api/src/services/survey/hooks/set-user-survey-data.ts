@@ -191,9 +191,7 @@ const setUserSurveyData: Hook<Application, SurveyService> = async (
       user_id
     }
   } else {
-    finalData = {
-      ...transformedData
-    }
+    finalData = transformedData
   }
 
   try {
