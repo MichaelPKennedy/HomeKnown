@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { searchClient } from './services/search/search.shared'
+export type { Search, SearchData, SearchQuery, SearchPatch } from './services/search/search.shared'
+
 import { photosClient } from './services/photos/photos.shared'
 export type { Photos, PhotosData, PhotosQuery, PhotosPatch } from './services/photos/photos.shared'
 
@@ -115,5 +118,6 @@ export const createClient = <Configuration = any,>(
   client.configure(userClient)
   client.configure(userCitiesClient)
   client.configure(photosClient)
+  client.configure(searchClient)
   return client
 }
