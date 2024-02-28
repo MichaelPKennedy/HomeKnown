@@ -29,27 +29,59 @@ export class SearchService implements ServiceMethods<any> {
     const queryStr = params.query?.search || ''
 
     try {
+      // Prepare the search pattern to match against concatenated city and state names or abbreviations
+      const searchPattern = `%${queryStr.replace(/\s+/g, '%')}%` // Replace spaces with '%' for flexible matching
+
       const cities = await this.sequelize.models.City.findAll({
         where: {
-          city_name: {
-            [Op.like]: `%${queryStr}%`
-          }
+          [Op.or]: [
+            // Match against concatenated city name and state name
+            this.sequelize.where(
+              this.sequelize.fn(
+                'concat',
+                this.sequelize.col('City.city_name'),
+                ' ',
+                this.sequelize.col('State.state')
+              ),
+              {
+                [Op.like]: searchPattern
+              }
+            ),
+            // Match against concatenated city name and state abbreviation
+            this.sequelize.where(
+              this.sequelize.fn(
+                'concat',
+                this.sequelize.col('City.city_name'),
+                ' ',
+                this.sequelize.col('State.state_abbrev')
+              ),
+              {
+                [Op.like]: searchPattern
+              }
+            )
+          ]
         },
         include: [
           {
             model: this.sequelize.models.State,
-            attributes: ['state']
+            attributes: ['state', 'state_abbrev']
           }
         ],
-        attributes: ['city_id', 'city_name', [this.sequelize.col('State.state'), 'state_name']],
+        attributes: [
+          'city_id',
+          'city_name',
+          [this.sequelize.col('State.state'), 'state_name'],
+          [this.sequelize.col('State.state_abbrev'), 'state_abbrev']
+        ],
         raw: true,
         limit: 30
       })
 
-      return cities.map((city: City) => ({
+      return cities.map((city: any) => ({
         city_id: city.city_id,
         city_name: city.city_name,
-        state_name: city.state_name
+        state_name: city.state_name,
+        state_abbrev: city.state_abbrev
       }))
     } catch (error) {
       console.error('Error fetching cities:', error)
