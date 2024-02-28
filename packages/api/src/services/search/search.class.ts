@@ -29,13 +29,11 @@ export class SearchService implements ServiceMethods<any> {
     const queryStr = params.query?.search || ''
 
     try {
-      // Prepare the search pattern to match against concatenated city and state names or abbreviations
-      const searchPattern = `%${queryStr.replace(/\s+/g, '%')}%` // Replace spaces with '%' for flexible matching
+      const searchPattern = `%${queryStr.replace(/\s+/g, '%')}%`
 
       const cities = await this.sequelize.models.City.findAll({
         where: {
           [Op.or]: [
-            // Match against concatenated city name and state name
             this.sequelize.where(
               this.sequelize.fn(
                 'concat',
@@ -47,7 +45,6 @@ export class SearchService implements ServiceMethods<any> {
                 [Op.like]: searchPattern
               }
             ),
-            // Match against concatenated city name and state abbreviation
             this.sequelize.where(
               this.sequelize.fn(
                 'concat',
