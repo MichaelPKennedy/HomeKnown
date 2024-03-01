@@ -53,7 +53,7 @@
 .btnPreferences:hover {
   background-color: white;
   color: #01697c;
-  border: 1px solid #01697c;
+  border: 0.5px solid #01697c;
 }
 
 .btnPreferences:focus {
@@ -298,7 +298,7 @@
   transition: background-color 0.2s;
   background-color: transparent;
   color: #01697c;
-  border: 1px solid #01697c;
+  border: 0.5px solid #01697c;
   border-radius: 0;
   margin-bottom: 15px;
   border-radius: 4px;
@@ -414,8 +414,8 @@ a:active {
 .header {
   color: black;
   margin-top: 15px;
-  margin-bottom: 15px;
-  font-size: 24px;
+  margin-bottom: 20px;
+  font-size: 22px;
   height: 2em;
 }
 

@@ -174,7 +174,7 @@
   transition: background-color 0.2s;
   background-color: white;
   color: #01697c;
-  border: 1px solid #01697c;
+  border: 0.5px solid #01697c;
   border-radius: 4px;
   margin-bottom: 15px;
   height: 40px;
@@ -197,7 +197,7 @@
 .btnCancel:hover {
   background-color: white;
   color: #01697c;
-  border: 1px solid #01697c;
+  border: 0.5px solid #01697c;
 }
 
 .btnCancel:focus {
