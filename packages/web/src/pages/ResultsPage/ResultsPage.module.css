@@ -413,6 +413,10 @@ a:active {
 
 .header {
   color: black;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 24px;
+  height: 2em;
 }
 
 .cityContainer h2 {

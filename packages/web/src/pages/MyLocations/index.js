@@ -171,12 +171,12 @@ const MyLocations = () => {
                             <h4 className={styles.header}>
                               {city.city_name}, {city.state_name}
                             </h4>
-                            <h6 className={styles.text}>
+                            {/* <h6 className={styles.text}>
                               County: {city.county_name}
                             </h6>
                             <h6 className={styles.text}>
                               Population: {city?.Population?.pop_2022 || "N/A"}
-                            </h6>
+                            </h6> */}
                           </div>
                         </Link>
                         <ResultsMap {...city}></ResultsMap>
