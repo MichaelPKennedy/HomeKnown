@@ -10,9 +10,6 @@ const DemographicsTable = ({ data }) => {
 
   return (
     <Card className={styles.card}>
-      <Card.Header>
-        <h4>Demographics</h4>
-      </Card.Header>
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <tbody>

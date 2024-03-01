@@ -191,9 +191,6 @@ const ReusablePriceChartComponent = ({ housingData = [], rentData = [] }) => {
 
   return (
     <Card className={styles.card}>
-      <Card.Header>
-        <h4>{dataType === "homePrice" ? "Home" : "Rent"} Prices</h4>
-      </Card.Header>
       {mostRecentPrice && (
         <div className="mt-4">
           <strong>Current Average Price: </strong>

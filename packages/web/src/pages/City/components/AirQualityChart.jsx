@@ -146,9 +146,6 @@ const AirQualityChart = ({ airQualityData }) => {
 
   return (
     <Card className={styles.card}>
-      <Card.Header>
-        <h4>Air Pollutants</h4>
-      </Card.Header>
       <div className={styles.airContainer}>
         <Bar data={chartData} options={options} />
       </div>

@@ -272,9 +272,6 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
 
   return (
     <Card className={styles.card}>
-      <Card.Header>
-        <h4>Weather</h4>
-      </Card.Header>
       <div className={styles.housingChartContainer}>
         <div className={styles.buttonContainer}>
           <button className={styles.btnDropdown} onClick={toggleChartType}>
