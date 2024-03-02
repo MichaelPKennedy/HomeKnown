@@ -115,11 +115,11 @@ const WeatherPreferences = ({
               }));
             }}
             marks={{
-              0: "Desert Dry",
+              0: "Min",
               25: "Comfortably Dry",
               50: "Moderate",
               75: "High Moisture",
-              100: "Maximum Humidity",
+              100: "Max",
             }}
             step={null}
           />

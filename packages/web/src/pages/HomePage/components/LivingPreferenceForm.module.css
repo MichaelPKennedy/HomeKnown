@@ -453,6 +453,12 @@ details .formCheck {
   font-size: 18px;
 }
 
+.sliderContainer {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 25px;
+}
+
 .styles_formCheckInput {
   display: none;
 }
