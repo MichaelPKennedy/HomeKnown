@@ -80,7 +80,7 @@ const LivingPreferenceForm = () => {
   const [loading, setLoading] = useState(false);
   const [showSubmitButton, setShowSubmitButton] = useState(false);
   const [surveyResults, setSurveyResults] = useState(null);
-  const [showForm, setShowForm] = useState(true);
+  const [showForm, setShowForm] = useState(false);
   const [formAnimation, setFormAnimation] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
@@ -243,6 +243,8 @@ const LivingPreferenceForm = () => {
       setSurveyResults(JSON.parse(savedResults));
       setFormData(JSON.parse(savedFormData));
       setShowForm(false); // Hide form if there are saved results
+    } else {
+      setShowForm(true);
     }
   }, []);
 
