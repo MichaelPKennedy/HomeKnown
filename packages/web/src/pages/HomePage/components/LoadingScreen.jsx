@@ -7,7 +7,7 @@ const LoadingScreen = () => {
     <div className={styles.loadingScreen}>
       <img src={logoImage} alt="Loading" className={styles.logo} />
       <div className={styles.loadingText}>
-        Please wait while we find you the perfect place to live
+        <p>Please wait while we find you the perfect place to live</p>
       </div>
       <div className={styles.loadingDots}>
         <div className={styles.dot}></div>
