@@ -7,6 +7,9 @@ import LoginModal from "../../components/LoginModal";
 import { useCityData } from "../../utils/CityDataContext";
 import ResultsMap from "./components/ResultsMap";
 import LargeResultsMap from "./components/LargeResultsMap";
+import goldMedal from "../../assets/gold-medal.png";
+import silverMedal from "../../assets/silver-medal.png";
+import bronzeMedal from "../../assets/bronze-medal.png";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -33,6 +36,36 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
 
   const renderCityData = (city, index) => {
     const isCitySaved = userCityIds.some((id) => id === city.city_id);
+    let rankingElement;
+
+    if (index === 0) {
+      rankingElement = (
+        <img
+          src={goldMedal}
+          alt="First Place"
+          className={styles.rankingImage}
+        />
+      );
+    } else if (index === 1) {
+      rankingElement = (
+        <img
+          src={silverMedal}
+          alt="Second Place"
+          className={styles.rankingImage}
+        />
+      );
+    } else if (index === 2) {
+      rankingElement = (
+        <img
+          src={bronzeMedal}
+          alt="Third Place"
+          className={styles.rankingImage}
+        />
+      );
+    } else {
+      rankingElement = <div className={styles.ranking}>{index + 1}</div>;
+    }
+
     return (
       <div className={styles.cityContainer} key={`results-${city.city_id}`}>
         <HeartIcon
@@ -46,15 +79,10 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           state={{ city }}
         >
           <div className={styles.cityDetails}>
-            {" "}
-            <div className={styles.ranking}>#{index + 1}</div>
+            {rankingElement}
             <p className={styles.header}>
               {city.city_name}, {city.state_name}
             </p>
-            {/* <h6 className={styles.text}>County: {city.county_name}</h6>
-            <h6 className={styles.text}>
-              Population: {city?.Population?.pop_2022 || "N/A"}
-            </h6> */}
           </div>
         </Link>
         <ResultsMap {...city}></ResultsMap>
