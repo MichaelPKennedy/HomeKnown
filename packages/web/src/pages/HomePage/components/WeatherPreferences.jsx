@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import TemperatureSelection from "./TemperatureSelection";
+import Slider from "rc-slider";
 import styles from "./LivingPreferenceForm.module.css";
 
 const WeatherPreferences = ({
   formData,
+  setFormData,
   handleInputChange,
   handleTemperatureChange,
   hasColdMonth,
 }) => {
+  useEffect(() => {
+    console.log("formData", formData);
+  }, [formData]);
   return (
     <div>
       <div className={`form-group ${styles.formGroup}`}>
@@ -93,6 +98,31 @@ const WeatherPreferences = ({
               Comfortable with regular rainfall
             </label>
           </div>
+        </div>
+      </div>
+      {/* Humidity Preference */}
+      <div className={`form-group ${styles.formGroup}`}>
+        <h4>Humidity Preference</h4>
+        <div className={styles.sliderContainer}>
+          <Slider
+            min={0}
+            max={100}
+            defaultValue={formData.humidityPreference}
+            onChange={(value) => {
+              setFormData((prevState) => ({
+                ...prevState,
+                humidityPreference: value,
+              }));
+            }}
+            marks={{
+              0: "Desert Dry",
+              25: "Comfortably Dry",
+              50: "Moderate",
+              75: "High Moisture",
+              100: "Maximum Humidity",
+            }}
+            step={null}
+          />
         </div>
       </div>
     </div>

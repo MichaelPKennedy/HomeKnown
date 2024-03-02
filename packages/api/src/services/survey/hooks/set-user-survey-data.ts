@@ -168,6 +168,7 @@ const setUserSurveyData: Hook<Application, SurveyService> = async (
     min_temp: Math.min(...temperatureData.map((td: TemperatureData) => td.temp)),
     precipitation: surveyData.precipitation === 'regular',
     snow: surveyData.snowPreference === 'regular' || surveyData.snowPreference === 'heavy',
+    humidity: surveyData.humidityPreference || null,
     pop_min: surveyData.minPopulation === -1 ? 0 : surveyData.minPopulation,
     pop_max: surveyData.maxPopulation === -1 ? 10000000 : surveyData.maxPopulation,
     homeMin: null,

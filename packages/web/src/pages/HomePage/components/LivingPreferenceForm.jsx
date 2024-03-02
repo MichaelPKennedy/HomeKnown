@@ -41,6 +41,7 @@ const initialFormData = {
   homeMax: 300000,
   rentMin: 1000,
   rentMax: 2000,
+  humidityPreference: 50,
   temperatureData: [
     { month: "Jan", temp: 30 },
     { month: "Feb", temp: 35 },
@@ -138,7 +139,11 @@ const LivingPreferenceForm = () => {
     }
 
     if (formData.weights.weatherWeight > 0) {
-      if (!formData.snowPreference || !formData.rainPreference) {
+      if (
+        !formData.snowPreference ||
+        !formData.rainPreference ||
+        !formData.humidityPreference
+      ) {
         isValid = false;
         errorMessage = "Please specify your weather preferences.";
       }
@@ -417,6 +422,7 @@ const LivingPreferenceForm = () => {
               {formData.weights.weatherWeight > 0 && (
                 <WeatherPreferences
                   formData={formData}
+                  setFormData={setFormData}
                   handleInputChange={handleInputChange}
                   handleTemperatureChange={handleTemperatureChange}
                   hasColdMonth={hasColdMonth}

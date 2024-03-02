@@ -110,6 +110,10 @@ export const GuestSurveysModel = (sequelize: Sequelize) => {
         type: DataTypes.BOOLEAN,
         allowNull: true
       },
+      humidity: {
+        type: DataTypes.INTEGER,
+        allowNull: true
+      },
       snow: {
         type: DataTypes.BOOLEAN,
         allowNull: true
