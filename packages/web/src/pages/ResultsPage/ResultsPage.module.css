@@ -598,6 +598,8 @@ a:active {
   top: 22px;
   right: 10px;
   outline: none;
+  font-size: 18px;
+  color: red;
   margin: 5px;
 }
 

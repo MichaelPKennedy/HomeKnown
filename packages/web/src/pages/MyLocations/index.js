@@ -4,7 +4,6 @@ import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
 import { AuthContext } from "../../AuthContext";
-import HeartIcon from "../../components/HeartIcon";
 import LoginModal from "../../components/LoginModal";
 
 const MyLocations = () => {
@@ -15,10 +14,6 @@ const MyLocations = () => {
   const [tempSelectedStates, setTempSelectedStates] = useState(new Set());
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
-  const { cityId } = useParams();
-  const isCitySaved = userCityData.some(
-    (savedCity) => savedCity.city_id === Number(cityId)
-  );
 
   const groupCitiesByState = (cities) => {
     const groupedCities = {};
@@ -198,11 +193,19 @@ const MyLocations = () => {
                               </p>
                             </div>
                           </Link>
-                          <HeartIcon
+                          <span
                             onClick={() => handleHeartClick(city.city_id)}
                             className={styles.myLocationsHeartButton}
-                            isSaved={isCitySaved}
-                          />
+                            role="button"
+                            tabIndex="0"
+                            onKeyDown={(event) =>
+                              event.key === "Enter" &&
+                              handleHeartClick(city.city_id)
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
+                            x
+                          </span>
                         </div>
                       );
                     })}
