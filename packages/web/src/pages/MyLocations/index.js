@@ -117,108 +117,105 @@ const MyLocations = () => {
 
   return (
     <div className={styles.myLocationsContainer}>
-      <div className={styles.resultsContainer}>
-        <button
-          onClick={toggleFilterVisibility}
-          className={styles.filterButton}
-        >
-          Select Filters
-        </button>
-        {isFilterVisible && (
-          <div className={styles.filterOptions}>
-            <button
-              onClick={toggleSelectAllStates}
-              className={`btn ${styles.selectAllButton}`}
-            >
-              {tempSelectedStates.size === Object.keys(citiesByState).length
-                ? "Deselect All"
-                : "Select All"}
-            </button>
-            {Object.keys(citiesByState).map((state) => (
-              <div key={state} className={styles.checkboxContainer}>
-                <input
-                  type="checkbox"
-                  id={`checkbox-${state}`}
-                  name={state}
-                  checked={tempSelectedStates.has(state)}
-                  onChange={handleCheckboxChange}
-                />
-                <label className={styles.label} htmlFor={`checkbox-${state}`}>
-                  {state}
-                </label>
-                <button
-                  onClick={() => selectOnlyThisState(state)}
-                  className={`${styles.selectOnlyButton} float-right`}
-                >
-                  Only
-                </button>
-              </div>
-            ))}
-            <button onClick={applyFilter} className={styles.applyButton}>
-              Save and Apply
-            </button>
-          </div>
-        )}
-        <div className={styles.resultsList}>
+      <button onClick={toggleFilterVisibility} className={styles.filterButton}>
+        Select Filters
+      </button>
+      {isFilterVisible && (
+        <div className={styles.filterOptions}>
           <button
-            onClick={toggleAllStates}
-            className={`btn float-right ${styles.toggleAllButton}`}
+            onClick={toggleSelectAllStates}
+            className={`btn ${styles.selectAllButton}`}
           >
-            {allStatesOpen ? "Close All" : "Expand All"}
+            {tempSelectedStates.size === Object.keys(citiesByState).length
+              ? "Deselect All"
+              : "Select All"}
           </button>
-          {Object.keys(citiesByState)
-            .filter((state) => selectedStates.has(state))
-            .map((state) => (
-              <div key={state} className={styles.stateSection}>
-                <button
-                  onClick={() => toggleState(state)}
-                  className={styles.stateDropdownButton}
-                >
-                  {state}
-                </button>
-                {openStates[state] && (
-                  <div className={styles.myLocationsList}>
-                    {citiesByState[state].map((city, index) => {
-                      const isCitySaved = userCityIds.some(
-                        (id) => id === city.city_id
-                      );
-                      return (
-                        <div
-                          className={styles.myLocationsBox}
-                          key={`my-locations-${city.city_id}`}
-                        >
-                          <Link
-                            to={`/results/${city.city_id}`}
-                            key={city.city_id}
-                            state={{ city }}
-                          >
-                            <div className={styles.cityDetails}>
-                              <p className={styles.myLocationsHeader}>
-                                {city.city_name}
-                              </p>
-                            </div>
-                          </Link>
-                          <span
-                            onClick={() => handleHeartClick(city.city_id)}
-                            className={styles.myLocationsHeartButton}
-                            role="button"
-                            tabIndex="0"
-                            onKeyDown={(event) =>
-                              event.key === "Enter" &&
-                              handleHeartClick(city.city_id)
-                            }
-                            style={{ cursor: "pointer" }}
-                          >
-                            x
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            ))}
+          {Object.keys(citiesByState).map((state) => (
+            <div key={state} className={styles.checkboxContainer}>
+              <input
+                type="checkbox"
+                id={`checkbox-${state}`}
+                name={state}
+                checked={tempSelectedStates.has(state)}
+                onChange={handleCheckboxChange}
+              />
+              <label className={styles.label} htmlFor={`checkbox-${state}`}>
+                {state}
+              </label>
+              <button
+                onClick={() => selectOnlyThisState(state)}
+                className={`${styles.selectOnlyButton} float-right`}
+              >
+                Only
+              </button>
+            </div>
+          ))}
+          <button onClick={applyFilter} className={styles.applyButton}>
+            Save and Apply
+          </button>
         </div>
+      )}
+      <div className={styles.resultsList}>
+        <button
+          onClick={toggleAllStates}
+          className={`btn float-right ${styles.toggleAllButton}`}
+        >
+          {allStatesOpen ? "Close All" : "Expand All"}
+        </button>
+        {Object.keys(citiesByState)
+          .filter((state) => selectedStates.has(state))
+          .map((state) => (
+            <div key={state} className={styles.stateSection}>
+              <button
+                onClick={() => toggleState(state)}
+                className={styles.stateDropdownButton}
+              >
+                {state}
+              </button>
+              {openStates[state] && (
+                <div className={styles.myLocationsList}>
+                  {citiesByState[state].map((city, index) => {
+                    const isCitySaved = userCityIds.some(
+                      (id) => id === city.city_id
+                    );
+                    return (
+                      <div
+                        className={styles.myLocationsBox}
+                        key={`my-locations-${city.city_id}`}
+                      >
+                        <Link
+                          to={`/results/${city.city_id}`}
+                          key={city.city_id}
+                          state={{ city }}
+                        >
+                          <div className={styles.cityDetails}>
+                            <p className={styles.myLocationsHeader}>
+                              {city.city_name}
+                            </p>
+                          </div>
+                        </Link>
+                        <span
+                          onClick={() => handleHeartClick(city.city_id)}
+                          className={styles.myLocationsHeartButton}
+                          role="button"
+                          tabIndex="0"
+                          onKeyDown={(event) =>
+                            event.key === "Enter" &&
+                            handleHeartClick(city.city_id)
+                          }
+                          style={{ cursor: "pointer" }}
+                        >
+                          x
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
+      </div>
+      <div className={styles.myLocationsMapContainer}>
         <LargeResultsMap cities={filteredCities}></LargeResultsMap>
       </div>
       {showLoginModal && (

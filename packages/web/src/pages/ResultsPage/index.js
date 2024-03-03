@@ -113,7 +113,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           <p>No cities to display</p>
         )}
       </div>
-      <div className={styles.largeMapContainer}>
+      <div className={styles.mapContainer}>
         <LargeResultsMap cities={topTen}></LargeResultsMap>
       </div>
     </div>
