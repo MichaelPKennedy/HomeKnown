@@ -6,7 +6,7 @@ import ReusableChart from "../components/ReusableChart";
 const Weather = () => {
   const location = useLocation();
   const { cityData, isLoading, error } = useCityData();
-  const startYear = 2010;
+  const startYear = 2020;
   const endYear = 2023;
 
   const { city } = location?.state || {};

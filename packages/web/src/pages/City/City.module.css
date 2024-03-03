@@ -201,3 +201,55 @@
     font-size: 28px;
   }
 }
+
+/* overview fact section */
+.factsContainer {
+  width: 100%;
+  margin-bottom: 20px;
+  margin: auto;
+}
+
+.factCard {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  height: 120px;
+  padding: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 1000px) {
+  .factCard {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    height: 100px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.icon {
+  font-size: 24px;
+  margin-right: 16px;
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+}
+
+.factName {
+  font-size: 14px;
+  color: #666;
+}
+
+.factValue {
+  font-size: 14px;
+  color: #333;
+}

@@ -4,6 +4,26 @@ import { useCityData } from "../../../utils/CityDataContext";
 import WeatherForecast from "../components/WeatherForecast";
 import CityPhotos from "../components/CityPhotos";
 import styles from "../City.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Assuming you are using FontAwesome for icons
+import {
+  faBuilding,
+  faUsers,
+  faMountain,
+} from "@fortawesome/free-solid-svg-icons";
+
+const CityFactCard = ({ factName, factValue, icon }) => {
+  return (
+    <div className="col col-lg-3 col-md-6 col-sm-6 pl-2 pr-2">
+      <div className={styles.factCard}>
+        <div className={styles.icon}>{icon}</div>
+        <div className={styles.fact}>
+          <div className={styles.factName}>{factName}</div>
+          <div className={styles.factValue}>{factValue}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Overview = () => {
   const location = useLocation();
@@ -13,6 +33,26 @@ const Overview = () => {
   const currentCity = city ? city : cityData;
   const { photos } = cityData || {};
   const { description } = currentCity || {};
+
+  useEffect(() => {
+    console.log("currentCity", currentCity);
+    console.log("cityData", cityData);
+  }, [currentCity]);
+
+  const cityFacts = [
+    {
+      name: "Population",
+      value: currentCity.Population.pop_2022,
+      icon: faUsers,
+    },
+    { name: "County", value: currentCity.county_name, icon: faBuilding },
+    { name: "Metro Area", value: currentCity.metroArea, icon: faBuilding },
+    {
+      name: "Elevation",
+      value: `${currentCity.elevation} ft`,
+      icon: faMountain,
+    },
+  ];
 
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
@@ -38,9 +78,22 @@ const Overview = () => {
             </div>
           )}
         </div>
+
         {/* <div className="col-md-4">
           <WeatherForecast {...currentCity} />
         </div> */}
+      </div>
+      <div
+        className={`${styles.factsContainer} row gx-lg-1 gx-md-1 gx-0 mb-5 mt-3`}
+      >
+        {cityFacts.map((fact, index) => (
+          <CityFactCard
+            key={index}
+            factName={fact.name}
+            factValue={fact.value}
+            icon={<FontAwesomeIcon icon={fact.icon} />}
+          />
+        ))}
       </div>
     </div>
   );

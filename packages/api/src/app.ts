@@ -43,6 +43,7 @@ import { CrimeStatsCityModel } from './models/crime-stats-city.model'
 import { PublicServiceCacheModel } from './models/public-service-cache.model'
 import { CityAverageTempModel } from './models/city-average-temp.model'
 import { CityMonthlyWeatherCountyModel } from './models/city-monthly-weather-county.model'
+import { CityMonthlyWeatherModel } from './models/city-monthly-weather.model'
 import { CountyMonthlyWeatherModel } from './models/county-monthly-weather.model'
 import { CitySceneryCacheModel } from './models/city-scenery-cache.model'
 import { AirQualityModel } from './models/air-quality.model'
@@ -104,6 +105,7 @@ LandMarkModel(sequelize)
 CrimeStatsCityModel(sequelize)
 PublicServiceCacheModel(sequelize)
 CityMonthlyWeatherCountyModel(sequelize)
+CityMonthlyWeatherModel(sequelize)
 CountyMonthlyWeatherModel(sequelize)
 CitySceneryCacheModel(sequelize)
 AirQualityModel(sequelize)
@@ -129,6 +131,7 @@ const CrimeStatsCity = sequelize.models.CrimeStatsCity
 const CrimeStats = sequelize.models.CrimeStats
 const CityDemographics = sequelize.models.CityDemographics
 const CityMonthlyWeatherCounty = sequelize.models.CityMonthlyWeatherCounty
+const CityMonthlyWeather = sequelize.models.CityMonthlyWeather
 const CitySnowCache = sequelize.models.CitySnowCache
 const CountyMonthlyWeather = sequelize.models.CountyMonthlyWeather
 const CityIndustrySalary = sequelize.models.CityIndustrySalary
@@ -164,6 +167,7 @@ City.hasOne(CityAverageTemp, { foreignKey: 'city_id' })
 City.hasOne(CrimeStatsCity, { foreignKey: 'city_id' })
 City.hasOne(CityDemographics, { foreignKey: 'city_id' })
 City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
+City.hasMany(CityMonthlyWeather, { foreignKey: 'city_id' })
 City.hasMany(HomePrice, { foreignKey: 'city_id' })
 City.hasMany(MonthlyRentCities, { foreignKey: 'city_id' })
 City.hasMany(CitySnowCache, { foreignKey: 'city_id' })
@@ -179,6 +183,7 @@ CityAverageTemp.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
 CityPlacesCache.belongsTo(City, { foreignKey: 'city_id' })
 CityMonthlyWeatherCounty.belongsTo(City, { foreignKey: 'city_id' })
+CityMonthlyWeather.belongsTo(City, { foreignKey: 'city_id' })
 County.hasMany(CountyMonthlyWeather, { foreignKey: 'county_fips' })
 CountyMonthlyWeather.belongsTo(County, { foreignKey: 'county_fips' })
 Occupation.hasMany(CityIndustrySalary, { foreignKey: 'occ_code' })

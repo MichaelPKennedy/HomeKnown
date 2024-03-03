@@ -70,7 +70,7 @@ const datalabelsPlugin = {
 ChartJS.register(datalabelsPlugin);
 
 const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
-  const [selectedYear, setSelectedYear] = useState(2022);
+  const [selectedYear, setSelectedYear] = useState(2023);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [chartType, setChartType] = useState("temperature");
 
@@ -95,10 +95,10 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
     return sortedData.map((item) => ({
       label: getMonthName(item.month, isMobile),
       avgTemp: Math.round(item.avg_temp),
-      maxTemp: Math.round(item.max_temp),
-      minTemp: Math.round(item.min_temp),
+      maxTemp: Math.round(item.avg_max_temp),
+      minTemp: Math.round(item.avg_min_temp),
       snow: item.snow || 0,
-      rain: item.rain || 0,
+      rain: item.precip / 10 || 0,
     }));
   };
 

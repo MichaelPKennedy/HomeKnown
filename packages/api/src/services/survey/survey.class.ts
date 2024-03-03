@@ -468,7 +468,7 @@ export class SurveyService implements ServiceMethods<any> {
           model: this.sequelize.models.CityDemographics
         },
         {
-          model: this.sequelize.models.CityMonthlyWeatherCounty
+          model: this.sequelize.models.CityMonthlyWeather
         },
         {
           model: this.sequelize.models.HomePrice,
@@ -527,6 +527,8 @@ export class SurveyService implements ServiceMethods<any> {
           pop_2021: city.pop_2021,
           pop_2022: city.pop_2022
         },
+        elevation: city.elevation,
+        metroArea: city.Area?.area_title,
         description: city.city_description,
         AirQuality: city.Area?.AirQuality,
         CityDemographics: city.CityDemographic,
@@ -536,7 +538,7 @@ export class SurveyService implements ServiceMethods<any> {
         MonthlyRent: city.MonthlyRentCities,
         Jobs: cityJobs,
         selectedJobs,
-        Weather: city.CityMonthlyWeatherCounties
+        Weather: city.CityMonthlyWeathers
       }
     })
 
