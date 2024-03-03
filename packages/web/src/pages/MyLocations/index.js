@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
 import { AuthContext } from "../../AuthContext";
 import LoginModal from "../../components/LoginModal";
+import LargeResultsMap from "../ResultsPage/components/LargeResultsMap";
 
 const MyLocations = () => {
   const { userCityData, userCityIds, addCity, removeCity } = useCityData();
@@ -110,6 +111,10 @@ const MyLocations = () => {
     setTempSelectedStates(new Set([selectedState]));
   };
 
+  const filteredCities = userCityData.filter((city) =>
+    selectedStates.has(city.state_name)
+  );
+
   return (
     <div className={styles.myLocationsContainer}>
       <div className={styles.resultsContainer}>
@@ -214,6 +219,7 @@ const MyLocations = () => {
               </div>
             ))}
         </div>
+        <LargeResultsMap cities={filteredCities}></LargeResultsMap>
       </div>
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
