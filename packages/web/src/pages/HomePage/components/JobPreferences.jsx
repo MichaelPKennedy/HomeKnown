@@ -37,7 +37,9 @@ const JobPreferences = ({
           onSuggestionsClearRequested={onSuggestionsClearRequested}
           onSuggestionSelected={suggestionSelected}
           getSuggestionValue={(suggestion) => suggestion.occ_title}
-          renderSuggestion={(suggestion) => <div>{suggestion.occ_title}</div>}
+          renderSuggestion={(suggestion) => (
+            <div className={styles.suggestion}>{suggestion.occ_title}</div>
+          )}
           inputProps={{
             className: `form-control ${styles.formInput}`,
             id: "job",

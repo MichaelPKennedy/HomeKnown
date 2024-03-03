@@ -137,8 +137,15 @@ export class SurveyService implements ServiceMethods<any> {
   }
 
   parseWeatherData(data: SurveyData): any {
-    const { temperatureData, snowPreference, rainPreference, minPopulation, maxPopulation, includedStates } =
-      data.data
+    const {
+      temperatureData,
+      snowPreference,
+      rainPreference,
+      minPopulation,
+      maxPopulation,
+      includedStates,
+      humidityPreference
+    } = data.data
 
     return {
       temperatureData,
@@ -146,7 +153,8 @@ export class SurveyService implements ServiceMethods<any> {
       rainPreference,
       minPopulation,
       maxPopulation,
-      includedStates
+      includedStates,
+      humidityPreference
     }
   }
 

@@ -41,6 +41,7 @@ import { MTFCCModel } from './models/MTFCC.model'
 import { LandMarkModel } from './models/landmark.model'
 import { CrimeStatsCityModel } from './models/crime-stats-city.model'
 import { PublicServiceCacheModel } from './models/public-service-cache.model'
+import { CityAverageTempModel } from './models/city-average-temp.model'
 import { CityMonthlyWeatherCountyModel } from './models/city-monthly-weather-county.model'
 import { CountyMonthlyWeatherModel } from './models/county-monthly-weather.model'
 import { CitySceneryCacheModel } from './models/city-scenery-cache.model'
@@ -54,7 +55,7 @@ import { GuestSurveysModel } from './models/guest-surveys.model'
 import { UserCitiesModel } from './models/user-cities.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
-import { CountyAverageTempModel } from './models/city-average-temp'
+import { CountyAverageTempModel } from './models/county-average-temp.model'
 
 const app: Application = express(feathers())
 
@@ -115,6 +116,7 @@ UserSurveysModel(sequelize)
 GuestSurveysModel(sequelize)
 CitySnowCacheModel(sequelize)
 CityPlacesCacheModel(sequelize)
+CityAverageTempModel(sequelize)
 CountyAverageTempModel(sequelize)
 
 const City = sequelize.models.City
@@ -142,6 +144,7 @@ const UserCities = sequelize.models.UserCities
 const UserSurveys = sequelize.models.UserSurveys
 const Users = sequelize.models.Users
 const CityPlacesCache = sequelize.models.CityPlacesCache
+const CityAverageTemp = sequelize.models.CityAverageTemp
 const CountyAverageTemp = sequelize.models.CountyAverageTemp
 
 //database relationships
@@ -157,6 +160,7 @@ City.belongsTo(State, { foreignKey: 'state_code' })
 City.belongsTo(County, { foreignKey: 'county_fips' })
 City.hasOne(PublicServiceCache, { foreignKey: 'city_id' })
 City.hasOne(CitySceneryCache, { foreignKey: 'city_id' })
+City.hasOne(CityAverageTemp, { foreignKey: 'city_id' })
 City.hasOne(CrimeStatsCity, { foreignKey: 'city_id' })
 City.hasOne(CityDemographics, { foreignKey: 'city_id' })
 City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
@@ -171,6 +175,7 @@ UserCities.belongsTo(City, { foreignKey: 'city_id' })
 Users.hasMany(UserCities, { foreignKey: 'user_id' })
 Users.hasMany(UserSurveys, { foreignKey: 'user_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
+CityAverageTemp.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
 CityPlacesCache.belongsTo(City, { foreignKey: 'city_id' })
 CityMonthlyWeatherCounty.belongsTo(City, { foreignKey: 'city_id' })

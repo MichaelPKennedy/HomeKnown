@@ -105,8 +105,9 @@ const WeatherPreferences = ({
         <h4>Humidity Preference</h4>
         <div className={styles.sliderContainer}>
           <Slider
-            min={0}
-            max={100}
+            min={25}
+            max={75}
+            className={styles.sliderMark}
             defaultValue={formData.humidityPreference}
             onChange={(value) => {
               setFormData((prevState) => ({
@@ -115,11 +116,9 @@ const WeatherPreferences = ({
               }));
             }}
             marks={{
-              0: "Min",
               25: "Comfortably Dry",
               50: "Moderate",
               75: "High Moisture",
-              100: "Max",
             }}
             step={null}
           />

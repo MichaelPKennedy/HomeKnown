@@ -11,6 +11,7 @@ const Op = Sequelize.Op
 export interface WeatherParams extends Params {
   snowPreference?: 'none' | 'light' | 'heavy'
   rainPreference?: 'dry' | 'regular'
+  humidityPreference: number
   temperatureData: [
     { month: string; temp?: number },
     { month: string; temp?: number },
@@ -71,8 +72,15 @@ export class WeatherService implements ServiceMethods<any> {
       throw new Error('Invalid query data provided.')
     }
 
-    const { snowPreference, rainPreference, temperatureData, minPopulation, maxPopulation, includedStates } =
-      queryData
+    const {
+      snowPreference,
+      rainPreference,
+      temperatureData,
+      minPopulation,
+      maxPopulation,
+      includedStates,
+      humidityPreference
+    } = queryData
 
     let cityWhereCondition: CityWhereCondition = {}
 
@@ -90,6 +98,14 @@ export class WeatherService implements ServiceMethods<any> {
     if (includedStates?.length > 0) {
       cityWhereCondition.state_code = {
         [Op.in]: includedStates
+      }
+    }
+
+    const humidityRange = this.getHumidityRange(humidityPreference)
+
+    const humidityWhereCondition = {
+      avg_humidity: {
+        [Op.between]: humidityRange
       }
     }
 
@@ -128,7 +144,15 @@ export class WeatherService implements ServiceMethods<any> {
                 model: this.sequelize.models.City,
                 attributes: ['city_id', 'county_fips'],
                 required: true,
-                where: cityWhereCondition
+                where: cityWhereCondition,
+                include: [
+                  {
+                    model: this.sequelize.models.CityAverageTemp,
+                    attributes: ['avg_humidity'],
+                    required: true,
+                    where: humidityWhereCondition
+                  }
+                ]
               }
             ]
           }
@@ -200,6 +224,24 @@ export class WeatherService implements ServiceMethods<any> {
       console.error('Error querying weather data:', error)
       throw new Error('Error querying weather data')
     }
+  }
+
+  getHumidityRange(humidityPreference: number) {
+    let range
+    switch (humidityPreference) {
+      case 25:
+        range = [1, 49.99]
+        break
+      case 50:
+        range = [50, 67.99]
+        break
+      case 75:
+        range = [68, 100]
+        break
+      default:
+        throw new Error('Invalid humidity preference')
+    }
+    return range
   }
 
   calculateTemperatureScore(tempDiff: number): number {

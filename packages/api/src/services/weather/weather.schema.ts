@@ -56,7 +56,8 @@ export const weatherAdditionalQueryProperties = Type.Object(
     ),
     minPopulation: Type.Optional(Type.Number()),
     maxPopulation: Type.Optional(Type.Number()),
-    includedStates: Type.Optional(Type.Array(Type.Number()))
+    includedStates: Type.Optional(Type.Array(Type.Number())),
+    humidityPreference: Type.Optional(Type.Number())
   },
   { additionalProperties: false }
 )

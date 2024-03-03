@@ -171,6 +171,7 @@ export const SurveyFormDataSchema = Type.Object({
   homeMax: Type.Optional(Type.Number()),
   rentMin: Type.Optional(Type.Number()),
   rentMax: Type.Optional(Type.Number()),
+  humidityPreference: Type.Optional(Type.Number()),
   temperatureData: TemperatureDataSchema,
   weights: WeightsSchema
 })

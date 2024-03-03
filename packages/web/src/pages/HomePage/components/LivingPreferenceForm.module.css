@@ -261,7 +261,7 @@
 }
 
 .formCheckInput {
-  transform: scale(1.5);
+  transform: scale(1.2);
   margin-right: 5px;
   margin-bottom: 5px;
 }
@@ -429,7 +429,6 @@ details .formCheck {
 .formCheckInput {
   flex-shrink: 0; /* Prevents the checkbox from shrinking */
   padding: 10px;
-  background-color: orange;
 }
 
 .selectedJobs {
@@ -448,15 +447,23 @@ details .formCheck {
   flex-wrap: no-wrap;
 }
 
+.suggestion {
+  cursor: pointer;
+}
+
 .slider {
   width: 100%;
   font-size: 18px;
 }
 
 .sliderContainer {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 60px;
+  margin-right: 60px;
   margin-top: 25px;
+}
+
+.rc-slider-mark-text {
+  font-size: 22px !important; /* Adjust the size as needed and use !important cautiously */
 }
 
 .styles_formCheckInput {
