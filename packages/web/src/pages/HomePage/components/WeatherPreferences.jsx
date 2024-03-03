@@ -107,7 +107,6 @@ const WeatherPreferences = ({
           <Slider
             min={25}
             max={75}
-            className={styles.sliderMark}
             defaultValue={formData.humidityPreference}
             onChange={(value) => {
               setFormData((prevState) => ({

@@ -1,15 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
 import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
-import ResultsMap from "../ResultsPage/components/ResultsMap";
+import { AuthContext } from "../../AuthContext";
+import HeartIcon from "../../components/HeartIcon";
+import LoginModal from "../../components/LoginModal";
 
 const MyLocations = () => {
-  const { userCityData } = useCityData();
+  const { userCityData, userCityIds, addCity, removeCity } = useCityData();
   const [selectedStates, setSelectedStates] = useState(new Set());
   const [allStatesOpen, setAllStatesOpen] = useState(true);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
   const [tempSelectedStates, setTempSelectedStates] = useState(new Set());
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
+  const { cityId } = useParams();
+  const isCitySaved = userCityData.some(
+    (savedCity) => savedCity.city_id === Number(cityId)
+  );
 
   const groupCitiesByState = (cities) => {
     const groupedCities = {};
@@ -41,6 +50,19 @@ const MyLocations = () => {
       setTempSelectedStates(allStates);
     }
   }, [userCityData]);
+
+  const handleHeartClick = async (cityId) => {
+    if (!isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+    const isCitySaved = userCityIds.some((id) => id === cityId);
+    if (isCitySaved) {
+      await removeCity(cityId);
+    } else {
+      await addCity(cityId);
+    }
+  };
 
   const toggleState = (state) => {
     setOpenStates((prev) => ({ ...prev, [state]: !prev[state] }));
@@ -96,7 +118,6 @@ const MyLocations = () => {
   return (
     <div className={styles.myLocationsContainer}>
       <div className={styles.resultsContainer}>
-        <h1 className={styles.resultsHeader}>My Locations</h1>
         <button
           onClick={toggleFilterVisibility}
           className={styles.filterButton}
@@ -157,37 +178,43 @@ const MyLocations = () => {
                 </button>
                 {openStates[state] && (
                   <div className={styles.myLocationsList}>
-                    {citiesByState[state].map((city, index) => (
-                      <div
-                        className={styles.cityContainer}
-                        key={`my-locations-${city.city_id}`}
-                      >
-                        <Link
-                          to={`/results/${city.city_id}`}
-                          key={city.city_id}
-                          state={{ city }}
+                    {citiesByState[state].map((city, index) => {
+                      const isCitySaved = userCityIds.some(
+                        (id) => id === city.city_id
+                      );
+                      return (
+                        <div
+                          className={styles.myLocationsBox}
+                          key={`my-locations-${city.city_id}`}
                         >
-                          <div className={styles.cityDetails}>
-                            <h4 className={styles.header}>
-                              {city.city_name}, {city.state_name}
-                            </h4>
-                            {/* <h6 className={styles.text}>
-                              County: {city.county_name}
-                            </h6>
-                            <h6 className={styles.text}>
-                              Population: {city?.Population?.pop_2022 || "N/A"}
-                            </h6> */}
-                          </div>
-                        </Link>
-                        <ResultsMap {...city}></ResultsMap>
-                      </div>
-                    ))}
+                          <Link
+                            to={`/results/${city.city_id}`}
+                            key={city.city_id}
+                            state={{ city }}
+                          >
+                            <div className={styles.cityDetails}>
+                              <p className={styles.myLocationsHeader}>
+                                {city.city_name}
+                              </p>
+                            </div>
+                          </Link>
+                          <HeartIcon
+                            onClick={() => handleHeartClick(city.city_id)}
+                            className={styles.myLocationsHeartButton}
+                            isSaved={isCitySaved}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 )}
               </div>
             ))}
         </div>
       </div>
+      {showLoginModal && (
+        <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
     </div>
   );
 };

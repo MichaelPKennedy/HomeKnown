@@ -343,6 +343,24 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.myLocationsBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  text-decoration: none;
+  border: 1px solid #e1e4e8;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
 .cityImage {
   height: 200px;
   width: 330px;
@@ -392,6 +410,20 @@ a:active {
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
   }
 
+  .myLocationsBox {
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: relative;
+    text-decoration: none;
+    border: 1px solid #e1e4e8;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  }
+
   .cityImage {
     height: 250px;
     width: 400px;
@@ -417,6 +449,13 @@ a:active {
   margin-bottom: 20px;
   font-size: 24px;
   height: 2em;
+}
+
+.myLocationsHeader {
+  color: black;
+  font-size: 22px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .cityContainer h2 {
@@ -544,6 +583,19 @@ a:active {
   cursor: pointer;
   position: absolute;
   top: 10px;
+  right: 10px;
+  outline: none;
+  margin: 5px;
+}
+
+.myLocationsHeartButton,
+.myLocationsHeartButton:focus,
+.myLocationsHeartButton:hover {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 22px;
   right: 10px;
   outline: none;
   margin: 5px;

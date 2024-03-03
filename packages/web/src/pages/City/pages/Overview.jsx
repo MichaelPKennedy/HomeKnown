@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useCityData } from "../../../utils/CityDataContext";
 import WeatherForecast from "../components/WeatherForecast";
@@ -11,7 +11,7 @@ const Overview = () => {
   const { cityData, isLoading, error } = useCityData();
 
   const currentCity = city ? city : cityData;
-  const { photos } = currentCity || {};
+  const { photos } = cityData || {};
   const { description } = currentCity || {};
 
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
