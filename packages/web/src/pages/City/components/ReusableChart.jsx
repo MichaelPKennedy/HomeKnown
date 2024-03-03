@@ -36,29 +36,28 @@ const datalabelsPlugin = {
       if (!meta.hidden) {
         meta.data.forEach((element, index) => {
           const rawValue = dataset.data[index];
-          const parsedValue = parseFloat(rawValue);
-          if (parsedValue === 0) {
-            return;
-          }
-          let displayValue = parsedValue.toFixed(2);
-          // If the number is an integer after parsing (e.g., 9.00), display it as an integer
-          if (parsedValue === Math.floor(parsedValue)) {
-            displayValue = parsedValue.toString();
-          }
+          if (rawValue !== null && !isNaN(rawValue)) {
+            const parsedValue = parseFloat(rawValue);
+            let displayValue = parsedValue.toFixed(2);
 
-          // Check for mobile device
-          const isMobile = window.innerWidth <= 768;
+            // If the number is an integer after parsing (e.g., 9.00), display it as an integer
+            if (parsedValue === Math.floor(parsedValue)) {
+              displayValue = parsedValue.toString();
+            }
+            // Check for mobile device
+            const isMobile = window.innerWidth <= 768;
 
-          // Display logic depending on device type
-          if (!isMobile || (isMobile && displayValue.length < 5)) {
-            ctx.fillStyle = "black";
-            const fontSize = 14;
-            ctx.font = `${fontSize}px Arial`;
-            const dataString = displayValue;
-            const x = element.x;
-            const y = element.y - fontSize;
-            const textWidth = ctx.measureText(dataString).width;
-            ctx.fillText(dataString, x - textWidth / 2, y);
+            // Display logic depending on device type
+            if (!isMobile || (isMobile && displayValue.length < 5)) {
+              ctx.fillStyle = "black";
+              const fontSize = 14;
+              ctx.font = `${fontSize}px Arial`;
+              const dataString = displayValue;
+              const x = element.x;
+              const y = element.y - fontSize;
+              const textWidth = ctx.measureText(dataString).width;
+              ctx.fillText(dataString, x - textWidth / 2, y);
+            }
           }
         });
       }
@@ -87,19 +86,27 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
   }, []);
 
   const transformWeatherData = (weatherData, selectedYear) => {
-    const filteredData = weatherData.filter(
-      (item) => Number(item.year) === Number(selectedYear)
-    );
-    const sortedData = filteredData.sort((a, b) => a.month - b.month);
+    let monthlyData = new Array(12).fill(null);
 
-    return sortedData.map((item) => ({
-      label: getMonthName(item.month, isMobile),
-      avgTemp: Math.round(item.avg_temp),
-      maxTemp: Math.round(item.avg_max_temp),
-      minTemp: Math.round(item.avg_min_temp),
-      snow: item.snow || 0,
-      rain: item.precip / 10 || 0,
-    }));
+    console.log("weatherData", weatherData);
+
+    weatherData
+      .filter((item) => Number(item.year) === Number(selectedYear))
+      .forEach((item) => {
+        console.log("item", item);
+        monthlyData[item.month - 1] = {
+          label: getMonthName(item.month, isMobile),
+          avgTemp: !item.avg_temp ? null : Math.round(item.avg_temp),
+          maxTemp: !item.avg_max_temp ? null : Math.round(item.avg_max_temp),
+          minTemp: !item.avg_min_temp ? null : Math.round(item.avg_min_temp),
+          snow: item.snow || 0,
+          rain: item.precip / 10 || 0,
+        };
+      });
+
+    console.log("monthlyData", monthlyData);
+
+    return monthlyData;
   };
 
   const getMonthName = (monthNumber, short = false) => {
@@ -222,6 +229,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
             borderColor: "rgb(75, 192, 192)",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             fill: true,
+            spanGaps: true,
             tension: 0.1,
             yAxisID: "y",
           },
@@ -229,6 +237,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
             type: "line",
             label: "Max Temperature (°F)",
             data: chartFilteredData.map((item) => item.maxTemp),
+            spanGaps: true,
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             fill: true,
@@ -239,13 +248,14 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
             type: "line",
             label: "Min Temperature (°F)",
             data: chartFilteredData.map((item) => item.minTemp),
+            spanGaps: true,
             borderColor: "rgb(54, 162, 235)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             fill: true,
             tension: 0.1,
             yAxisID: "y",
           },
-        ]
+        ].filter((dataset) => dataset.data.some((value) => value !== null))
       : [
           {
             type: "bar",
