@@ -65,7 +65,7 @@ function City() {
   };
 
   const handleBackToResults = () => {
-    navigate("/");
+    navigate("/explore");
   };
 
   return (

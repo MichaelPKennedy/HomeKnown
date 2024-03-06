@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { Card, Button } from "react-bootstrap";
 import styles from "./JobData.module.css";
-import { statesMapping } from "../../HomePage/constants";
+import { statesMapping } from "../../ExplorePage/constants";
 
 const JobData = ({ jobs }) => {
   const [wageType, setWageType] = useState("hourly");
