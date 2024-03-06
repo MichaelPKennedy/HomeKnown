@@ -33,7 +33,7 @@ const SearchBar = ({ onSearch }) => {
   const handleCloseResults = () => {
     setTimeout(() => {
       setShowResults(false);
-    }, 100);
+    }, 200);
   };
 
   return (

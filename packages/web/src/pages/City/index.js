@@ -74,7 +74,7 @@ function City() {
   const handleBack = () => {
     switch (backPage) {
       case "results":
-        navigate("/results");
+        navigate("/explore");
         break;
       case "search":
         navigate("/");
