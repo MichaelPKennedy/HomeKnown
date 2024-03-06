@@ -186,7 +186,7 @@ const MyLocations = () => {
                         <Link
                           to={`/results/${city.city_id}`}
                           key={city.city_id}
-                          state={{ city }}
+                          state={{ city, fromPage: "my-locations" }}
                         >
                           <div className={styles.cityDetails}>
                             <p className={styles.myLocationsHeader}>

@@ -64,8 +64,41 @@ function City() {
     }
   };
 
-  const handleBackToResults = () => {
-    navigate("/explore");
+  const fromPage = location.state?.fromPage;
+  console.log("fromPage", fromPage);
+
+  const handleBack = () => {
+    switch (fromPage) {
+      case "results":
+        navigate("/results");
+        break;
+      case "search":
+        navigate("/");
+        break;
+      case "home":
+        navigate("/");
+        break;
+      case "my-locations":
+        navigate("/my-locations");
+        break;
+      default:
+        navigate("/");
+    }
+  };
+
+  const backButtonLabel = () => {
+    switch (fromPage) {
+      case "results":
+        return "Back to Results";
+      case "search":
+        return "Back to Search";
+      case "my-locations":
+        return "Back to Locations";
+      case "home":
+        return "Back to Home";
+      default:
+        return "Back";
+    }
   };
 
   return (
@@ -77,10 +110,10 @@ function City() {
         <main className={`col-md-9 col-12 ms-sm-auto px-md-4`}>
           <div className={styles.headerContainer}>
             <button
-              onClick={handleBackToResults}
+              onClick={handleBack}
               className={`btn btn-secondary ${styles.backButton}`}
             >
-              <FontAwesomeIcon icon={faAngleLeft} /> Back to Results
+              <FontAwesomeIcon icon={faAngleLeft} /> {backButtonLabel()}
             </button>
             <div className={styles.cityName}>
               <p className={styles.header}>

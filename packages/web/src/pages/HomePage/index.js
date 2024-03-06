@@ -1,13 +1,43 @@
-import React from "react";
-import styles from "./HomePage.module.css";
+import React, { useState } from "react";
+import { Container, Row, Col } from "react-bootstrap";
 import CookieConsent from "./components/CookieConsent";
+import SearchBar from "./components/SearchBar";
+import CityCard from "./components/CityCard";
+import client from "../../feathersClient.js";
+import styles from "./HomePage.module.css";
 
-const ExplorePage = () => {
+const HomePage = () => {
+  const handleSearch = async (searchTerm) => {
+    try {
+      const results = await client.service("/search").find({
+        query: {
+          search: searchTerm,
+        },
+      });
+
+      return results;
+    } catch (error) {
+      console.error("Search failed:", error);
+    }
+  };
+
   return (
-    <div>
+    <Container style={{ maxWidth: "70%", margin: "0 auto" }}>
+      <Row>
+        <Col xs={12}>
+          <SearchBar onSearch={handleSearch} />
+        </Col>
+      </Row>
+      <Row>
+        {/* {searchResults.map((city) => (
+          <Col md={4} xs={12} key={city.id}>
+            <CityCard city={city} />
+          </Col>
+        ))} */}
+      </Row>
       <CookieConsent />
-    </div>
+    </Container>
   );
 };
 
-export default ExplorePage;
+export default HomePage;

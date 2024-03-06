@@ -76,7 +76,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
         <Link
           to={`/results/${city.city_id}`}
           key={city.city_id}
-          state={{ city }}
+          state={{ city, fromPage: "results" }}
         >
           <div className={styles.cityDetails}>
             {rankingElement}

@@ -6,7 +6,7 @@ export type { Search, SearchData, SearchPatch, SearchQuery }
 
 export interface SearchParams extends Params {
   query?: {
-    search?: string
+    search: string
   }
 }
 
@@ -26,7 +26,7 @@ export class SearchService implements ServiceMethods<any> {
   }
 
   async find(params: SearchParams): Promise<any[] | Paginated<any>> {
-    const queryStr = params.query?.search || ''
+    const queryStr = params.query?.search.replace(/,|\s+/g, '%') || ''
 
     try {
       const searchPattern = `%${queryStr.replace(/\s+/g, '%')}%`

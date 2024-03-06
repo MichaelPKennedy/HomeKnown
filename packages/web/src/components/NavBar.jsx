@@ -45,6 +45,11 @@ const NavBar = () => {
           </li> */}
         </ul>
         <ul className="navbar-nav ml-auto mr-1">
+          <li className="nav-item mr-4">
+            <Link to="/explore">
+              <button className={`nav-link btn btn-link`}>Explore</button>
+            </Link>
+          </li>
           {isLoggedIn && (
             <li className="nav-item mr-4">
               <Link to="/my-locations">
