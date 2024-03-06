@@ -12,6 +12,7 @@ import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 function City() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [backPage, setBackPage] = useState("");
 
   const { city } = location?.state || {};
   const {
@@ -36,6 +37,12 @@ function City() {
       setCityId(cityId);
     }
   }, [cityId]);
+
+  useEffect(() => {
+    if (location.state?.fromPage && location.state.fromPage !== backPage) {
+      setBackPage(location.state.fromPage);
+    }
+  }, [location, backPage]);
 
   const isCitySaved = userCityData.some(
     (savedCity) => savedCity.city_id === Number(cityId)
@@ -64,11 +71,8 @@ function City() {
     }
   };
 
-  const fromPage = location.state?.fromPage;
-  console.log("fromPage", fromPage);
-
   const handleBack = () => {
-    switch (fromPage) {
+    switch (backPage) {
       case "results":
         navigate("/results");
         break;
@@ -87,7 +91,7 @@ function City() {
   };
 
   const backButtonLabel = () => {
-    switch (fromPage) {
+    switch (backPage) {
       case "results":
         return "Back to Results";
       case "search":
