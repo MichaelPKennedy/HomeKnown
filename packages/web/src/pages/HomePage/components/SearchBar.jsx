@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, InputGroup, Button, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import debounce from "lodash/debounce";
+import styles from "../HomePage.module.css";
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,7 +48,11 @@ const SearchBar = ({ onSearch }) => {
             onBlur={handleCloseResults}
             onFocus={() => searchTerm.length > 0 && setShowResults(true)}
           />
-          <Button variant="outline-secondary" type="submit">
+          <Button
+            variant="outline-secondary"
+            type="submit"
+            className={`${styles.button} ml-1`}
+          >
             Search
           </Button>
         </InputGroup>

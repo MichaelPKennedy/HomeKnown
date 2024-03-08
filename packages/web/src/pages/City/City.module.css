@@ -144,6 +144,15 @@
   border: none;
 }
 
+.backButton:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.backButton:focus {
+  outline: none;
+}
+
 @media (max-width: 767px) {
   .backButton {
     margin-left: 0;

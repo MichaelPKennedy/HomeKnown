@@ -31,7 +31,7 @@ const HomePage = () => {
 
   return (
     <Container style={{ maxWidth: "70%", margin: "0 auto" }}>
-      <Row>
+      <Row className="mt-4 mb-5">
         <Col xs={12}>
           <SearchBar onSearch={handleSearch} />
         </Col>

@@ -703,7 +703,8 @@ a:active {
 }
 
 .toggleAllButton:hover {
-  background-color: transparent;
+  background-color: #01697c;
+  color: white;
 }
 
 .toggleAllButton:focus,
@@ -740,6 +741,19 @@ a:active {
 
 .filterButton {
   margin-top: 15px;
+  background-color: transparent;
+  border: 1px solid #01697c;
+  color: #01697c;
+}
+
+.filterButton:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.filterButton:focus,
+.filterButton:active {
+  outline: none;
 }
 
 .filterOptions {
