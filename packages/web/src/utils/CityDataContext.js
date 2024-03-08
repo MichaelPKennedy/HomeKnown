@@ -40,6 +40,7 @@ export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
   const [userPreferences, setUserPreferences] = useState({});
   const [userRecommendations, setUserRecommendations] = useState([]);
+  const [stats, setStats] = useState({});
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
@@ -96,6 +97,19 @@ export const CityDataProvider = ({ children }) => {
       enabled: !!cityId,
     }
   );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const statsResponse = await client.service("stats").find();
+        setStats(statsResponse);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (cityData) {
@@ -197,6 +211,7 @@ export const CityDataProvider = ({ children }) => {
         userRecInterests,
         userRecInterestsLoading,
         userRecInterestsError,
+        stats,
       }}
     >
       {children}

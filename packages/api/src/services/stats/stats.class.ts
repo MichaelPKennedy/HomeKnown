@@ -1,9 +1,11 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Stats, StatsData, StatsPatch, StatsQuery } from './stats.schema'
-const { Op, col } = require('sequelize')
+import NodeCache from 'node-cache'
 
 export type { Stats, StatsData, StatsPatch, StatsQuery }
+
+const myCache = new NodeCache({ stdTTL: 86400 }) // 24 hours
 
 interface CityStats {
   ranking: number
@@ -28,6 +30,12 @@ export class StatsService implements ServiceMethods<any> {
   }
 
   async find(): Promise<StatsResult> {
+    const cacheKey = 'topCitiesAndTopMonthlyCities'
+    const cachedData = myCache.get<StatsResult>(cacheKey)
+
+    if (cachedData) {
+      return cachedData
+    }
     const now = new Date()
     const currentMonth = now.getMonth() + 1
 
@@ -82,10 +90,14 @@ export class StatsService implements ServiceMethods<any> {
       state: city.City.State.state
     }))
 
-    return {
+    const result: StatsResult = {
       topCities: topCities as CityStats[],
       topMonthlyCities: topMonthlyCities as CityStats[]
     }
+
+    myCache.set(cacheKey, result)
+
+    return result
   }
 
   async get(id: Id, params?: Params): Promise<any> {

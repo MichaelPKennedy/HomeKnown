@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
@@ -8,7 +8,7 @@ import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
-  const { userRecommendations } = useCityData();
+  const { userRecommendations, stats } = useCityData();
   const handleSearch = async (searchTerm) => {
     try {
       const results = await client.service("/search").find({
@@ -22,6 +22,11 @@ const HomePage = () => {
       console.error("Search failed:", error);
     }
   };
+
+  useEffect(() => {
+    console.log("userRecommendations", userRecommendations);
+    console.log("stats", stats);
+  }, [userRecommendations, stats]);
 
   return (
     <Container style={{ maxWidth: "70%", margin: "0 auto" }}>
