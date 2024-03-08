@@ -49,7 +49,7 @@ export class StatsService implements ServiceMethods<any> {
             include: [
               {
                 model: this.sequelize.models.State,
-                attributes: ['state']
+                attributes: ['state_abbrev']
               }
             ]
           }
@@ -57,10 +57,10 @@ export class StatsService implements ServiceMethods<any> {
       })
     ).map((city: any) => ({
       ranking: city.ranking,
-      cityId: city.city_id,
+      city_id: city.city_id,
       count: city.count,
-      cityName: city.City.city_name,
-      stateName: city.City.State.state
+      city_name: city.City.city_name,
+      state: city.City.State.state_abbrev
     }))
 
     const topMonthlyCities = (
@@ -76,7 +76,7 @@ export class StatsService implements ServiceMethods<any> {
             include: [
               {
                 model: this.sequelize.models.State,
-                attributes: ['state']
+                attributes: ['state_abbrev']
               }
             ]
           }
@@ -84,10 +84,10 @@ export class StatsService implements ServiceMethods<any> {
       })
     ).map((city: any) => ({
       ranking: city.ranking,
-      cityId: city.city_id,
+      city_id: city.city_id,
       count: city.count,
       city_name: city.City.city_name,
-      state: city.City.State.state
+      state: city.City.State.state_abbrev
     }))
 
     const result: StatsResult = {

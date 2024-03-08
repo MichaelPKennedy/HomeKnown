@@ -42,14 +42,14 @@ const Overview = () => {
   const cityFacts = [
     {
       name: "Population",
-      value: currentCity.Population.pop_2022,
+      value: currentCity?.Population?.pop_2022,
       icon: faUsers,
     },
     { name: "County", value: currentCity.county_name, icon: faBuilding },
     { name: "Metro Area", value: currentCity.metroArea, icon: faBuilding },
     {
       name: "Elevation",
-      value: `${currentCity.elevation} ft`,
+      value: `${currentCity?.elevation} ft`,
       icon: faMountain,
     },
   ];

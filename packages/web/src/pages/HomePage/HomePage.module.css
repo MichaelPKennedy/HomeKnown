@@ -1,0 +1,17 @@
+.statsHeader {
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.statsContainer {
+  border: 1px solid #eaeaea; /* Light grey border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 20px; /* Spacing inside the container */
+  margin-top: 20px; /* Space above the container */
+  margin-bottom: 20px; /* Space below the container */
+  background-color: #f9f9f9; /* Light background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.statsRow {
+}

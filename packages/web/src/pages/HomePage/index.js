@@ -9,6 +9,7 @@ import styles from "./HomePage.module.css";
 
 const HomePage = () => {
   const { userRecommendations, stats } = useCityData();
+  const { topCities, topMonthlyCities } = stats || {};
   const handleSearch = async (searchTerm) => {
     try {
       const results = await client.service("/search").find({
@@ -35,13 +36,25 @@ const HomePage = () => {
           <SearchBar onSearch={handleSearch} />
         </Col>
       </Row>
-      <Row>
-        {/* {searchResults.map((city) => (
-          <Col md={4} xs={12} key={city.id}>
-            <CityCard city={city} />
-          </Col>
-        ))} */}
+      <Row className={styles.statsContainer}>
+        <Col md={4} xs={12}>
+          <div className={styles.statsHeader}>
+            <p>Top User Cities This Month</p>
+          </div>
+          {topMonthlyCities?.slice(0, 10).map((city, index) => (
+            <CityCard city={city} index={index} key={index} />
+          ))}
+        </Col>
+        <Col md={4} xs={12}>
+          <div className={styles.statsHeader}>
+            <p>Top User Cities All Time</p>
+          </div>
+          {topCities?.slice(0, 10).map((city, index) => (
+            <CityCard city={city} index={index} key={index} />
+          ))}
+        </Col>
       </Row>
+
       <CookieConsent />
     </Container>
   );
