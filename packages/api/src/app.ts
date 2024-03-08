@@ -54,9 +54,12 @@ import { UsersModel } from './models/users.model'
 import { UserSurveysModel } from './models/user-surveys.model'
 import { GuestSurveysModel } from './models/guest-surveys.model'
 import { UserCitiesModel } from './models/user-cities.model'
+import { UserRecommendedCitiesModel } from './models/user-recommended-cities.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
 import { CountyAverageTempModel } from './models/county-average-temp.model'
+import { TopCitiesModel } from './models/top-cities.model'
+import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 
 const app: Application = express(feathers())
 
@@ -120,6 +123,9 @@ CitySnowCacheModel(sequelize)
 CityPlacesCacheModel(sequelize)
 CityAverageTempModel(sequelize)
 CountyAverageTempModel(sequelize)
+UserRecommendedCitiesModel(sequelize)
+TopCitiesModel(sequelize)
+TopMonthlyCitiesModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -146,9 +152,12 @@ const Weather = sequelize.models.Weather
 const UserCities = sequelize.models.UserCities
 const UserSurveys = sequelize.models.UserSurveys
 const Users = sequelize.models.Users
+const UserRecommendedCities = sequelize.models.UserRecommendedCities
 const CityPlacesCache = sequelize.models.CityPlacesCache
 const CityAverageTemp = sequelize.models.CityAverageTemp
 const CountyAverageTemp = sequelize.models.CountyAverageTemp
+const TopCities = sequelize.models.TopCities
+const TopMonthlyCities = sequelize.models.TopMonthlyCities
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -178,6 +187,9 @@ UserSurveys.belongsTo(Users, { foreignKey: 'user_id' })
 UserCities.belongsTo(City, { foreignKey: 'city_id' })
 Users.hasMany(UserCities, { foreignKey: 'user_id' })
 Users.hasMany(UserSurveys, { foreignKey: 'user_id' })
+UserRecommendedCities.belongsTo(Users, { foreignKey: 'user_id' })
+UserRecommendedCities.belongsTo(City, { foreignKey: 'city_id' })
+Users.hasMany(UserRecommendedCities, { foreignKey: 'user_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 CityAverageTemp.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
@@ -205,6 +217,10 @@ State.hasMany(StateIndustrySalary, { foreignKey: 'state_code' })
 State.hasMany(Weather, { foreignKey: 'state_code' })
 State.hasMany(City, { foreignKey: 'state_code' })
 StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
+TopCities.belongsTo(City, { foreignKey: 'city_id' })
+TopMonthlyCities.belongsTo(City, { foreignKey: 'city_id' })
+City.hasOne(TopCities, { foreignKey: 'city_id' })
+City.hasOne(TopMonthlyCities, { foreignKey: 'city_id' })
 Weather.belongsTo(State, { foreignKey: 'state_code' })
 
 // Configure services and real-time functionality

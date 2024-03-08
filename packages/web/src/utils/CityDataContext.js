@@ -39,6 +39,7 @@ const fetchWeatherForecast = async ({ queryKey }) => {
 export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
   const [userPreferences, setUserPreferences] = useState({});
+  const [userRecommendations, setUserRecommendations] = useState([]);
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
@@ -123,14 +124,21 @@ export const CityDataProvider = ({ children }) => {
     const fetchUserCityData = async () => {
       if (isLoggedIn && user) {
         try {
-          const [cityIdsResponse, surveyResponse] = await Promise.all([
-            client
-              .service("user-cities")
-              .find({ query: { user_id: user.user_id } }),
-            client.service("survey").find({ query: { user_id: user.user_id } }),
-          ]);
+          const [cityIdsResponse, surveyResponse, recommendations] =
+            await Promise.all([
+              client
+                .service("user-cities")
+                .find({ query: { user_id: user.user_id } }),
+              client
+                .service("survey")
+                .find({ query: { user_id: user.user_id } }),
+              client
+                .service("recommendations")
+                .find({ query: { user_id: user.user_id } }),
+            ]);
           setUserCityIds(cityIdsResponse.data);
           setUserCityData(surveyResponse);
+          setUserRecommendations(recommendations);
         } catch (error) {
           console.error("Error fetching saved cities:", error);
         }
@@ -184,6 +192,7 @@ export const CityDataProvider = ({ children }) => {
         isForecastLoading,
         forecastError,
         userPreferences,
+        userRecommendations,
         setUserPreferences,
         userRecInterests,
         userRecInterestsLoading,

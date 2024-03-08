@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchBar from "./components/SearchBar";
 import CityCard from "./components/CityCard";
@@ -7,6 +8,7 @@ import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
+  const { userRecommendations } = useCityData();
   const handleSearch = async (searchTerm) => {
     try {
       const results = await client.service("/search").find({

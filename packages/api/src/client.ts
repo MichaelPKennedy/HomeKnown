@@ -4,6 +4,17 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { statsClient } from './services/stats/stats.shared'
+export type { Stats, StatsData, StatsQuery, StatsPatch } from './services/stats/stats.shared'
+
+import { recommendationsClient } from './services/recommendations/recommendations.shared'
+export type {
+  Recommendations,
+  RecommendationsData,
+  RecommendationsQuery,
+  RecommendationsPatch
+} from './services/recommendations/recommendations.shared'
+
 import { searchClient } from './services/search/search.shared'
 export type { Search, SearchData, SearchQuery, SearchPatch } from './services/search/search.shared'
 
@@ -119,5 +130,7 @@ export const createClient = <Configuration = any,>(
   client.configure(userCitiesClient)
   client.configure(photosClient)
   client.configure(searchClient)
+  client.configure(recommendationsClient)
+  client.configure(statsClient)
   return client
 }

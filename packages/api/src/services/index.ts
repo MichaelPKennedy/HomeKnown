@@ -1,3 +1,5 @@
+import { stats } from './stats/stats'
+import { recommendations } from './recommendations/recommendations'
 import { search } from './search/search'
 import { photos } from './photos/photos'
 import { userCities } from './user-cities/user-cities'
@@ -17,6 +19,8 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(stats)
+  app.configure(recommendations)
   app.configure(search)
   app.configure(photos)
   app.configure(userCities)
