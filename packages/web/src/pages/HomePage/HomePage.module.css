@@ -5,13 +5,8 @@
 }
 
 .statsContainer {
-  border: 1px solid #eaeaea; /* Light grey border */
-  border-radius: 8px; /* Rounded corners */
-  padding: 20px; /* Spacing inside the container */
-  margin-top: 20px; /* Space above the container */
   margin-bottom: 20px; /* Space below the container */
-  background-color: #f8f9fa; /* Light background color */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  display: flex;
 }
 
 .statsRow {

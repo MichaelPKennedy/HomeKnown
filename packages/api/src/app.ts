@@ -60,6 +60,8 @@ import { CityPlacesCacheModel } from './models/city-places-cache.model'
 import { CountyAverageTempModel } from './models/county-average-temp.model'
 import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
+import { TopCityPhotosModel } from './models/top-city-photos.model'
+import c from 'config'
 
 const app: Application = express(feathers())
 
@@ -126,6 +128,7 @@ CountyAverageTempModel(sequelize)
 UserRecommendedCitiesModel(sequelize)
 TopCitiesModel(sequelize)
 TopMonthlyCitiesModel(sequelize)
+TopCityPhotosModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -158,6 +161,7 @@ const CityAverageTemp = sequelize.models.CityAverageTemp
 const CountyAverageTemp = sequelize.models.CountyAverageTemp
 const TopCities = sequelize.models.TopCities
 const TopMonthlyCities = sequelize.models.TopMonthlyCities
+const TopCityPhotos = sequelize.models.TopCityPhotos
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -219,8 +223,10 @@ State.hasMany(City, { foreignKey: 'state_code' })
 StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
 TopCities.belongsTo(City, { foreignKey: 'city_id' })
 TopMonthlyCities.belongsTo(City, { foreignKey: 'city_id' })
+TopCityPhotos.belongsTo(City, { foreignKey: 'city_id' })
 City.hasOne(TopCities, { foreignKey: 'city_id' })
 City.hasOne(TopMonthlyCities, { foreignKey: 'city_id' })
+City.hasMany(TopCityPhotos, { foreignKey: 'city_id' })
 Weather.belongsTo(State, { foreignKey: 'state_code' })
 
 // Configure services and real-time functionality

@@ -4,6 +4,7 @@ import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchBar from "./components/SearchBar";
 import CityCard from "./components/CityCard";
+import Photos from "./components/Photos";
 import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
@@ -30,30 +31,48 @@ const HomePage = () => {
   }, [userRecommendations, stats]);
 
   return (
-    <Container style={{ maxWidth: "70%", margin: "0 auto" }}>
-      <Row className="mt-4 mb-5">
+    <Container style={{ maxWidth: "90%", margin: "0 auto" }}>
+      <Row className="mt-4 mb-5" style={{ maxWidth: "70%", margin: "0 auto" }}>
         <Col xs={12}>
           <SearchBar onSearch={handleSearch} />
         </Col>
       </Row>
+      <div className={styles.statsHeader}>
+        <p>Top User Cities This Month</p>
+      </div>
       <Row className={styles.statsContainer}>
-        <Col md={4} xs={12}>
-          <div className={styles.statsHeader}>
-            <p>Top User Cities This Month</p>
-          </div>
-          {topMonthlyCities?.slice(0, 10).map((city, index) => (
-            <CityCard city={city} index={index} key={index} />
-          ))}
-        </Col>
-        <Col md={4} xs={12}>
-          <div className={styles.statsHeader}>
-            <p>Top User Cities All Time</p>
-          </div>
-          {topCities?.slice(0, 10).map((city, index) => (
-            <CityCard city={city} index={index} key={index} />
-          ))}
-        </Col>
+        {topMonthlyCities?.slice(0, 10).map((city, index) => (
+          <Col
+            key={`monthly-${city.city_id}-${index}`}
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={3}
+            className="d-flex align-items-stretch"
+          >
+            <CityCard city={city} index={index} />
+          </Col>
+        ))}
       </Row>
+      {/* <div className={styles.statsHeader}>
+        <p>Top User Cities All Time</p>
+      </div>
+      <Row className={styles.statsContainer}>
+        {topCities?.slice(0, 10).map((city, index) => (
+          <Col
+            key={`all-time-${city.city_id}-${index}`}
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={3}
+            className="d-flex align-items-stretch"
+          >
+            <CityCard city={city} index={index} />
+          </Col>
+        ))}
+      </Row> */}
 
       <CookieConsent />
     </Container>
