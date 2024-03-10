@@ -12,6 +12,28 @@
 .statsRow {
 }
 
+.homeContainer {
+  margin: 0 auto;
+}
+
+.searchBar {
+  margin: 0 auto;
+}
+
+.homeContainer {
+  width: 90%;
+}
+
+@media screen and (min-width: 1000px) {
+  .searchBar {
+    width: 70%;
+  }
+
+  .homeContainer {
+    width: 90%;
+  }
+}
+
 .button {
   background-color: transparent;
   border: 1px solid #01697c;

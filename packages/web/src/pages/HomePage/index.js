@@ -4,7 +4,6 @@ import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchBar from "./components/SearchBar";
 import CityCard from "./components/CityCard";
-import Photos from "./components/Photos";
 import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
@@ -31,8 +30,8 @@ const HomePage = () => {
   }, [userRecommendations, stats]);
 
   return (
-    <Container style={{ maxWidth: "90%", margin: "0 auto" }}>
-      <Row className="mt-4 mb-5" style={{ maxWidth: "70%", margin: "0 auto" }}>
+    <div className={styles.homeContainer}>
+      <Row className={`${styles.searchBar} mt-4 mb-5`}>
         <Col xs={12}>
           <SearchBar onSearch={handleSearch} />
         </Col>
@@ -75,7 +74,7 @@ const HomePage = () => {
       </Row> */}
 
       <CookieConsent />
-    </Container>
+    </div>
   );
 };
 
