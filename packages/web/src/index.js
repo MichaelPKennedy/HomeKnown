@@ -34,6 +34,28 @@ import Overview from "./pages/City/pages/Overview";
 import Industry from "./pages/City/pages/Industry";
 import AirQuality from "./pages/City/pages/AirQuality";
 import Demographics from "./pages/City/pages/Demographics";
+import * as Sentry from "@sentry/react";
+
+Sentry.init({
+  dsn: "https://41c875fe4dae8546ea00662c958ff71b@o4506176576225280.ingest.us.sentry.io/4506176585269248",
+  integrations: [
+    Sentry.browserTracingIntegration(),
+    Sentry.replayIntegration({
+      maskAllText: false,
+      blockAllMedia: false,
+    }),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Which URLs distributed tracing should be enabled
+  tracePropagationTargets: [
+    "localhost",
+    /^https:\/\/homeknown-api-4fe050b813af\.herokuapp\.com/,
+  ],
+  // Session Replay
+  replaysSessionSampleRate: 0.1,
+  replaysOnErrorSampleRate: 1.0,
+});
 
 class ErrorBoundary extends React.Component {
   constructor(props) {

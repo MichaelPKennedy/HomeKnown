@@ -16,6 +16,10 @@ const Weather = () => {
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
+
+  if (weatherData.length === 0) {
+    return <div> No Weather data available for this location</div>;
+  }
   return (
     <ReusableChart
       data={weatherData}

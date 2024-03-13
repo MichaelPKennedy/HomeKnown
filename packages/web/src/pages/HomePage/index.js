@@ -72,8 +72,7 @@ const HomePage = () => {
           </Col>
         ))}
       </Row> */}
-
-      <CookieConsent />
+      {/* <CookieConsent /> */}
     </div>
   );
 };

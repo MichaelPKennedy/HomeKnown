@@ -156,7 +156,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
         type: "linear",
         display: chartType === "temperature",
         suggestedMax:
-          Math.max(...chartFilteredData.map((item) => item.maxTemp)) * 1.05,
+          Math.max(...chartFilteredData?.map((item) => item?.maxTemp)) * 1.05,
         position: "left",
         title: {
           display: false,
@@ -225,7 +225,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           {
             type: "line",
             label: "Average Temperature (°F)",
-            data: chartFilteredData.map((item) => item.avgTemp),
+            data: chartFilteredData?.map((item) => item?.avgTemp),
             borderColor: "rgb(75, 192, 192)",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             fill: true,
@@ -236,7 +236,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           {
             type: "line",
             label: "Max Temperature (°F)",
-            data: chartFilteredData.map((item) => item.maxTemp),
+            data: chartFilteredData?.map((item) => item?.maxTemp),
             spanGaps: true,
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
@@ -247,7 +247,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           {
             type: "line",
             label: "Min Temperature (°F)",
-            data: chartFilteredData.map((item) => item.minTemp),
+            data: chartFilteredData?.map((item) => item?.minTemp),
             spanGaps: true,
             borderColor: "rgb(54, 162, 235)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
@@ -260,7 +260,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           {
             type: "bar",
             label: "Snow (inches)",
-            data: chartFilteredData.map((item) => item.snow),
+            data: chartFilteredData?.map((item) => item?.snow),
             borderColor: "rgb(201, 203, 207)",
             backgroundColor: "rgba(201, 203, 207, 0.5)",
             yAxisID: "y1",
@@ -268,7 +268,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           {
             type: "bar",
             label: "Rain (inches)",
-            data: chartFilteredData.map((item) => item.rain),
+            data: chartFilteredData?.map((item) => item?.rain),
             borderColor: "rgb(75, 192, 75)",
             backgroundColor: "rgba(75, 192, 75, 0.5)",
             yAxisID: "y1",
@@ -276,7 +276,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
         ];
 
   const chartData = {
-    labels: chartFilteredData.map((item) => item.label),
+    labels: chartFilteredData?.map((item) => item?.label),
     datasets: datasets,
   };
 
