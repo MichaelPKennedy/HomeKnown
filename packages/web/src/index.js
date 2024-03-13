@@ -16,6 +16,7 @@ import ResultsPage from "./pages/ResultsPage";
 import City from "./pages/City";
 import MyLocations from "./pages/MyLocations";
 import NavBar from "./components/NavBar";
+import ErrorPage from "./components/ErrorPage";
 import { DndProvider } from "react-dnd";
 import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -73,7 +74,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      return <div>Something went wrong.</div>;
+      return <ErrorPage />;
     }
 
     return this.props.children;

@@ -1,0 +1,29 @@
+/* ErrorComponent.module.css */
+.errorContainer {
+  margin: 30px;
+  text-align: center;
+}
+
+.errorImage {
+  border-radius: 50%;
+  margin-bottom: 20px;
+  height: auto;
+  width: 90%; /* Default width for smaller screens */
+}
+
+.reloadButton {
+  padding: 10px 20px;
+  margin-top: 20px;
+  cursor: pointer;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+/* Styles for screens wider than 1000px */
+@media (min-width: 1000px) {
+  .errorImage {
+    width: 400px; /* Fixed width for larger screens */
+  }
+}
