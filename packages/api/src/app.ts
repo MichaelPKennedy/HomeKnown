@@ -61,7 +61,8 @@ import { CountyAverageTempModel } from './models/county-average-temp.model'
 import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 import { TopCityPhotosModel } from './models/top-city-photos.model'
-import c from 'config'
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
+import allowApiKey from './hooks/allow-api-key'
 
 const app: Application = express(feathers())
 
@@ -250,7 +251,7 @@ app.use(errorHandler({ logger }))
 // Register hooks that run on all service methods
 app.hooks({
   around: {
-    all: [logError]
+    all: [logError, allowApiKey(), authenticate('jwt', 'apiKey')]
   },
   before: {},
   after: {},

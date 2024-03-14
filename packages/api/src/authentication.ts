@@ -3,6 +3,7 @@ import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
 import CustomStrategy from './customStrategy'
 import { OAuthStrategy, oauth } from '@feathersjs/authentication-oauth'
 import GoogleStrategy from './googleStrategy'
+import ApiKeyStrategy from './apiKeyStrategy'
 
 import type { Application } from './declarations'
 
@@ -24,6 +25,7 @@ export const authentication = (app: Application) => {
   authentication.register('jwt', new JWTStrategy())
   authentication.register('local', new CustomStrategy(app, sequelize))
   authentication.register('google', new GoogleStrategy(app, sequelize))
+  authentication.register('apiKey', new ApiKeyStrategy(app))
 
   app.use('authentication', authentication)
 }

@@ -8,9 +8,17 @@ const DEFAULT_API_ENDPOINT = isMobileTesting
   : "http://localhost:3030";
 const API_ENDPOINT = process.env.REACT_APP_API_URL || DEFAULT_API_ENDPOINT;
 
-const restClient = rest(API_ENDPOINT);
-const client = feathers();
+const axiosInstance = axios.create({
+  baseURL: API_ENDPOINT,
+});
 
-client.configure(restClient.axios(axios));
+const API_KEY = process.env.REACT_APP_API_KEY;
+// Set the API key header for every request
+axiosInstance.defaults.headers.common["x-access-token"] = API_KEY;
+
+const restClient = rest(API_ENDPOINT);
+
+const client = feathers();
+client.configure(restClient.axios(axiosInstance));
 
 export default client;
