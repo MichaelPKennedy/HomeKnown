@@ -137,9 +137,10 @@ class GoogleStrategy extends OAuthStrategy {
     return entity
   }
 
-  // Create an entity
   async createEntity(profile: GoogleProfile, params: Params) {
-    return super.createEntity(profile, params)
+    const data = await this.getEntityData(profile, null, params)
+
+    return this.app.service('users').create(data)
   }
 
   // Update an entity
