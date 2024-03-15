@@ -1,7 +1,8 @@
 const { disallow } = require('feathers-hooks-common')
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
 export const recreationHooks = {
   before: {
-    all: [],
+    all: [authenticate('jwt', 'apiKey')],
     find: [],
     get: [],
     create: [disallow('external')],

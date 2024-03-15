@@ -17,6 +17,7 @@ const { oauth } = require('@feathersjs/authentication-oauth')
 const process = require('process')
 const plainExpress = require('express')
 
+import allowApiKey from './hooks/allow-api-key'
 import { handleStripeWebhook } from './stripeWebhookHandler'
 
 import type { Application } from './declarations'
@@ -61,8 +62,6 @@ import { CountyAverageTempModel } from './models/county-average-temp.model'
 import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 import { TopCityPhotosModel } from './models/top-city-photos.model'
-import { authenticate } from '@feathersjs/authentication/lib/hooks'
-import allowApiKey from './hooks/allow-api-key'
 
 const app: Application = express(feathers())
 
@@ -249,9 +248,10 @@ app.use(notFound())
 app.use(errorHandler({ logger }))
 
 // Register hooks that run on all service methods
+// allowApiKey needed to format API key for authenticate()
 app.hooks({
   around: {
-    all: [logError, allowApiKey(), authenticate('jwt', 'apiKey')]
+    all: [logError, allowApiKey()]
   },
   before: {},
   after: {},

@@ -1,11 +1,12 @@
 const { disallow } = require('feathers-hooks-common')
+import { authenticate } from '@feathersjs/authentication/lib/hooks'
 import nearbyIndustryData from './hooks/nearby-industry-data'
 import setUserSurveyData from './hooks/set-user-survey-data'
 import getCityPhoto from './hooks/get-city-photos'
 
 export const surveyHooks = {
   before: {
-    all: [],
+    all: [authenticate('jwt', 'apiKey')],
     find: [],
     get: [],
     create: [setUserSurveyData],

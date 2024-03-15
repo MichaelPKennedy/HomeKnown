@@ -16,6 +16,10 @@
         "clientID": "GOOGLE_CLIENT_ID",
         "clientSecret": "GOOGLE_CLIENT_SECRET"
       }
+    },
+    "apiKey": {
+      "allowedKeys": [ "API_KEY_1", "API_KEY_2" ],
+      "header": "API_HEADER_KEY"
     }
   }
 }

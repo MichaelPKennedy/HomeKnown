@@ -17,16 +17,20 @@ import googleAuthentication from './hooks/google-authentication'
 
 export const userHooks = {
   around: {
-    all: [schemaHooks.resolveResult(userResolver)],
-    find: [authenticate('jwt')],
+    all: [schemaHooks.resolveResult(userResolver), authenticate('jwt', 'apiKey')],
+    find: [],
     get: [],
     create: [],
-    update: [authenticate('jwt')],
-    patch: [authenticate('jwt')],
-    remove: [authenticate('jwt')]
+    update: [],
+    patch: [],
+    remove: []
   },
   before: {
-    all: [schemaHooks.validateQuery(userQueryValidator), schemaHooks.resolveQuery(userQueryResolver)],
+    all: [
+      schemaHooks.validateQuery(userQueryValidator),
+      schemaHooks.resolveQuery(userQueryResolver),
+      authenticate('jwt', 'apiKey')
+    ],
     find: [],
     get: [],
     create: [schemaHooks.validateData(userDataValidator), schemaHooks.resolveData(userDataResolver)],

@@ -3,7 +3,7 @@ const { disallow } = require('feathers-hooks-common')
 
 module.exports = {
   before: {
-    all: [authenticate('jwt')],
+    all: [authenticate('jwt', 'apiKey')],
     find: [],
     get: [],
     create: [disallow('external')],
