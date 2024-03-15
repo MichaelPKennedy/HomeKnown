@@ -18,7 +18,7 @@
       }
     },
     "apiKey": {
-      "allowedKeys": [ "API_KEY_1", "API_KEY_2" ],
+      "allowedKeys": "API_KEY_1",
       "header": "API_HEADER_KEY"
     }
   }

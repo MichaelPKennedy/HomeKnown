@@ -14,7 +14,7 @@ declare module './declarations' {
 }
 
 interface ApiKeyConfig {
-  allowedKeys: string[]
+  allowedKeys: string
   header: string
 }
 
@@ -23,7 +23,7 @@ interface CustomAuthenticationConfiguration {
 }
 
 function isApiKeyConfig(config: any): config is ApiKeyConfig {
-  return config && Array.isArray(config.allowedKeys) && typeof config.header === 'string'
+  return config && typeof config.allowedKeys === 'string' && typeof config.header === 'string'
 }
 
 class ApiKeyStrategy extends AuthenticationBaseStrategy {
@@ -38,7 +38,7 @@ class ApiKeyStrategy extends AuthenticationBaseStrategy {
     const config = this.app.get('authentication') as CustomAuthenticationConfiguration
     const { token } = authentication
 
-    if (!config.apiKey || !isApiKeyConfig(config.apiKey) || !config.apiKey.allowedKeys.includes(token)) {
+    if (!config.apiKey || !isApiKeyConfig(config.apiKey) || config.apiKey.allowedKeys !== token) {
       throw new NotAuthenticated('Incorrect API Key')
     }
 

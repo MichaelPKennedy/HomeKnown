@@ -84,12 +84,6 @@ const LivingPreferenceForm = () => {
   const [formAnimation, setFormAnimation] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  const instructions1 = isMobile
-    ? "Touch inside a category to add a token. Swipe left on a category to remove."
-    : "Drag and drop or click inside a category to add a token. Drag to and drop to remove or swap tokens.";
-  const instructions2 =
-    "Put more tokens into the categories you care about the most.";
-
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1000);
@@ -351,25 +345,6 @@ const LivingPreferenceForm = () => {
               className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
               <div className={`form-group ${styles.formGroup}`}>
-                {!showSubmitButton && (
-                  <div className={`${styles.parHeaderContainer}`}>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderFirst}`}
-                    >
-                      {instructions1}
-                    </p>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderSecond}`}
-                    >
-                      {instructions2}
-                    </p>
-                    <p
-                      className={`${styles.parHeader} ${styles.parHeaderThird}`}
-                    >
-                      {instructions1}
-                    </p>
-                  </div>
-                )}
                 {isMobile ? (
                   <PreferenceWeightMobile
                     onWeightsChange={updateFormDataWithWeights}
