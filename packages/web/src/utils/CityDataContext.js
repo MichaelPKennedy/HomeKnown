@@ -9,10 +9,16 @@ export const useCityData = () => useContext(CityDataContext);
 
 const fetchCityData = async (cityId) => {
   const authToken = localStorage.getItem("authToken");
+  let headers;
+  if (authToken) {
+    headers = {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    };
+  }
   const response = await client.service("survey").get(cityId, {
-    headers: {
-      Authorization: `Bearer ${authToken}`,
-    },
+    headers,
   });
   return response[0];
 };
@@ -107,10 +113,16 @@ export const CityDataProvider = ({ children }) => {
     const fetchData = async () => {
       try {
         const authToken = localStorage.getItem("authToken");
+        let headers;
+        if (authToken) {
+          headers = {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          };
+        }
         const statsResponse = await client.service("stats").find({
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
+          headers,
         });
         setStats(statsResponse);
       } catch (error) {

@@ -209,17 +209,21 @@ const LivingPreferenceForm = () => {
     setLoading(true);
     try {
       const authToken = localStorage.getItem("authToken");
+      let headers;
+      if (authToken) {
+        headers = {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        };
+      }
       const userId = isLoggedIn ? user?.user_id : null;
       const response = await client.service("survey").create(
         {
           data: formData,
           user_id: userId,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
+        headers
       );
       if (response) {
         setLoading(false);

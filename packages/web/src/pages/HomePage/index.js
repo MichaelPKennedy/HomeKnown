@@ -13,13 +13,19 @@ const HomePage = () => {
   const handleSearch = async (searchTerm) => {
     try {
       const authToken = localStorage.getItem("authToken");
+      let headers;
+      if (authToken) {
+        headers = {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        };
+      }
       const results = await client.service("/search").find({
         query: {
           search: searchTerm,
         },
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
+        headers,
       });
 
       return results;
