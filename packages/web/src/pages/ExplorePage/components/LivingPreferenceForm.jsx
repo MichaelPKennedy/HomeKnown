@@ -331,13 +331,6 @@ const LivingPreferenceForm = () => {
     setShowSubmitButton(hasNonZeroWeight);
   }, [formData]);
 
-  useEffect(() => {
-    if (localStorage.getItem("showLoginSuccessToast") === "true") {
-      toast.success("Login Successful");
-      localStorage.removeItem("showLoginSuccessToast");
-    }
-  }, []);
-
   return (
     <div className={styles.centerContainer}>
       {surveyResults && showForm && (
