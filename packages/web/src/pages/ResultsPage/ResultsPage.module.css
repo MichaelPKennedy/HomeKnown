@@ -455,10 +455,6 @@ a:active {
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 20px;
   }
-
-  .myLocationsList {
-    padding: 20px;
-  }
 }
 
 .header {

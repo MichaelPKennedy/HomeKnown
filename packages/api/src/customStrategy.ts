@@ -85,7 +85,7 @@ class CustomStrategy extends LocalStrategy {
 
   async getPayload(authResult: AuthenticationResult, params: any): Promise<{ accessToken: string }> {
     const secretKey = process.env.SECRET_KEY || 'default_secret' // Fallback secret key
-    const accessToken = jwt.sign({ userId: authResult.user.user_id }, secretKey, { expiresIn: '1d' })
+    const accessToken = jwt.sign({ sub: authResult.user.user_id }, secretKey, { expiresIn: '1d' })
     return { accessToken }
   }
 }

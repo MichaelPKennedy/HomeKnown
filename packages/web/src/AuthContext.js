@@ -1,11 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
-import client from "./feathersClient";
+import client, { axiosInstance } from "./feathersClient";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+
+  function setJwtToken(token) {
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+  }
 
   const fetchUserData = async (userId) => {
     try {
@@ -29,6 +33,7 @@ export const AuthProvider = ({ children }) => {
   const login = (token, userData) => {
     localStorage.setItem("authToken", token);
     localStorage.setItem("userId", userData.user_id);
+    setJwtToken(token);
     setIsLoggedIn(true);
     setUser(userData);
   };
@@ -36,6 +41,7 @@ export const AuthProvider = ({ children }) => {
   const googleLogin = (token, user_id) => {
     localStorage.setItem("authToken", token);
     localStorage.setItem("userId", user_id);
+    setJwtToken(token);
     fetchUserData(user_id);
   };
 
