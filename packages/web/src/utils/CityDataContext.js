@@ -8,7 +8,12 @@ const CityDataContext = createContext();
 export const useCityData = () => useContext(CityDataContext);
 
 const fetchCityData = async (cityId) => {
-  const response = await client.service("survey").get(cityId);
+  const authToken = localStorage.getItem("authToken");
+  const response = await client.service("survey").get(cityId, {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  });
   return response[0];
 };
 
@@ -101,7 +106,12 @@ export const CityDataProvider = ({ children }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const statsResponse = await client.service("stats").find();
+        const authToken = localStorage.getItem("authToken");
+        const statsResponse = await client.service("stats").find({
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        });
         setStats(statsResponse);
       } catch (error) {
         console.error("Error fetching stats:", error);

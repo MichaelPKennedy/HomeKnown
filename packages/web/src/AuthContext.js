@@ -13,7 +13,12 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await client.service("users").get(userId);
+      const authToken = localStorage.getItem("authToken");
+      const response = await client.service("users").get(userId, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       setUser(response);
       setIsLoggedIn(true);
     } catch (error) {

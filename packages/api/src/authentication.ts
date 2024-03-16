@@ -1,5 +1,6 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/authentication.html
-import { AuthenticationService, JWTStrategy } from '@feathersjs/authentication'
+import { JWTStrategy } from '@feathersjs/authentication'
+import { AuthenticateService } from './services/authenticate/authenticate.class'
 import CustomStrategy from './customStrategy'
 import { OAuthStrategy, oauth } from '@feathersjs/authentication-oauth'
 import GoogleStrategy from './googleStrategy'
@@ -9,7 +10,7 @@ import type { Application } from './declarations'
 
 declare module './declarations' {
   interface ServiceTypes {
-    authentication: AuthenticationService
+    authentication: AuthenticateService
   }
 }
 interface GoogleProfile {
@@ -20,7 +21,7 @@ interface GoogleProfile {
 
 export const authentication = (app: Application) => {
   const sequelize = app.get('sequelizeClient' as any)
-  const authentication = new AuthenticationService(app)
+  const authentication = new AuthenticateService(app)
 
   authentication.register('jwt', new JWTStrategy())
   authentication.register('local', new CustomStrategy(app, sequelize))

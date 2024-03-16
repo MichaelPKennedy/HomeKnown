@@ -77,17 +77,6 @@ class CustomStrategy extends LocalStrategy {
       [this.entity]: entity
     }
   }
-
-  async getEntityQuery(query: any, params: any): Promise<any> {
-    // Custom query adjustments if needed
-    return query
-  }
-
-  async getPayload(authResult: AuthenticationResult, params: any): Promise<{ accessToken: string }> {
-    const secretKey = process.env.SECRET_KEY || 'default_secret' // Fallback secret key
-    const accessToken = jwt.sign({ sub: authResult.user.user_id }, secretKey, { expiresIn: '1d' })
-    return { accessToken }
-  }
 }
 
 export default CustomStrategy

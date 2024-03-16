@@ -12,9 +12,13 @@ const HomePage = () => {
   const { topCities, topMonthlyCities } = stats || {};
   const handleSearch = async (searchTerm) => {
     try {
+      const authToken = localStorage.getItem("authToken");
       const results = await client.service("/search").find({
         query: {
           search: searchTerm,
+        },
+        headers: {
+          Authorization: `Bearer ${authToken}`,
         },
       });
 
