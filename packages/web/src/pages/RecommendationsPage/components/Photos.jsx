@@ -11,15 +11,7 @@ import unsplashLogo from "../../../assets/unsplashLogo.png";
 const Photos = ({ city }) => {
   const { photos } = city || {};
 
-  const imagesToShow =
-    photos && photos.length > 0
-      ? photos
-      : [
-          {
-            url: logo,
-            alt: "Default City Image",
-          },
-        ];
+  const hasPhotos = photos && Array.isArray(photos) && photos.length > 0;
 
   return (
     <Swiper
@@ -30,7 +22,15 @@ const Photos = ({ city }) => {
       modules={[Pagination, Navigation]}
       className={`mySwiper ${styles.swiper}`}
     >
-      {imagesToShow.map((photo, index) => (
+      {(hasPhotos
+        ? photos
+        : [
+            {
+              url: logo,
+              alt: "Default City Image",
+            },
+          ]
+      ).map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
           <Link to={`/results/${city.cityId}`} state={{ fromPage: "home" }}>
             {photo.blurHash && (
@@ -46,7 +46,9 @@ const Photos = ({ city }) => {
             <img
               src={photo.url}
               alt={photo.alt}
-              className={styles.photo}
+              className={`${styles.photo} ${
+                !hasPhotos ? styles.defaultLogo : ""
+              }`}
               onLoad={(e) => {
                 if (photo.blurHash) {
                   e.target.previousSibling.style.display = "none";

@@ -35,3 +35,7 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+.defaultLogo {
+  opacity: 0.3; /* Adjust transparency; 1 is fully opaque, 0 is fully transparent */
+}
