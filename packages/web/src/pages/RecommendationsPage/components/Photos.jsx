@@ -4,13 +4,22 @@ import { Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
 import styles from "./swiperStylesRecommendations.module.css";
-import logo from "../../../assets/logo.png";
+import logo from "../../../assets/logo.png"; // Make sure the path is correct
 
 import unsplashLogo from "../../../assets/unsplashLogo.png";
 
 const Photos = ({ city }) => {
   const { photos } = city || {};
-  if (!photos || !photos.length) return null;
+
+  const imagesToShow =
+    photos && photos.length > 0
+      ? photos
+      : [
+          {
+            url: logo,
+            alt: "Default City Image",
+          },
+        ];
 
   return (
     <Swiper
@@ -21,16 +30,9 @@ const Photos = ({ city }) => {
       modules={[Pagination, Navigation]}
       className={`mySwiper ${styles.swiper}`}
     >
-      {(photos && photos.length > 0
-        ? photos
-        : [{ url: logo, alt: "Default City Image" }]
-      ).map((photo, index) => (
+      {imagesToShow.map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
-          <Link
-            to={`/results/${city.cityId}`}
-            key={city.cityId}
-            state={{ fromPage: "home" }}
-          >
+          <Link to={`/results/${city.cityId}`} state={{ fromPage: "home" }}>
             {photo.blurHash && (
               <Blurhash
                 hash={photo.blurHash}
@@ -52,30 +54,32 @@ const Photos = ({ city }) => {
               }}
             />
           </Link>
-          <p>
-            Photo by{" "}
-            <a
-              href={`${photo.attribution?.photographerUrl}?utm_source=homeknown&utm_medium=referral`}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {photo.attribution?.photographer}
-            </a>{" "}
-            on{" "}
-            <a
-              href="https://unsplash.com?utm_source=homeknown&utm_medium=referral"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <div className={styles.unsplashLogoContainer}>
-                <img
-                  src={unsplashLogo}
-                  alt="Unsplash"
-                  className={styles.unsplashLogo}
-                />
-              </div>
-            </a>
-          </p>
+          {photo.attribution && (
+            <p>
+              Photo by{" "}
+              <a
+                href={`${photo.attribution.photographerUrl}?utm_source=homeknown&utm_medium=referral`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {photo.attribution.photographer}
+              </a>{" "}
+              on{" "}
+              <a
+                href="https://unsplash.com?utm_source=homeknown&utm_medium=referral"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className={styles.unsplashLogoContainer}>
+                  <img
+                    src={unsplashLogo}
+                    alt="Unsplash"
+                    className={styles.unsplashLogo}
+                  />
+                </div>
+              </a>
+            </p>
+          )}
         </SwiperSlide>
       ))}
     </Swiper>
