@@ -1,5 +1,6 @@
 const { disallow } = require('feathers-hooks-common')
 import { authenticate } from '@feathersjs/authentication/lib/hooks'
+import getCityPhoto from './hooks/get-city-photos'
 export const recommendationsHooks = {
   before: {
     all: [authenticate('jwt', 'apiKey')],
@@ -12,7 +13,7 @@ export const recommendationsHooks = {
   },
   after: {
     all: [],
-    find: [],
+    find: [getCityPhoto],
     get: [],
     create: [],
     update: [],

@@ -1,0 +1,15 @@
+.recommendationsHeader {
+  font-size: 18px;
+  margin-left: 10px;
+  margin-top: 15px;
+}
+
+.recommendations {
+  margin-bottom: 20px; /* Space below the container */
+  display: flex;
+}
+
+.pageContainer {
+  margin: 0 auto;
+  width: 90%;
+}
