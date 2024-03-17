@@ -25,6 +25,11 @@ export const UserRecommendedCitiesModel = (sequelize: Sequelize) => {
           key: 'city_id'
         }
       },
+      premium: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+        defaultValue: false
+      },
       createdAt: {
         type: DataTypes.DATE,
         allowNull: false,

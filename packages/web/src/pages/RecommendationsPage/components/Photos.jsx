@@ -26,13 +26,16 @@ const Photos = ({ city }) => {
         ? photos
         : [
             {
-              url: logo,
+              reg_url: logo,
               alt: "Default City Image",
             },
           ]
       ).map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
-          <Link to={`/results/${city.cityId}`} state={{ fromPage: "home" }}>
+          <Link
+            to={`/results/${city.cityId}`}
+            state={{ fromPage: "recommendations" }}
+          >
             {photo.blurHash && (
               <Blurhash
                 hash={photo.blurHash}
@@ -44,7 +47,7 @@ const Photos = ({ city }) => {
               />
             )}
             <img
-              src={photo.url}
+              src={photo.reg_url}
               alt={photo.alt}
               className={`${styles.photo} ${
                 !hasPhotos ? styles.defaultLogo : ""

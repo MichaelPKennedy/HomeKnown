@@ -46,13 +46,14 @@ export class RecommendationsService implements ServiceMethods<any> {
             ]
           }
         ],
-        attributes: ['city_id']
+        attributes: ['city_id', 'premium']
       })
 
       const result = recommendations.map((r: any) => ({
         cityId: r.city_id,
         cityName: r.City.city_name,
-        state: r.City.State.state
+        state: r.City.State.state,
+        premium: r.premium
       }))
 
       return result

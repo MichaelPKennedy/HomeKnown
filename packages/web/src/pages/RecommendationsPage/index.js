@@ -17,7 +17,7 @@ const RecommendationsPage = () => {
         <p>Cities we think you will like</p>
       </div>
       <Row className={styles.recommendationsContainer}>
-        {userRecommendations?.slice(0, 50).map((city, index) => (
+        {userRecommendations?.premium?.slice(0, 50).map((city, index) => (
           <Col
             key={`monthly-${city.cityId}-${index}`}
             xs={12}

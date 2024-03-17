@@ -118,6 +118,8 @@ export class PhotosService implements ServiceMethods<any> {
       'one man only',
       'one woman',
       'one woman only',
+      'boy',
+      'girl',
       'adult',
       'human',
       'auto',
@@ -139,7 +141,14 @@ export class PhotosService implements ServiceMethods<any> {
       'puppy photo',
       'macys',
       'grey',
-      'earthquake'
+      'earthquake',
+      'sweets',
+      'pastries',
+      'pastry',
+      'dessert',
+      'food',
+      'citrus fruit',
+      'skewers'
     ]
 
     try {
@@ -168,6 +177,12 @@ export class PhotosService implements ServiceMethods<any> {
             unsplashNavigationUrl,
             ...photo.tags.map((tag: any) => tag.title.toLowerCase())
           ].join(' ')
+
+          const containsExcludedWord = excludedTags.some((excludedWord) =>
+            new RegExp(`\\b${excludedWord.toLowerCase()}\\b`).test(allText)
+          )
+          if (containsExcludedWord) return false
+
           const cityNameLower = cityName.toLowerCase()
           const stateNameLower = stateName.toLowerCase()
           const stateAbbrevLower = stateAbbrev.toLowerCase()
@@ -184,6 +199,7 @@ export class PhotosService implements ServiceMethods<any> {
         })
         .map((photo: any) => ({
           url: photo.urls.full,
+          reg_url: photo.urls.regular,
           navigationUrl: photo.links.html,
           alt: photo.alt_description,
           blurHash: photo.blur_hash,

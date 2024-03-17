@@ -85,6 +85,9 @@ function City() {
       case "my-locations":
         navigate("/my-locations");
         break;
+      case "recommendations":
+        navigate("/recommendations");
+        break;
       default:
         navigate("/");
     }
@@ -98,6 +101,8 @@ function City() {
         return "Back to Search";
       case "my-locations":
         return "Back to Locations";
+      case "recommendations":
+        return "Recommendations";
       case "home":
         return "Back to Home";
       default:

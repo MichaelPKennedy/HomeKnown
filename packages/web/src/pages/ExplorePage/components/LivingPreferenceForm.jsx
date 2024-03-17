@@ -306,10 +306,7 @@ const LivingPreferenceForm = () => {
 
   const toggleFormVisibility = () => {
     if (showForm) {
-      // When hiding the form, start the slide-up animation
-      setFormAnimation(styles.formSlidingExit);
-      // Use a timeout to change the state after the animation completes
-      setTimeout(() => setShowForm(false), 160); // Adjust the timeout to match your animation duration
+      setShowForm(false);
     } else {
       // When showing the form, just change the state and let CSS handle the slide down
       setShowForm(true);

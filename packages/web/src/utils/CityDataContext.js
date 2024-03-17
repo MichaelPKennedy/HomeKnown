@@ -174,7 +174,17 @@ export const CityDataProvider = ({ children }) => {
             ]);
           setUserCityIds(cityIdsResponse.data);
           setUserCityData(surveyResponse);
-          setUserRecommendations(recommendations);
+
+          const premiumRecommendations = recommendations.filter(
+            (rec) => rec.premium
+          );
+          const standardRecommendations = recommendations.filter(
+            (rec) => !rec.premium
+          );
+          setUserRecommendations({
+            premium: premiumRecommendations,
+            standard: standardRecommendations,
+          });
         } catch (error) {
           console.error("Error fetching saved cities:", error);
         }
