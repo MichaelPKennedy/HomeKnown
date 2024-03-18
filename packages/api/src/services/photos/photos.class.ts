@@ -136,7 +136,6 @@ export class PhotosService implements ServiceMethods<any> {
       'bike',
       'alcohol',
       'drink',
-      'nightlife',
       'animal photography',
       'puppy photo',
       'macys',
@@ -148,7 +147,13 @@ export class PhotosService implements ServiceMethods<any> {
       'dessert',
       'food',
       'citrus fruit',
-      'skewers'
+      'skewers',
+      'sedan',
+      'automotive',
+      'sports car',
+      'car',
+      'cars',
+      'vehicle'
     ]
 
     try {
