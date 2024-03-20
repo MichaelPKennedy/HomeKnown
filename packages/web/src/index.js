@@ -25,6 +25,7 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import LoginPage from "./pages/Login/LoginPage";
 import RegisterPage from "./pages/Login/RegisterPage";
 import LoggedOut from "./pages/Login/LoggedOut";
+import VerifyEmail from "./pages/VerifyEmail";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
 import DataSources from "./pages/DataSources";
@@ -116,6 +117,7 @@ root.render(
                     path="/recommendations"
                     element={<RecommendationsPage />}
                   />
+                  <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="/results/:cityId" element={<City />}>
                     <Route index element={<Overview />} />
                     <Route path="recreation" element={<Recreation />} />

@@ -1,3 +1,4 @@
+import { emailVerification } from './email-verification/email-verification'
 import { stats } from './stats/stats'
 import { recommendations } from './recommendations/recommendations'
 import { search } from './search/search'
@@ -19,6 +20,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(emailVerification)
   app.configure(stats)
   app.configure(recommendations)
   app.configure(search)

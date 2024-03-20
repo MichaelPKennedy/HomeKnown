@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { emailVerificationClient } from './services/email-verification/email-verification.shared'
+export type {
+  EmailVerification,
+  EmailVerificationData,
+  EmailVerificationQuery,
+  EmailVerificationPatch
+} from './services/email-verification/email-verification.shared'
+
 import { statsClient } from './services/stats/stats.shared'
 export type { Stats, StatsData, StatsQuery, StatsPatch } from './services/stats/stats.shared'
 
@@ -104,7 +112,7 @@ export type ClientApplication = Application<ServiceTypes, Configuration>
  * @see https://dove.feathersjs.com/api/client.html
  * @returns The Feathers client application
  */
-export const createClient = <Configuration = any>(
+export const createClient = <Configuration = any,>(
   connection: TransportConnection<ServiceTypes>,
   authenticationOptions: Partial<AuthenticationClientOptions> = {}
 ) => {
@@ -132,5 +140,6 @@ export const createClient = <Configuration = any>(
   client.configure(searchClient)
   client.configure(recommendationsClient)
   client.configure(statsClient)
+  client.configure(emailVerificationClient)
   return client
 }

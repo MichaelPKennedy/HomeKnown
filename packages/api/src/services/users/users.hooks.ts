@@ -13,7 +13,7 @@ import {
   userPatchResolver,
   userQueryResolver
 } from './users.schema'
-import googleAuthentication from './hooks/google-authentication'
+import welcomeEmail from './hooks/send-welcome-email'
 
 export const userHooks = {
   around: {
@@ -38,7 +38,8 @@ export const userHooks = {
     remove: []
   },
   after: {
-    all: [googleAuthentication]
+    all: [],
+    create: [welcomeEmail]
   },
   error: {
     all: []
