@@ -66,8 +66,6 @@ const welcomeEmail: Hook<Application, UserService> = async (
 
     try {
       const response = await sgMail.send(msg)
-      console.log('response', response)
-      console.log('Welcome email sent successfully')
     } catch (error) {
       console.error('Failed to send welcome email', error)
     }
