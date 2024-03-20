@@ -58,7 +58,7 @@ const welcomeEmail: Hook<Application, UserService> = async (
     `
     const msg = {
       to: user.primary_email,
-      from: 'michael@homeknown.app',
+      from: { email: 'michael@homeknown.app', name: 'HomeKnown' },
       subject: 'Welcome to HomeKnown!',
       text: `Welcome, ${user.first_name || user.username}! Thank you for registering at HomeKnown.`,
       html: htmlContent.replace('https://www.homeknown.app/verify-email', verificationLink)
