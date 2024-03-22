@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import { toast } from "react-toastify";
+import React, { useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
 import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchBar from "./components/SearchBar";
@@ -34,13 +33,6 @@ const HomePage = () => {
       console.error("Search failed:", error);
     }
   };
-
-  useEffect(() => {
-    if (localStorage.getItem("showLoginSuccessToast") === "true") {
-      toast.success("Login Successful");
-      localStorage.removeItem("showLoginSuccessToast");
-    }
-  }, []);
 
   useEffect(() => {
     console.log("userRecommendations", userRecommendations);

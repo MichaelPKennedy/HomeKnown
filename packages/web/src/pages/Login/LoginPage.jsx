@@ -22,7 +22,6 @@ const LoginPage = () => {
     }
     const { access_token, user_id } = queryString.parse(window.location.search);
     if (access_token && user_id) {
-      localStorage.setItem("showLoginSuccessToast", "true");
       googleLogin(access_token, user_id);
       navigate("/");
     }
