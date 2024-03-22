@@ -10,7 +10,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { CityDataProvider } from "./utils/CityDataContext";
 import HomePage from "./pages/HomePage";
-import AccountPage from "./pages/AccountPage";
+import AccountPage from "./pages/Account/AccountPage";
+import PersonalInfo from "./pages/Account/PersonalInfo";
 import ExplorePage from "./pages/ExplorePage";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import SearchPage from "./pages/SearchPage";
@@ -112,6 +113,10 @@ root.render(
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="account-settings" element={<AccountPage />} />
+                  <Route
+                    path="account-settings/personal-info"
+                    element={<PersonalInfo />}
+                  />
                   <Route path="/explore" element={<ExplorePage />} />
                   <Route path="/search" element={<SearchPage />} />
                   <Route path="/results" element={<ResultsPage />} />

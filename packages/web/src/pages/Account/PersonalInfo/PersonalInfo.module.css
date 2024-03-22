@@ -1,0 +1,75 @@
+/* PersonalInfo.module.css */
+
+.personalInfoContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.infoLabel {
+  font-size: 16px; /* Adjust font size as needed */
+  color: #333;
+  margin-bottom: 4px; /* Space between label and value */
+}
+
+.infoValue {
+  font-size: 16px; /* Adjust font size as needed */
+  color: #333;
+  margin-bottom: 16px; /* Space between value and edit link or next label */
+}
+
+.actionLink {
+  margin-left: 16px; /* Or any space you need */
+  color: black;
+  cursor: pointer;
+  padding-top: 4px; /* Adjust the padding to align with the label if needed */
+  align-self: start; /* Aligns the link to the top */
+}
+
+.info {
+  flex-grow: 1;
+  text-align: right;
+  margin-right: 10px;
+}
+
+/* You might want to add :hover effects for the edit links */
+.editLink:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb {
+  font-size: 16px;
+  margin-bottom: 24px; /* Adjust as needed */
+}
+
+.accountLink {
+  color: #0066ff;
+  text-decoration: none;
+  margin-right: 2px;
+}
+
+.accountLink:hover {
+  text-decoration: underline;
+}
+
+.chevronIcon {
+  margin: 0 8px; /* Space around the chevron icon */
+  font-size: 12px;
+  margin-bottom: 1px;
+}
