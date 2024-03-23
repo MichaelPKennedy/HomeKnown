@@ -95,16 +95,17 @@ export class UserService implements ServiceMethods<any> {
       })
 
       if (!user) {
-        await t.rollback()
         throw new Error('User not found.')
       }
 
       if (newPassword && !currentPassword) {
         otherData.password = await bcrypt.hash(newPassword, 10)
       } else if (currentPassword && newPassword) {
+        if (currentPassword === newPassword) {
+          throw new Error('New password cannot be same as current password')
+        }
         const isMatch = await bcrypt.compare(currentPassword, user.password)
         if (!isMatch) {
-          await t.rollback()
           throw new Error('Current password is incorrect.')
         }
 
@@ -119,7 +120,6 @@ export class UserService implements ServiceMethods<any> {
 
         for (let record of previousPasswords) {
           if (await bcrypt.compare(newPassword, record.passwordHash)) {
-            await t.rollback()
             throw new Error('New password cannot match any of the last four passwords.')
           }
         }

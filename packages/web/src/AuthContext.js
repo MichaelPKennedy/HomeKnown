@@ -49,24 +49,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const changePassword = async (currentPassword, newPassword) => {
-    try {
-      const response = await client.service("users").patch(
-        user.user_id,
-        {
-          currentPassword,
-          newPassword,
+    const response = await client.service("users").patch(
+      user.user_id,
+      {
+        currentPassword,
+        newPassword,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        }
-      );
-      console.log("Password changed successfully", response);
-      await fetchUserData(user.user_id);
-    } catch (error) {
-      console.error("Error changing password:", error);
-    }
+      }
+    );
+    console.log("Password changed successfully", response);
+    await fetchUserData(user.user_id);
   };
 
   const createPassword = async (newPassword) => {
