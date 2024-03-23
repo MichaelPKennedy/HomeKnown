@@ -30,7 +30,7 @@ const PersonalInfo = () => {
 
   const renderEditForm = (field) =>
     editingField === field && (
-      <div className="d-flex align-items-center mt-2">
+      <div className={`d-flex align-items-center mt-2 ${styles.editForm}`}>
         <input
           type="text"
           className="form-control"
@@ -40,12 +40,6 @@ const PersonalInfo = () => {
         />
         <button className={styles.saveBtn} onClick={handleSave}>
           Save
-        </button>
-        <button
-          className={`btn btn-secondary ${styles.cancelBtn}`}
-          onClick={() => setEditingField(null)}
-        >
-          <FontAwesomeIcon icon={faTimes} /> {/* Using FontAwesome icon */}
         </button>
       </div>
     );
@@ -87,88 +81,134 @@ const PersonalInfo = () => {
       <h2 className={styles.title}>Personal Info</h2>
 
       {/* Username */}
-      <div className={styles.infoItem}>
-        <div>
-          <div className={styles.infoLabel}>Username</div>
-          <div className={styles.infoValue}>{user?.username || "N/A"}</div>
-        </div>
-        {editingField !== "username" && (
-          <div
-            className={styles.actionLink}
-            onClick={() => handleEdit("username", user?.username)}
-          >
-            {user?.username ? "Edit" : "Add"}
+      <div>
+        {editingField !== "username" ? (
+          <div className={styles.infoItem}>
+            <div>
+              <div className={styles.infoLabel}>Username</div>
+              <div className={styles.infoValue}>{user?.username || "N/A"}</div>
+            </div>
+            <div
+              className={styles.actionLink}
+              onClick={() => handleEdit("username", user?.username)}
+            >
+              {user?.username ? "Edit" : "Add"}
+            </div>
+          </div>
+        ) : (
+          <div className={styles.editingContainer}>
+            <div className={styles.titleSection}>
+              <div className={styles.infoLabel}>Username</div>
+              <button
+                className={`btn btn-secondary ${styles.cancelBtn}`}
+                onClick={() => setEditingField(null)}
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+            <div className={styles.infoItemEditing}>
+              {renderEditForm("username")}
+            </div>
           </div>
         )}
-        {renderEditForm("username")}
       </div>
 
       {/* First Name */}
-      <div className={styles.infoItem}>
+      <div
+        className={`${styles.infoItem} ${
+          editingField === "first_name" ? styles.infoItemEditing : ""
+        }`}
+      >
         <div>
           <div className={styles.infoLabel}>First Name</div>
-          <div className={styles.infoValue}>{user?.first_name || "N/A"}</div>
+          {editingField !== "first_name" && (
+            <div className={styles.infoValue}>{user?.first_name || "N/A"}</div>
+          )}
         </div>
-        {editingField !== "first_name" && (
+        {editingField !== "first_name" ? (
           <div
             className={styles.actionLink}
             onClick={() => handleEdit("first_name", user?.first_name)}
           >
             {user?.first_name ? "Edit" : "Add"}
           </div>
+        ) : (
+          renderEditForm("first_name")
         )}
-        {renderEditForm("first_name")}
       </div>
 
       {/* Last Name */}
-      <div className={styles.infoItem}>
+      <div
+        className={`${styles.infoItem} ${
+          editingField === "last_name" ? styles.infoItemEditing : ""
+        }`}
+      >
         <div>
           <div className={styles.infoLabel}>Last Name</div>
-          <div className={styles.infoValue}>{user?.last_name || "N/A"}</div>
+          {editingField !== "last_name" && (
+            <div className={styles.infoValue}>{user?.last_name || "N/A"}</div>
+          )}
         </div>
-        {editingField !== "last_name" && (
+        {editingField !== "last_name" ? (
           <div
             className={styles.actionLink}
             onClick={() => handleEdit("last_name", user?.last_name)}
           >
             {user?.last_name ? "Edit" : "Add"}
           </div>
+        ) : (
+          renderEditForm("last_name")
         )}
-        {renderEditForm("last_name")}
       </div>
 
-      {/* Email Address */}
-      <div className={styles.infoItem}>
+      {/* Email */}
+      <div
+        className={`${styles.infoItem} ${
+          editingField === "primary_email" ? styles.infoItemEditing : ""
+        }`}
+      >
         <div>
-          <div className={styles.infoLabel}>Email address</div>
-          <div className={styles.infoValue}>{user?.primary_email || "N/A"}</div>
+          <div className={styles.infoLabel}>Email Address</div>
+          {editingField !== "primary_email" && (
+            <div className={styles.infoValue}>
+              {user?.primary_email || "N/A"}
+            </div>
+          )}
         </div>
-        {editingField !== "primary_email" && (
+        {editingField !== "primary_email" ? (
           <div
             className={styles.actionLink}
             onClick={() => handleEdit("primary_email", user?.primary_email)}
           >
             {user?.primary_email ? "Edit" : "Add"}
           </div>
+        ) : (
+          renderEditForm("primary_email")
         )}
-        {renderEditForm("primary_email")}
       </div>
 
-      {/* Phone Number */}
-      <div className={styles.infoItem}>
+      {/* Phone */}
+      <div
+        className={`${styles.infoItem} ${
+          editingField === "phone" ? styles.infoItemEditing : ""
+        }`}
+      >
         <div>
-          <div className={styles.infoLabel}>Phone number</div>
-          <div className={styles.infoValue}>{user?.phone || "N/A"}</div>
+          <div className={styles.infoLabel}>Phone Number</div>
+          {editingField !== "phone" && (
+            <div className={styles.infoValue}>{user?.phone || "N/A"}</div>
+          )}
         </div>
-        {editingField !== "phone" && (
+        {editingField !== "phone" ? (
           <div
             className={styles.actionLink}
             onClick={() => handleEdit("phone", user?.phone)}
           >
             {user?.phone ? "Edit" : "Add"}
           </div>
+        ) : (
+          renderEditForm("phone")
         )}
-        {renderEditForm("phone")}
       </div>
 
       {/* Member Since (Read-only) */}
