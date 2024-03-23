@@ -73,3 +73,25 @@
   font-size: 12px;
   margin-bottom: 1px;
 }
+
+.saveBtn {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: white;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-left: 5px;
+}
+
+.cancelBtn {
+  margin-left: 5px;
+}
+
+.saveBtn:hover {
+  background-color: #01697c;
+  color: white;
+}

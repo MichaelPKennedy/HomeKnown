@@ -10,7 +10,8 @@
 .gridItem {
   background: #fff;
   border-radius: 8px;
-  padding: 25px;
+  padding: 20px;
+  height: 200px;
   text-align: left;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -71,6 +72,7 @@
     border-bottom: 1px solid #ddd;
     border-radius: 0px;
     box-shadow: none;
+    height: auto;
   }
 
   .icon {

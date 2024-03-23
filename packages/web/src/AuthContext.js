@@ -27,6 +27,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUserField = async (userId, fieldName, fieldValue) => {
+    try {
+      const authToken = localStorage.getItem("authToken");
+      const updatedUser = await client.service("users").patch(
+        userId,
+        {
+          [fieldName]: fieldValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }
+      );
+      setUser((prevUser) => ({ ...prevUser, [fieldName]: fieldValue }));
+      console.log("User updated successfully:", updatedUser);
+    } catch (error) {
+      console.error("Error updating user field:", error);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
@@ -59,7 +80,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, login, googleLogin, logout }}
+      value={{ isLoggedIn, user, login, googleLogin, logout, updateUserField }}
     >
       {children}
     </AuthContext.Provider>
