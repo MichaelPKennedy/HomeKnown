@@ -21,7 +21,7 @@ const NavBar = () => {
     ? user.first_name[0]
     : user?.username
     ? user.username[0]
-    : "?";
+    : null;
 
   return (
     <nav
@@ -79,7 +79,7 @@ const NavBar = () => {
               aria-haspopup="true"
               aria-expanded="false"
             >
-              {userInitial}
+              {userInitial || <FontAwesomeIcon icon={faUser} />}
             </button>
             <div
               className={`dropdown-menu dropdown-menu-right ${styles.dropdown}`}
