@@ -1,11 +1,7 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../../AuthContext";
 import styles from "./PersonalInfo.module.css";
 
@@ -14,9 +10,28 @@ const PersonalInfo = () => {
   const [editingField, setEditingField] = useState(null);
   const [editValue, setEditValue] = useState("");
 
-  useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const monthName = months[date.getMonth()];
+
+    return `${day} ${monthName} ${year}`;
+  };
 
   const handleEdit = (fieldName, currentValue) => {
     setEditingField(fieldName);
@@ -44,29 +59,38 @@ const PersonalInfo = () => {
       </div>
     );
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate();
-    const year = date.getFullYear();
-    const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const monthName = months[date.getMonth()];
+  const renderCancelButton = () => (
+    <button
+      className={`btn btn-secondary ${styles.cancelBtn}`}
+      onClick={() => setEditingField(null)}
+    >
+      <FontAwesomeIcon icon={faTimes} />
+    </button>
+  );
 
-    // Format: Day Month Year (e.g., 12 December 2023)
-    return `${day} ${monthName} ${year}`;
-  };
+  const renderEditButton = (field, value) => (
+    <div className={styles.actionLink} onClick={() => handleEdit(field, value)}>
+      {value ? "Edit" : "Add"}
+    </div>
+  );
+
+  const renderInfoValue = (value) => (
+    <div className={styles.infoValue}>{value || "N/A"}</div>
+  );
+
+  const fieldRenderer = (field, label) => (
+    <div className={styles.infoItem}>
+      <div className={styles.titleSection}>
+        <div className={styles.infoLabel}>{label}</div>
+        {editingField === field
+          ? renderCancelButton()
+          : renderEditButton(field, user?.[field])}
+      </div>
+      {editingField === field
+        ? renderEditForm(field)
+        : renderInfoValue(user?.[field])}
+    </div>
+  );
 
   return (
     <div className={styles.personalInfoContainer}>
@@ -80,133 +104,11 @@ const PersonalInfo = () => {
 
       <h2 className={styles.title}>Personal Info</h2>
 
-      {/* Username */}
-      <div className={styles.editingContainer}>
-        <div className={styles.infoItem}>
-          <div>
-            <div className={styles.titleSection}>
-              <div className={styles.infoLabel}>Username</div>
-              {editingField === "username" ? (
-                <button
-                  className={`btn btn-secondary ${styles.cancelBtn}`}
-                  onClick={() => setEditingField(null)}
-                >
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-              ) : (
-                <div
-                  className={styles.actionLink}
-                  onClick={() => handleEdit("username", user?.username)}
-                >
-                  {user?.username ? "Edit" : "Add"}
-                </div>
-              )}
-            </div>
-            {editingField !== "username" && (
-              <div className={styles.infoValue}>{user?.username || "N/A"}</div>
-            )}
-          </div>
-          {editingField === "username" && renderEditForm("username")}
-        </div>
-      </div>
-
-      {/* First Name */}
-      <div
-        className={`${styles.infoItem} ${
-          editingField === "first_name" ? styles.infoItemEditing : ""
-        }`}
-      >
-        <div>
-          <div className={styles.infoLabel}>First Name</div>
-          {editingField !== "first_name" && (
-            <div className={styles.infoValue}>{user?.first_name || "N/A"}</div>
-          )}
-        </div>
-        {editingField !== "first_name" ? (
-          <div
-            className={styles.actionLink}
-            onClick={() => handleEdit("first_name", user?.first_name)}
-          >
-            {user?.first_name ? "Edit" : "Add"}
-          </div>
-        ) : (
-          renderEditForm("first_name")
-        )}
-      </div>
-
-      {/* Last Name */}
-      <div
-        className={`${styles.infoItem} ${
-          editingField === "last_name" ? styles.infoItemEditing : ""
-        }`}
-      >
-        <div>
-          <div className={styles.infoLabel}>Last Name</div>
-          {editingField !== "last_name" && (
-            <div className={styles.infoValue}>{user?.last_name || "N/A"}</div>
-          )}
-        </div>
-        {editingField !== "last_name" ? (
-          <div
-            className={styles.actionLink}
-            onClick={() => handleEdit("last_name", user?.last_name)}
-          >
-            {user?.last_name ? "Edit" : "Add"}
-          </div>
-        ) : (
-          renderEditForm("last_name")
-        )}
-      </div>
-
-      {/* Email */}
-      <div
-        className={`${styles.infoItem} ${
-          editingField === "primary_email" ? styles.infoItemEditing : ""
-        }`}
-      >
-        <div>
-          <div className={styles.infoLabel}>Email Address</div>
-          {editingField !== "primary_email" && (
-            <div className={styles.infoValue}>
-              {user?.primary_email || "N/A"}
-            </div>
-          )}
-        </div>
-        {editingField !== "primary_email" ? (
-          <div
-            className={styles.actionLink}
-            onClick={() => handleEdit("primary_email", user?.primary_email)}
-          >
-            {user?.primary_email ? "Edit" : "Add"}
-          </div>
-        ) : (
-          renderEditForm("primary_email")
-        )}
-      </div>
-
-      {/* Phone */}
-      <div
-        className={`${styles.infoItem} ${
-          editingField === "phone" ? styles.infoItemEditing : ""
-        }`}
-      >
-        <div>
-          <div className={styles.infoLabel}>Phone Number</div>
-          {editingField !== "phone" && (
-            <div className={styles.infoValue}>{user?.phone || "N/A"}</div>
-          )}
-        </div>
-        {editingField !== "phone" ? (
-          <div
-            className={styles.actionLink}
-            onClick={() => handleEdit("phone", user?.phone)}
-          >
-            {user?.phone ? "Edit" : "Add"}
-          </div>
-        ) : (
-          renderEditForm("phone")
-        )}
-      </div>
+      {fieldRenderer("username", "Username")}
+      {fieldRenderer("first_name", "First Name")}
+      {fieldRenderer("last_name", "Last Name")}
+      {fieldRenderer("primary_email", "Email Address")}
+      {fieldRenderer("phone", "Phone Number")}
 
       {/* Member Since (Read-only) */}
       <div className={styles.infoItem}>
