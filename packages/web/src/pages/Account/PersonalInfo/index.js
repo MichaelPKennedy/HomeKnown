@@ -79,7 +79,11 @@ const PersonalInfo = () => {
   );
 
   const fieldRenderer = (field, label) => (
-    <div className={styles.infoItem}>
+    <div
+      className={`${styles.infoItem} ${
+        editingField === field ? styles.activeEditField : ""
+      }`}
+    >
       <div className={styles.titleSection}>
         <div className={styles.infoLabel}>{label}</div>
         {editingField === field
@@ -92,6 +96,9 @@ const PersonalInfo = () => {
     </div>
   );
 
+  const renderOverlay = () =>
+    editingField && <div className={styles.overlay}></div>;
+
   return (
     <div className={styles.personalInfoContainer}>
       <div className={styles.breadcrumb}>
@@ -103,19 +110,21 @@ const PersonalInfo = () => {
       </div>
 
       <h2 className={styles.title}>Personal Info</h2>
+      <div>
+        {renderOverlay()}
+        {fieldRenderer("username", "Username")}
+        {fieldRenderer("first_name", "First Name")}
+        {fieldRenderer("last_name", "Last Name")}
+        {fieldRenderer("primary_email", "Email Address")}
+        {fieldRenderer("phone", "Phone Number")}
 
-      {fieldRenderer("username", "Username")}
-      {fieldRenderer("first_name", "First Name")}
-      {fieldRenderer("last_name", "Last Name")}
-      {fieldRenderer("primary_email", "Email Address")}
-      {fieldRenderer("phone", "Phone Number")}
-
-      {/* Member Since (Read-only) */}
-      <div className={styles.infoItem}>
-        <div>
-          <div className={styles.infoLabel}>Member Since</div>
-          <div className={styles.infoValue}>
-            {user?.created_at ? formatDate(user.created_at) : "N/A"}
+        {/* Member Since (Read-only) */}
+        <div className={styles.infoItem}>
+          <div>
+            <div className={styles.infoLabel}>Member Since</div>
+            <div className={styles.infoValue}>
+              {user?.created_at ? formatDate(user.created_at) : "N/A"}
+            </div>
           </div>
         </div>
       </div>
