@@ -16,15 +16,13 @@
 
 .infoItem {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction: column;
   padding: 10px 0;
   border-bottom: 1px solid #ddd;
 }
 
 .infoItemEditing {
   display: block;
-  border-bottom: 1px solid #ddd;
 }
 
 .infoLabel {

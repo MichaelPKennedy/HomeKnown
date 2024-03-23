@@ -81,36 +81,33 @@ const PersonalInfo = () => {
       <h2 className={styles.title}>Personal Info</h2>
 
       {/* Username */}
-      <div>
-        {editingField !== "username" ? (
-          <div className={styles.infoItem}>
-            <div>
-              <div className={styles.infoLabel}>Username</div>
-              <div className={styles.infoValue}>{user?.username || "N/A"}</div>
-            </div>
-            <div
-              className={styles.actionLink}
-              onClick={() => handleEdit("username", user?.username)}
-            >
-              {user?.username ? "Edit" : "Add"}
-            </div>
-          </div>
-        ) : (
-          <div className={styles.editingContainer}>
+      <div className={styles.editingContainer}>
+        <div className={styles.infoItem}>
+          <div>
             <div className={styles.titleSection}>
               <div className={styles.infoLabel}>Username</div>
-              <button
-                className={`btn btn-secondary ${styles.cancelBtn}`}
-                onClick={() => setEditingField(null)}
-              >
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
+              {editingField === "username" ? (
+                <button
+                  className={`btn btn-secondary ${styles.cancelBtn}`}
+                  onClick={() => setEditingField(null)}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              ) : (
+                <div
+                  className={styles.actionLink}
+                  onClick={() => handleEdit("username", user?.username)}
+                >
+                  {user?.username ? "Edit" : "Add"}
+                </div>
+              )}
             </div>
-            <div className={styles.infoItemEditing}>
-              {renderEditForm("username")}
-            </div>
+            {editingField !== "username" && (
+              <div className={styles.infoValue}>{user?.username || "N/A"}</div>
+            )}
           </div>
-        )}
+          {editingField === "username" && renderEditForm("username")}
+        </div>
       </div>
 
       {/* First Name */}
