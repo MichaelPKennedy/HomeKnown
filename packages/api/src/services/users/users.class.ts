@@ -40,7 +40,11 @@ export class UserService implements ServiceMethods<any> {
       throw new Error('User not found.')
     }
 
-    const { password: _, ...userWithoutPassword } = user.get({ plain: true })
+    const userObject = user.get({ plain: true })
+    const hasPassword = !!userObject.password
+    const { password, ...userWithoutPassword } = userObject
+    userWithoutPassword.hasPassword = hasPassword
+
     return userWithoutPassword
   }
 
