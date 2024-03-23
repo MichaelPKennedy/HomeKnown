@@ -12,6 +12,7 @@ import { CityDataProvider } from "./utils/CityDataContext";
 import HomePage from "./pages/HomePage";
 import AccountPage from "./pages/Account/AccountPage";
 import PersonalInfo from "./pages/Account/PersonalInfo";
+import SecurityPage from "./pages/Account/SecurityPage";
 import ExplorePage from "./pages/ExplorePage";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import SearchPage from "./pages/SearchPage";
@@ -116,6 +117,10 @@ root.render(
                   <Route
                     path="account-settings/personal-info"
                     element={<PersonalInfo />}
+                  />
+                  <Route
+                    path="account-settings/security"
+                    element={<SecurityPage />}
                   />
                   <Route path="/explore" element={<ExplorePage />} />
                   <Route path="/search" element={<SearchPage />} />

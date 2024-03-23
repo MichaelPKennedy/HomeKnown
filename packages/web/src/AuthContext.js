@@ -48,6 +48,47 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      const response = await client.service("users").patch(
+        user.user_id,
+        {
+          currentPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      console.log("Password changed successfully", response);
+      await fetchUserData(user.user_id);
+    } catch (error) {
+      console.error("Error changing password:", error);
+    }
+  };
+
+  const createPassword = async (newPassword) => {
+    try {
+      const response = await client.service("users").patch(
+        user.user_id,
+        {
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      console.log("Password created successfully", response);
+      await fetchUserData(user.user_id);
+    } catch (error) {
+      console.error("Error creating password:", error);
+    }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const userId = localStorage.getItem("userId");
@@ -80,7 +121,16 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, user, login, googleLogin, logout, updateUserField }}
+      value={{
+        isLoggedIn,
+        user,
+        login,
+        googleLogin,
+        logout,
+        updateUserField,
+        changePassword,
+        createPassword,
+      }}
     >
       {children}
     </AuthContext.Provider>

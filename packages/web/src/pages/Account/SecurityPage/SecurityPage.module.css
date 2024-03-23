@@ -1,0 +1,65 @@
+.securityContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.input,
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Makes sure padding doesn't increase the width */
+  margin-bottom: 10px; /* Space between inputs */
+}
+
+.saveBtn {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: white;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-self: start;
+}
+
+.saveBtn:hover {
+  background-color: #01697c;
+  color: white;
+}
+.breadcrumb {
+  position: relative;
+  font-size: 16px;
+  margin-bottom: 24px;
+  z-index: 9999;
+}
+
+.chevronIcon {
+  margin: 0 8px; /* Space around the chevron icon */
+  font-size: 12px;
+  margin-bottom: 1px;
+}

@@ -4,16 +4,24 @@ import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import styles from "./NavBar.module.css";
 import { AuthContext } from "../AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem("authToken");
-  const { logout } = useContext(AuthContext);
+  const { logout, user } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
     navigate("/signed-out");
   };
+
+  const userInitial = user?.first_name
+    ? user.first_name[0]
+    : user?.username
+    ? user.username[0]
+    : "?";
 
   return (
     <nav
@@ -37,13 +45,6 @@ const NavBar = () => {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          {/* <li className="nav-item">
-            <Link className="nav-link" to="/search">
-              Search
-            </Link>
-          </li> */}
-        </ul>
         <ul className="navbar-nav ml-auto mr-1">
           <li className="nav-item mr-4">
             <Link to="/explore">
@@ -70,44 +71,58 @@ const NavBar = () => {
               </li>
             </>
           )}
-          <li className="nav-item dropdown mr-4">
+          <li className="nav-item dropdown">
             <button
-              className={`${styles.button} nav-link btn btn-link dropdown-toggle`}
-              id="navbarDropdown"
+              className={`nav-link btn btn-link ${styles.userCircle}`}
+              id="userMenuDropdown"
               data-toggle="dropdown"
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Settings
+              {userInitial}
             </button>
-            <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-              <Link className="dropdown-item mb-2" to="/privacy-policy">
+            <div
+              className={`dropdown-menu dropdown-menu-right ${styles.dropdown}`}
+              aria-labelledby="userMenuDropdown"
+            >
+              {isLoggedIn ? (
+                <>
+                  <Link
+                    className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                    to="/account-settings"
+                  >
+                    Account
+                  </Link>
+                  <button
+                    className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <Link
+                  className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                  to="/login"
+                >
+                  Login
+                </Link>
+              )}
+              <div className="dropdown-divider"></div>
+              <Link
+                className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                to="/privacy-policy"
+              >
                 Privacy Policy
               </Link>
-              <Link className="dropdown-item mb-2" to="/terms-of-service">
+              <Link
+                className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                to="/terms-of-service"
+              >
                 Terms of Service
-              </Link>
-              <Link className="dropdown-item" to="/data-sources">
-                Our Data Sources
               </Link>
             </div>
           </li>
-          {isLoggedIn ? (
-            <li className="nav-item">
-              <button
-                className={`${styles.button} nav-link btn btn-link`}
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </li>
-          ) : (
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">
-                Login
-              </Link>
-            </li>
-          )}
         </ul>
       </div>
     </nav>

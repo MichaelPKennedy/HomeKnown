@@ -2,6 +2,7 @@ import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feather
 import type { Application } from '../../declarations'
 import type { User, UserData, UserPatch, UserQuery } from './users.schema'
 export type { User, UserData, UserPatch, UserQuery }
+import bcrypt from 'bcryptjs'
 
 export interface UserParams extends Params {
   query?: { login: string; primary_email: string }
@@ -83,17 +84,83 @@ export class UserService implements ServiceMethods<any> {
       throw new Error('No ID provided for patch operation')
     }
 
+    const { currentPassword, newPassword, ...otherData } = data
+
+    let t
     try {
-      const [affectedRows] = await this.sequelize.models.Users.update(data, {
-        where: { user_id }
+      t = await this.sequelize.transaction()
+      const user = await this.sequelize.models.Users.findOne({
+        where: { user_id },
+        transaction: t
+      })
+
+      if (!user) {
+        await t.rollback()
+        throw new Error('User not found.')
+      }
+
+      if (newPassword && !currentPassword) {
+        otherData.password = await bcrypt.hash(newPassword, 10)
+      } else if (currentPassword && newPassword) {
+        const isMatch = await bcrypt.compare(currentPassword, user.password)
+        if (!isMatch) {
+          await t.rollback()
+          throw new Error('Current password is incorrect.')
+        }
+
+        const previousPasswords = await this.sequelize.models.PasswordHistory.findAll(
+          {
+            where: { user_id },
+            order: [['createdAt', 'DESC']],
+            limit: 4
+          },
+          { transaction: t }
+        )
+
+        for (let record of previousPasswords) {
+          if (await bcrypt.compare(newPassword, record.passwordHash)) {
+            await t.rollback()
+            throw new Error('New password cannot match any of the last four passwords.')
+          }
+        }
+
+        const newHash = await bcrypt.hash(newPassword, 10)
+
+        try {
+          await this.sequelize.models.PasswordHistory.create(
+            {
+              user_id,
+              passwordHash: user.password
+            },
+            { transaction: t }
+          )
+        } catch (e) {
+          console.log('e', e)
+        }
+
+        otherData.password = newHash
+      }
+
+      const [affectedRows] = await this.sequelize.models.Users.update(otherData, {
+        where: { user_id },
+        transaction: t
       })
 
       const updatedUser = await this.sequelize.models.Users.findOne({
         where: { user_id }
       })
 
-      return updatedUser
+      const userObject = updatedUser.get({ plain: true })
+      const hasPassword = !!userObject.password
+      const { password, ...userWithoutPassword } = userObject
+      userWithoutPassword.hasPassword = hasPassword
+
+      await t.commit()
+      return userWithoutPassword
     } catch (error) {
+      if (t) {
+        await t.rollback()
+      }
       throw error
     }
   }

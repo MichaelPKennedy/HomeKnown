@@ -56,6 +56,7 @@ import { UserSurveysModel } from './models/user-surveys.model'
 import { GuestSurveysModel } from './models/guest-surveys.model'
 import { UserCitiesModel } from './models/user-cities.model'
 import { UserRecommendedCitiesModel } from './models/user-recommended-cities.model'
+import { PasswordHistoryModel } from './models/password-history.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
 import { CountyAverageTempModel } from './models/county-average-temp.model'
@@ -126,6 +127,7 @@ CityPlacesCacheModel(sequelize)
 CityAverageTempModel(sequelize)
 CountyAverageTempModel(sequelize)
 UserRecommendedCitiesModel(sequelize)
+PasswordHistoryModel(sequelize)
 TopCitiesModel(sequelize)
 TopMonthlyCitiesModel(sequelize)
 TopCityPhotosModel(sequelize)
@@ -156,6 +158,7 @@ const UserCities = sequelize.models.UserCities
 const UserSurveys = sequelize.models.UserSurveys
 const Users = sequelize.models.Users
 const UserRecommendedCities = sequelize.models.UserRecommendedCities
+const PasswordHistory = sequelize.models.PasswordHistory
 const CityPlacesCache = sequelize.models.CityPlacesCache
 const CityAverageTemp = sequelize.models.CityAverageTemp
 const CountyAverageTemp = sequelize.models.CountyAverageTemp
@@ -194,6 +197,8 @@ Users.hasMany(UserSurveys, { foreignKey: 'user_id' })
 UserRecommendedCities.belongsTo(Users, { foreignKey: 'user_id' })
 UserRecommendedCities.belongsTo(City, { foreignKey: 'city_id' })
 Users.hasMany(UserRecommendedCities, { foreignKey: 'user_id' })
+Users.hasMany(PasswordHistory, { foreignKey: 'user_id' })
+PasswordHistory.belongsTo(Users, { foreignKey: 'user_id' })
 CitySceneryCache.belongsTo(City, { foreignKey: 'city_id' })
 CityAverageTemp.belongsTo(City, { foreignKey: 'city_id' })
 CityDemographics.belongsTo(City, { foreignKey: 'city_id' })
