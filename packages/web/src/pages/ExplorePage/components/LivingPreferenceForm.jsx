@@ -329,7 +329,7 @@ const LivingPreferenceForm = () => {
   }, [formData]);
 
   return (
-    <div className={styles.centerContainer}>
+    <div className={styles.pageContainer}>
       {surveyResults && showForm && (
         <div className={styles.btnContainer}>
           <button

@@ -110,7 +110,7 @@
   outline: none;
 }
 
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 768px) {
   .btnContainer {
     margin: auto;
     display: flex;
@@ -118,6 +118,10 @@
     width: 70%;
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .pageContainer {
+    padding-top: 20px;
   }
 }
 
@@ -218,6 +222,16 @@
   width: 100%;
   overflow-x: hidden;
   z-index: 1;
+}
+
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  z-index: 1;
+  padding-top: 10px;
 }
 
 .formContainer {

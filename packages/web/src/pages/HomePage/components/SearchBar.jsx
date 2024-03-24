@@ -47,6 +47,7 @@ const SearchBar = ({ onSearch }) => {
             onChange={(e) => setSearchTerm(e.target.value)}
             onBlur={handleCloseResults}
             onFocus={() => searchTerm.length > 0 && setShowResults(true)}
+            className={styles.ellipsisText}
           />
           <Button
             variant="outline-secondary"
@@ -69,7 +70,9 @@ const SearchBar = ({ onSearch }) => {
               state={{ fromPage: "search" }}
             >
               <ListGroup.Item action>
-                {city.city_name}, {city.state_name}
+                <div className={styles.ellipsisText}>
+                  {city.city_name}, {city.state_name}
+                </div>
               </ListGroup.Item>
             </Link>
           ))}

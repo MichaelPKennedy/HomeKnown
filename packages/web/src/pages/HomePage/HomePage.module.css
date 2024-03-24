@@ -49,3 +49,15 @@
 .button:active {
   outline: none;
 }
+
+.ellipsisText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.searchResultsButton:active,
+.searchResultsButton:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

@@ -4,7 +4,7 @@ import LivingPreferenceForm from "./components/LivingPreferenceForm.jsx";
 
 const ExplorePage = () => {
   return (
-    <div className="">
+    <div className={styles.explorePageContainer}>
       <LivingPreferenceForm />
     </div>
   );

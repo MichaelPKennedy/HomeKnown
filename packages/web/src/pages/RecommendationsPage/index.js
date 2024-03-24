@@ -13,9 +13,6 @@ const RecommendationsPage = () => {
   }, [userRecommendations]);
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.recommendationsHeader}>
-        <p>Cities we think you will like</p>
-      </div>
       <Row className={styles.recommendationsContainer}>
         {userRecommendations?.premium?.slice(0, 50).map((city, index) => (
           <Col

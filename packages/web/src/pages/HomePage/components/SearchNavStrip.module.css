@@ -1,0 +1,77 @@
+.activeLink {
+  background-color: lightgray;
+  color: white;
+}
+
+.navStrip {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 7px !important;
+  padding-top: 10px !important;
+  background-color: white !important;
+}
+
+.navButton,
+.navButton:hover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: white;
+  color: grey;
+  padding-bottom: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-radius: 0;
+}
+
+.navButtonSelected,
+.navButtonSelected:hover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: white;
+  color: black;
+  border-radius: 0;
+  padding-bottom: 12px;
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 2px solid black;
+}
+
+.navButton:focus,
+.navButton:active,
+.navButtonSelected:focus,
+.navButtonSelected:active {
+  outline: none !important;
+  box-shadow: none;
+}
+
+.textLabel {
+  color: grey;
+  font-size: 14px;
+}
+
+.icon {
+  margin-bottom: 10px;
+}
+
+.boldLabel {
+  color: black;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .navStrip {
+    padding-bottom: 10px !important;
+  }
+}

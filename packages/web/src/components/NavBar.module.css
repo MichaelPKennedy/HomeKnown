@@ -47,7 +47,7 @@
 .userCircle:active,
 .userCircle:focus {
   outline: none !important;
-  box-shadow: rgba(1, 105, 124, 0.1) 0px 0px 0px 3px;
+  box-shadow: none;
 }
 
 .userCircle,

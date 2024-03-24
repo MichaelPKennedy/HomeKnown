@@ -1,13 +1,4 @@
 .explorePageContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  font-family: "Arial", sans-serif;
-  background-color: #f4f4f4;
-  padding: 0 15px; /* Add some padding for smaller screens */
-  box-sizing: border-box; /* Makes sure padding doesn't add extra width */
 }
 
 h1 {
@@ -34,10 +25,6 @@ button:hover {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .explorePageContainer {
-    padding: 0 10px;
-  }
-
   h1 {
     font-size: 24px; /* Reduce font size for mobile */
   }
