@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { contactSupportClient } from './services/contact-support/contact-support.shared'
+export type {
+  ContactSupport,
+  ContactSupportData,
+  ContactSupportQuery,
+  ContactSupportPatch
+} from './services/contact-support/contact-support.shared'
+
 import { emailVerificationClient } from './services/email-verification/email-verification.shared'
 export type {
   EmailVerification,
@@ -141,5 +149,6 @@ export const createClient = <Configuration = any,>(
   client.configure(recommendationsClient)
   client.configure(statsClient)
   client.configure(emailVerificationClient)
+  client.configure(contactSupportClient)
   return client
 }

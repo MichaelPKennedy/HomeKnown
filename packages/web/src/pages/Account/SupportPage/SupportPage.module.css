@@ -1,0 +1,11 @@
+.supportContainer {
+  padding-top: 10px;
+  width: 65%;
+  margin: auto;
+}
+
+@media (max-width: 768px) {
+  .supportContainer {
+    width: 90%;
+  }
+}

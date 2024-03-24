@@ -139,6 +139,12 @@ const NavBar = () => {
                       Login
                     </Link>
                   )}
+                  <Link
+                    className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                    to="/support"
+                  >
+                    Support
+                  </Link>
                   <div className="dropdown-divider"></div>
                   <Link
                     className={`dropdown-item pl-3 ${styles.dropdownItem}`}

@@ -1,3 +1,4 @@
+import { contactSupport } from './contact-support/contact-support'
 import { emailVerification } from './email-verification/email-verification'
 import { stats } from './stats/stats'
 import { recommendations } from './recommendations/recommendations'
@@ -20,6 +21,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(contactSupport)
   app.configure(emailVerification)
   app.configure(stats)
   app.configure(recommendations)

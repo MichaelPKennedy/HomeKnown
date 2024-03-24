@@ -8,6 +8,7 @@ import {
   faCreditCard,
   faBell,
   faChevronRight,
+  faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 
 // Placeholder components
@@ -71,6 +72,20 @@ const AccountPage = () => {
             <p className={styles.title}>Notifications</p>
             <p className={styles.description}>
               Choose notification preferences and how you want to be contacted
+            </p>
+          </div>
+          <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
+        </div>
+      </Link>
+
+      {/* Contact Support */}
+      <Link to="/support" className={styles.accountLink}>
+        <div className={styles.gridItem}>
+          <FontAwesomeIcon icon={faEnvelope} className={styles.icon} />
+          <div className={styles.textContainer}>
+            <p className={styles.title}>Contact Support</p>
+            <p className={styles.description}>
+              Contact Support about account or billing questions
             </p>
           </div>
           <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />

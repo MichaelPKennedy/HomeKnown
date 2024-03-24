@@ -13,6 +13,8 @@ import HomePage from "./pages/HomePage";
 import AccountPage from "./pages/Account/AccountPage";
 import PersonalInfo from "./pages/Account/PersonalInfo";
 import SecurityPage from "./pages/Account/SecurityPage";
+import SupportPage from "./pages/Account/SupportPage";
+import ThankYouPage from "./pages/Account/components/ThankYouPage";
 import ExplorePage from "./pages/ExplorePage";
 import RecommendationsPage from "./pages/RecommendationsPage";
 import SearchPage from "./pages/SearchPage";
@@ -121,6 +123,11 @@ root.render(
                   <Route
                     path="account-settings/security"
                     element={<SecurityPage />}
+                  />
+                  <Route path="/support" element={<SupportPage />} />
+                  <Route
+                    path="/support/confirmation"
+                    element={<ThankYouPage />}
                   />
                   <Route path="/explore" element={<ExplorePage />} />
                   <Route path="/search" element={<SearchPage />} />
