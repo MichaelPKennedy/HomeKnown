@@ -16,13 +16,11 @@
 }
 
 @media (min-width: 768px) {
-  .nav {
-    padding-left: 0px;
-    padding-right: 0px;
-  }
   .navBody {
     width: 90%;
     margin: auto;
+    padding-left: 0px;
+    padding-right: 0px;
   }
 }
 
