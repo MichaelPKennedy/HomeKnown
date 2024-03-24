@@ -29,12 +29,16 @@ const NavBar = () => {
 
   useEffect(() => {
     const controlNavbar = () => {
-      if (window.scrollY > lastScrollY) {
+      if (window.scrollY <= 0) {
+        setBottomNavClass(styles.bottomNavShow);
+      } else if (window.scrollY > lastScrollY) {
         setBottomNavClass(styles.bottomNavHide);
       } else {
         setBottomNavClass(styles.bottomNavShow);
       }
-      lastScrollY = window.scrollY;
+      if (window.scrollY > 0) {
+        lastScrollY = window.scrollY;
+      }
     };
 
     window.addEventListener("scroll", controlNavbar);
