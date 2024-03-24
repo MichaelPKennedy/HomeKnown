@@ -13,6 +13,9 @@ const RecommendationsPage = () => {
   }, [userRecommendations]);
   return (
     <div className={styles.pageContainer}>
+      <div className={styles.recommendationsHeader}>
+        <p className="mb-2">Your AI Recommendations...</p>
+      </div>
       <Row className={styles.recommendationsContainer}>
         {userRecommendations?.premium?.slice(0, 50).map((city, index) => (
           <Col
