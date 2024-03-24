@@ -179,9 +179,11 @@
 }
 
 .formCheckInput {
-  transform: scale(1.2);
-  margin-right: 5px;
-  margin-bottom: 5px;
+  flex-shrink: 0; /* Prevents the checkbox from shrinking */
+  transform: scale(1.5);
+  padding: 10px;
+  margin-right: 15px;
+  padding-top: 5px;
 }
 
 /* Label and other text styles */
@@ -262,7 +264,7 @@
 }
 
 /* Desktop */
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: 768px) {
   /* 768px tablets and up */
   .formContent {
     width: 70%;
@@ -275,6 +277,10 @@
     transition: background-color 0.2s;
     margin-right: 20px;
     margin-bottom: 40px;
+  }
+
+  .formCheckInput {
+    transform: scale(1.2);
   }
 }
 
@@ -349,14 +355,16 @@ details .formCheck {
 }
 
 .formCheckLabel {
+  display: flex;
+  align-items: center;
   flex-grow: 1; /* Ensures the label takes up all remaining horizontal space */
   margin-left: 10px; /* Spacing between checkbox and label */
   margin-bottom: 5px;
+  margin-top: 5px;
 }
 
-.formCheckInput {
-  flex-shrink: 0; /* Prevents the checkbox from shrinking */
-  padding: 10px;
+.question {
+  margin-bottom: 15px;
 }
 
 .selectedJobs {

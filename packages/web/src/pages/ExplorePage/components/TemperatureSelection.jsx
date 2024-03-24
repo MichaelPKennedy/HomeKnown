@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import { Chart, CategoryScale, LinearScale, BarElement } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import ChartDragData from "chartjs-plugin-dragdata";
-import Styles from "./TemperatureSelection.module.css";
+import styles from "./TemperatureSelection.module.css";
 
 Chart.register(
   CategoryScale,
@@ -81,9 +81,11 @@ const TemperatureSelection = ({ data, onDataChange }) => {
   };
 
   return isMounted ? (
-    <div className={Styles.chartContainer}>
-      <div className={`form-group ${Styles.formGroup}`}>
-        <label htmlFor="temperatureProfile">Temperature Profile</label>
+    <div className={styles.chartContainer}>
+      <div className={`form-group ${styles.formGroup}`}>
+        <p htmlFor="temperatureProfile" className={styles.question}>
+          Temperature Profile
+        </p>
         <select
           id="temperatureProfile"
           className="form-control"

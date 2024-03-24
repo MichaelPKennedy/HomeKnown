@@ -28,10 +28,11 @@ const WeatherPreferences = ({
         {hasColdMonth() && (
           <div className={`form-group ${styles.formGroup}`}>
             {/* Snow Preference */}
-            <label>
+            <p className={styles.question}>
               Would you be okay living in an area that receives snow?
-            </label>
-            <div className={styles.formCheck}>
+            </p>
+
+            <label className={styles.formCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -40,9 +41,9 @@ const WeatherPreferences = ({
                 onChange={handleInputChange}
                 checked={formData.snowPreference === "none"}
               />
-              <label className={styles.formCheckLabel}>No snow</label>
-            </div>
-            <div className={styles.formCheck}>
+              No snow
+            </label>
+            <label className={styles.formCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -51,11 +52,9 @@ const WeatherPreferences = ({
                 onChange={handleInputChange}
                 checked={formData.snowPreference === "light"}
               />
-              <label className={styles.formCheckLabel}>
-                Light, occasional snow
-              </label>
-            </div>
-            <div className={styles.formCheck}>
+              Light, occasional snow
+            </label>
+            <label className={styles.formCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -64,17 +63,17 @@ const WeatherPreferences = ({
                 onChange={handleInputChange}
                 checked={formData.snowPreference === "heavy"}
               />
-              <label className={styles.formCheckLabel}>Heavy snowfall</label>
-            </div>
+              Heavy snowfall
+            </label>
           </div>
         )}
 
         {/* Rain Preference */}
         <div className={`form-group ${styles.formGroup}`}>
-          <label>
+          <p className={styles.question}>
             Would you be okay living in an area that receives regular rainfall?
-          </label>
-          <div className={styles.formCheck}>
+          </p>
+          <label className={styles.formCheckLabel}>
             <input
               className={styles.formCheckInput}
               type="radio"
@@ -83,9 +82,9 @@ const WeatherPreferences = ({
               onChange={handleInputChange}
               checked={formData.rainPreference === "dry"}
             />
-            <label className={styles.formCheckLabel}>Generally dry</label>
-          </div>
-          <div className={styles.formCheck}>
+            Generally dry
+          </label>
+          <label className={styles.formCheckLabel}>
             <input
               className={styles.formCheckInput}
               type="radio"
@@ -94,10 +93,8 @@ const WeatherPreferences = ({
               onChange={handleInputChange}
               checked={formData.rainPreference === "regular"}
             />
-            <label className={styles.formCheckLabel}>
-              Comfortable with regular rainfall
-            </label>
-          </div>
+            Comfortable with regular rainfall
+          </label>
         </div>
       </div>
       {/* Humidity Preference */}

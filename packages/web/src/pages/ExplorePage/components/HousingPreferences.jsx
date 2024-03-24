@@ -10,9 +10,9 @@ const HousingPreferences = ({ formData, setFormData }) => {
   return (
     <div className={`form-group ${styles.formGroup}`}>
       <h4 className="pb-2">Housing</h4>
-      <label>Are you looking to buy or rent?</label>
+      <p className={styles.question}>Are you looking to buy or rent?</p>
       <div>
-        <label className={styles.radio}>
+        <label className={styles.formCheckLabel}>
           <input
             className={styles.formCheckInput}
             type="radio"
@@ -25,7 +25,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
           />
           Buy
         </label>
-        <label className={styles.radio}>
+        <label className={styles.formCheckLabel}>
           <input
             className={styles.formCheckInput}
             type="radio"
@@ -43,9 +43,9 @@ const HousingPreferences = ({ formData, setFormData }) => {
       {/* If buying */}
       {formData.housingType === "buy" && (
         <div className={`form-group mt-3`}>
-          <label htmlFor="homePriceRange">
+          <p htmlFor="homePriceRange" className={styles.question}>
             What is the home price range you are looking for?
-          </label>
+          </p>
           <Slider
             range
             min={50000}
