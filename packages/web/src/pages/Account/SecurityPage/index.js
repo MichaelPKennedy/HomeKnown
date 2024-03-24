@@ -82,7 +82,7 @@ const SecurityPage = () => {
             required
           />
         </div>
-        <button type="submit" className={styles.saveBtn}>
+        <button type="submit" className={`btn ${styles.saveBtn}`}>
           {user?.hasPassword ? "Change Password" : "Set Password"}
         </button>
       </form>
