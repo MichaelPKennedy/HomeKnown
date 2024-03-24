@@ -348,16 +348,15 @@ details[open] > summary {
 
 details[open] .formCheck {
   background-color: #f8f9fa; /* A shade between white and light gray */
-  padding-left: 14px;
+  padding-left: 5px;
 }
 
 /* Checkbox Styling */
 details .formCheck {
   display: flex;
   align-items: center; /* Vertically centers the checkbox and label */
-  padding: 8px 18px 8px 22px; /* Added more padding to the left */
+  padding: 6px 18px 6px 22px; /* Added more padding to the left */
   background-color: #f8f9fa; /* Bootstrap light gray */
-  padding-bottom: 10px;
 }
 
 .formCheckLabel {

@@ -65,16 +65,16 @@ const RecreationalPreferences = ({ formData, handleCheckboxChange }) => {
             <summary>{category}</summary>
             {interests.map((interest) => (
               <div className={styles.formCheck} key={interest}>
-                <input
-                  className={styles.formCheckInput}
-                  type="checkbox"
-                  value={interest}
-                  id={interest}
-                  name="recreationalInterests"
-                  onChange={handleCheckboxChange}
-                  checked={formData.recreationalInterests.includes(interest)}
-                />
                 <label className={styles.formCheckLabel} htmlFor={interest}>
+                  <input
+                    className={styles.formCheckInput}
+                    type="checkbox"
+                    value={interest}
+                    id={interest}
+                    name="recreationalInterests"
+                    onChange={handleCheckboxChange}
+                    checked={formData.recreationalInterests.includes(interest)}
+                  />
                   {interest.charAt(0).toUpperCase() +
                     interest.slice(1).replaceAll(/([A-Z])/g, " $1")}
                 </label>
