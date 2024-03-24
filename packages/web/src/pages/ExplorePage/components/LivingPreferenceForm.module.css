@@ -121,7 +121,6 @@
   width: 100%;
   overflow-x: hidden;
   z-index: 1;
-  padding-top: 10px;
 }
 
 @media screen and (min-width: 768px) {
@@ -132,10 +131,6 @@
     width: 70%;
     padding-left: 20px;
     padding-right: 20px;
-  }
-
-  .pageContainer {
-    padding-top: 0px;
   }
 
   .submitBtnRow {
