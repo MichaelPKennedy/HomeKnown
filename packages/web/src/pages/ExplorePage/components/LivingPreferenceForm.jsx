@@ -422,7 +422,9 @@ const LivingPreferenceForm = () => {
               )}
               {showSubmitButton && (
                 <div
-                  className={`d-flex justify-content-start ${styles.submitBtnRow}`}
+                  className={`d-flex justify-content-start ${
+                    surveyResults ? "" : styles.submitBtnRow
+                  }`}
                 >
                   <button
                     type="submit"
