@@ -13,10 +13,11 @@
 .preferenceContainer {
   display: flex;
   flex-direction: column;
-  height: auto;
+  height: 100%;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
+  margin-top: 10px;
 }
 
 .tokenBank {
@@ -42,7 +43,7 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 .dropzone {
@@ -110,6 +111,14 @@
   }
   .preferenceToken {
     margin: 3px;
+  }
+
+  .preferenceContainer {
+    margin-top: 40px;
+  }
+
+  .dropZoneContainer {
+    margin-top: 30px;
   }
 }
 

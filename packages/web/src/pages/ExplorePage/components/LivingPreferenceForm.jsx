@@ -347,7 +347,7 @@ const LivingPreferenceForm = () => {
               onSubmit={handleSubmit}
               className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
-              <div className={`form-group ${styles.formGroup}`}>
+              <div className={`form-group ${styles.preferenceFormGroup}`}>
                 {isMobile ? (
                   <PreferenceWeightMobile
                     onWeightsChange={updateFormDataWithWeights}

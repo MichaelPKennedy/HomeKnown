@@ -263,6 +263,12 @@
   margin-top: 1rem;
 }
 
+.preferenceFormGroup {
+  width: 100%;
+  margin-bottom: 2rem;
+  z-index: 1;
+}
+
 /* Desktop */
 @media screen and (min-width: 768px) {
   /* 768px tablets and up */
