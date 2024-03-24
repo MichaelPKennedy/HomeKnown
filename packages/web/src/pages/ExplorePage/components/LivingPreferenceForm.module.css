@@ -368,6 +368,15 @@ details .formCheck {
   margin-top: 5px;
 }
 
+.radioFormCheckLabel {
+  display: flex;
+  align-items: center;
+  flex-grow: 1; /* Ensures the label takes up all remaining horizontal space */
+  margin-left: 10px; /* Spacing between checkbox and label */
+  margin-bottom: 12px;
+  margin-top: 12px;
+}
+
 .question {
   margin-bottom: 15px;
 }

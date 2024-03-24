@@ -32,7 +32,7 @@ const WeatherPreferences = ({
               Would you be okay living in an area that receives snow?
             </p>
 
-            <label className={styles.formCheckLabel}>
+            <label className={styles.radioFormCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -43,7 +43,7 @@ const WeatherPreferences = ({
               />
               No snow
             </label>
-            <label className={styles.formCheckLabel}>
+            <label className={styles.radioFormCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -54,7 +54,7 @@ const WeatherPreferences = ({
               />
               Light, occasional snow
             </label>
-            <label className={styles.formCheckLabel}>
+            <label className={styles.radioFormCheckLabel}>
               <input
                 className={styles.formCheckInput}
                 type="radio"
@@ -73,7 +73,7 @@ const WeatherPreferences = ({
           <p className={styles.question}>
             Would you be okay living in an area that receives regular rainfall?
           </p>
-          <label className={styles.formCheckLabel}>
+          <label className={styles.radioFormCheckLabel}>
             <input
               className={styles.formCheckInput}
               type="radio"
@@ -84,7 +84,7 @@ const WeatherPreferences = ({
             />
             Generally dry
           </label>
-          <label className={styles.formCheckLabel}>
+          <label className={styles.radioFormCheckLabel}>
             <input
               className={styles.formCheckInput}
               type="radio"

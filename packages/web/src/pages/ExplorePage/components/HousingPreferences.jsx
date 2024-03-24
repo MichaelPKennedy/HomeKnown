@@ -12,7 +12,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
       <h4 className="pb-2">Housing</h4>
       <p className={styles.question}>Are you looking to buy or rent?</p>
       <div>
-        <label className={styles.formCheckLabel}>
+        <label className={styles.radioFormCheckLabel}>
           <input
             className={styles.formCheckInput}
             type="radio"
@@ -25,7 +25,7 @@ const HousingPreferences = ({ formData, setFormData }) => {
           />
           Buy
         </label>
-        <label className={styles.formCheckLabel}>
+        <label className={styles.radioFormCheckLabel}>
           <input
             className={styles.formCheckInput}
             type="radio"
