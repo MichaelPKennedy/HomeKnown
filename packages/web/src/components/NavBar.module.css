@@ -1,12 +1,13 @@
 .logo {
-  width: 50px;
+  width: 40px;
   margin-right: 15px;
 }
 
 .nav {
+  display: none;
   z-index: 1000;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 12px;
+  padding-bottom: 12px;
   background-color: white !important;
   border-bottom: 0.8px solid rgba(128, 128, 128, 0.3);
 }
@@ -22,11 +23,23 @@
     padding-left: 0px;
     padding-right: 0px;
   }
+  .nav {
+    display: flex;
+  }
 }
 
 .button:hover {
   background-color: #01697c;
   color: white !important;
+}
+
+.button {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.brand {
+  font-size: 18px;
 }
 
 .button:focus,
@@ -63,4 +76,15 @@
 .dropdownItem {
   font-size: 15px;
   font-weight: 400 !important;
+}
+
+.bottomNavShow {
+  display: flex; /* or 'block' depending on your layout */
+  transform: translateY(0); /* Start at 0 movement from the Y-axis */
+}
+
+/* Hidden state for the bottom nav with animation */
+.bottomNavHide {
+  display: flex; /* or 'block' depending on your layout */
+  transform: translateY(100%); /* Move it down out of view */
 }

@@ -4,7 +4,7 @@ import { Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
 import styles from "./swiperStylesRecommendations.module.css";
-import logo from "../../../assets/logo.png"; // Make sure the path is correct
+import logo from "../../../assets/light-logo.png"; // Make sure the path is correct
 
 import unsplashLogo from "../../../assets/unsplashLogo.png";
 

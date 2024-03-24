@@ -1,4 +1,4 @@
-import logo from "./assets/logo.png";
+import logo from "./assets/light-logo.png";
 import "./App.css";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";

@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ErrorPage.module.css";
-import logo from "../assets/logo.png";
+import logo from "../assets/light-logo.png";
 
 const ErrorPage = () => {
   return (
