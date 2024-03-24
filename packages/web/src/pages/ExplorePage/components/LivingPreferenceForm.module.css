@@ -114,6 +114,16 @@
   margin-bottom: 80px;
 }
 
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  z-index: 1;
+  padding-top: 10px;
+}
+
 @media screen and (min-width: 768px) {
   .btnContainer {
     margin: auto;
@@ -125,7 +135,7 @@
   }
 
   .pageContainer {
-    padding-top: 20px;
+    padding-top: 0px;
   }
 
   .submitBtnRow {
@@ -232,16 +242,6 @@
   width: 100%;
   overflow-x: hidden;
   z-index: 1;
-}
-
-.pageContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden;
-  z-index: 1;
-  padding-top: 10px;
 }
 
 .formContainer {
