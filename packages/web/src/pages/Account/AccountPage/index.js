@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./AccountPage.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -10,16 +10,23 @@ import {
   faChevronRight,
   faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../../../AuthContext";
 
 // Placeholder components
-const PersonalInfo = () => <div>Personal Info Component</div>;
-const LoginSecurity = () => <div>Login & Security Component</div>;
 const PaymentsSubscriptions = () => (
   <div>Payments & Subscriptions Component</div>
 );
 const Notifications = () => <div>Notifications Component</div>;
 
 const AccountPage = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/signed-out");
+  };
+
   return (
     <div className={styles.gridContainer}>
       {/* Personal Info */}
@@ -91,6 +98,15 @@ const AccountPage = () => {
           <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
         </div>
       </Link>
+      {isLoggedIn ? (
+        <button className={styles.logout} onClick={handleLogout}>
+          Logout
+        </button>
+      ) : (
+        <Link className={styles.login} to="/login">
+          Login
+        </Link>
+      )}
     </div>
   );
 };
