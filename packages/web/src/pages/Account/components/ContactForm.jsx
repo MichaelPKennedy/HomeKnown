@@ -19,12 +19,9 @@ const ContactForm = () => {
         user_id: user?.user_id || null,
         message,
       });
-      toast.success("Support Request Submitted!");
       setContactType("report a bug");
       setMessage("");
-      setTimeout(() => {
-        navigate("/support/confirmation");
-      }, 200);
+      navigate("/support/confirmation");
     } catch (error) {
       toast.error(error.message);
     }

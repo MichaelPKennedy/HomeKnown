@@ -16,3 +16,29 @@
   background-color: #01697c;
   color: white;
 }
+
+.header {
+  text-align: left;
+}
+
+.container {
+  height: calc(100vh - 81px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: hidden;
+}
+
+.content {
+  margin-top: 0px;
+  width: 90%;
+  margin-bottom: 0px;
+}
+
+@media (min-width: 768px) {
+  .content {
+    width: 65%;
+    margin-bottom: 200px;
+  }
+}
