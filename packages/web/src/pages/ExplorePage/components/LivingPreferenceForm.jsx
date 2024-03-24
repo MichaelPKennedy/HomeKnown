@@ -421,7 +421,9 @@ const LivingPreferenceForm = () => {
                 </>
               )}
               {showSubmitButton && (
-                <div className="d-flex justify-content-start">
+                <div
+                  className={`d-flex justify-content-start ${styles.submitBtnRow}`}
+                >
                   <button
                     type="submit"
                     className={`mt-2 ${styles.btnDropdown}`}

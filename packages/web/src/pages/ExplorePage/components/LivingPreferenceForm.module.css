@@ -110,6 +110,10 @@
   outline: none;
 }
 
+.submitBtnRow {
+  margin-bottom: 80px;
+}
+
 @media screen and (min-width: 768px) {
   .btnContainer {
     margin: auto;
@@ -122,6 +126,10 @@
 
   .pageContainer {
     padding-top: 20px;
+  }
+
+  .submitBtnRow {
+    margin-bottom: 30px;
   }
 }
 
