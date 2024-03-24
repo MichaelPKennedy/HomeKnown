@@ -24,106 +24,112 @@ const NavBar = () => {
     : null;
 
   return (
-    <nav
-      className={`${styles.nav} navbar navbar-expand-lg navbar-light bg-light`}
-    >
-      <Link to="/">
-        <img src={logo} alt="Home Known Logo" className={styles.logo} />
-      </Link>
-      <Link className="navbar-brand" to="/">
-        Home Known
-      </Link>
-      <button
-        className="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+    <nav className={`${styles.nav}`}>
+      <div
+        className={`${styles.navBody} navbar navbar-expand-lg navbar-light bg-light`}
       >
-        <span className="navbar-toggler-icon"></span>
-      </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav ml-auto mr-1">
-          <li className="nav-item mr-4">
-            <Link to="/explore">
-              <button className={`${styles.button} nav-link btn btn-link`}>
-                Explore
+        <Link to="/">
+          <img src={logo} alt="Home Known Logo" className={styles.logo} />
+        </Link>
+        <Link className="navbar-brand" to="/">
+          Home Known
+        </Link>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ml-auto mr-1">
+            <li className="nav-item mr-4">
+              <Link to="/explore">
+                <button className={`${styles.button} nav-link btn btn-link`}>
+                  Explore
+                </button>
+              </Link>
+            </li>
+            {isLoggedIn && (
+              <>
+                <li className="nav-item mr-4">
+                  <Link to="/recommendations">
+                    <button
+                      className={`${styles.button} nav-link btn btn-link`}
+                    >
+                      Recommendations
+                    </button>
+                  </Link>
+                </li>
+                <li className="nav-item mr-4">
+                  <Link to="/my-locations">
+                    <button
+                      className={`${styles.button} nav-link btn btn-link`}
+                    >
+                      My Locations
+                    </button>
+                  </Link>
+                </li>
+              </>
+            )}
+            <li className="nav-item dropdown">
+              <button
+                className={`nav-link btn btn-link ${styles.userCircle}`}
+                id="userMenuDropdown"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                {userInitial || <FontAwesomeIcon icon={faUser} />}
               </button>
-            </Link>
-          </li>
-          {isLoggedIn && (
-            <>
-              <li className="nav-item mr-4">
-                <Link to="/recommendations">
-                  <button className={`${styles.button} nav-link btn btn-link`}>
-                    Recommendations
-                  </button>
-                </Link>
-              </li>
-              <li className="nav-item mr-4">
-                <Link to="/my-locations">
-                  <button className={`${styles.button} nav-link btn btn-link`}>
-                    My Locations
-                  </button>
-                </Link>
-              </li>
-            </>
-          )}
-          <li className="nav-item dropdown">
-            <button
-              className={`nav-link btn btn-link ${styles.userCircle}`}
-              id="userMenuDropdown"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {userInitial || <FontAwesomeIcon icon={faUser} />}
-            </button>
-            <div
-              className={`dropdown-menu dropdown-menu-right ${styles.dropdown}`}
-              aria-labelledby="userMenuDropdown"
-            >
-              {isLoggedIn ? (
-                <>
+              <div
+                className={`dropdown-menu dropdown-menu-right ${styles.dropdown}`}
+                aria-labelledby="userMenuDropdown"
+              >
+                {isLoggedIn ? (
+                  <>
+                    <Link
+                      className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                      to="/account-settings"
+                    >
+                      Account
+                    </Link>
+                    <button
+                      className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
                   <Link
                     className={`dropdown-item pl-3 ${styles.dropdownItem}`}
-                    to="/account-settings"
+                    to="/login"
                   >
-                    Account
+                    Login
                   </Link>
-                  <button
-                    className={`dropdown-item pl-3 ${styles.dropdownItem}`}
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
+                )}
+                <div className="dropdown-divider"></div>
                 <Link
                   className={`dropdown-item pl-3 ${styles.dropdownItem}`}
-                  to="/login"
+                  to="/privacy-policy"
                 >
-                  Login
+                  Privacy Policy
                 </Link>
-              )}
-              <div className="dropdown-divider"></div>
-              <Link
-                className={`dropdown-item pl-3 ${styles.dropdownItem}`}
-                to="/privacy-policy"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                className={`dropdown-item pl-3 ${styles.dropdownItem}`}
-                to="/terms-of-service"
-              >
-                Terms of Service
-              </Link>
-            </div>
-          </li>
-        </ul>
+                <Link
+                  className={`dropdown-item pl-3 ${styles.dropdownItem}`}
+                  to="/terms-of-service"
+                >
+                  Terms of Service
+                </Link>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
