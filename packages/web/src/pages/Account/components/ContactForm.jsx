@@ -62,7 +62,7 @@ const ContactForm = () => {
             rows="4"
           ></textarea>
         </div>
-        <button type="submit" className="btn btn-primary">
+        <button type="submit" className={`btn mt-3 ${styles.button}`}>
           Submit
         </button>
       </form>

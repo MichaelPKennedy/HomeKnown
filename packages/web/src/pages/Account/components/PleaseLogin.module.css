@@ -1,3 +1,8 @@
+.buttonRow {
+  display: flex;
+  justify-content: start;
+}
+
 .button {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
@@ -15,4 +20,13 @@
 .button:hover {
   background-color: #01697c;
   color: white;
+}
+
+.header {
+  text-align: left;
+}
+
+.container {
+  margin: auto;
+  margin-top: 50px;
 }
