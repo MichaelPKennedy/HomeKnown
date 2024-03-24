@@ -481,16 +481,14 @@ a:active {
 
 .ranking {
   position: absolute;
-  top: -5px;
-  left: -5px;
-  background-color: #01697c;
+  top: 5px;
+  left: 2px;
   font-size: 18px;
+  font-weight: 600;
   width: 35px;
   height: 35px;
   text-align: center;
-  line-height: 35px;
-  color: #fff;
-  border-radius: 50%;
+  color: black;
 }
 .chartContainer {
   width: 100%;
