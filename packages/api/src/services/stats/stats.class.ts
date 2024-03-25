@@ -34,6 +34,9 @@ export class StatsService implements ServiceMethods<any> {
     const cacheKey = 'topCitiesAndTopMonthlyCities'
     const cachedData = myCache.get<StatsResult>(cacheKey)
 
+    if (cachedData) {
+      return cachedData
+    }
     const now = new Date()
     const currentMonth = now.getMonth() + 1
 
