@@ -70,21 +70,21 @@ const StateSelection = ({ formData, setFormData }) => {
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>
-                <input
-                  className={styles.formCheckInput}
-                  type="checkbox"
-                  value={stateCode}
-                  id={`state-${stateCode}`}
-                  onChange={handleCheckboxChange}
-                  checked={
-                    allSelected ||
-                    formData?.includedStates?.includes(parseInt(stateCode))
-                  }
-                />
                 <label
                   className={styles.formCheckLabel}
                   htmlFor={`state-${stateCode}`}
                 >
+                  <input
+                    className={styles.formCheckInput}
+                    type="checkbox"
+                    value={stateCode}
+                    id={`state-${stateCode}`}
+                    onChange={handleCheckboxChange}
+                    checked={
+                      allSelected ||
+                      formData?.includedStates?.includes(parseInt(stateCode))
+                    }
+                  />
                   {stateName}
                 </label>
               </div>
