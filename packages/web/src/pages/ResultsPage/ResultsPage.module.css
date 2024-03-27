@@ -43,17 +43,17 @@
   color: white;
 }
 
-@media (max-width: 1000px) {
-  .btnContainer {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+.btnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 10;
 }
 
 .btnPreferences:hover {
   background-color: white;
   color: #01697c;
-  border: 0.5px solid #01697c;
 }
 
 .btnPreferences:focus {
@@ -296,30 +296,23 @@
 
 .btnPreferences {
   position: relative;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   background-color: transparent;
   color: #01697c;
-  border: 0.5px solid #01697c;
+  border: none;
   border-radius: 0;
   margin-bottom: 15px;
   border-radius: 4px;
   height: 40px;
-  width: 100%;
-}
-
-@media (min-width: 1000px) {
-  .btnContainer {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
+  width: 200px;
+  margin: auto;
 }
 
 .btnPreferences::after {
   content: "";
   position: absolute;
-  bottom: -10px;
+  bottom: -5px;
   left: 50%;
 
   border-left: 5px solid transparent;

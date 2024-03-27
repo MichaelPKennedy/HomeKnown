@@ -54,43 +54,29 @@
 
 .btnContainer {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: left;
+  justify-content: center;
   width: 100%;
-  z-index: 10;
-}
-
-@media (max-width: 1000px) {
-  .btnContainer {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-}
-
-.btnContainer {
-  width: 100%;
+  background-color: white;
   z-index: 10;
 }
 
 .btnCancel {
   position: relative;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   background-color: white;
   color: #01697c;
-  border: 0.5px solid #01697c;
+  border: none;
   border-radius: 4px;
   margin-bottom: 15px;
   height: 40px;
-  width: 100%;
+  width: 200px;
 }
 
 .btnCancel::after {
   content: "";
   position: absolute;
-  bottom: -10px; /* Adjust as needed */
+  bottom: -5px;
   height: 50px;
   left: 50%;
   transform: translateX(-50%);
@@ -103,7 +89,6 @@
 .btnCancel:hover {
   background-color: white;
   color: #01697c;
-  border: 0.5px solid #01697c;
 }
 
 .btnCancel:focus {
@@ -124,15 +109,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  .btnContainer {
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    width: 70%;
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
   .submitBtnRow {
     margin-bottom: 30px;
   }
