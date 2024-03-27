@@ -132,14 +132,14 @@ const MyLocations = () => {
           </button>
           {Object.keys(citiesByState).map((state) => (
             <div key={state} className={styles.checkboxContainer}>
-              <input
-                type="checkbox"
-                id={`checkbox-${state}`}
-                name={state}
-                checked={tempSelectedStates.has(state)}
-                onChange={handleCheckboxChange}
-              />
               <label className={styles.label} htmlFor={`checkbox-${state}`}>
+                <input
+                  type="checkbox"
+                  id={`checkbox-${state}`}
+                  name={state}
+                  checked={tempSelectedStates.has(state)}
+                  onChange={handleCheckboxChange}
+                />
                 {state}
               </label>
               <button
