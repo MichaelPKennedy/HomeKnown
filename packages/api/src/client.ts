@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { categoriesClient } from './services/categories/categories.shared'
+export type {
+  Categories,
+  CategoriesData,
+  CategoriesQuery,
+  CategoriesPatch
+} from './services/categories/categories.shared'
+
 import { contactSupportClient } from './services/contact-support/contact-support.shared'
 export type {
   ContactSupport,
@@ -150,5 +158,6 @@ export const createClient = <Configuration = any,>(
   client.configure(statsClient)
   client.configure(emailVerificationClient)
   client.configure(contactSupportClient)
+  client.configure(categoriesClient)
   return client
 }

@@ -71,6 +71,22 @@ export const CityModel = (sequelize: Sequelize) => {
           model: State,
           key: 'state_code'
         }
+      },
+      coast: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      },
+      tropical: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      },
+      collegeTown: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
+      },
+      winter: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true
       }
     },
     {

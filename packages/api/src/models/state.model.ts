@@ -37,6 +37,10 @@ export const StateModel = (sequelize: Sequelize) => {
       },
       UtilCostsIndex: {
         type: DataTypes.DECIMAL(10, 2)
+      },
+      region: {
+        type: DataTypes.STRING(25),
+        allowNull: false
       }
     },
     {
