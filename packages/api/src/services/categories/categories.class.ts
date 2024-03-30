@@ -80,19 +80,25 @@ export class CategoriesService implements ServiceMethods<any> {
             as: 'State',
             required: true,
             attributes: ['state', 'region']
+          },
+          {
+            model: this.sequelize.models.CityPhotos,
+            required: false
           }
         ],
         limit: 50,
-        raw: true,
         nest: true
       })
 
-      result[category] = cities.map((city: any) => ({
+      const mappedCities = cities.map((city: any) => ({
         city_id: city.city_id,
         city_name: city.city_name,
         state_name: city.State.state,
-        region: city.State.region
+        region: city.State.region,
+        photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
       }))
+
+      result[category] = mappedCities.sort((a: any, b: any) => b.photos.length - a.photos.length)
     }
 
     return result as CategoriesResult

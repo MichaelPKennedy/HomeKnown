@@ -37,7 +37,7 @@ const CityPhotos = ({ photos }) => {
             />
           )}
           <img
-            src={photo.url}
+            src={photo.full_url}
             alt={photo.alt}
             className={styles.photo}
             onLoad={(e) => {
@@ -49,11 +49,11 @@ const CityPhotos = ({ photos }) => {
           <p>
             Photo by{" "}
             <a
-              href={`${photo.attribution.photographerUrl}?utm_source=homeknown&utm_medium=referral`}
+              href={`${photo.photographerUrl}?utm_source=homeknown&utm_medium=referral`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {photo.attribution.photographer}
+              {photo.photographer}
             </a>{" "}
             on{" "}
             <a

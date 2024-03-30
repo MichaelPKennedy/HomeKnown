@@ -27,9 +27,9 @@ const Photos = ({ city }) => {
             key={city.city_id}
             state={{ fromPage: "home" }}
           >
-            {photo.blur_hash && (
+            {photo.blurHash && (
               <Blurhash
-                hash={photo.blur_hash}
+                hash={photo.blurHash}
                 width="100%"
                 height="100%"
                 resolutionX={32}
@@ -38,11 +38,11 @@ const Photos = ({ city }) => {
               />
             )}
             <img
-              src={photo.regular_url}
-              alt={photo.alt_description}
+              src={photo.reg_url}
+              alt={photo.alt}
               className={styles.photo}
               onLoad={(e) => {
-                if (photo.blur_hash) {
+                if (photo.blurHash) {
                   e.target.previousSibling.style.display = "none";
                 }
               }}
@@ -51,7 +51,7 @@ const Photos = ({ city }) => {
           <p>
             Photo by{" "}
             <a
-              href={`${photo.profile_url}?utm_source=homeknown&utm_medium=referral`}
+              href={`${photo.photographerUrl}?utm_source=homeknown&utm_medium=referral`}
               target="_blank"
               rel="noopener noreferrer"
             >

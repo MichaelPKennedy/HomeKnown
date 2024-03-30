@@ -60,6 +60,7 @@ import { ContactSupportModel } from './models/contact-support.model'
 import { PasswordHistoryModel } from './models/password-history.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
+import { CityPhotosModel } from './models/city-photos.model'
 import { CountyAverageTempModel } from './models/county-average-temp.model'
 import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
@@ -132,6 +133,7 @@ PasswordHistoryModel(sequelize)
 TopCitiesModel(sequelize)
 TopMonthlyCitiesModel(sequelize)
 TopCityPhotosModel(sequelize)
+CityPhotosModel(sequelize)
 ContactSupportModel(sequelize)
 
 const City = sequelize.models.City
@@ -168,6 +170,7 @@ const CountyAverageTemp = sequelize.models.CountyAverageTemp
 const TopCities = sequelize.models.TopCities
 const TopMonthlyCities = sequelize.models.TopMonthlyCities
 const TopCityPhotos = sequelize.models.TopCityPhotos
+const CityPhotos = sequelize.models.CityPhotos
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -234,9 +237,11 @@ StateIndustrySalary.belongsTo(State, { foreignKey: 'state_code' })
 TopCities.belongsTo(City, { foreignKey: 'city_id' })
 TopMonthlyCities.belongsTo(City, { foreignKey: 'city_id' })
 TopCityPhotos.belongsTo(City, { foreignKey: 'city_id' })
+CityPhotos.belongsTo(City, { foreignKey: 'city_id' })
 City.hasOne(TopCities, { foreignKey: 'city_id' })
 City.hasOne(TopMonthlyCities, { foreignKey: 'city_id' })
 City.hasMany(TopCityPhotos, { foreignKey: 'city_id' })
+City.hasMany(CityPhotos, { foreignKey: 'city_id' })
 Weather.belongsTo(State, { foreignKey: 'state_code' })
 
 // Configure services and real-time functionality

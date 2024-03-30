@@ -51,7 +51,7 @@ export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
   const [userPreferences, setUserPreferences] = useState({});
   const [userRecommendations, setUserRecommendations] = useState([]);
-  const [stats, setStats] = useState({});
+  const [categories, setCategories] = useState({});
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
@@ -121,12 +121,12 @@ export const CityDataProvider = ({ children }) => {
             },
           };
         }
-        const statsResponse = await client.service("stats").find({
+        const categoriesResponse = await client.service("categories").find({
           headers,
         });
-        setStats(statsResponse);
+        setCategories(categoriesResponse);
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error("Error fetching categories:", error);
       }
     };
 
@@ -243,7 +243,7 @@ export const CityDataProvider = ({ children }) => {
         userRecInterests,
         userRecInterestsLoading,
         userRecInterestsError,
-        stats,
+        categories,
       }}
     >
       {children}

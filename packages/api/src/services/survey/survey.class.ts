@@ -490,6 +490,9 @@ export class SurveyService implements ServiceMethods<any> {
         {
           model: this.sequelize.models.County,
           attributes: ['county_name']
+        },
+        {
+          model: this.sequelize.models.CityPhotos
         }
       ]
     })
@@ -538,7 +541,8 @@ export class SurveyService implements ServiceMethods<any> {
         MonthlyRent: city.MonthlyRentCities,
         Jobs: cityJobs,
         selectedJobs,
-        Weather: city.CityMonthlyWeathers
+        Weather: city.CityMonthlyWeathers,
+        photos: city.CityPhotos.map((photo: any) => photo.get({ plain: true }))
       }
     })
 

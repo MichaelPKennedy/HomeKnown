@@ -1,6 +1,21 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCity, faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCity,
+  faCalendarAlt,
+  faUmbrellaBeach,
+  faWater,
+  faUniversity,
+  faSnowflake,
+  faMapMarkerAlt,
+  faFish,
+  faSun,
+  faMountain,
+  faLeaf,
+  faAnchor,
+  faSeedling,
+  faTree,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./SearchNavStrip.module.css";
 
 const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
@@ -10,7 +25,86 @@ const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
       label: "Top Monthly",
       icon: faCalendarAlt,
     },
-    { id: "topCities", label: "Top All Time", icon: faCity },
+    {
+      id: "topCities",
+      label: "Top All Time",
+      icon: faCity,
+    },
+    {
+      id: "tropical",
+      label: "Tropical",
+      icon: faUmbrellaBeach,
+    },
+    {
+      id: "coast",
+      label: "Coast",
+      icon: faWater,
+    },
+    {
+      id: "collegeTown",
+      label: "College Town",
+      icon: faUniversity,
+    },
+    {
+      id: "winter",
+      label: "Winter",
+      icon: faSnowflake,
+    },
+    {
+      id: "Southeast",
+      label: "Southeast",
+      icon: faMapMarkerAlt,
+    },
+    {
+      id: "Pacific",
+      label: "Pacific",
+      icon: faFish,
+    },
+    {
+      id: "Southwest",
+      label: "Southwest",
+      icon: faSun,
+    },
+    {
+      id: "SouthCentral",
+      label: "South Central",
+      icon: faMapMarkerAlt,
+    },
+    {
+      id: "PacificCoast",
+      label: "Pacific Coast",
+      icon: faWater,
+    },
+    {
+      id: "MountainWest",
+      label: "Mountain West",
+      icon: faMountain,
+    },
+    {
+      id: "NewEngland",
+      label: "New England",
+      icon: faLeaf,
+    },
+    {
+      id: "MidAtlantic",
+      label: "Mid-Atlantic",
+      icon: faAnchor,
+    },
+    {
+      id: "GreatLakes",
+      label: "Great Lakes",
+      icon: faWater,
+    },
+    {
+      id: "GreatPlains",
+      label: "Great Plains",
+      icon: faSeedling,
+    },
+    {
+      id: "PacificNorthwest",
+      label: "Pacific Northwest",
+      icon: faTree,
+    },
   ];
 
   return (

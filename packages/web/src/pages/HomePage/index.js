@@ -9,7 +9,7 @@ import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
-  const { stats } = useCityData();
+  const { categories } = useCityData();
   const [selectedOption, setSelectedOption] = useState("topMonthlyCities");
 
   const handleSelectionChange = (optionId) => {
@@ -17,8 +17,12 @@ const HomePage = () => {
   };
 
   const getSelectedCities = () => {
-    return stats[selectedOption]?.slice(0, 10) || [];
+    return categories[selectedOption]?.slice(0, 50) || [];
   };
+
+  useEffect(() => {
+    console.log("categories:", categories);
+  }, [categories]);
 
   useEffect(() => {
     console.log("Selected Option:", selectedOption);
@@ -60,21 +64,19 @@ const HomePage = () => {
         currentSelection={selectedOption}
       />
       <Row className={styles.statsContainer}>
-        {getSelectedCities()
-          .slice(0, 10)
-          .map((city, index) => (
-            <Col
-              key={`${selectedOption}-${city.city_id}-${index}`}
-              xs={12}
-              sm={6}
-              md={4}
-              lg={3}
-              xl={3}
-              className="d-flex align-items-stretch"
-            >
-              <CityCard city={city} index={index} />
-            </Col>
-          ))}
+        {getSelectedCities().map((city, index) => (
+          <Col
+            key={`${selectedOption}-${city.city_id}-${index}`}
+            xs={12}
+            sm={6}
+            md={4}
+            lg={3}
+            xl={3}
+            className="d-flex align-items-stretch"
+          >
+            <CityCard city={city} index={index} />
+          </Col>
+        ))}
       </Row>
       {/* <div className={styles.statsHeader}>
         <p>Top User Cities All Time</p>

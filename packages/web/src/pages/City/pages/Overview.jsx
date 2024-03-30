@@ -31,7 +31,7 @@ const Overview = () => {
   const { cityData, isLoading, error } = useCityData();
 
   const currentCity = city ? city : cityData;
-  const { photos } = cityData || {};
+  const { photos } = currentCity || {};
   const { description } = currentCity || {};
 
   useEffect(() => {
