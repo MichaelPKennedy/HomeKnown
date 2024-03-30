@@ -1,6 +1,8 @@
 import type { Id, NullableId, Paginated, Params, ServiceMethods } from '@feathersjs/feathers'
 import type { Application } from '../../declarations'
 import type { Categories, CategoriesData, CategoriesPatch, CategoriesQuery } from './categories.schema'
+import NodeCache from 'node-cache'
+const myCache = new NodeCache({ stdTTL: 86400 }) // 24 hours
 import { Op } from 'sequelize'
 
 export type { Categories, CategoriesData, CategoriesPatch, CategoriesQuery }
@@ -62,17 +64,26 @@ export class CategoriesService implements ServiceMethods<any> {
   }
 
   async find(params: Params = {}): Promise<CategoriesResult | Paginated<CategoriesResult>> {
+    const cacheKey = 'defaultCategoriesResult'
+    const isDefaultQuery = !params.query || Object.keys(params.query).length === 0
+
+    if (isDefaultQuery) {
+      const cachedResult = myCache.get<CategoriesResult>(cacheKey)
+      if (cachedResult) {
+        return cachedResult
+      }
+    }
+
     const categories = ['tropical', 'coast', 'collegeTown', 'winter', ...regions]
     const result: Partial<CategoriesResult> = {}
 
     const stats = await this.app.service('stats').find()
-
     if (stats) {
       result.topMonthlyCities = stats.topMonthlyCities
       result.topCities = stats.topCities
     }
 
-    for (const category of categories) {
+    const categoryPromises = categories.map(async (category) => {
       let whereCondition = {}
       if (['tropical', 'coast', 'collegeTown', 'winter'].includes(category)) {
         whereCondition = { [category]: true }
@@ -99,15 +110,28 @@ export class CategoriesService implements ServiceMethods<any> {
         nest: true
       })
 
-      const mappedCities = cities.map((city: any) => ({
-        city_id: city.city_id,
-        city_name: city.city_name,
-        state_name: city.State.state,
-        region: city.State.region,
-        photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
-      }))
+      return {
+        category,
+        cities: cities
+          .map((city: any) => ({
+            city_id: city.city_id,
+            city_name: city.city_name,
+            state_name: city.State.state,
+            region: city.State.region,
+            photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
+          }))
+          .sort((a: any, b: any) => b.photos.length - a.photos.length)
+      }
+    })
 
-      result[category] = mappedCities.sort((a: any, b: any) => b.photos.length - a.photos.length)
+    const categoriesWithCities = await Promise.all(categoryPromises)
+
+    categoriesWithCities.forEach(({ category, cities }) => {
+      result[category] = cities
+    })
+
+    if (isDefaultQuery) {
+      myCache.set(cacheKey, result)
     }
 
     return result as CategoriesResult
