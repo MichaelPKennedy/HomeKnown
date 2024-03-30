@@ -10,7 +10,7 @@ import styles from "./HomePage.module.css";
 
 const HomePage = () => {
   const { categories } = useCityData();
-  const [selectedOption, setSelectedOption] = useState("topMonthlyCities");
+  const [selectedOption, setSelectedOption] = useState("coast");
 
   const handleSelectionChange = (optionId) => {
     setSelectedOption(optionId);

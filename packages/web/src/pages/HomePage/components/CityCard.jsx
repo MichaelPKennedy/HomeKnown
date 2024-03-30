@@ -16,7 +16,7 @@ const CityCard = ({ city, index }) => {
         <div className={styles.cityDetails}>
           <div className={styles.ranking}>{index + 1}</div>
           <p className={styles.header}>
-            {city.city_name}, {city.state}
+            {city.city_name}, {city.state_name}
           </p>
         </div>
       </Link>

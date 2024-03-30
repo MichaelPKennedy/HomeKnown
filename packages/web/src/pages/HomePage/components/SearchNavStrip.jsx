@@ -21,24 +21,14 @@ import styles from "./SearchNavStrip.module.css";
 const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
   const options = [
     {
-      id: "topMonthlyCities",
-      label: "Top Monthly",
-      icon: faCalendarAlt,
-    },
-    {
-      id: "topCities",
-      label: "Top All Time",
-      icon: faCity,
+      id: "coast",
+      label: "Coastal",
+      icon: faWater,
     },
     {
       id: "tropical",
       label: "Tropical",
       icon: faUmbrellaBeach,
-    },
-    {
-      id: "coast",
-      label: "Coast",
-      icon: faWater,
     },
     {
       id: "collegeTown",
@@ -66,44 +56,54 @@ const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
       icon: faSun,
     },
     {
-      id: "SouthCentral",
+      id: "South Central",
       label: "South Central",
       icon: faMapMarkerAlt,
     },
     {
-      id: "PacificCoast",
+      id: "Pacific Coast",
       label: "Pacific Coast",
       icon: faWater,
     },
     {
-      id: "MountainWest",
+      id: "Mountain West",
       label: "Mountain West",
       icon: faMountain,
     },
     {
-      id: "NewEngland",
+      id: "Pacific Northwest",
+      label: "Pacific Northwest",
+      icon: faTree,
+    },
+    {
+      id: "New England",
       label: "New England",
       icon: faLeaf,
     },
     {
-      id: "MidAtlantic",
+      id: "Mid-Atlantic",
       label: "Mid-Atlantic",
       icon: faAnchor,
     },
     {
-      id: "GreatLakes",
+      id: "Great Lakes",
       label: "Great Lakes",
       icon: faWater,
     },
     {
-      id: "GreatPlains",
+      id: "Great Plains",
       label: "Great Plains",
       icon: faSeedling,
     },
     {
-      id: "PacificNorthwest",
-      label: "Pacific Northwest",
-      icon: faTree,
+      id: "topMonthlyCities",
+      label: "Top Monthly",
+      icon: faCalendarAlt,
+    },
+    {
+      id: "topCities",
+      label: "Top All Time",
+      icon: faCity,
     },
   ];
 

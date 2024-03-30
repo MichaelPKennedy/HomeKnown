@@ -8,20 +8,20 @@ export type { Categories, CategoriesData, CategoriesPatch, CategoriesQuery }
 interface City {
   city_id: number
   city_name: string
-  area_code: number
+  area_code?: number
   Latitude: number | null
   Longitude: number | null
-  currentHomePrice: number | null
-  currentRentPrice: number | null
-  pop_2022: number | null
-  cost_index: number | null
-  city_description: string | null
-  elevation: number | null
-  state_code: number | null
-  coast: boolean | null
-  tropical: boolean | null
-  collegeTown: boolean | null
-  winter: boolean | null
+  currentHomePrice?: number | null
+  currentRentPrice?: number | null
+  pop_2022?: number | null
+  cost_index?: number | null
+  city_description?: string | null
+  elevation?: number | null
+  state_code?: number | null
+  coast?: boolean | null
+  tropical?: boolean | null
+  collegeTown?: boolean | null
+  winter?: boolean | null
 }
 
 const regions = [
@@ -43,6 +43,8 @@ export interface CategoriesParams extends Params {
 }
 
 interface CategoriesResult {
+  topMonthlyCities: City[]
+  topCities: City[]
   tropical: City[]
   coast: City[]
   collegeTown: City[]
@@ -62,6 +64,13 @@ export class CategoriesService implements ServiceMethods<any> {
   async find(params: Params = {}): Promise<CategoriesResult | Paginated<CategoriesResult>> {
     const categories = ['tropical', 'coast', 'collegeTown', 'winter', ...regions]
     const result: Partial<CategoriesResult> = {}
+
+    const stats = await this.app.service('stats').find()
+
+    if (stats) {
+      result.topMonthlyCities = stats.topMonthlyCities
+      result.topCities = stats.topCities
+    }
 
     for (const category of categories) {
       let whereCondition = {}

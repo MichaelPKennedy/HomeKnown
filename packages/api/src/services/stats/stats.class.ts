@@ -14,6 +14,8 @@ interface CityStats {
   count: number
   city_name: string
   state: string
+  Latitude: number
+  Longitude: number
 }
 
 interface StatsResult {
@@ -46,22 +48,14 @@ export class StatsService implements ServiceMethods<any> {
         include: [
           {
             model: this.sequelize.models.City,
-            attributes: ['city_name'],
+            attributes: ['city_name', 'Latitude', 'Longitude'],
             include: [
               {
                 model: this.sequelize.models.State,
                 attributes: ['state_abbrev']
               },
               {
-                model: this.sequelize.models.TopCityPhotos,
-                attributes: [
-                  'full_url',
-                  'regular_url',
-                  'blur_hash',
-                  'alt_description',
-                  'photographer',
-                  'profile_url'
-                ]
+                model: this.sequelize.models.CityPhotos
               }
             ]
           }
@@ -72,15 +66,10 @@ export class StatsService implements ServiceMethods<any> {
       city_id: city.city_id,
       count: city.count,
       city_name: city.City.city_name,
+      Latitude: city.City.Latitude,
+      Longitude: city.City.Longitude,
       state: city.City.State.state_abbrev,
-      photos: city.City.TopCityPhotos.map((photo: any) => ({
-        full_url: photo.full_url,
-        regular_url: photo.regular_url,
-        blur_hash: photo.blur_hash,
-        alt_description: photo.alt_description,
-        photographer: photo.photographer,
-        profile_url: photo.profile_url
-      }))
+      photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
 
     const topMonthlyCities = (
@@ -99,15 +88,7 @@ export class StatsService implements ServiceMethods<any> {
                 attributes: ['state_abbrev']
               },
               {
-                model: this.sequelize.models.TopCityPhotos,
-                attributes: [
-                  'full_url',
-                  'regular_url',
-                  'blur_hash',
-                  'alt_description',
-                  'photographer',
-                  'profile_url'
-                ]
+                model: this.sequelize.models.CityPhotos
               }
             ]
           }
@@ -119,14 +100,7 @@ export class StatsService implements ServiceMethods<any> {
       count: city.count,
       city_name: city.City.city_name,
       state: city.City.State.state_abbrev,
-      photos: city.City.TopCityPhotos.map((photo: any) => ({
-        full_url: photo.full_url,
-        regular_url: photo.regular_url,
-        blur_hash: photo.blur_hash,
-        alt_description: photo.alt_description,
-        photographer: photo.photographer,
-        profile_url: photo.profile_url
-      }))
+      photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
 
     const result: StatsResult = {
