@@ -1,3 +1,4 @@
+import { forgotPassword } from './forgot-password/forgot-password'
 import { categories } from './categories/categories'
 import { contactSupport } from './contact-support/contact-support'
 import { emailVerification } from './email-verification/email-verification'
@@ -22,6 +23,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(forgotPassword)
   app.configure(categories)
   app.configure(contactSupport)
   app.configure(emailVerification)

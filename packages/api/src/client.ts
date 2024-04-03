@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { forgotPasswordClient } from './services/forgot-password/forgot-password.shared'
+export type {
+  ForgotPassword,
+  ForgotPasswordData,
+  ForgotPasswordQuery,
+  ForgotPasswordPatch
+} from './services/forgot-password/forgot-password.shared'
+
 import { categoriesClient } from './services/categories/categories.shared'
 export type {
   Categories,
@@ -159,5 +167,6 @@ export const createClient = <Configuration = any,>(
   client.configure(emailVerificationClient)
   client.configure(contactSupportClient)
   client.configure(categoriesClient)
+  client.configure(forgotPasswordClient)
   return client
 }

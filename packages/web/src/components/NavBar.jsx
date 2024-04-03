@@ -80,28 +80,20 @@ const NavBar = () => {
                   </button>
                 </Link>
               </li>
-              {isLoggedIn && (
-                <>
-                  <li className="nav-item mr-4">
-                    <Link to="/recommendations">
-                      <button
-                        className={`${styles.button} nav-link btn btn-link`}
-                      >
-                        Recommendations
-                      </button>
-                    </Link>
-                  </li>
-                  <li className="nav-item mr-4">
-                    <Link to="/my-locations">
-                      <button
-                        className={`${styles.button} nav-link btn btn-link`}
-                      >
-                        My Locations
-                      </button>
-                    </Link>
-                  </li>
-                </>
-              )}
+              <li className="nav-item mr-4">
+                <Link to="/recommendations">
+                  <button className={`${styles.button} nav-link btn btn-link`}>
+                    Recommendations
+                  </button>
+                </Link>
+              </li>
+              <li className="nav-item mr-4">
+                <Link to="/my-locations">
+                  <button className={`${styles.button} nav-link btn btn-link`}>
+                    My Locations
+                  </button>
+                </Link>
+              </li>
               <li className="nav-item dropdown">
                 <button
                   className={`nav-link btn btn-link ${styles.userCircle}`}

@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
 import { AuthContext } from "../../AuthContext";
 import LoginModal from "../../components/LoginModal";
+import PleaseLogin from "./components/PleaseLogin";
 import LargeResultsMap from "../ResultsPage/components/LargeResultsMap";
 
 const MyLocations = () => {
@@ -115,7 +116,7 @@ const MyLocations = () => {
     selectedStates.has(city.state_name)
   );
 
-  return (
+  return isLoggedIn ? (
     <div className={styles.myLocationsContainer}>
       <button onClick={toggleFilterVisibility} className={styles.filterButton}>
         Select Filters
@@ -222,6 +223,8 @@ const MyLocations = () => {
         <LoginModal onClose={() => setShowLoginModal(false)} />
       )}
     </div>
+  ) : (
+    <PleaseLogin />
   );
 };
 export default MyLocations;

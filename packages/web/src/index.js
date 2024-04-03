@@ -43,6 +43,8 @@ import Industry from "./pages/City/pages/Industry";
 import AirQuality from "./pages/City/pages/AirQuality";
 import Demographics from "./pages/City/pages/Demographics";
 import * as Sentry from "@sentry/react";
+import PasswordReset from "./pages/Account/PasswordReset";
+import ForgotPassword from "./pages/Account/ForgotPassword";
 
 Sentry.init({
   dsn: "https://41c875fe4dae8546ea00662c958ff71b@o4506176576225280.ingest.us.sentry.io/4506176585269248",
@@ -137,6 +139,8 @@ root.render(
                     element={<RecommendationsPage />}
                   />
                   <Route path="/verify-email" element={<VerifyEmail />} />
+                  <Route path="/reset-password" element={<PasswordReset />} />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                   <Route path="/results/:cityId" element={<City />}>
                     <Route index element={<Overview />} />
                     <Route path="recreation" element={<Recreation />} />

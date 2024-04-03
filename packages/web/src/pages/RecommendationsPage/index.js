@@ -1,17 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useCityData } from "../../utils/CityDataContext";
+import { AuthContext } from "../../AuthContext";
 import CityCard from "./components/CityCard";
+import PleaseLogin from "./components/PleaseLogin";
 import styles from "./RecommendationsPage.module.css";
 
 const RecommendationsPage = () => {
   const { userRecommendations } = useCityData();
+  const { isLoggedIn } = useContext(AuthContext);
 
   useEffect(() => {
     console.log("userRecommendations", userRecommendations);
   }, [userRecommendations]);
-  return (
+  return isLoggedIn ? (
     <div className={styles.pageContainer}>
       <div className={styles.recommendationsHeader}>
         <p className="mb-2">Your AI Recommendations...</p>
@@ -32,6 +35,8 @@ const RecommendationsPage = () => {
         ))}
       </Row>
     </div>
+  ) : (
+    <PleaseLogin />
   );
 };
 

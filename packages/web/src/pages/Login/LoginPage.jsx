@@ -80,6 +80,15 @@ const LoginPage = () => {
               Login
             </Button>
           </Form>
+          <div className="text-center">
+            <Button
+              variant="link"
+              onClick={() => navigate("/forgot-password")}
+              className={styles.forgotPasswordButton}
+            >
+              Forgot Password?
+            </Button>
+          </div>
         </Card.Body>
       </Card>
       <Card className={styles.card}>

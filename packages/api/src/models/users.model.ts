@@ -50,6 +50,15 @@ export const UsersModel = (sequelize: Sequelize) => {
         unique: true,
         defaultValue: null
       },
+      forgotPswdToken: {
+        type: DataTypes.STRING(100),
+        unique: true,
+        defaultValue: null
+      },
+      forgotPswdExpiry: {
+        type: DataTypes.DATE,
+        defaultValue: null
+      },
       phone: {
         type: DataTypes.STRING(100),
         allowNull: true,

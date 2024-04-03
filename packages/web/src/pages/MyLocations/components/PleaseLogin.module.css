@@ -1,0 +1,56 @@
+.buttonRow {
+  display: flex;
+  justify-content: start;
+}
+
+.button {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  margin-bottom: 25px;
+  margin-right: 20px;
+  background-color: transparent;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.button:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.header {
+  text-align: left;
+}
+
+.container {
+  height: calc(100vh - 81px);
+  padding-top: 10px;
+  width: 65%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: hidden;
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+  }
+}
+
+.content {
+  margin-top: 0px;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+@media (min-width: 768px) {
+  .content {
+    margin-bottom: 200px;
+  }
+}

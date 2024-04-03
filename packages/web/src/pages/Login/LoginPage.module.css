@@ -57,19 +57,29 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Media query for larger screens */
 @media (min-width: 1000px) {
   .card {
     width: 600px;
   }
 
-  /* Adjust the login container for larger screens */
   .loginPageContainer {
     justify-content: start;
-    padding-top: 50px; /* Space from the top */
+    padding-top: 50px;
   }
 }
 
 .termsOfService {
   font-size: 14px;
+}
+
+.forgotPasswordButton {
+  color: #444;
+  text-decoration: none;
+}
+
+.forgotPasswordButton:hover,
+.forgotPasswordButton:focus {
+  color: #555;
+  text-decoration: underline;
+  background-color: transparent;
 }
