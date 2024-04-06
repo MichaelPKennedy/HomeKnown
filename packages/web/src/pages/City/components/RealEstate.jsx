@@ -1,12 +1,23 @@
 import React, { useState } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Modal from "react-modal";
+import styles from "./RealEstate.module.css";
 
 const RealEstate = ({ data, city }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
+  // State to control the visibility of the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   Modal.setAppElement("#root");
+
+  const handleMarkerClick = (property) => {
+    setSelectedProperty(property);
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div>
@@ -19,38 +30,47 @@ const RealEstate = ({ data, city }) => {
         {data
           .filter((result) => result.location.address.coordinate)
           .map((result) => {
-            console.log("result", result);
             const { lat, lon } = result.location.address.coordinate;
             return (
               <Marker
                 key={result.property_id}
                 position={[lat, lon]}
                 eventHandlers={{
-                  click: () => {
-                    setSelectedProperty(result);
-                  },
+                  click: () => handleMarkerClick(result),
                 }}
-              />
+              >
+                <Popup>
+                  <div onClick={handleOpenModal}>
+                    <h2>
+                      {result.location.address.line},{" "}
+                      {result.location.address.city}
+                    </h2>
+                    <img
+                      src={result.location.street_view_url}
+                      alt="Street View"
+                      style={{ width: "100%" }}
+                    />
+                    <p>
+                      Price: ${result.list_price_min} - ${result.list_price_max}
+                    </p>
+                  </div>
+                </Popup>
+              </Marker>
             );
           })}
       </MapContainer>
 
       {selectedProperty && (
         <Modal
-          isOpen={true}
-          onRequestClose={() => setSelectedProperty(null)}
+          isOpen={isModalOpen}
+          onRequestClose={() => setIsModalOpen(false)}
           contentLabel="Property Details"
-          style={{ overlay: { zIndex: 1000 }, width: "50%" }}
+          style={{ overlay: { zIndex: 1000 } }}
         >
           <h2>
             {selectedProperty.location.address.line},{" "}
             {selectedProperty.location.address.city}
           </h2>
-          <img
-            src={selectedProperty.primary_photo.href}
-            alt="Primary"
-            style={{ width: "100%" }}
-          />
           <img
             src={selectedProperty.location.street_view_url}
             alt="Street View"
@@ -60,8 +80,7 @@ const RealEstate = ({ data, city }) => {
             Price: ${selectedProperty.list_price_min} - $
             {selectedProperty.list_price_max}
           </p>
-          {/* Add more details as needed */}
-          <button onClick={() => setSelectedProperty(null)}>Close</button>
+          <button onClick={() => setIsModalOpen(false)}>Close</button>
         </Modal>
       )}
     </div>
