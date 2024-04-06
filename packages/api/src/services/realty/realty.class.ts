@@ -9,18 +9,37 @@ import { Op } from 'sequelize'
 
 export type { Realty, RealtyData, RealtyPatch, RealtyQuery }
 
+type PropertyType =
+  | 'apartment'
+  | 'condo_townhome'
+  | 'condo_townhome_rowhome_coop'
+  | 'condop'
+  | 'condos'
+  | 'coop'
+  | 'duplex_triplex'
+  | 'farm'
+  | 'land'
+  | 'mobile'
+  | 'multi_family'
+  | 'single_family'
+  | 'townhomes'
 export interface RealtyParams extends Params {
-  query?: {
+  query: {
     state_code: string
     city: string
     propertyStatus: 'rent' | 'buy' | 'sold'
     priceMin?: number
     priceMax?: number
-    radius?: number
+    soldPriceMin?: number
+    soldPriceMax?: number
+    bedsMin?: number
+    bedsMax?: number
+    bathsMin?: number
+    bathsMax?: number
     foreclosure?: boolean
     cats?: boolean
     dogs?: boolean
-    type?: string[]
+    type?: PropertyType[]
     limit?: number
   }
 }
@@ -31,12 +50,23 @@ interface DataOptions {
   state_code?: string
   city?: string
   status: string[]
-  radius: number
   sort: {
     direction: string
     field: string
   }
   list_price?: {
+    min: number
+    max: number
+  }
+  beds?: {
+    min: number
+    max: number
+  }
+  baths?: {
+    min: number
+    max: number
+  }
+  sold_price?: {
     min: number
     max: number
   }
@@ -53,8 +83,6 @@ function generateCacheKey(params: RealtyParams['query']): string {
   for (const key in params) {
     if (params.hasOwnProperty(key)) {
       let value: any = (params as any)[key]
-
-      // For arrays, sort them to ensure consistent key order
       if (Array.isArray(value)) {
         value = value.sort().join(',')
       }
@@ -74,19 +102,33 @@ export class RealtyService implements ServiceMethods<any> {
   }
 
   async find(params: RealtyParams): Promise<any> {
+    const query = params.query || {}
+    const cacheKey = generateCacheKey(query)
+    const cachedResult = myCache.get(cacheKey)
+    if (cachedResult) {
+      console.log('cache key', cacheKey)
+      console.log('Cache hit')
+      return cachedResult
+    }
+
     const {
       state_code,
       city,
       type,
       priceMin,
       priceMax,
-      radius = 15,
+      soldPriceMin,
+      soldPriceMax,
+      bedsMin,
+      bedsMax,
+      bathsMin,
+      bathsMax,
       foreclosure,
       cats,
       dogs,
       propertyStatus,
       limit = 500
-    } = params.query || {}
+    } = query || {}
 
     const statusMap: { [key: string]: string[] } = {
       rent: ['for_rent'],
@@ -96,17 +138,12 @@ export class RealtyService implements ServiceMethods<any> {
 
     const status = statusMap[propertyStatus || 'buy']
 
-    const cacheKey = `${state_code}-${city}-${status.join(',')}`
-    const cachedResult = myCache.get(cacheKey)
-    if (cachedResult) return cachedResult
-
     let data: DataOptions = {
       limit,
       offset: 0,
       state_code,
       city,
       status,
-      radius,
       sort: {
         direction: 'desc',
         field: 'list_date'
@@ -114,6 +151,9 @@ export class RealtyService implements ServiceMethods<any> {
     }
 
     if (priceMin && priceMax) data = { ...data, list_price: { min: priceMin, max: priceMax } }
+    if (bedsMin && bedsMax) data = { ...data, beds: { min: bedsMin, max: bedsMax } }
+    if (bathsMin && bathsMax) data = { ...data, baths: { min: bathsMin, max: bathsMax } }
+    if (soldPriceMin && soldPriceMax) data = { ...data, sold_price: { min: soldPriceMin, max: soldPriceMax } }
     if (foreclosure) data = { ...data, foreclosure }
     if (cats) data = { ...data, pet_policy: { cats } }
     if (dogs) data = { ...data, pet_policy: { dogs } }
