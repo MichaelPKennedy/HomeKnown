@@ -179,8 +179,32 @@ export class RealtyService implements ServiceMethods<any> {
     }
   }
 
-  async get(id: Id, params?: any): Promise<any> {
-    throw new Error('Method not implemented.')
+  async get(propertyId: string, params?: any): Promise<any> {
+    const cacheKey = `property:${propertyId}`
+    const cachedResult = myCache.get(cacheKey)
+    if (cachedResult) {
+      return cachedResult
+    }
+
+    const options = {
+      method: 'GET',
+      url: 'https://realty-in-us.p.rapidapi.com/properties/v3/detail',
+      params: { property_id: propertyId },
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': process.env.X_RAPIDAPI_KEY,
+        'X-RapidAPI-Host': process.env.X_RAPIDAPI_HOST
+      }
+    }
+
+    try {
+      const response = await axios.request(options)
+      myCache.set(cacheKey, response.data, 10000)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching property details:', error)
+      throw new Error('Failed to fetch property details')
+    }
   }
 
   async create(data: any, params?: RealtyParams): Promise<any> {
