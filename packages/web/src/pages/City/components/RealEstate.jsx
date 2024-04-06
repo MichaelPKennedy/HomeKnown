@@ -3,37 +3,36 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import Modal from "react-modal";
 
-const RealEstate = ({ data }) => {
+const RealEstate = ({ data, city }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
-
-  // Define a base URL for map tiles. You can change this based on your preference or requirements.
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
-  // Ensure to set the modal app element for accessibility purposes.
   Modal.setAppElement("#root");
 
   return (
     <div>
       <MapContainer
-        center={[40.15, -76.6]}
-        zoom={13}
+        center={[city.latitude, city.longitude]}
+        zoom={11}
         style={{ height: "500px", width: "100%" }}
       >
         <TileLayer url={tileUrl} />
-        {data.home_search.results.map((result) => (
-          <Marker
-            key={result.property_id}
-            position={[
-              result.location.address.coordinate.lat,
-              result.location.address.coordinate.lon,
-            ]}
-            eventHandlers={{
-              click: () => {
-                setSelectedProperty(result);
-              },
-            }}
-          />
-        ))}
+        {data
+          .filter((result) => result.location.address.coordinate)
+          .map((result) => {
+            console.log("result", result);
+            const { lat, lon } = result.location.address.coordinate;
+            return (
+              <Marker
+                key={result.property_id}
+                position={[lat, lon]}
+                eventHandlers={{
+                  click: () => {
+                    setSelectedProperty(result);
+                  },
+                }}
+              />
+            );
+          })}
       </MapContainer>
 
       {selectedProperty && (
@@ -41,6 +40,7 @@ const RealEstate = ({ data }) => {
           isOpen={true}
           onRequestClose={() => setSelectedProperty(null)}
           contentLabel="Property Details"
+          style={{ overlay: { zIndex: 1000 }, width: "50%" }}
         >
           <h2>
             {selectedProperty.location.address.line},{" "}
@@ -69,5 +69,3 @@ const RealEstate = ({ data }) => {
 };
 
 export default RealEstate;
-
-//usage <RealEstate data={apiData} />

@@ -171,8 +171,9 @@ export class RealtyService implements ServiceMethods<any> {
 
     try {
       const response = await axios.request(options)
-      myCache.set(cacheKey, response.data, 10000)
-      return response.data
+      const results = response?.data?.data?.home_search?.results || []
+      myCache.set(cacheKey, results, 10000)
+      return results
     } catch (error) {
       console.error(error)
       throw new Error('Failed to fetch property data')
@@ -199,8 +200,9 @@ export class RealtyService implements ServiceMethods<any> {
 
     try {
       const response = await axios.request(options)
-      myCache.set(cacheKey, response.data, 10000)
-      return response.data
+      const propertyDetails = response?.data?.data?.home
+      myCache.set(cacheKey, propertyDetails, 10000)
+      return propertyDetails
     } catch (error) {
       console.error('Error fetching property details:', error)
       throw new Error('Failed to fetch property details')

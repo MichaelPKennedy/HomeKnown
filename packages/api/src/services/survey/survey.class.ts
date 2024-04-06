@@ -480,7 +480,7 @@ export class SurveyService implements ServiceMethods<any> {
         },
         {
           model: this.sequelize.models.State,
-          attributes: ['state']
+          attributes: ['state', 'state_abbrev']
         },
         {
           model: this.sequelize.models.Area,
@@ -523,6 +523,7 @@ export class SurveyService implements ServiceMethods<any> {
         city_name: city.city_name,
         county_name: city.County?.county_name,
         state_name: city.State?.state,
+        state_abbrev: city.State?.state_abbrev,
         latitude: cityLatitude,
         longitude: cityLongitude,
         Population: {
