@@ -93,6 +93,14 @@ const RealEstate = ({ data, city }) => {
                       ? `$${result.list_price}`
                       : `$${result.list_price_min} - $${result.list_price_max}`}
                   </p>
+                  <span>{result.description.type.replace(/_/g, " ")} | </span>
+                  {result.description.beds && (
+                    <span>{result.description.beds} beds | </span>
+                  )}
+                  {result.description.baths && (
+                    <span>{result.description.baths} baths | </span>
+                  )}
+                  <span>{result.description.sqft} sqft </span>
                 </div>
               </PopupWithAdjustment>
             </Marker>
