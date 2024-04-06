@@ -181,10 +181,20 @@
   gap: 10px;
 }
 
+.cityPhotos {
+  width: 90%;
+  height: 400px;
+}
+
 @media (max-width: 767px) {
   .cityName {
     margin-top: 15px;
     margin-bottom: 15px;
+  }
+
+  .cityPhotos {
+    width: 100%;
+    height: 300px;
   }
 }
 
@@ -198,11 +208,6 @@
 .header {
   margin-bottom: 0px;
   font-size: 24px;
-}
-
-.cityPhotos {
-  width: 100%;
-  height: 500px;
 }
 
 @media (min-width: 1000px) {
