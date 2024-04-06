@@ -106,8 +106,6 @@ export class RealtyService implements ServiceMethods<any> {
     const cacheKey = generateCacheKey(query)
     const cachedResult = myCache.get(cacheKey)
     if (cachedResult) {
-      console.log('cache key', cacheKey)
-      console.log('Cache hit')
       return cachedResult
     }
 
@@ -150,10 +148,11 @@ export class RealtyService implements ServiceMethods<any> {
       }
     }
 
-    if (priceMin && priceMax) data = { ...data, list_price: { min: priceMin, max: priceMax } }
-    if (bedsMin && bedsMax) data = { ...data, beds: { min: bedsMin, max: bedsMax } }
-    if (bathsMin && bathsMax) data = { ...data, baths: { min: bathsMin, max: bathsMax } }
-    if (soldPriceMin && soldPriceMax) data = { ...data, sold_price: { min: soldPriceMin, max: soldPriceMax } }
+    if (priceMin && priceMax) data = { ...data, list_price: { min: Number(priceMin), max: Number(priceMax) } }
+    if (bedsMin && bedsMax) data = { ...data, beds: { min: Number(bedsMin), max: Number(bedsMax) } }
+    if (bathsMin && bathsMax) data = { ...data, baths: { min: Number(bathsMin), max: Number(bathsMax) } }
+    if (soldPriceMin && soldPriceMax)
+      data = { ...data, sold_price: { min: Number(soldPriceMin), max: Number(soldPriceMax) } }
     if (foreclosure) data = { ...data, foreclosure }
     if (cats) data = { ...data, pet_policy: { cats } }
     if (dogs) data = { ...data, pet_policy: { dogs } }
