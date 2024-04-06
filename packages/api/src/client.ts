@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { realtyClient } from './services/realty/realty.shared'
+export type { Realty, RealtyData, RealtyQuery, RealtyPatch } from './services/realty/realty.shared'
+
 import { forgotPasswordClient } from './services/forgot-password/forgot-password.shared'
 export type {
   ForgotPassword,
@@ -168,5 +171,6 @@ export const createClient = <Configuration = any,>(
   client.configure(contactSupportClient)
   client.configure(categoriesClient)
   client.configure(forgotPasswordClient)
+  client.configure(realtyClient)
   return client
 }
