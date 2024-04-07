@@ -125,7 +125,7 @@ export class RealtyService implements ServiceMethods<any> {
       cats,
       dogs,
       propertyStatus,
-      limit = 1000
+      limit = 500
     } = query || {}
 
     const statusMap: { [key: string]: string[] } = {
@@ -138,7 +138,7 @@ export class RealtyService implements ServiceMethods<any> {
     if (propertyStatus) {
       status = statusMap[propertyStatus]
     } else {
-      status = ['for_sale', 'for_rent']
+      status = ['for_sale', 'for_rent', 'sold']
     }
 
     let data: DataOptions = {
@@ -177,17 +177,8 @@ export class RealtyService implements ServiceMethods<any> {
     try {
       const response = await axios.request(options)
       const results = response?.data?.data?.home_search?.results || []
-      const groupedResults = results.reduce((acc: any, result: any) => {
-        const status = result.status
-        if (!acc[status]) {
-          acc[status] = []
-        }
-        acc[status].push(result)
-        return acc
-      }, {})
-      myCache.set(cacheKey, groupedResults, 10000)
-
-      return groupedResults
+      myCache.set(cacheKey, results, 10000)
+      return results
     } catch (error) {
       console.error(error)
       throw new Error('Failed to fetch property data')

@@ -1,0 +1,119 @@
+/* FilterModal.module.css */
+.flexContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.scrollableContent {
+  flex: 1; /* Takes up all available space */
+  overflow-y: auto; /* Only this part will scroll */
+  padding: 20px;
+}
+
+.footer {
+  /* No need for positioning; flexbox keeps it at the bottom */
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background: white; /* Ensure it matches the modal background */
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  padding: 0 20px; /* Match the padding with .scrollableContent for alignment */
+}
+
+/* Ensure .closeButton has no specific flex alignment that might interfere */
+.closeButton {
+  align-self: flex-end;
+  width: 56px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: black;
+  font-size: 1.5em;
+}
+
+/* Adjust the .header margin if necessary to ensure layout consistency */
+.header {
+  font-size: 1.25em;
+  width: 100%;
+  margin-bottom: 0px !important;
+  padding-left: 56px !important;
+}
+
+.label {
+  margin-top: 10px;
+}
+
+.select {
+  padding: 8px;
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.btnContainer {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+}
+
+.buttonsContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background-color: #fff; /* Match modal content background */
+  padding: 10px;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1); /* Optional: adds slight shadow */
+}
+
+.button {
+  width: calc(50% - 10px); /* Fill half the container minus a bit for the gap */
+  margin: 0 5px; /* Add a small gap between buttons */
+}
+
+.clearButton {
+  background-color: #dc3545; /* Use a different color for the clear button */
+}
+
+/* Adjust the button styles as needed */
+.button,
+.clearButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold; /* Optional: to make the text bold */
+}
+
+.button:hover,
+.clearButton:hover {
+  opacity: 0.8;
+}
+
+.modalTrigger {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .modalTrigger {
+    display: none;
+  }
+  .filterBar {
+    display: flex;
+    /* Additional styles to position and style the filter bar */
+  }
+}
+
+/* Styles for your filter bar */
+.filterBar {
+  display: none;
+  /* Your styles for the filter bar */
+}
