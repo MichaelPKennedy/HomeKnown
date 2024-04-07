@@ -56,7 +56,6 @@ const RealEstate = ({ data, city }) => {
   });
 
   const applyFilters = (filters) => {
-    console.log("filters", filters);
     const filtered = data.filter((result) => {
       const matchesType =
         filters.type === "any" || result.status === filters.type;
@@ -103,7 +102,6 @@ const RealEstate = ({ data, city }) => {
     propertyType: "any",
   });
 
-  // Function to update filters
   const handleFilterChange = (filterName, value) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -111,18 +109,23 @@ const RealEstate = ({ data, city }) => {
     }));
   };
 
-  // Function to apply filters
+  const handleFilterChangeDesktop = (filterName, value) => {
+    const newFilters = {
+      ...filters,
+      [filterName]: value,
+    };
+    setFilters(newFilters);
+    applyFilters(newFilters);
+  };
+
   const handleApplyFilters = () => {
     applyFilters(filters);
   };
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener("resize", handleResize);
-
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -130,17 +133,19 @@ const RealEstate = ({ data, city }) => {
     <div className={styles.mapContainer}>
       {!isMobile && (
         <FilterBar
-          filters={filteredData}
-          onFilterChange={handleFilterChange}
+          filters={filters}
+          onFilterChange={handleFilterChangeDesktop}
           onApplyFilters={handleApplyFilters}
         />
       )}
-      <button
-        onClick={() => setIsFilterModalOpen(true)}
-        className={styles.filterButton}
-      >
-        Filter Properties
-      </button>
+      {isMobile && (
+        <button
+          onClick={() => setIsFilterModalOpen(true)}
+          className={styles.filterButton}
+        >
+          Filter Properties
+        </button>
+      )}
       <MapContainer
         center={[city.latitude, city.longitude]}
         zoom={11}
