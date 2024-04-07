@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import ReactDOMServer from "react-dom/server";
@@ -139,97 +140,101 @@ const RealEstate = ({ data, city }) => {
         />
       )}
       {isMobile && (
-        <button
-          onClick={() => setIsFilterModalOpen(true)}
-          className={styles.filterButton}
-        >
-          Filter Properties
-        </button>
+        <div className={styles.buttonContainer}>
+          <button
+            onClick={() => setIsFilterModalOpen(true)}
+            className={styles.filterButton}
+          >
+            Filter Properties
+          </button>
+        </div>
       )}
-      <MapContainer
-        center={[city.latitude, city.longitude]}
-        zoom={11}
-        style={{ height: "500px", width: "100%" }}
-      >
-        <TileLayer url={tileUrl} />
-        {filteredData
-          .filter((result) => result.location.address.coordinate)
-          .map((result) => (
-            <Marker
-              key={result.property_id}
-              position={[
-                result.location.address.coordinate.lat,
-                result.location.address.coordinate.lon,
-              ]}
-              icon={customMarkerIcon}
-            >
-              <PopupWithAdjustment
-                position={result.location.address.coordinate}
+      <Card className={styles.card}>
+        <MapContainer
+          center={[city.latitude, city.longitude]}
+          zoom={11}
+          style={{ height: "500px", width: "100%" }}
+        >
+          <TileLayer url={tileUrl} />
+          {filteredData
+            .filter((result) => result.location.address.coordinate)
+            .map((result) => (
+              <Marker
+                key={result.property_id}
+                position={[
+                  result.location.address.coordinate.lat,
+                  result.location.address.coordinate.lon,
+                ]}
+                icon={customMarkerIcon}
               >
-                <div
-                  className={styles.popupClick}
-                  onClick={() => handleOpenModal(result)}
+                <PopupWithAdjustment
+                  position={result.location.address.coordinate}
                 >
-                  <div className={styles.addressContainer}>
-                    <p className={styles.address}>
-                      {result.location.address.line},{" "}
-                      {result.location.address.city}
+                  <div
+                    className={styles.popupClick}
+                    onClick={() => handleOpenModal(result)}
+                  >
+                    <div className={styles.addressContainer}>
+                      <p className={styles.address}>
+                        {result.location.address.line},{" "}
+                        {result.location.address.city}
+                      </p>
+                    </div>
+                    <img
+                      src={result.location.street_view_url}
+                      alt="Street View"
+                      style={{ width: "100%", height: "210px" }}
+                    />
+                    <p className="mb-0">
+                      Price:{" "}
+                      {result.list_price
+                        ? `$${result.list_price}`
+                        : `$${result.list_price_min} - $${result.list_price_max}`}
                     </p>
+                    <span>{result.description.type.replace(/_/g, " ")} | </span>
+                    {result.description.beds && (
+                      <span>{result.description.beds} beds | </span>
+                    )}
+                    {result.description.baths && (
+                      <span>{result.description.baths} baths | </span>
+                    )}
+                    <span>{result.description.sqft} sqft </span>
                   </div>
-                  <img
-                    src={result.location.street_view_url}
-                    alt="Street View"
-                    style={{ width: "100%", height: "210px" }}
-                  />
-                  <p className="mb-0">
-                    Price:{" "}
-                    {result.list_price
-                      ? `$${result.list_price}`
-                      : `$${result.list_price_min} - $${result.list_price_max}`}
-                  </p>
-                  <span>{result.description.type.replace(/_/g, " ")} | </span>
-                  {result.description.beds && (
-                    <span>{result.description.beds} beds | </span>
-                  )}
-                  {result.description.baths && (
-                    <span>{result.description.baths} baths | </span>
-                  )}
-                  <span>{result.description.sqft} sqft </span>
-                </div>
-              </PopupWithAdjustment>
-            </Marker>
-          ))}
-      </MapContainer>
-      {selectedProperty && (
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          contentLabel="Property Details"
-          style={{ overlay: { zIndex: 1000 } }}
-        >
-          <h2>
-            {selectedProperty.location.address.line},{" "}
-            {selectedProperty.location.address.city}
-          </h2>
-          <img
-            src={selectedProperty.location.street_view_url}
-            alt="Street View"
-            style={{ maxWidth: "80%", height: "80%" }}
-          />
-          <p className="mb-0">
-            Price:{" "}
-            {selectedProperty.list_price
-              ? `$${selectedProperty.list_price}`
-              : `$${selectedProperty.list_price_min} - $${selectedProperty.list_price_max}`}
-          </p>
-          <button onClick={() => setIsModalOpen(false)}>Close</button>
-        </Modal>
-      )}
-      <FilterModal
-        isOpen={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
-        onApplyFilters={applyFilters}
-      />
+                </PopupWithAdjustment>
+              </Marker>
+            ))}
+        </MapContainer>
+        {selectedProperty && (
+          <Modal
+            isOpen={isModalOpen}
+            onRequestClose={() => setIsModalOpen(false)}
+            contentLabel="Property Details"
+            style={{ overlay: { zIndex: 1000 } }}
+          >
+            <h2>
+              {selectedProperty.location.address.line},{" "}
+              {selectedProperty.location.address.city}
+            </h2>
+            <img
+              src={selectedProperty.location.street_view_url}
+              alt="Street View"
+              style={{ maxWidth: "80%", height: "80%" }}
+            />
+            <p className="mb-0">
+              Price:{" "}
+              {selectedProperty.list_price
+                ? `$${selectedProperty.list_price}`
+                : `$${selectedProperty.list_price_min} - $${selectedProperty.list_price_max}`}
+            </p>
+            <button onClick={() => setIsModalOpen(false)}>Close</button>
+          </Modal>
+        )}
+        <FilterModal
+          isOpen={isFilterModalOpen}
+          onClose={() => setIsFilterModalOpen(false)}
+          onApplyFilters={applyFilters}
+        />
+      </Card>
     </div>
   );
 };
