@@ -22,13 +22,28 @@
 }
 
 .filterButton {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  max-width: 200px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  font-weight: normal;
+  background-color: transparent;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filterButton:hover {
+  background-color: #01697c;
   color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+}
+
+.filterButton:focus {
+  outline: none;
 }
 
 @media (max-width: 768px) {

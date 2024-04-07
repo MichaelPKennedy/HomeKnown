@@ -77,6 +77,19 @@
 .button {
   width: calc(50% - 10px); /* Fill half the container minus a bit for the gap */
   margin: 0 5px; /* Add a small gap between buttons */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  max-width: 200px;
+  margin-bottom: 20px;
+  margin-right: 20px;
+  font-weight: normal;
+  color: white;
+  background-color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
 }
 
 .clearButton {
@@ -90,10 +103,13 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-weight: bold; /* Optional: to make the text bold */
 }
 
-.button:hover,
+.button:hover {
+  background-color: #01697c;
+  color: white;
+}
+
 .clearButton:hover {
   opacity: 0.8;
 }
