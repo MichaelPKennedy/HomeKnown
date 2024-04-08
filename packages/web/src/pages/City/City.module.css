@@ -134,19 +134,21 @@
   margin: 5px;
 }
 
-@media (min-width: 768px) {
-  .backButton {
-    margin-right: 20px;
-    min-width: 100px;
-    text-align: left;
-  }
-}
-
 .backButton {
-  min-width: 155px;
   background-color: transparent;
   color: black;
   border: none;
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  .backButton {
+    display: inline-flex;
+    white-space: nowrap;
+    align-items: center;
+    margin-right: 20px;
+    font-size: 16px;
+  }
 }
 
 .backButton:hover {
@@ -213,7 +215,7 @@
 
 @media (max-width: 768px) {
   .header {
-    font-size: 22px;
+    font-size: 20px;
   }
 }
 

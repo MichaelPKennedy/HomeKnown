@@ -96,11 +96,11 @@ function City() {
   const backButtonLabel = () => {
     switch (backPage) {
       case "results":
-        return "Back to Results";
+        return "Results";
       case "search":
-        return "Back to Search";
+        return "Search";
       case "my-locations":
-        return "Back to Locations";
+        return "My Locations";
       case "recommendations":
         return "Recommendations";
       case "home":
@@ -122,7 +122,8 @@ function City() {
               onClick={handleBack}
               className={`btn btn-secondary ${styles.backButton}`}
             >
-              <FontAwesomeIcon icon={faAngleLeft} /> {backButtonLabel()}
+              <FontAwesomeIcon icon={faAngleLeft} className="mr-1" />{" "}
+              {backButtonLabel()}
             </button>
             <div className={`${styles.cityName} container`}>
               <p className={styles.header}>

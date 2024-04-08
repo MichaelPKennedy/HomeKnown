@@ -27,9 +27,7 @@ const PopupWithAdjustment = ({ children, position }) => {
 
   return (
     <Popup>
-      <div style={{ width: "300px", height: "315px", overflow: "auto" }}>
-        {children}
-      </div>
+      <div className={styles.popup}>{children}</div>
     </Popup>
   );
 };
@@ -170,7 +168,7 @@ const RealEstate = ({ data, city }) => {
                 >
                   <div
                     className={styles.popupClick}
-                    onClick={() => handleOpenModal(result)}
+                    // onClick={() => handleOpenModal(result)}
                   >
                     <div className={styles.addressContainer}>
                       <p className={styles.address}>
@@ -181,7 +179,7 @@ const RealEstate = ({ data, city }) => {
                     <img
                       src={result.location.street_view_url}
                       alt="Street View"
-                      style={{ width: "100%", height: "210px" }}
+                      className={styles.photo}
                     />
                     <p className="mb-0">
                       Price:{" "}
