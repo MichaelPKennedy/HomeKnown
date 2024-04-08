@@ -138,7 +138,7 @@
 }
 
 .backButton {
-  min-width: 100px;
+  min-width: 155px;
   background-color: transparent;
   color: black;
   border: none;
@@ -176,9 +176,11 @@
 .cityName {
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: start;
+  text-align: start;
   gap: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .cityPhotos {
@@ -190,6 +192,8 @@
   .cityName {
     margin-top: 15px;
     margin-bottom: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 
   .cityPhotos {
@@ -198,21 +202,14 @@
   }
 }
 
-@media (min-width: 768px) {
-  .header {
-    margin-bottom: 0px;
-    font-size: 24px;
-  }
-}
-
 .header {
   margin-bottom: 0px;
   font-size: 24px;
 }
 
-@media (min-width: 1000px) {
+@media (max-width: 768px) {
   .header {
-    font-size: 28px;
+    font-size: 20px;
   }
 }
 

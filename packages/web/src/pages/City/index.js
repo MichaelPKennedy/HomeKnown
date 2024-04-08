@@ -124,7 +124,7 @@ function City() {
             >
               <FontAwesomeIcon icon={faAngleLeft} /> {backButtonLabel()}
             </button>
-            <div className={styles.cityName}>
+            <div className={`${styles.cityName} container`}>
               <p className={styles.header}>
                 {currentCity?.city_name}, {state}
               </p>
