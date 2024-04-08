@@ -35,7 +35,8 @@
 
 .button {
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 400;
+  color: rgb(56, 56, 56) !important;
 }
 
 .brand {

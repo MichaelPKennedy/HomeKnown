@@ -46,7 +46,7 @@ const CityPhotos = ({ photos }) => {
               }
             }}
           />
-          <p>
+          <p className="mb-0">
             Photo by{" "}
             <a
               href={`${photo.photographerUrl}?utm_source=homeknown&utm_medium=referral`}

@@ -15,6 +15,10 @@
   margin-left: 200px;
 }
 
+.navContainer {
+  background-color: white !important;
+}
+
 @media (min-width: 768px) {
   .navContainer {
     max-width: 250px;
@@ -134,6 +138,7 @@
   .backButton {
     margin-right: 20px;
     min-width: 100px;
+    text-align: left;
   }
 }
 
@@ -186,14 +191,13 @@
 .cityPhotos {
   width: 90%;
   height: 400px;
+  margin-bottom: 15px;
 }
 
 @media (max-width: 767px) {
   .cityName {
     margin-top: 15px;
     margin-bottom: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
   }
 
   .cityPhotos {
@@ -209,7 +213,7 @@
 
 @media (max-width: 768px) {
   .header {
-    font-size: 20px;
+    font-size: 22px;
   }
 }
 

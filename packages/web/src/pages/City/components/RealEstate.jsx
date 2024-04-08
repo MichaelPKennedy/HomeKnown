@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Card } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faMapPin } from "@fortawesome/free-solid-svg-icons";
 import ReactDOMServer from "react-dom/server";
 import FilterModal from "./FilterModal";
 import FilterBar from "./FilterBar";
@@ -49,10 +49,8 @@ const RealEstate = ({ data, city }) => {
   };
 
   const customMarkerIcon = new L.DivIcon({
-    html: ReactDOMServer.renderToString(
-      <FontAwesomeIcon icon={faMapMarkerAlt} size="2x" color="black" />
-    ),
-    className: "custom-marker",
+    html: `<div class="${styles.circleMapMarker}"></div>`,
+    className: "",
     iconSize: [30, 30],
   });
 

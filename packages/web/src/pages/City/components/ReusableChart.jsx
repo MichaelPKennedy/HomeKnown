@@ -285,9 +285,7 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
       <div className={styles.housingChartContainer}>
         <div className={styles.buttonContainer}>
           <button className={styles.btnDropdown} onClick={toggleChartType}>
-            {chartType === "temperature"
-              ? "Show Precipitation"
-              : "Show Temperature"}
+            {chartType === "temperature" ? "Precipitation" : "Temperature"}
           </button>
           <select
             className={`form-select form-select-lg ${styles.btnDropdown}`}

@@ -59,7 +59,7 @@ const Overview = () => {
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
   return (
-    <div className="container">
+    <div className="container pl-0 pr-0">
       {photos?.length > 0 && (
         <div className={styles.cityPhotos}>
           <CityPhotos photos={photos} />

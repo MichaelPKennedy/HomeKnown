@@ -80,3 +80,14 @@
   text-align: center;
   margin-bottom: 40px;
 }
+
+.circleMapMarker {
+  width: 20px; /* Adjust size as needed */
+  height: 20px; /* Adjust size as needed */
+  border: 2px solid white; /* Adjust color and border size as needed */
+  border-radius: 50%;
+  background-color: #8b0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

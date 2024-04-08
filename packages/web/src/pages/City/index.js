@@ -116,7 +116,7 @@ function City() {
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
           <SideBar cityId={cityId} />
         </div>
-        <main className={`col-md-9 col-12 ms-sm-auto px-md-4`}>
+        <main className={`col-md-9 col-12 ms-sm-auto px-4 p`}>
           <div className={styles.headerContainer}>
             <button
               onClick={handleBack}
