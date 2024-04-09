@@ -423,11 +423,17 @@ a:active {
     border-radius: 15px;
   }
 
-  .resultsPage,
+  .resultsPage {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 55px;
+    row-gap: 10px;
+  }
+
   .myLocationsList {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 50px;
+    grid-gap: 10px;
   }
 }
 
@@ -575,7 +581,7 @@ a:active {
   cursor: pointer;
   position: absolute;
   top: 40px;
-  right: 20px;
+  right: 10px;
   outline: none;
   margin: 5px;
   z-index: 1000;
