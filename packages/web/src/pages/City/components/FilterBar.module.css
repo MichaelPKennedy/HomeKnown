@@ -1,5 +1,6 @@
 .filterBar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   padding: 10px;
   margin-bottom: 10px;
@@ -34,7 +35,7 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   max-width: 200px;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   margin-right: 20px;
   font-weight: normal;
   background-color: transparent;
@@ -53,10 +54,10 @@
 .dropdownContent {
   position: absolute;
   background-color: #f9f9f9;
-  min-width: 160px;
+  min-width: 250px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   padding: 12px 16px;
-  z-index: 1000;
+  z-index: 2000;
 }
 
 .optionGroup {
@@ -90,6 +91,9 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   max-width: 200px;
+  min-width: 105px;
+  margin-top: 10px;
+  white-space: nowrap;
   font-weight: normal;
   background-color: transparent;
   color: #01697c;
@@ -108,4 +112,62 @@
 .filterButton:focus,
 .filterSelect:focus {
   outline: none;
+}
+
+.filterLabel {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.priceRangeGroup,
+.sqftRangeGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px; /* Adjust the space between the min and max dropdowns */
+}
+
+.priceRangeGroup > div,
+.sqftRangeGroup > div {
+  flex: 1;
+}
+
+.label {
+  display: block;
+  margin-bottom: 4px; /* Space between the label and the select box */
+}
+
+.select {
+  width: 135px;
+  padding: 8px; /* Adjust the padding to match the design */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 4px; /* Border radius for rounded corners */
+}
+
+/* Style for the Apply/Close button if needed */
+.applyButton {
+  margin-top: 16px; /* Space above the button */
+  padding: 8px 16px; /* Padding inside the button */
+  border: none;
+  background-color: #01697c !important;
+  color: white !important;
+  border-radius: 4px; /* Border radius for rounded corners */
+  cursor: pointer; /* Cursor for the button */
+}
+
+.applyButton:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.radioLabel,
+.checkboxLabel {
+  display: block;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.radioInput,
+.checkboxInput {
+  margin-right: 10px;
 }

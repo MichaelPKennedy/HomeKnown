@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import { Card } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapPin } from "@fortawesome/free-solid-svg-icons";
-import ReactDOMServer from "react-dom/server";
 import FilterModal from "./FilterModal";
 import FilterBar from "./FilterBar";
 import L from "leaflet";
@@ -54,11 +51,10 @@ const RealEstate = ({ data, city }) => {
 
   const applyFilters = (filters) => {
     const filtered = data.filter((result) => {
-      const matchesType =
-        filters.type === "any" || result.status === filters.type;
+      const matchesStatus = result.status === filters.status;
       const matchesPropertyType =
-        filters.propertyType === "any" ||
-        result.description.type === filters.propertyType;
+        filters.propertyTypes === "any" ||
+        filters.propertyTypes.includes(result.description.type);
       const matchesMinPrice =
         filters.price.min === "any" || result.list_price >= filters.price.min;
       const matchesMaxPrice =
@@ -75,7 +71,7 @@ const RealEstate = ({ data, city }) => {
         result.description.sqft <= filters.sqft.max;
 
       return (
-        matchesType &&
+        matchesStatus &&
         matchesPropertyType &&
         matchesMinPrice &&
         matchesMaxPrice &&
@@ -90,13 +86,27 @@ const RealEstate = ({ data, city }) => {
     setIsFilterModalOpen(false);
   };
 
+  const propertyTypes = [
+    "apartment",
+    "condo_townhome",
+    "condos",
+    "coop",
+    "duplex_triplex",
+    "farm",
+    "land",
+    "mobile",
+    "multi_family",
+    "single_family",
+    "townhomes",
+  ];
+
   const [filters, setFilters] = useState({
-    type: "any",
+    status: "for_sale",
     price: { min: "any", max: "any" },
     beds: "any",
     baths: "any",
     sqft: { min: "any", max: "any" },
-    propertyType: "any",
+    propertyTypes: propertyTypes,
   });
 
   const handleFilterChange = (filterName, value) => {

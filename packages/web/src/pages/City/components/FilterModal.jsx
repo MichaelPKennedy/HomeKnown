@@ -32,12 +32,12 @@ if (isMobile) {
 }
 
 const initialFilterOptions = {
-  type: "for_sale",
+  status: "for_sale",
   price: { min: "any", max: "any" },
   beds: "any",
   baths: "any",
   sqft: { min: "any", max: "any" },
-  propertyType: "any",
+  propertyTypes: [],
 };
 
 Modal.setAppElement("#root");
@@ -162,6 +162,36 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
     }
   };
 
+  const handleCheckboxChange = (type) => {
+    setFilterOptions((prev) => {
+      const newPropertyTypes = prev.propertyTypes.includes(type)
+        ? prev.propertyTypes.filter((t) => t !== type)
+        : [...prev.propertyTypes, type];
+      return { ...prev, propertyTypes: newPropertyTypes };
+    });
+  };
+
+  const renderCheckboxInput = (label, options) => (
+    <div className={styles.fieldContainer}>
+      <label className={styles.label}>{label}</label>
+      <div>
+        {options.map((option) => (
+          <label key={option} className={styles.checkboxLabel}>
+            <input
+              type="checkbox"
+              name="propertyType"
+              value={option}
+              checked={filterOptions.propertyTypes.includes(option)}
+              onChange={() => handleCheckboxChange(option)}
+              className={styles.checkboxInput}
+            />
+            {option.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+
   const renderSelectOption = (option) => {
     if (typeof option === "number" || option === "any") {
       return option.toString();
@@ -189,7 +219,7 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   );
 
   const getPriceOptions = () => {
-    return filterOptions.type === "for_sale"
+    return filterOptions.status === "for_sale"
       ? buyPriceOptions
       : rentPriceOptions;
   };
@@ -227,7 +257,7 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   };
 
   const handleSelectChange = (field, value) => {
-    if (field === "type") {
+    if (field === "status") {
       setFilterOptions((prev) => ({
         ...prev,
         price: { min: "any", max: "any" },
@@ -251,8 +281,6 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   const propertyTypes = [
     "apartment",
     "condo_townhome",
-    "condo_townhome_rowhome_coop",
-    "condop",
     "condos",
     "coop",
     "duplex_triplex",
@@ -281,20 +309,15 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
           </div>
           {renderSelectInput(
             "Rent or Buy",
-            "type",
-            ["for_rent", "for_sale"],
+            "status",
+            ["for_rent", "for_sale", "sold"],
             false
           )}
           {renderRangeSelectInput("Price", "price")}
           {renderSelectInput("Beds", "beds", bedOptions, true)}
           {renderSelectInput("Baths", "baths", bathOptions, true)}
           {renderRangeSelectInput("Sqft", "sqft", sqftOptions)}
-          {renderSelectInput(
-            "Property Type",
-            "propertyType",
-            propertyTypes,
-            true
-          )}
+          {renderCheckboxInput("Home Types", propertyTypes)}
         </div>
         <div className={styles.footer}>
           <button
