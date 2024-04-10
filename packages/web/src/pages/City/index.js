@@ -8,6 +8,7 @@ import LoginModal from "../../components/LoginModal";
 import SideBar from "./components/SideBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import LoadingScreen from "./components/LoadingScreen";
 
 function City() {
   const location = useLocation();
@@ -50,7 +51,7 @@ function City() {
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  if (isLoading && !currentCity) return <div>Loading city data...</div>;
+  if (isLoading && !currentCity) return <LoadingScreen />;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
