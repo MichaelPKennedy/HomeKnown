@@ -13,16 +13,44 @@ const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
+  const validatePassword = (password) => {
+    console.log("in validatePassword");
+    const errors = [];
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters.");
+    }
+    if (!/\d/.test(password)) {
+      errors.push("Password must include a number.");
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must include a lowercase letter.");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must include an uppercase letter.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Password must include a special character.");
+    }
+
+    return errors.length === 0 ? true : errors;
+  };
+
   const handleRegister = async (event) => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      toast.error("Passwords do not match.");
+      return;
+    }
+
+    const passwordValidationResult = validatePassword(password);
+    if (passwordValidationResult !== true) {
+      passwordValidationResult.forEach((error) => toast.error(error));
       return;
     }
 
     if (!agreedToTerms) {
-      alert("Please agree to the terms of service and privacy policy.");
+      toast.error("Please agree to the terms of service and privacy policy.");
       return;
     }
 
@@ -72,6 +100,10 @@ const RegisterPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <Form.Text className="text-muted">
+                Passwords must be at least 8 characters and include a number, an
+                uppercase letter, a lowercase letter, and a special character.
+              </Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicConfirmPassword">

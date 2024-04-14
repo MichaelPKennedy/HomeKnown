@@ -14,6 +14,28 @@ const SecurityPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
+  const validatePassword = (password) => {
+    console.log("in validatePassword");
+    const errors = [];
+    if (password.length < 8) {
+      errors.push("Password must be at least 8 characters.");
+    }
+    if (!/\d/.test(password)) {
+      errors.push("Password must include a number.");
+    }
+    if (!/[a-z]/.test(password)) {
+      errors.push("Password must include a lowercase letter.");
+    }
+    if (!/[A-Z]/.test(password)) {
+      errors.push("Password must include an uppercase letter.");
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      errors.push("Password must include a special character.");
+    }
+
+    return errors.length === 0 ? true : errors;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
@@ -21,6 +43,11 @@ const SecurityPage = () => {
       return;
     }
     try {
+      const passwordValidationResult = validatePassword(newPassword);
+      if (passwordValidationResult !== true) {
+        passwordValidationResult.forEach((error) => toast.error(error));
+        return;
+      }
       if (!user.hasPassword) {
         await createPassword(newPassword);
         toast.success("Password created successfully. Please log in again.");

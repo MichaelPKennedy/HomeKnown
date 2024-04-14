@@ -58,7 +58,7 @@ const AccountPage = () => {
       </Link>
 
       {/* Payments & Subscriptions */}
-      <Link to="/account-settings/payments" className={styles.accountLink}>
+      {/* <Link to="/account-settings/payments" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faCreditCard} className={styles.icon} />
           <div className={styles.textContainer}>
@@ -69,7 +69,7 @@ const AccountPage = () => {
           </div>
           <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
         </div>
-      </Link>
+      </Link> */}
 
       {/* Notifications */}
       <Link to="/account-settings/notifications" className={styles.accountLink}>
