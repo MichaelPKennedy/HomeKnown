@@ -15,26 +15,33 @@ const RecommendationsPage = () => {
     console.log("userRecommendations", userRecommendations);
   }, [userRecommendations]);
   return isLoggedIn ? (
-    <div className={styles.pageContainer}>
-      <div className={styles.recommendationsHeader}>
-        <p className="mb-2">Your AI Recommendations...</p>
+    userRecommendations?.premium?.length > 0 ? ( // Check if length is greater than 0 to display recommendations
+      <div className={styles.pageContainer}>
+        <div className={styles.recommendationsHeader}>
+          <p className="mb-2">Your AI Recommendations...</p>
+        </div>
+        <Row className={styles.recommendationsContainer}>
+          {userRecommendations.premium.slice(0, 50).map((city, index) => (
+            <Col
+              key={`monthly-${city.cityId}-${index}`}
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              xl={3}
+              className="d-flex align-items-stretch"
+            >
+              <CityCard city={city} index={index} />
+            </Col>
+          ))}
+        </Row>
       </div>
-      <Row className={styles.recommendationsContainer}>
-        {userRecommendations?.premium?.slice(0, 50).map((city, index) => (
-          <Col
-            key={`monthly-${city.cityId}-${index}`}
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            xl={3}
-            className="d-flex align-items-stretch"
-          >
-            <CityCard city={city} index={index} />
-          </Col>
-        ))}
-      </Row>
-    </div>
+    ) : (
+      <div className="ml-5 mt-5">
+        {" "}
+        Start interacting with the app to get AI recommendations!{" "}
+      </div>
+    )
   ) : (
     <PleaseLogin />
   );
