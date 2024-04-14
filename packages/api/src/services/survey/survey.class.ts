@@ -523,6 +523,7 @@ export class SurveyService implements ServiceMethods<any> {
         city_name: city.city_name,
         county_name: city.County?.county_name,
         state_name: city.State?.state,
+        area_code: city.area_code,
         state_abbrev: city.State?.state_abbrev,
         latitude: cityLatitude,
         longitude: cityLongitude,
