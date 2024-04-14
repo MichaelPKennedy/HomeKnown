@@ -27,9 +27,8 @@ const AccountPage = () => {
     navigate("/signed-out");
   };
 
-  return (
+  return isLoggedIn ? (
     <div className={styles.gridContainer}>
-      {/* Personal Info */}
       <Link to="/account-settings/personal-info" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faUser} className={styles.icon} />
@@ -43,7 +42,6 @@ const AccountPage = () => {
         </div>
       </Link>
 
-      {/* Login & Security */}
       <Link to="/account-settings/security" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faLock} className={styles.icon} />
@@ -57,7 +55,6 @@ const AccountPage = () => {
         </div>
       </Link>
 
-      {/* Payments & Subscriptions */}
       {/* <Link to="/account-settings/payments" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faCreditCard} className={styles.icon} />
@@ -71,9 +68,8 @@ const AccountPage = () => {
         </div>
       </Link> */}
 
-      {/* Notifications */}
       <Link to="/account-settings/notifications" className={styles.accountLink}>
-        <div className={styles.gridItem} onClick={() => <Notifications />}>
+        <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faBell} className={styles.icon} />
           <div className={styles.textContainer}>
             <p className={styles.title}>Notifications</p>
@@ -85,7 +81,6 @@ const AccountPage = () => {
         </div>
       </Link>
 
-      {/* Contact Support */}
       <Link to="/support" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faEnvelope} className={styles.icon} />
@@ -98,15 +93,15 @@ const AccountPage = () => {
           <FontAwesomeIcon icon={faChevronRight} className={styles.chevron} />
         </div>
       </Link>
-      {isLoggedIn ? (
-        <button className={styles.logout} onClick={handleLogout}>
-          Logout
-        </button>
-      ) : (
-        <Link className={styles.login} to="/login">
-          Login
-        </Link>
-      )}
+      <button className={styles.logout} onClick={handleLogout}>
+        Logout
+      </button>
+    </div>
+  ) : (
+    <div className={styles.gridContainer}>
+      <Link className={styles.login} to="/login">
+        Login
+      </Link>
     </div>
   );
 };
