@@ -131,11 +131,28 @@ const FixMapSize = () => {
   return null;
 };
 
-const RecreationMap = ({ data }) => {
+const RecreationMap = ({ data, searchData, fromSurvey }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filters, setFilters] = useState({});
   const [tempFilters, setTempFilters] = useState({});
   const { userRecInterests, userRecInterestsLoading } = useCityData();
+  const [activeInterests, setActiveInterests] = useState({});
+
+  useEffect(() => {
+    if (searchData) {
+      setActiveInterests(searchData);
+      const searchFilters = Object.keys(searchData).reduce((acc, key) => {
+        acc[key] = true;
+        return acc;
+      }, {});
+
+      setFilters(searchFilters);
+    }
+  }, [searchData]);
+
+  useEffect(() => {
+    console.log("filters", filters);
+  }, [filters]);
 
   const handleFilterModalToggle = () => {
     setShowFilterModal(!showFilterModal);
@@ -167,37 +184,42 @@ const RecreationMap = ({ data }) => {
   }, []);
 
   useEffect(() => {
-    if (userRecInterests) {
+    if (userRecInterests && fromSurvey) {
       const newFilters = Object.keys(userRecInterests).reduce((acc, key) => {
         acc[key] = true;
         return acc;
       }, {});
       setFilters(newFilters);
+      setActiveInterests(userRecInterests);
     }
   }, [userRecInterests]);
 
   return (
     <CityDataProvider>
-      {userRecInterestsLoading ? (
-        <div className="d-flex align-items-center mb-4 mt-4">
-          <button className={`${styles.filterBtn} float-left`} disabled>
-            Filter Preferences
-          </button>
-          <div className="d-flex align-items-center ml-3">
-            <p className="mb-0 mr-1">Locations Loading...</p>
-            <Spinner animation="border" size="sm" />
-          </div>
-        </div>
-      ) : (
-        <div className="d-flex align-items-center mb-4 mt-4">
-          <button
-            className={`${styles.filterBtn} float-left`}
-            variant="primary"
-            onClick={handleFilterModalToggle}
-          >
-            Filter Preferences
-          </button>
-        </div>
+      {!searchData && fromSurvey && (
+        <>
+          {userRecInterestsLoading ? (
+            <div className="d-flex align-items-center mb-4 mt-4">
+              <button className={`${styles.filterBtn} float-left`} disabled>
+                Filter Preferences
+              </button>
+              <div className="d-flex align-items-center ml-3">
+                <p className="mb-0 mr-1">Locations Loading...</p>
+                <Spinner animation="border" size="sm" />
+              </div>
+            </div>
+          ) : (
+            <div className="d-flex align-items-center mb-4 mt-4">
+              <button
+                className={`${styles.filterBtn} float-left`}
+                variant="primary"
+                onClick={handleFilterModalToggle}
+              >
+                Filter Preferences
+              </button>
+            </div>
+          )}
+        </>
       )}
       <Card className={styles.card}>
         <MapContainer
@@ -235,8 +257,10 @@ const RecreationMap = ({ data }) => {
               {data.city_name}
             </Tooltip>
           </Marker>
-          {userRecInterests &&
-            Object.entries(userRecInterests).map(([type, elements]) => {
+          {activeInterests &&
+            Object.entries(activeInterests).map(([type, elements]) => {
+              console.log("type", type);
+              console.log("filters[type]", filters[type]);
               if (filters[type]) {
                 return elements.map((element, index) => {
                   const position = element.center

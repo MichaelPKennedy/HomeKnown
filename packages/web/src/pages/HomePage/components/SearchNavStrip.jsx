@@ -37,7 +37,7 @@ const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
     },
     {
       id: "winter",
-      label: "Winter",
+      label: "Snowy",
       icon: faSnowflake,
     },
     {
