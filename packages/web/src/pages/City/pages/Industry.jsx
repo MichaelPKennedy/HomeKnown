@@ -4,6 +4,7 @@ import { useCityData } from "../../../utils/CityDataContext";
 import { useLocation } from "react-router-dom";
 import JobData from "../components/JobData";
 import client from "../../../feathersClient";
+import styles from "./Industry.module.css";
 
 const Industry = () => {
   const location = useLocation();
@@ -123,6 +124,7 @@ const Industry = () => {
             placeholder="Select a job"
             isLoading={loadingIndustry}
             onMenuOpen={() => fetchJobOptions(searchTerm)}
+            className={styles.select}
           />
           {industryData && <JobData jobs={industryData} />}
         </>

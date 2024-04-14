@@ -10,11 +10,7 @@ const JobData = ({ jobs }) => {
   const { closestCity } = jobs?.[0] || {};
 
   if (jobs.length < 1) {
-    return (
-      <div>
-        No job data currently available within 50 miles of this location
-      </div>
-    );
+    return <div>No job data currently available for the selected job.</div>;
   }
 
   let closestCityStateName = "";
