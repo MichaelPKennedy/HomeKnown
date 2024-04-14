@@ -94,7 +94,7 @@ const Recreation = () => {
             value={selectedOption}
             onChange={setSelectedOption}
             options={options}
-            placeholder="Select a Recreation Activity"
+            placeholder="Select an Activity"
             isClearable
             className={styles.select}
           />
