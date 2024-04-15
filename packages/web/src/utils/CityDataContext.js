@@ -58,6 +58,21 @@ export const CityDataProvider = ({ children }) => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
+  const fetchRealEstateData = async (city) => {
+    try {
+      const response = await client.service("/realty").find({
+        query: {
+          state_code: city.state_abbrev,
+          city: city.city_name,
+        },
+      });
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch real estate data:", error);
+      return [];
+    }
+  };
+
   const fetchRecInterestsForCity = async ({ queryKey }) => {
     const [_key, city] = queryKey;
     const savedFormData = JSON.parse(sessionStorage.getItem("formData"));
@@ -106,6 +121,18 @@ export const CityDataProvider = ({ children }) => {
     },
     {
       enabled: !!cityId,
+    }
+  );
+
+  const {
+    data: realEstateData,
+    isLoading: isRealEstateLoading,
+    error: realEstateError,
+  } = useQuery(
+    ["realEstateData", cityId],
+    () => fetchRealEstateData(cityData),
+    {
+      enabled: !!cityData,
     }
   );
 
@@ -234,6 +261,9 @@ export const CityDataProvider = ({ children }) => {
         removeCity,
         setCityId,
         isLoading,
+        isRealEstateLoading,
+        realEstateData,
+        realEstateError,
         error,
         isForecastLoading,
         forecastError,

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useCityData } from "../../../utils/CityDataContext";
 import { Card } from "react-bootstrap";
 import FilterModal from "./FilterModal";
 import FilterBar from "./FilterBar";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import Modal from "react-modal";
+import { Spinner } from "react-bootstrap";
 import styles from "./RealEstate.module.css";
 
 const PopupWithAdjustment = ({ children, position }) => {
@@ -29,14 +31,21 @@ const PopupWithAdjustment = ({ children, position }) => {
   );
 };
 
-const RealEstate = ({ data, city }) => {
+const RealEstate = ({ city }) => {
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const tileUrl = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
   Modal.setAppElement("#root");
+
+  const { realEstateData, isRealEstateLoading, realEstateError } =
+    useCityData();
+
+  useEffect(() => {
+    console.log("realEstateData", realEstateData);
+  }, [realEstateData]);
 
   const handleOpenModal = (property) => {
     setSelectedProperty(property);
@@ -50,7 +59,7 @@ const RealEstate = ({ data, city }) => {
   });
 
   const applyFilters = (filters) => {
-    const filtered = data.filter((result) => {
+    const filtered = realEstateData?.filter((result) => {
       const matchesStatus = result.status === filters.status;
       const matchesPropertyType =
         filters.propertyTypes === "any" ||
@@ -116,6 +125,10 @@ const RealEstate = ({ data, city }) => {
     }));
   };
 
+  useEffect(() => {
+    setFilteredData(realEstateData);
+  }, [realEstateData]);
+
   const handleFilterChangeDesktop = (filterName, value) => {
     const newFilters = {
       ...filters,
@@ -155,6 +168,12 @@ const RealEstate = ({ data, city }) => {
           </button>
         </div>
       )}
+      {isRealEstateLoading && (
+        <div className="d-flex align-items-center ml-3 mb-3">
+          <p className="mb-0 mr-1">Real Estate Data Loading...</p>
+          <Spinner animation="border" size="sm" />
+        </div>
+      )}
       <Card className={styles.card}>
         <MapContainer
           center={[city.latitude, city.longitude]}
@@ -163,7 +182,7 @@ const RealEstate = ({ data, city }) => {
         >
           <TileLayer url={tileUrl} />
           {filteredData
-            .filter((result) => result.location.address.coordinate)
+            ?.filter((result) => result.location.address.coordinate)
             .map((result) => (
               <Marker
                 key={result.property_id}
