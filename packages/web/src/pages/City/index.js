@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useParams, Outlet, useNavigate } from "react-router-dom";
 import styles from "./City.module.css";
-import HeartIcon from "../../components/HeartIcon";
+import HeartIcon from "./components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
 import { useCityData } from "../../utils/CityDataContext";
 import LoginModal from "../../components/LoginModal";
@@ -113,7 +113,7 @@ function City() {
 
   return (
     <div className="container-fluid">
-      <div className="row">
+      <div className={`row ${styles.cityContainer}`}>
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
           <SideBar cityId={cityId} />
         </div>

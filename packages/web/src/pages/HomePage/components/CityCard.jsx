@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import LoginModal from "../../../components/LoginModal";
 import Photos from "./Photos";
+import ResultsMap from "../../ResultsPage/components/ResultsMap";
 import styles from "./CityCard.module.css";
 
 const CityCard = ({ city, index }) => {
@@ -20,7 +21,11 @@ const CityCard = ({ city, index }) => {
           </p>
         </div>
       </Link>
-      <Photos city={city} />
+      {city.photos && city.photos.length > 0 ? (
+        <Photos city={city} />
+      ) : (
+        <ResultsMap {...city} />
+      )}
       {showLoginModal && (
         <LoginModal onClose={() => setShowLoginModal(false)} />
       )}

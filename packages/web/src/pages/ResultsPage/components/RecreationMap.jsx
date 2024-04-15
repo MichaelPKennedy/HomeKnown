@@ -71,7 +71,7 @@ import { Card, Button, Modal, Form } from "react-bootstrap";
 const placeToIconMap = {
   restaurants: faPizzaSlice,
   beaches: faUmbrellaBeach,
-  lakes: faWater,
+  lakes: faFish,
   bars: faCocktail,
   mountains: faMountain,
   hikingTrails: faHiking,
@@ -84,7 +84,7 @@ const placeToIconMap = {
   skiResorts: faSnowboarding,
   nationalParks: faTree,
   botanicalGardens: faLeaf,
-  rivers: faWater,
+  rivers: faTint,
   sportsCentres: faBasketballBall,
   swimmingFacilities: faSwimmer,
   climbingCentres: faMountain,

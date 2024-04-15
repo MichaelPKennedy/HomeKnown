@@ -93,7 +93,7 @@ export class CategoriesService implements ServiceMethods<any> {
 
       const cities = await this.sequelize.models.City.findAll({
         where: whereCondition,
-        attributes: ['city_name', 'city_id'],
+        attributes: ['city_name', 'city_id', 'Latitude', 'Longitude'],
         include: [
           {
             model: this.sequelize.models.State,
@@ -117,6 +117,8 @@ export class CategoriesService implements ServiceMethods<any> {
             city_id: city.city_id,
             city_name: city.city_name,
             state_name: city.State.state,
+            latitude: city.Latitude,
+            longitude: city.Longitude,
             region: city.State.region,
             photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
           }))

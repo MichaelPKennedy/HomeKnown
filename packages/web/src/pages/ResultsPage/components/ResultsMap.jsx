@@ -7,6 +7,7 @@ import {
   useMap,
 } from "react-leaflet";
 import L from "leaflet";
+import { Link } from "react-router-dom";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactDOMServer from "react-dom/server";
@@ -22,38 +23,42 @@ const ResultsMap = (city) => {
   };
 
   return (
-    <MapContainer
-      center={[city.latitude, city.longitude]}
-      zoom={5}
-      dragging={false}
-      scrollWheelZoom={false}
-      className={styles.resultsMap}
+    <Link
+      to={`/results/${city.city_id}`}
+      key={city.city_id}
+      state={{ fromPage: "home" }}
     >
-      <FixMapSize />
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker
-        position={[city.latitude, city.longitude]}
-        icon={
-          new L.DivIcon({
-            className: styles.cityMarker,
-            html: ReactDOMServer.renderToString(
-              <div>
-                <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
-              </div>
-            ),
-            iconSize: [30, 30],
-          })
-        }
+      <MapContainer
+        center={[city.latitude, city.longitude]}
+        zoom={5}
+        zoomControl={false}
+        dragging={false}
+        scrollWheelZoom={false}
+        className={styles.resultsMap}
       >
-        <Tooltip direction="top">
-          <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
-          <span>{city.city_name}</span>
-        </Tooltip>
-      </Marker>
-    </MapContainer>
+        <FixMapSize />
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        <Marker
+          position={[city.latitude, city.longitude]}
+          icon={
+            new L.DivIcon({
+              className: styles.cityMarker,
+              html: ReactDOMServer.renderToString(
+                <div>
+                  <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                </div>
+              ),
+              iconSize: [30, 30],
+            })
+          }
+        >
+          <Tooltip direction="top">
+            <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
+            <span>{city.city_name}</span>
+          </Tooltip>
+        </Marker>
+      </MapContainer>
+    </Link>
   );
 };
 

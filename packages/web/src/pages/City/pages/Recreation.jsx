@@ -53,13 +53,14 @@ const Recreation = () => {
   const currentCity = city ? city : cityData;
   const fromSurvey = city ? true : false;
 
-  const handleSearch = async () => {
-    if (selectedOption && currentCity) {
+  const handleSearch = async (option) => {
+    if (option && currentCity) {
       setIsLoadingSearch(true);
       setNoResults(false);
+      setSelectedOption(option); // Set the selected option state here
       try {
         const elements = await fetchDataForPreference(
-          selectedOption.value,
+          option.value,
           currentCity
         );
         let namedElements;
@@ -70,7 +71,7 @@ const Recreation = () => {
         } else {
           namedElements = elements;
         }
-        setSearchData({ [selectedOption.value]: namedElements });
+        setSearchData({ [option.value]: namedElements });
         if (namedElements.length === 0) {
           setNoResults(true);
         }
@@ -92,19 +93,16 @@ const Recreation = () => {
         <div className={styles.searchContainer}>
           <Select
             value={selectedOption}
-            onChange={setSelectedOption}
+            onChange={handleSearch}
             options={options}
             placeholder="Select an Activity"
             isClearable
             className={styles.select}
           />
-          <button onClick={handleSearch} className={styles.searchBtn}>
-            Search
-          </button>
         </div>
       )}
       {isLoadingSearch && (
-        <div className="d-flex align-items-center ml-3 mb-3">
+        <div className="d-flex align-items-center ml-1 mb-3">
           <p className="mb-0 mr-1">Locations Loading...</p>
           <Spinner animation="border" size="sm" />
         </div>
