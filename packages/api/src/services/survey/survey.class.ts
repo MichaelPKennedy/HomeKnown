@@ -558,7 +558,7 @@ export class SurveyService implements ServiceMethods<any> {
     const cacheKey = `cityDetails_${user_id}`
     const cachedData = myCache.get(cacheKey)
 
-    if (cachedData) {
+    if (cachedData && cachedData.length > 0) {
       return cachedData
     }
 
@@ -573,7 +573,9 @@ export class SurveyService implements ServiceMethods<any> {
     })
     const cityDetails = await this.getCityDetails(cities)
 
-    myCache.set(cacheKey, cityDetails)
+    if (cityDetails.length > 0) {
+      myCache.set(cacheKey, cityDetails)
+    }
 
     return cityDetails
   }
