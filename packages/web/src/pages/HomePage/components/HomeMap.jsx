@@ -11,9 +11,9 @@ import { Link } from "react-router-dom";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactDOMServer from "react-dom/server";
-import styles from "../ResultsPage.module.css";
+import styles from "./HomeMap.module.css";
 
-const ResultsMap = (city) => {
+const HomeMap = (city) => {
   const FixMapSize = () => {
     const map = useMap();
     React.useEffect(() => {
@@ -26,7 +26,7 @@ const ResultsMap = (city) => {
     <Link
       to={`/results/${city.city_id}`}
       key={city.city_id}
-      state={{ city, fromPage: "results" }}
+      state={{ fromPage: "home" }}
     >
       <MapContainer
         center={[city.latitude, city.longitude]}
@@ -62,4 +62,4 @@ const ResultsMap = (city) => {
   );
 };
 
-export default ResultsMap;
+export default HomeMap;

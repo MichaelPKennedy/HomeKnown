@@ -193,7 +193,7 @@ const RealEstate = ({ city }) => {
                 icon={customMarkerIcon}
               >
                 <PopupWithAdjustment
-                  position={result.location.address.coordinate}
+                  position={result?.location?.address?.coordinate}
                 >
                   <div
                     className={styles.popupClick}
@@ -201,12 +201,12 @@ const RealEstate = ({ city }) => {
                   >
                     <div className={styles.addressContainer}>
                       <p className={styles.address}>
-                        {result.location.address.line},{" "}
-                        {result.location.address.city}
+                        {result?.location?.address.line},{" "}
+                        {result?.location?.address.city}
                       </p>
                     </div>
                     <img
-                      src={result.location.street_view_url}
+                      src={result?.location?.street_view_url}
                       alt="Street View"
                       className={styles.photo}
                     />
@@ -214,16 +214,20 @@ const RealEstate = ({ city }) => {
                       Price:{" "}
                       {result.list_price
                         ? `$${result.list_price}`
-                        : `$${result.list_price_min} - $${result.list_price_max}`}
+                        : result.list_price_min && result.list_price_max
+                        ? `$${result.list_price_min} - $${result.list_price_max}`
+                        : "N/A"}
                     </p>
-                    <span>{result.description.type.replace(/_/g, " ")} | </span>
+                    <span>
+                      {result?.description?.type?.replace(/_/g, " ")} |{" "}
+                    </span>
                     {result.description.beds && (
-                      <span>{result.description.beds} beds | </span>
+                      <span>{result?.description?.beds} beds | </span>
                     )}
                     {result.description.baths && (
-                      <span>{result.description.baths} baths | </span>
+                      <span>{result?.description?.baths} baths | </span>
                     )}
-                    <span>{result.description.sqft} sqft </span>
+                    <span>{result?.description?.sqft} sqft </span>
                   </div>
                 </PopupWithAdjustment>
               </Marker>
@@ -249,7 +253,10 @@ const RealEstate = ({ city }) => {
               Price:{" "}
               {selectedProperty.list_price
                 ? `$${selectedProperty.list_price}`
-                : `$${selectedProperty.list_price_min} - $${selectedProperty.list_price_max}`}
+                : selectedProperty.list_price_min &&
+                  selectedProperty.list_price_max
+                ? `$${selectedProperty.list_price_min} - $${selectedProperty.list_price_max}`
+                : "N/A"}
             </p>
             <button onClick={() => setIsModalOpen(false)}>Close</button>
           </Modal>
