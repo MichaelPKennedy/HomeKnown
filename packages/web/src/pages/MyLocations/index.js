@@ -116,7 +116,7 @@ const MyLocations = () => {
     selectedStates.has(city.state_name)
   );
 
-  const hasLocations = userCityData && userCityData.length > 0;
+  const hasLocations = userCityIds && userCityIds.length > 0;
 
   return isLoggedIn ? (
     <>
