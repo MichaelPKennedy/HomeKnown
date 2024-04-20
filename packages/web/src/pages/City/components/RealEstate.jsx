@@ -109,6 +109,20 @@ const RealEstate = ({ city }) => {
     "townhomes",
   ];
 
+  const buyPriceOptions = [
+    0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000,
+    500000, 550000, 600000, 650000, 700000, 750000, 800000, 850000, 900000,
+    950000, 1000000, 1250000, 1500000, 1750000, 2000000, 2250000, 2500000,
+    2750000, 3000000, 3250000, 3500000, 3750000, 4000000, 4250000, 4500000,
+    4750000, 5000000, 6000000, 7000000, 8000000, 9000000, 10000000, 11000000,
+    12000000, 13000000, 14000000, 15000000, 16000000,
+  ];
+
+  const rentPriceOptions = [
+    0, 500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000,
+    6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000,
+  ];
+
   const [filters, setFilters] = useState({
     status: "for_sale",
     price: { min: "any", max: "any" },
@@ -127,17 +141,28 @@ const RealEstate = ({ city }) => {
     if (stored) {
       const storedFilters = JSON.parse(stored);
       if (storedFilters.housingType) {
-        console.log("storedFilters housing type", storedFilters.housingType);
         const newFilters = { ...filters };
         newFilters.status =
           storedFilters.housingType === "buy" ? "for_sale" : "for_rent";
 
         if (storedFilters.housingType === "buy") {
-          newFilters.price.min = storedFilters.homeMin || "any";
-          newFilters.price.max = storedFilters.homeMax || "any";
+          newFilters.price.min = getClosestPrice(
+            storedFilters.homeMin,
+            buyPriceOptions
+          );
+          newFilters.price.max = getClosestPrice(
+            storedFilters.homeMax,
+            buyPriceOptions
+          );
         } else if (storedFilters.housingType === "rent") {
-          newFilters.price.min = storedFilters.rentMin || "any";
-          newFilters.price.max = storedFilters.rentMax || "any";
+          newFilters.price.min = getClosestPrice(
+            storedFilters.rentMin,
+            rentPriceOptions
+          );
+          newFilters.price.max = getClosestPrice(
+            storedFilters.rentMax,
+            rentPriceOptions
+          );
         }
 
         setFilters(newFilters);
@@ -145,6 +170,19 @@ const RealEstate = ({ city }) => {
       }
     }
   }, []);
+
+  function getClosestPrice(price, options) {
+    const numPrice = Number(price);
+    const validOptions = options.filter((option) => typeof option === "number");
+
+    let closest = validOptions[0];
+    for (let i = 1; i < validOptions.length; i++) {
+      if (validOptions[i] <= numPrice && validOptions[i] > closest) {
+        closest = validOptions[i];
+      }
+    }
+    return closest;
+  }
 
   const handleStatusChange = (status) => {
     const newFilters = {
