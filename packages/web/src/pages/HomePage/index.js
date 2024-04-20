@@ -20,14 +20,6 @@ const HomePage = () => {
     return categories[selectedOption]?.slice(0, 50) || [];
   };
 
-  useEffect(() => {
-    console.log("categories:", categories);
-  }, [categories]);
-
-  useEffect(() => {
-    console.log("Selected Option:", selectedOption);
-  }, [selectedOption]);
-
   const handleSearch = async (searchTerm) => {
     try {
       const authToken = localStorage.getItem("authToken");

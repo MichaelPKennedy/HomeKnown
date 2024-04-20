@@ -34,11 +34,6 @@ const Overview = () => {
   const { photos } = currentCity || {};
   const { description } = currentCity || {};
 
-  useEffect(() => {
-    console.log("currentCity", currentCity);
-    console.log("cityData", cityData);
-  }, [currentCity]);
-
   const cityFacts = [
     {
       name: "Population",

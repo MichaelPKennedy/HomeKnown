@@ -42,7 +42,6 @@ export const AuthProvider = ({ children }) => {
         }
       );
       setUser((prevUser) => ({ ...prevUser, [fieldName]: fieldValue }));
-      console.log("User updated successfully:", updatedUser);
     } catch (error) {
       console.error("Error updating user field:", error);
     }
@@ -61,7 +60,6 @@ export const AuthProvider = ({ children }) => {
         },
       }
     );
-    console.log("Password changed successfully", response);
     await fetchUserData(user.user_id);
   };
 
@@ -78,7 +76,6 @@ export const AuthProvider = ({ children }) => {
           },
         }
       );
-      console.log("Password created successfully", response);
       await fetchUserData(user.user_id);
     } catch (error) {
       console.error("Error creating password:", error);

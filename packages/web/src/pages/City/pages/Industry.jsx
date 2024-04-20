@@ -17,7 +17,6 @@ const Industry = () => {
   const [selectedJob, setSelectedJob] = useState(null);
 
   const { city } = location?.state || {};
-  console.log("city in jobs", city);
   const currentCity = city ? city : cityData;
   const fromSurvey = city ? true : false;
   const { Jobs: jobs } = currentCity || {};

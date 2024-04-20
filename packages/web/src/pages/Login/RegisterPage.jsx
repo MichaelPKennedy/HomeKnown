@@ -14,7 +14,6 @@ const RegisterPage = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const validatePassword = (password) => {
-    console.log("in validatePassword");
     const errors = [];
     if (password.length < 8) {
       errors.push("Password must be at least 8 characters.");

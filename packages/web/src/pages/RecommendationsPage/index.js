@@ -11,9 +11,6 @@ const RecommendationsPage = () => {
   const { userRecommendations } = useCityData();
   const { isLoggedIn } = useContext(AuthContext);
 
-  useEffect(() => {
-    console.log("userRecommendations", userRecommendations);
-  }, [userRecommendations]);
   return isLoggedIn ? (
     userRecommendations?.standard?.length > 0 ? (
       <div className={styles.pageContainer}>

@@ -88,12 +88,9 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
   const transformWeatherData = (weatherData, selectedYear) => {
     let monthlyData = new Array(12).fill(null);
 
-    console.log("weatherData", weatherData);
-
     weatherData
       .filter((item) => Number(item.year) === Number(selectedYear))
       .forEach((item) => {
-        console.log("item", item);
         monthlyData[item.month - 1] = {
           label: getMonthName(item.month, isMobile),
           avgTemp: !item.avg_temp ? null : Math.round(item.avg_temp),
@@ -103,8 +100,6 @@ const ReusableChart = ({ data, label, startYear, endYear, dataType }) => {
           rain: item.precip / 10 || 0,
         };
       });
-
-    console.log("monthlyData", monthlyData);
 
     return monthlyData;
   };

@@ -10,9 +10,6 @@ const WeatherPreferences = ({
   handleTemperatureChange,
   hasColdMonth,
 }) => {
-  useEffect(() => {
-    console.log("formData", formData);
-  }, [formData]);
   return (
     <div>
       <div className={`form-group ${styles.formGroup}`}>
