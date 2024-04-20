@@ -81,7 +81,7 @@ export class StatsService implements ServiceMethods<any> {
         include: [
           {
             model: this.sequelize.models.City,
-            attributes: ['city_name'],
+            attributes: ['city_name', 'Latitude', 'Longitude'],
             include: [
               {
                 model: this.sequelize.models.State,
@@ -99,6 +99,8 @@ export class StatsService implements ServiceMethods<any> {
       city_id: city.city_id,
       count: city.count,
       city_name: city.City.city_name,
+      latitude: city.City.Latitude,
+      longitude: city.City.Longitude,
       state: city.City.State.state_abbrev,
       photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
