@@ -150,10 +150,6 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
     }
   }, [searchData]);
 
-  useEffect(() => {
-    console.log("filters", filters);
-  }, [filters]);
-
   const handleFilterModalToggle = () => {
     setShowFilterModal(!showFilterModal);
     if (!showFilterModal) {
@@ -263,8 +259,6 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
           </Marker>
           {activeInterests &&
             Object.entries(activeInterests).map(([type, elements]) => {
-              console.log("type", type);
-              console.log("filters[type]", filters[type]);
               if (filters[type]) {
                 return elements.map((element, index) => {
                   const position = element.center

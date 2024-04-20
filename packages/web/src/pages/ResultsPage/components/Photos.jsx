@@ -32,7 +32,10 @@ const Photos = ({ city }) => {
           ]
       ).map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
-          <Link to={`/results/${city.city_id}`} state={{ fromPage: "results" }}>
+          <Link
+            to={`/results/${city.city_id}`}
+            state={{ city, fromPage: "results" }}
+          >
             {photo.blurHash && (
               <Blurhash
                 hash={photo.blurHash}
