@@ -29,7 +29,7 @@ const sendForgotPswdEmail: Hook<Application, ForgotPasswordService> = async (
         .container { background-color: #fff; border: 1px solid #ddd; padding: 20px; max-width: 600px; margin: 20px auto; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         h1 { color: #333; }
         p { line-height: 1.6; }
-        .button { display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: white; background-color: #01697c; text-decoration: none; }
+        .button { display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF; background-color: #01697c; text-decoration: none; }
         .button:hover { background-color: #0056b3; }
         .footer { text-align: center; margin-top: 20px; font-size: 0.9em; color: #555; }
       </style>
