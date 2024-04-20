@@ -3,6 +3,7 @@ import { Card, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import client from "../../../feathersClient";
 import { toast } from "react-toastify";
+import styles from "./ForgotPassword.module.css";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -23,8 +24,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="forgot-password-page">
-      <Card>
+    <div className={styles.pageContainer}>
+      <Card className={styles.card}>
         <Card.Body>
           <h2 className="text-center mb-4">Password Reset</h2>
           <Form onSubmit={handleForgotPassword}>
@@ -38,7 +39,7 @@ const ForgotPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
-            <Button className="w-100 mt-3" type="submit">
+            <Button className={`w-30 mt-3 ${styles.btn}`} type="submit">
               Reset Password
             </Button>
           </Form>
