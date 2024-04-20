@@ -35,7 +35,7 @@ const welcomeEmail: Hook<Application, UserService> = async (
         h1 { color: #333; }
         p { line-height: 1.6; }
         .button { display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF !important; background-color: #01697c !important; text-decoration: none; }
-        .button:hover { background-color: #FFFFFF; color: #01697c !important; border: 1px solid #01697c;}
+        .button:hover { background-color: #FFFFFF !important; color: #01697c !important; border: 1px solid #01697c;}
         .footer { text-align: center; margin-top: 20px; font-size: 0.9em; color: #555; }
       </style>
       </head>
