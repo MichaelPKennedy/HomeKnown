@@ -39,10 +39,10 @@ const sendForgotPswdEmail: Hook<Application, ForgotPasswordService> = async (
       <h1>Password Reset Request</h1>
       <p>You're receiving this email because we received a password reset request for your account.</p>
       <p>Please click the button below to reset your password:</p>
-      <a href="${resetLink}" style="display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF !important; background-color: #01697c; text-decoration: none;">Reset Password</a>
+      <a href="${resetLink}" class="button" style="display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF !important; background-color: #01697c; text-decoration: none;">Reset Password</a>
       <p>This password reset link will expire in 60 minutes. If you did not request a password reset, no further action is required.</p>
       <p>If you have any questions or need assistance, please contact our support team:</p>
-      <a href="mailto:support@homeknown.app" class="button">Contact Support</a>
+      <a href="mailto:support@homeknown.app" class="button" style="display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF !important; background-color: #01697c; text-decoration: none;>Contact Support</a>
       <div class="footer">
         <p>This is an automated message; please do not reply directly to this email.</p>
       </div>
