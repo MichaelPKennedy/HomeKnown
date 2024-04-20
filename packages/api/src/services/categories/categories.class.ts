@@ -11,8 +11,8 @@ interface City {
   city_id: number
   city_name: string
   area_code?: number
-  Latitude: number | null
-  Longitude: number | null
+  latitude: number | null
+  longitude: number | null
   currentHomePrice?: number | null
   currentRentPrice?: number | null
   pop_2022?: number | null

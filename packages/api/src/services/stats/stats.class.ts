@@ -14,8 +14,8 @@ interface CityStats {
   count: number
   city_name: string
   state: string
-  Latitude: number
-  Longitude: number
+  latitude: number
+  longitude: number
 }
 
 interface StatsResult {
@@ -66,8 +66,8 @@ export class StatsService implements ServiceMethods<any> {
       city_id: city.city_id,
       count: city.count,
       city_name: city.City.city_name,
-      Latitude: city.City.Latitude,
-      Longitude: city.City.Longitude,
+      latitude: city.City.Latitude,
+      longitude: city.City.Longitude,
       state: city.City.State.state_abbrev,
       photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
