@@ -250,7 +250,7 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
                   <FontAwesomeIcon
                     icon={faMapMarkerAlt}
                     size="2x"
-                    color="black"
+                    color="#01697c"
                   />
                 ),
                 iconSize: [30, 30],
