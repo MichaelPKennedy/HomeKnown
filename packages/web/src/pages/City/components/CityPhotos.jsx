@@ -15,6 +15,8 @@ import unsplashLogo from "../../../assets/unsplashLogo.png";
 const CityPhotos = ({ photos }) => {
   if (!photos || !photos.length) return null;
 
+  const isMobile = window.innerWidth < 768;
+
   return (
     <Swiper
       pagination={{
@@ -37,7 +39,7 @@ const CityPhotos = ({ photos }) => {
             />
           )}
           <img
-            src={photo.full_url}
+            src={isMobile ? photo.reg_url : photo.full_url}
             alt={photo.alt}
             className={styles.photo}
             onLoad={(e) => {
