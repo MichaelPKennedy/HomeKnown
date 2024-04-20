@@ -35,7 +35,7 @@ const welcomeEmail: Hook<Application, UserService> = async (
         h1 { color: #333; }
         p { line-height: 1.6; }
         .button { display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF; background-color: #01697c; text-decoration: none; }
-        .button:hover { background-color: #0056b3; }
+        .button:hover { background-color: #FFFFFF; color: #01697c !important; border: 1px solid #01697c;}
         .footer { text-align: center; margin-top: 20px; font-size: 0.9em; color: #555; }
       </style>
       </head>
@@ -44,7 +44,7 @@ const welcomeEmail: Hook<Application, UserService> = async (
         <h1>Welcome to HomeKnown, ${user.first_name || user.username}!</h1>
         <p>Thank you for registering at HomeKnown. We're excited to have you on board and can't wait to help you discover your perfect place to live.</p>
         <p>Please click the button below to verify your email address and get started:</p>
-        <a href="https://www.homeknown.app/verify-email" class="button">Verify Email</a>
+        <a href="https://www.homeknown.app/verify-email" style="display: inline-block; padding: 10px 20px; margin: 10px 2px; border-radius: 5px; color: #FFFFFF !important; background-color: #01697c; text-decoration: none;">Verify Email</a>
         <p>If you have any questions or need assistance, feel free to reach out to us:</p>
         <a href="https://www.homeknown.app/support" class="button">Contact Support</a>
       </div>
