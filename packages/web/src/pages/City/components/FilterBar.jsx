@@ -7,6 +7,7 @@ const FilterBar = ({ filters, onFilterChange }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
 
   const buyPriceOptions = [
+    "any",
     0,
     50000,
     100000,
@@ -55,10 +56,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
     14000000,
     15000000,
     16000000,
-    "any",
   ];
 
   const rentPriceOptions = [
+    "any",
     0,
     500,
     1000,
@@ -80,10 +81,10 @@ const FilterBar = ({ filters, onFilterChange }) => {
     9000,
     9500,
     10000,
-    "any",
   ];
 
   const sqftOptions = [
+    "any",
     500,
     1000,
     1500,
@@ -104,7 +105,6 @@ const FilterBar = ({ filters, onFilterChange }) => {
     9000,
     9500,
     10000,
-    "any",
   ];
 
   const propertyTypes = [

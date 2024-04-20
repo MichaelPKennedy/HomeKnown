@@ -43,10 +43,6 @@ const RealEstate = ({ city }) => {
   const { realEstateData, isRealEstateLoading, realEstateError } =
     useCityData();
 
-  useEffect(() => {
-    console.log("realEstateData", realEstateData);
-  }, [realEstateData]);
-
   const handleOpenModal = (property) => {
     setSelectedProperty(property);
     setIsModalOpen(true);
@@ -64,10 +60,13 @@ const RealEstate = ({ city }) => {
       const matchesPropertyType =
         filters.propertyTypes === "any" ||
         filters.propertyTypes.includes(result.description.type);
+
+      const listPriceMin = result.list_price || result.list_price_min;
+      const listPriceMax = result.list_price || result.list_price_max;
       const matchesMinPrice =
-        filters.price.min === "any" || result.list_price >= filters.price.min;
+        filters.price.min === "any" || listPriceMin >= filters.price.min;
       const matchesMaxPrice =
-        filters.price.max === "any" || result.list_price <= filters.price.max;
+        filters.price.max === "any" || listPriceMax <= filters.price.max;
       const matchesBeds =
         filters.beds === "any" || result.description.beds >= filters.beds;
       const matchesBaths =
@@ -91,6 +90,7 @@ const RealEstate = ({ city }) => {
       );
     });
 
+    setFilters(filters);
     setFilteredData(filtered);
     setIsFilterModalOpen(false);
   };
@@ -118,16 +118,43 @@ const RealEstate = ({ city }) => {
     propertyTypes: propertyTypes,
   });
 
-  const handleFilterChange = (filterName, value) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterName]: value,
-    }));
-  };
+  useEffect(() => {
+    applyFilters(filters);
+  }, [realEstateData]);
 
   useEffect(() => {
-    setFilteredData(realEstateData);
-  }, [realEstateData]);
+    const stored = sessionStorage.getItem("formData");
+    if (stored) {
+      const storedFilters = JSON.parse(stored);
+      if (storedFilters.housingType) {
+        console.log("storedFilters housing type", storedFilters.housingType);
+        const newFilters = { ...filters };
+        newFilters.status =
+          storedFilters.housingType === "buy" ? "for_sale" : "for_rent";
+
+        if (storedFilters.housingType === "buy") {
+          newFilters.price.min = storedFilters.homeMin || "any";
+          newFilters.price.max = storedFilters.homeMax || "any";
+        } else if (storedFilters.housingType === "rent") {
+          newFilters.price.min = storedFilters.rentMin || "any";
+          newFilters.price.max = storedFilters.rentMax || "any";
+        }
+
+        setFilters(newFilters);
+        applyFilters(newFilters);
+      }
+    }
+  }, []);
+
+  const handleStatusChange = (status) => {
+    const newFilters = {
+      ...filters,
+      price: { min: "any", max: "any" },
+      status: status,
+    };
+    setFilters(newFilters);
+    applyFilters(newFilters);
+  };
 
   const handleFilterChangeDesktop = (filterName, value) => {
     const newFilters = {
@@ -159,13 +186,31 @@ const RealEstate = ({ city }) => {
         />
       )}
       {isMobile && (
-        <div className={styles.buttonContainer}>
-          <button
-            onClick={() => setIsFilterModalOpen(true)}
-            className={styles.filterButton}
-          >
-            Filter Properties
-          </button>
+        <div>
+          <div className={styles.buttonContainer}>
+            <div className={styles.dropdown}>
+              <select
+                className={`form-control custom-select ${styles.select}`}
+                value={filters.status}
+                onChange={(e) => handleStatusChange(e.target.value)}
+                style={{
+                  maxWidth: "200px",
+                  margin: "0 auto",
+                  marginRight: "10px",
+                }}
+              >
+                <option value="for_rent">For Rent</option>
+                <option value="for_sale">For Sale</option>
+                <option value="sold">Sold</option>
+              </select>
+            </div>
+            <button
+              onClick={() => setIsFilterModalOpen(true)}
+              className={styles.filterButton}
+            >
+              Filter Properties
+            </button>
+          </div>
         </div>
       )}
       {isRealEstateLoading && (
@@ -265,6 +310,7 @@ const RealEstate = ({ city }) => {
           isOpen={isFilterModalOpen}
           onClose={() => setIsFilterModalOpen(false)}
           onApplyFilters={applyFilters}
+          filters={filters}
         />
       </Card>
     </div>

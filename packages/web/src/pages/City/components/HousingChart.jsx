@@ -45,6 +45,17 @@ const ReusablePriceChartComponent = ({ housingData = [], rentData = [] }) => {
   }, []);
 
   useEffect(() => {
+    const stored = sessionStorage.getItem("formData");
+    if (!stored) return;
+    const storedFilters = JSON.parse(stored);
+    if (storedFilters.housingType) {
+      const housingType =
+        storedFilters.housingType === "buy" ? "homePrice" : "rentPrice";
+      setDataType(housingType);
+    }
+  }, []);
+
+  useEffect(() => {
     const data = dataType === "homePrice" ? housingData?.[0] : rentData?.[0];
     if (!data) {
       setChartData({ labels: [], datasets: [] });

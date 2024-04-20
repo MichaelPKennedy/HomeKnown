@@ -8,7 +8,6 @@
 .scrollableContent {
   flex: 1; /* Takes up all available space */
   overflow-y: auto; /* Only this part will scroll */
-  padding: 20px;
 }
 
 .footer {
@@ -81,8 +80,6 @@
   padding: 0.5rem 1rem;
   transition: background-color 0.2s;
   max-width: 200px;
-  margin-bottom: 20px;
-  margin-right: 20px;
   font-weight: normal;
   color: white;
   background-color: #01697c;
@@ -103,6 +100,7 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  margin-right: 0px;
 }
 
 .button:hover {
@@ -128,8 +126,89 @@
   }
 }
 
-/* Styles for your filter bar */
+.filterLabel {
+  display: block;
+  margin-bottom: 8px;
+}
+
 .filterBar {
-  display: none;
-  /* Your styles for the filter bar */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+.filterItem {
+  margin: 0 10px;
+}
+
+.icon {
+  font-size: 12px;
+}
+
+.filterSelect {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  max-width: 200px;
+  height: 100%;
+  font-weight: normal;
+  background-color: transparent;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filterButton {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  max-width: 200px;
+  min-width: 105px;
+  margin-top: 10px;
+  white-space: nowrap;
+  font-weight: normal;
+  background-color: transparent;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.filterButton:hover,
+.filterSelect:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.filterButton:focus,
+.filterSelect:focus {
+  outline: none;
+}
+
+.filterContent {
+  min-width: 250px;
+  padding: 12px 0px 0px 0px;
+}
+
+.rangeGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.rangeGroup > div,
+.rangeGroup > div {
+  flex: 1;
+}
+
+.radioInput,
+.checkboxInput {
+  margin-right: 10px;
 }

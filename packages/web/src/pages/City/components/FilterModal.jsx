@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "react-modal";
 import styles from "./FilterModal.module.css";
 
@@ -31,19 +31,11 @@ if (isMobile) {
   customStyles.content.maxWidth = "100%";
 }
 
-const initialFilterOptions = {
-  status: "for_sale",
-  price: { min: "any", max: "any" },
-  beds: "any",
-  baths: "any",
-  sqft: { min: "any", max: "any" },
-  propertyTypes: [],
-};
-
 Modal.setAppElement("#root");
 
-const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
+const FilterModal = ({ isOpen, onClose, onApplyFilters, filters }) => {
   const buyPriceOptions = [
+    "any",
     0,
     50000,
     100000,
@@ -92,10 +84,10 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
     14000000,
     15000000,
     16000000,
-    "any",
   ];
 
   const rentPriceOptions = [
+    "any",
     0,
     500,
     1000,
@@ -117,12 +109,12 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
     9000,
     9500,
     10000,
-    "any",
   ];
 
   const bedOptions = [1, 2, 3, 4, 5];
   const bathOptions = [1, 1.5, 2, 3, 4];
   const sqftOptions = [
+    "any",
     500,
     1000,
     1500,
@@ -143,10 +135,22 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
     9000,
     9500,
     10000,
-    "any",
   ];
 
-  const [filterOptions, setFilterOptions] = useState(initialFilterOptions);
+  const [filterOptions, setFilterOptions] = useState(filters);
+
+  useEffect(() => {
+    setFilterOptions(filters);
+  }, [filters]);
+
+  const applyAndClose = () => {
+    const updatedFilters = {
+      ...filters,
+      ...filterOptions,
+    };
+    onApplyFilters(updatedFilters);
+    onClose();
+  };
 
   const handleInputChange = (field, subfield, value) => {
     if (subfield) {
@@ -162,6 +166,27 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
     }
   };
 
+  const handlePropertyTypeChange = (type) => {
+    if (type === "any") {
+      const newPropertyTypes =
+        filterOptions.propertyTypes.length === propertyTypes.length
+          ? []
+          : [...propertyTypes];
+      setFilterOptions((prev) => ({
+        ...prev,
+        propertyTypes: newPropertyTypes,
+      }));
+    } else {
+      const newPropertyTypes = filterOptions.propertyTypes.includes(type)
+        ? filterOptions.propertyTypes.filter((t) => t !== type)
+        : [...filterOptions.propertyTypes, type];
+      setFilterOptions((prev) => ({
+        ...prev,
+        propertyTypes: newPropertyTypes,
+      }));
+    }
+  };
+
   const handleCheckboxChange = (type) => {
     setFilterOptions((prev) => {
       const newPropertyTypes = prev.propertyTypes.includes(type)
@@ -172,9 +197,22 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   };
 
   const renderCheckboxInput = (label, options) => (
-    <div className={styles.fieldContainer}>
+    <div className={styles.filterContent}>
       <label className={styles.label}>{label}</label>
       <div>
+        <label className={styles.checkboxLabel}>
+          <input
+            type="checkbox"
+            name="propertyTypeAny"
+            value="any"
+            checked={
+              filterOptions.propertyTypes.length === propertyTypes.length
+            }
+            onChange={() => handlePropertyTypeChange("any")}
+            className={styles.checkboxInput}
+          />
+          Any
+        </label>
         {options.map((option) => (
           <label key={option} className={styles.checkboxLabel}>
             <input
@@ -182,7 +220,7 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
               name="propertyType"
               value={option}
               checked={filterOptions.propertyTypes.includes(option)}
-              onChange={() => handleCheckboxChange(option)}
+              onChange={() => handlePropertyTypeChange(option)}
               className={styles.checkboxInput}
             />
             {option.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
@@ -201,7 +239,7 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   };
 
   const renderSelectInput = (label, field, options, includeAny = true) => (
-    <div className={styles.fieldContainer}>
+    <div className={styles.filterContent}>
       <label className={styles.label}>{label}</label>
       <select
         className={styles.select}
@@ -219,63 +257,61 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
   );
 
   const getPriceOptions = () => {
-    return filterOptions.status === "for_sale"
-      ? buyPriceOptions
-      : rentPriceOptions;
+    return filters.status === "for_sale" ? buyPriceOptions : rentPriceOptions;
   };
 
   const renderRangeSelectInput = (label, field) => {
     const options = getPriceOptions();
     return (
-      <div>
-        <label className={styles.label}>{label} Minimum:</label>
-        <select
-          className={styles.select}
-          value={filterOptions[field].min}
-          onChange={(e) => handleSelectChange(field, { min: e.target.value })}
-        >
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option !== "any" ? `$${option.toLocaleString()}` : "No Min"}
-            </option>
-          ))}
-        </select>
-        <label className={styles.label}>{label} Maximum:</label>
-        <select
-          className={styles.select}
-          value={filterOptions[field].max}
-          onChange={(e) => handleSelectChange(field, { max: e.target.value })}
-        >
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option !== "any" ? `$${option.toLocaleString()}` : "No Max"}
-            </option>
-          ))}
-        </select>
+      <div className={styles.filterContent}>
+        <div className={styles.rangeGroup}>
+          <div>
+            <label className={styles.label}>{label} Minimum:</label>
+            <select
+              className={styles.select}
+              value={filterOptions[field].min}
+              onChange={(e) =>
+                handleSelectChange(field, { min: e.target.value })
+              }
+            >
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option !== "any" ? `$${option.toLocaleString()}` : "No Min"}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className={styles.label}>{label} Maximum:</label>
+            <select
+              className={styles.select}
+              value={filterOptions[field].max}
+              onChange={(e) =>
+                handleSelectChange(field, { max: e.target.value })
+              }
+            >
+              {options.map((option) => (
+                <option key={option} value={option}>
+                  {option !== "any" ? `$${option.toLocaleString()}` : "No Max"}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
       </div>
     );
   };
 
   const handleSelectChange = (field, value) => {
-    if (field === "status") {
-      setFilterOptions((prev) => ({
-        ...prev,
-        price: { min: "any", max: "any" },
-        [field]: value,
-      }));
-    } else {
-      setFilterOptions((prev) => ({
-        ...prev,
-        [field]:
-          typeof prev[field] === "object"
-            ? { ...prev[field], ...value }
-            : value,
-      }));
-    }
+    setFilterOptions((prev) => ({
+      ...prev,
+      [field]:
+        typeof prev[field] === "object" ? { ...prev[field], ...value } : value,
+    }));
   };
 
   const clearFilters = () => {
-    setFilterOptions(initialFilterOptions);
+    setFilterOptions(filters);
   };
 
   const propertyTypes = [
@@ -307,12 +343,6 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
               &times;
             </button>
           </div>
-          {renderSelectInput(
-            "Rent or Buy",
-            "status",
-            ["for_rent", "for_sale", "sold"],
-            false
-          )}
           {renderRangeSelectInput("Price", "price")}
           {renderSelectInput("Beds", "beds", bedOptions, true)}
           {renderSelectInput("Baths", "baths", bathOptions, true)}
@@ -320,10 +350,7 @@ const FilterModal = ({ isOpen, onClose, onApplyFilters }) => {
           {renderCheckboxInput("Home Types", propertyTypes)}
         </div>
         <div className={styles.footer}>
-          <button
-            className={styles.button}
-            onClick={() => onApplyFilters(filterOptions)}
-          >
+          <button className={styles.button} onClick={applyAndClose}>
             Apply Filters
           </button>
           <button

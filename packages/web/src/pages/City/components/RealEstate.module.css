@@ -109,6 +109,12 @@
   margin-bottom: 40px;
 }
 
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
 .circleMapMarker {
   width: 20px; /* Adjust size as needed */
   height: 20px; /* Adjust size as needed */
