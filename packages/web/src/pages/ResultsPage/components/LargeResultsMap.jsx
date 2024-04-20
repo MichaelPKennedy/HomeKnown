@@ -8,7 +8,7 @@ import {
 } from "react-leaflet";
 import L from "leaflet";
 import { Card } from "react-bootstrap";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ReactDOMServer from "react-dom/server";
 import styles from "../ResultsPage.module.css";
@@ -47,7 +47,11 @@ const LargeResultsMap = ({ cities }) => {
                 className: styles.cityMarker,
                 html: ReactDOMServer.renderToString(
                   <div>
-                    <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                    <FontAwesomeIcon
+                      icon={faMapMarkerAlt}
+                      size="2x"
+                      color="black"
+                    />
                   </div>
                 ),
                 iconSize: [30, 30],
@@ -55,7 +59,6 @@ const LargeResultsMap = ({ cities }) => {
             }
           >
             <Tooltip direction="top">
-              <FontAwesomeIcon icon={faStar} size="1x" color="gold" />
               <span>{city.city_name}</span>
             </Tooltip>
           </Marker>

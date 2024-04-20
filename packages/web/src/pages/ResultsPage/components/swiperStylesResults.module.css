@@ -1,0 +1,45 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiperSlide {
+  text-align: right;
+  font-size: 10px;
+  background: #fff;
+
+  /* Center slide text vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: 80%; /* Adjust based on your needs */
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.unsplashLogo {
+  color: black;
+  height: 1em; /* Sets the height of the logo to match the font size of the text */
+  width: auto; /* Keeps the logo's aspect ratio intact */
+  margin-left: 3px;
+  margin-bottom: 5px;
+}
+.unsplashLogoContainer {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.defaultLogo {
+  opacity: 0.3; /* Adjust transparency; 1 is fully opaque, 0 is fully transparent */
+}
+
+.attribution {
+  margin-bottom: 0px;
+  margin-top: 4px;
+  margin-right: 5px;
+}

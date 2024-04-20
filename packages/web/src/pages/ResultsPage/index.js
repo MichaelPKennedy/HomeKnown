@@ -7,6 +7,7 @@ import LoginModal from "../../components/LoginModal";
 import { useCityData } from "../../utils/CityDataContext";
 import ResultsMap from "./components/ResultsMap";
 import LargeResultsMap from "./components/LargeResultsMap";
+import Photos from "./components/Photos";
 
 function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const topTen = data?.topTen || [];
@@ -53,7 +54,11 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
             </p>
           </div>
         </Link>
-        <ResultsMap {...city}></ResultsMap>
+        {city.photos && city.photos.length > 0 ? (
+          <Photos city={city}></Photos>
+        ) : (
+          <ResultsMap {...city}></ResultsMap>
+        )}
         {showLoginModal && (
           <LoginModal onClose={() => setShowLoginModal(false)} />
         )}

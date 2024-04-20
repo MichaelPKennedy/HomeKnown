@@ -247,7 +247,11 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
               new L.DivIcon({
                 className: styles.cityMarker,
                 html: ReactDOMServer.renderToString(
-                  <FontAwesomeIcon icon={faStar} size="2x" color="gold" />
+                  <FontAwesomeIcon
+                    icon={faMapMarkerAlt}
+                    size="2x"
+                    color="black"
+                  />
                 ),
                 iconSize: [30, 30],
               })
