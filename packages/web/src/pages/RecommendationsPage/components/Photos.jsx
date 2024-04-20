@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
@@ -10,8 +10,13 @@ import unsplashLogo from "../../../assets/unsplashLogo.png";
 
 const Photos = ({ city }) => {
   const { photos } = city || {};
+  const [loadedImages, setLoadedImages] = useState({});
 
   const hasPhotos = photos && Array.isArray(photos) && photos.length > 0;
+
+  const handleImageLoad = (photoId) => {
+    setLoadedImages((prev) => ({ ...prev, [photoId]: true }));
+  };
 
   return (
     <Swiper
@@ -36,28 +41,29 @@ const Photos = ({ city }) => {
             to={`/results/${city.cityId}`}
             state={{ fromPage: "recommendations" }}
           >
-            {photo.blurHash && (
-              <Blurhash
-                hash={photo.blurHash}
-                width="100%"
-                height="100%"
-                resolutionX={32}
-                resolutionY={32}
-                punch={1}
+            <div className={styles.imageContainer}>
+              <img
+                src={photo.reg_url}
+                alt={photo.alt}
+                className={`${styles.photo} ${
+                  loadedImages[photo.id]
+                    ? styles.imageVisible
+                    : styles.imageHidden
+                }`}
+                onLoad={() => handleImageLoad(photo.id)}
               />
-            )}
-            <img
-              src={photo.reg_url}
-              alt={photo.alt}
-              className={`${styles.photo} ${
-                !hasPhotos ? styles.defaultLogo : ""
-              }`}
-              onLoad={(e) => {
-                if (photo.blurHash) {
-                  e.target.previousSibling.style.display = "none";
-                }
-              }}
-            />
+              {photo.blurHash && (
+                <Blurhash
+                  hash={photo.blurHash}
+                  width="100%"
+                  height="100%"
+                  resolutionX={32}
+                  resolutionY={32}
+                  punch={1}
+                  className={styles.blurHash}
+                />
+              )}
+            </div>
           </Link>
           {photo.attribution && (
             <p>
