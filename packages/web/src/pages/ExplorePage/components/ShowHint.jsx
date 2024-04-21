@@ -12,7 +12,7 @@ const HintPopup = () => {
     toast(hintMessage, {
       position: "top-center",
       autoClose: false,
-      closeOnClick: false,
+      closeOnClick: true,
       closeButton: true,
       draggable: false,
       zIndex: 9999,
