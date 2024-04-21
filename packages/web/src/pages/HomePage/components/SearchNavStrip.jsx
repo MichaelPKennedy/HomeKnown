@@ -30,11 +30,11 @@ const SearchNavStrip = ({ onSelectionChange, currentSelection }) => {
       label: "Tropical",
       icon: faUmbrellaBeach,
     },
-    {
-      id: "collegeTown",
-      label: "College Town",
-      icon: faUniversity,
-    },
+    // {
+    //   id: "collegeTown",
+    //   label: "College Town",
+    //   icon: faUniversity,
+    // },
     {
       id: "winter",
       label: "Snowy",
