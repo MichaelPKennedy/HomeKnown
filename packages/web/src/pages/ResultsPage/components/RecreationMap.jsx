@@ -131,7 +131,7 @@ const FixMapSize = () => {
   return null;
 };
 
-const RecreationMap = ({ data, searchData, fromSurvey }) => {
+const RecreationMap = ({ data, searchData, recreationWeight, fromSurvey }) => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filters, setFilters] = useState({});
   const [tempFilters, setTempFilters] = useState({});
@@ -180,7 +180,7 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
   }, []);
 
   useEffect(() => {
-    if (userRecInterests && fromSurvey) {
+    if (userRecInterests && fromSurvey && recreationWeight) {
       const newFilters = Object.keys(userRecInterests).reduce((acc, key) => {
         acc[key] = true;
         return acc;
@@ -192,7 +192,7 @@ const RecreationMap = ({ data, searchData, fromSurvey }) => {
 
   return (
     <CityDataProvider>
-      {!searchData && fromSurvey && (
+      {!searchData && fromSurvey && recreationWeight && (
         <>
           {userRecInterestsLoading ? (
             <div className="d-flex align-items-center mb-4 mt-4">

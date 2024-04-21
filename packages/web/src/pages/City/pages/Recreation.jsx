@@ -49,15 +49,26 @@ const Recreation = () => {
   const [searchData, setSearchData] = useState(null);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [noResults, setNoResults] = useState(false);
+  const [recreationWeight, setRecreationWeight] = useState(false);
+  const [recreationWeightLoading, setRecreationWeightLoading] = useState(true);
 
   const currentCity = city ? city : cityData;
   const fromSurvey = city ? true : false;
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(sessionStorage.getItem("formData"));
+
+    if (Number(savedFormData.weights.recreationalActivitiesWeight) > 0) {
+      setRecreationWeight(true);
+    }
+    setRecreationWeightLoading(false);
+  }, []);
 
   const handleSearch = async (option) => {
     if (option && currentCity) {
       setIsLoadingSearch(true);
       setNoResults(false);
-      setSelectedOption(option); // Set the selected option state here
+      setSelectedOption(option);
       try {
         const elements = await fetchDataForPreference(
           option.value,
@@ -89,7 +100,7 @@ const Recreation = () => {
 
   return (
     <>
-      {!city && (
+      {(!city || !recreationWeight) && (
         <div className={styles.searchContainer}>
           <Select
             value={selectedOption}
@@ -112,11 +123,12 @@ const Recreation = () => {
           No results found. Try a different search.
         </div>
       )}
-      {currentCity && (
+      {currentCity && !recreationWeightLoading && (
         <RecreationMap
           data={currentCity}
           searchData={searchData}
           fromSurvey={fromSurvey}
+          recreationWeight={recreationWeight}
         />
       )}
     </>
