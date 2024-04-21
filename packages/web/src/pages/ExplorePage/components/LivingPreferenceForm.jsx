@@ -17,6 +17,7 @@ import WeatherPreferences from "./WeatherPreferences.jsx";
 import RecreationalPreferences from "./RecreationalPreferences.jsx";
 import PopulationPreferences from "./PopulationPreferences";
 import StatePreferences from "./StatePreferences";
+import ShowHint from "./ShowHint";
 import ResultsPage from "../../ResultsPage";
 import { useCityData } from "../../../utils/CityDataContext";
 import { AuthContext } from "../../../AuthContext";
@@ -342,7 +343,8 @@ const LivingPreferenceForm = () => {
       )}
       <div>
         {showForm ? (
-          <div>
+          <div className={styles.preferenceFormContainer}>
+            <ShowHint />
             <form
               onSubmit={handleSubmit}
               className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}

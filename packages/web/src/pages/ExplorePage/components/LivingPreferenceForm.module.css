@@ -259,6 +259,10 @@
   .formCheckInput {
     transform: scale(1.2);
   }
+
+  .preferenceFormContainer {
+    position: relative;
+  }
 }
 
 .formInput {
