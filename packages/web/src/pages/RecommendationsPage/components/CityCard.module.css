@@ -32,10 +32,17 @@
 .cityDetails {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 5px;
 }
 
 .header {
   font-size: 16px;
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .cityContainer {
+    padding-top: 10px;
+    height: 360px;
+  }
 }

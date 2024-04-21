@@ -807,3 +807,15 @@ a:active {
   top: -20px;
   left: -15px;
 }
+
+.attribution {
+  margin-bottom: 0px;
+}
+
+@media screen and (max-width: 768px) {
+  .cityContainer {
+    padding-bottom: 0px;
+    height: 360px;
+    margin-bottom: 15px;
+  }
+}
