@@ -56,10 +56,12 @@ const Recreation = () => {
   const fromSurvey = city ? true : false;
 
   useEffect(() => {
-    const savedFormData = JSON.parse(sessionStorage.getItem("formData"));
-
-    if (Number(savedFormData.weights.recreationalActivitiesWeight) > 0) {
-      setRecreationWeight(true);
+    const item = sessionStorage.getItem("formData");
+    if (item) {
+      const savedFormData = JSON.parse(item);
+      if (Number(savedFormData?.weights?.recreationalActivitiesWeight) > 0) {
+        setRecreationWeight(true);
+      }
     }
     setRecreationWeightLoading(false);
   }, []);
