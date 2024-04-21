@@ -18,8 +18,8 @@
 .photo {
   display: block;
   width: 100%;
-  height: 93%; /* Adjust based on your needs */
-  margin-bottom: 10px;
+  height: 90%; /* Adjust based on your needs */
+  margin-bottom: 5px;
   border-radius: 15px;
   object-fit: cover;
 }
