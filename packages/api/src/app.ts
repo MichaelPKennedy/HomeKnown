@@ -71,10 +71,13 @@ const app: Application = express(feathers())
 app.post('/stripe-webhook', plainExpress.raw({ type: 'application/json' }), handleStripeWebhook)
 
 app.use((req, res, next) => {
-  console.log('req.hostname', req.hostname)
-  if (req.hostname === 'homeknown-client-c396f526d6b7.herokuapp.com') {
-    return res.redirect(301, `https://www.homeknown.app${req.originalUrl}`)
+  const host = req.headers.host
+
+  if (host === 'homeknown-client-c396f526d6b7.herokuapp.com') {
+    const newUrl = 'https://www.homeknown.app' + req.url
+    return res.redirect(301, newUrl)
   }
+
   next()
 })
 
