@@ -46,6 +46,14 @@ import * as Sentry from "@sentry/react";
 import PasswordReset from "./pages/Account/PasswordReset";
 import ForgotPassword from "./pages/Account/ForgotPassword";
 
+if (
+  window.location.origin ===
+  "https://homeknown-client-c396f526d6b7.herokuapp.com"
+) {
+  const newPath = `https://www.homeknown.app${window.location.pathname}${window.location.search}`;
+  window.location.href = newPath;
+}
+
 Sentry.init({
   dsn: "https://41c875fe4dae8546ea00662c958ff71b@o4506176576225280.ingest.us.sentry.io/4506176585269248",
   integrations: [
