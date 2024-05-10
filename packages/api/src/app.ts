@@ -70,6 +70,13 @@ const app: Application = express(feathers())
 
 app.post('/stripe-webhook', plainExpress.raw({ type: 'application/json' }), handleStripeWebhook)
 
+app.use((req, res, next) => {
+  if (req.hostname === 'homeknown-client-c396f526d6b7.herokuapp.com') {
+    return res.redirect(301, `https://www.homeknown.app${req.originalUrl}`)
+  }
+  next()
+})
+
 // Load app configuration
 app.configure(configuration(configurationValidator))
 app.use(cors())
