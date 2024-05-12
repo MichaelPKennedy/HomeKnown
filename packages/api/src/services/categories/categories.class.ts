@@ -69,9 +69,9 @@ export class CategoriesService implements ServiceMethods<any> {
 
     if (isDefaultQuery) {
       const cachedResult = myCache.get<CategoriesResult>(cacheKey)
-      if (cachedResult) {
-        return cachedResult
-      }
+      // if (cachedResult) {
+      //   return cachedResult
+      // }
     }
 
     const categories = ['tropical', 'coast', 'collegeTown', 'winter', ...regions]
@@ -133,7 +133,7 @@ export class CategoriesService implements ServiceMethods<any> {
     })
 
     if (isDefaultQuery) {
-      myCache.set(cacheKey, result)
+      // myCache.set(cacheKey, result)
     }
 
     return result as CategoriesResult
