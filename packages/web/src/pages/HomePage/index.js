@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { Helmet } from "react-helmet";
 import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchNavStrip from "./components/SearchNavStrip";
@@ -46,6 +47,13 @@ const HomePage = () => {
 
   return (
     <div className={styles.homeContainer}>
+      <Helmet>
+        <title>HomeKnown | Home</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       <Row className={`${styles.searchBar} mt-4 mb-2 pl-0 pr-0`}>
         <Col xs={12} className="pl-0 pr-0">
           <SearchBar onSearch={handleSearch} />
