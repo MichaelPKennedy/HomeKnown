@@ -78,7 +78,7 @@ const JobPreferences = ({
             <input
               type="number"
               name="minSalary1"
-              value={formData.minSalary1 || 0}
+              value={formData.minSalary1 || ""}
               onChange={(e) =>
                 setFormData({ ...formData, minSalary1: Number(e.target.value) })
               }
@@ -98,7 +98,7 @@ const JobPreferences = ({
             <input
               type="number"
               name="minSalary2"
-              value={formData.minSalary2 || 0}
+              value={formData.minSalary2 || ""}
               onChange={(e) =>
                 setFormData({ ...formData, minSalary2: Number(e.target.value) })
               }
