@@ -18,12 +18,16 @@ function SelectableBox({ title, sectionKey, weight, onSelect, icon }) {
     onSelect(sectionKey);
   };
 
+  const iconColor = weight > 0 ? "white" : "#01697c";
+
   return (
     <div
       onClick={handleClick}
-      className={`${styles.dropzone} ${weight > 0 ? styles.selected : ""}`}
+      className={`${styles.dropzone} ${
+        weight > 0 ? styles.selected : styles.unselected
+      }`}
     >
-      <FontAwesomeIcon icon={icon} size="3x" />
+      <FontAwesomeIcon icon={icon} size="3x" color={iconColor} />
       <p className={styles.dropzoneTitle}>{title}</p>
     </div>
   );
