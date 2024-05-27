@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Helmet } from "react-helmet";
 import { useParams } from "react-router-dom";
 import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
@@ -120,6 +121,13 @@ const MyLocations = () => {
 
   return isLoggedIn ? (
     <>
+      <Helmet>
+        <title>HomeKnown | My Locations</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       {hasLocations ? (
         <div className={styles.myLocationsContainer}>
           <button

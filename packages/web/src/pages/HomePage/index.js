@@ -48,7 +48,7 @@ const HomePage = () => {
   return (
     <div className={styles.homeContainer}>
       <Helmet>
-        <title>HomeKnown | Home</title>
+        <title>HomeKnown | Search</title>
         <meta
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."

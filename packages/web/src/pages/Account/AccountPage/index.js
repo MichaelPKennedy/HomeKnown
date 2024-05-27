@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styles from "./AccountPage.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,6 +30,13 @@ const AccountPage = () => {
 
   return isLoggedIn ? (
     <div className={styles.gridContainer}>
+      <Helmet>
+        <title>HomeKnown | Account</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       <Link to="/account-settings/personal-info" className={styles.accountLink}>
         <div className={styles.gridItem}>
           <FontAwesomeIcon icon={faUser} className={styles.icon} />

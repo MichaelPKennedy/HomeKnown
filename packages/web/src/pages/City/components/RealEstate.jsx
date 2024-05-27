@@ -288,11 +288,6 @@ const RealEstate = ({ city }) => {
                         {result?.location?.address.city}
                       </p>
                     </div>
-                    <img
-                      src={result?.location?.street_view_url}
-                      alt="Street View"
-                      className={styles.photo}
-                    />
                     <p className="mb-0">
                       Price:{" "}
                       {result.list_price

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
@@ -48,6 +49,13 @@ const LoginPage = () => {
 
   return (
     <div className={styles.loginPageContainer}>
+      <Helmet>
+        <title>HomeKnown | Explore</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       <h4 className={styles.title}>Login</h4>
       <Card className={styles.card}>
         <Card.Body>

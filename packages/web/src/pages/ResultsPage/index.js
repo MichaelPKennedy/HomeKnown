@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { Helmet } from "react-helmet";
 import styles from "./ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
@@ -68,6 +69,13 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
 
   return (
     <div>
+      <Helmet>
+        <title>HomeKnown | Results</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       {showEditButton && (
         <div className={styles.btnContainer}>
           <button
