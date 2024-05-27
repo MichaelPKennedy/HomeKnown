@@ -28,8 +28,8 @@ const WeightsSchema = Type.Object({
 
 // Job Schema
 const JobSchema = Type.Object({
-  naics: Type.String(),
-  occ: Type.String()
+  occ_code: Type.String(),
+  occ_title: Type.String()
 })
 
 const RecreationalInterestKey = Type.Union([
@@ -150,13 +150,13 @@ export const SurveyFormDataSchema = Type.Object({
     Type.Union([Type.Literal('none'), Type.Literal('light'), Type.Literal('heavy')])
   ),
   rainPreference: Type.Optional(Type.Union([Type.Literal('dry'), Type.Literal('regular')])),
-  minSalary1: Type.Optional(Type.Number()),
-  minSalary2: Type.Optional(Type.Number()),
+  minSalary1: Type.Optional(Type.Union([Type.Number(), Type.Null()])),
+  minSalary2: Type.Optional(Type.Union([Type.Number(), Type.Null()])),
   minPopulation: Type.Optional(Type.Number()),
   maxPopulation: Type.Optional(Type.Number()),
   includedStates: Type.Optional(Type.Array(Type.Number())),
   jobLevel: Type.Optional(
-    Type.Union([Type.Literal('entry-level'), Type.Literal('senior'), Type.Literal('both')])
+    Type.Union([Type.Literal('entry-level'), Type.Literal('senior'), Type.Literal('both'), Type.Literal('')])
   ),
   selectedJobs: Type.Optional(Type.Array(JobSchema)),
   livingPreference: Type.Optional(
@@ -164,7 +164,7 @@ export const SurveyFormDataSchema = Type.Object({
   ),
   recreationalInterests: Type.Optional(Type.Array(Type.String())),
   publicServices: Type.Optional(Type.Array(Type.String())),
-  scenery: Type.Optional(Type.String()),
+  scenery: Type.Optional(Type.Array(Type.String())),
   searchRadius: Type.Optional(Type.Number()),
   housingType: Type.Optional(Type.Union([Type.Literal('rent'), Type.Literal('buy')])),
   homeMin: Type.Optional(Type.Number()),

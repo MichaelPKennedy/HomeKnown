@@ -8,6 +8,7 @@ import client from "../../../feathersClient.js";
 import { useNavigate } from "react-router-dom";
 import PreferenceWeightMobile from "./PreferenceWeightMobile.jsx";
 import PreferenceWeight from "./PreferenceWeight.jsx";
+import PreferenceWeightSimple from "./PreferenceWeightSimple.jsx";
 import LoadingScreen from "./LoadingScreen.jsx";
 import JobPreferences from "./JobPreferences.jsx";
 import HousingPreferences from "./HousingPreferences.jsx";
@@ -31,7 +32,7 @@ const initialFormData = {
   scenery: [],
   searchRadius: 50,
   minPopulation: -1,
-  maxPopulation: 99,
+  maxPopulation: -1,
   includedStates: [],
   minSalary1: null,
   minSalary2: null,
@@ -97,11 +98,6 @@ const LivingPreferenceForm = () => {
   const validateForm = () => {
     let isValid = true;
     let errorMessage = "";
-
-    if (formData.weights.totalAvailablePoints > 0) {
-      isValid = false;
-      errorMessage = "Please allocate all available points for preferences.";
-    }
 
     if (!formData.minPopulation || !formData.maxPopulation) {
       isValid = false;
@@ -202,6 +198,8 @@ const LivingPreferenceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { isValid, errorMessage } = validateForm();
+
+    console.log("formData", formData);
 
     if (!isValid) {
       toast.error(errorMessage);
@@ -344,13 +342,12 @@ const LivingPreferenceForm = () => {
       <div>
         {showForm ? (
           <div className={styles.preferenceFormContainer}>
-            <ShowHint />
             <form
               onSubmit={handleSubmit}
               className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
               <div className={`form-group ${styles.preferenceFormGroup}`}>
-                {isMobile ? (
+                {/* {isMobile ? (
                   <PreferenceWeightMobile
                     onWeightsChange={updateFormDataWithWeights}
                     weights={formData.weights}
@@ -360,7 +357,11 @@ const LivingPreferenceForm = () => {
                     onWeightsChange={updateFormDataWithWeights}
                     weights={formData.weights}
                   />
-                )}
+                )} */}
+                <PreferenceWeightSimple
+                  onWeightsChange={updateFormDataWithWeights}
+                  weights={formData.weights}
+                />
               </div>
               {formData.weights.jobOpportunityWeight > 0 && (
                 <JobPreferences
