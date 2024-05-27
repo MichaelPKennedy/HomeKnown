@@ -67,7 +67,7 @@ const initialFormData = {
     crimeRateWeight: 0,
     sceneryWeight: 0,
     airQualityWeight: 0,
-    totalAvailablePoints: 8,
+    totalWeights: 0,
   },
 };
 
@@ -319,10 +319,8 @@ const LivingPreferenceForm = () => {
   }, [showForm]);
 
   useEffect(() => {
-    const { totalAvailablePoints, ...weightsWithoutTotal } = formData.weights;
-    const hasNonZeroWeight = Object.values(weightsWithoutTotal).some(
-      (weight) => weight > 0
-    );
+    const { totalWeights } = formData.weights;
+    const hasNonZeroWeight = totalWeights > 0;
 
     setShowSubmitButton(hasNonZeroWeight);
   }, [formData]);
@@ -411,7 +409,7 @@ const LivingPreferenceForm = () => {
                   hasColdMonth={hasColdMonth}
                 />
               )}
-              {formData.weights.totalAvailablePoints < 8 && (
+              {formData.weights.totalWeights > 0 && (
                 <>
                   <PopulationPreferences
                     formData={formData}
