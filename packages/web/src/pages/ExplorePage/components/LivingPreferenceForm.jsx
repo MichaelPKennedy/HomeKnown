@@ -256,7 +256,9 @@ const LivingPreferenceForm = () => {
       setShowForm(false); // Hide form if there are saved results
       const total = Object.values(formData.weights).reduce((a, b) => a + b, 0);
       setTotalWeights(total);
-      setTempWeights(temp);
+      if (temp) {
+        setTempWeights(temp);
+      }
     } else {
       setShowForm(true);
     }
