@@ -242,9 +242,13 @@ const LivingPreferenceForm = () => {
     const savedFormData = sessionStorage.getItem("formData");
 
     if (savedResults && savedFormData) {
-      setSurveyResults(JSON.parse(savedResults));
-      setFormData(JSON.parse(savedFormData));
+      const results = JSON.parse(savedResults);
+      const formData = JSON.parse(savedFormData);
+      setSurveyResults(results);
+      setFormData(formData);
       setShowForm(false); // Hide form if there are saved results
+      const total = Object.values(formData.weights).reduce((a, b) => a + b, 0);
+      setTotalWeights(total);
     } else {
       setShowForm(true);
     }
