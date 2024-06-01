@@ -49,12 +49,6 @@ const Housing = () => {
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
-  if (
-    (!homePrice && !rentPrice) ||
-    (homePrice?.length === 0 && rentPrice?.length === 0)
-  ) {
-    return <div>No housing data available for this location</div>;
-  }
 
   return (
     <>

@@ -214,6 +214,14 @@ const RealEstate = ({ city }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  if (!isRealEstateLoading && !realEstateData) {
+    return (
+      <div>
+        <p>No real estate data available for this city.</p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.mapContainer}>
       {!isMobile && (
