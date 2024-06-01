@@ -382,7 +382,7 @@ const LivingPreferenceForm = () => {
               </div>
               {categoryCount > 1 && (
                 <div className={`form-group ${styles.preferenceFormGroup}`}>
-                  <h4 className="pb-2 mt-3">Customize Priority</h4>
+                  <h4 className="pb-2 mt-3">Category Priority</h4>
                   {Object.keys(formData.weights)
                     .filter((key) => formData.weights[key] > 0)
                     .map((key) => (
