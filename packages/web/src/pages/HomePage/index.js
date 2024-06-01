@@ -54,6 +54,18 @@ const HomePage = () => {
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
       </Helmet>
+      <div className={styles.banner}>
+        <div className={styles.bannerText}>
+          <p className={styles.bannerHeader}>Discover Your Perfect Place</p>
+          <p className={styles.bannerBodyText}>
+            Discover your ideal cities and towns with our personalized
+            preference explorer!
+          </p>
+        </div>
+        <a href="/explore" className={styles.ctaButton}>
+          Start Exploring
+        </a>
+      </div>
       <Row className={`${styles.searchBar} mt-4 mb-2 pl-0 pr-0`}>
         <Col xs={12} className="pl-0 pr-0">
           <SearchBar onSearch={handleSearch} />

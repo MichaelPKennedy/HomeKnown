@@ -61,3 +61,67 @@
   outline: none !important;
   box-shadow: none !important;
 }
+
+.banner {
+  background-color: #75c2c2;
+  color: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.banner .ctaButton {
+  background-color: #01697c;
+  color: #fff;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  white-space: nowrap;
+}
+
+.banner .ctaButton:hover {
+  background-color: #0a5a68;
+}
+
+.bannerText {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.bannerBodyText {
+  flex-grow: 1;
+  margin: 0;
+}
+
+.bannerHeader {
+  color: black;
+  font-weight: medium;
+  font-size: 1.5em;
+  flex-grow: 1;
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .bannerBodyText {
+    display: none;
+  }
+
+  .bannerHeader {
+    font-size: 1em;
+  }
+
+  .banner .ctaButton {
+    padding: 10px 20px;
+    font-size: 0.8em;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+}

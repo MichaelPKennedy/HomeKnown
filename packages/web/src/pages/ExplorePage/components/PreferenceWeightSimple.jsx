@@ -50,53 +50,56 @@ function PreferenceWeight({
   };
 
   return (
-    <div className={styles.preferenceContainer}>
-      <div className={styles.dropZoneContainer}>
-        {[
-          {
-            title: "Cost of Living",
-            sectionKey: "costOfLivingWeight",
-            icon: faMoneyBillWave,
-          },
-          {
-            title: "Recreation",
-            sectionKey: "recreationalActivitiesWeight",
-            icon: faTree,
-          },
-          { title: "Weather", sectionKey: "weatherWeight", icon: faSun },
-          { title: "Scenery", sectionKey: "sceneryWeight", icon: faMountain },
-          {
-            title: "Salary & Job",
-            sectionKey: "jobOpportunityWeight",
-            icon: faBriefcase,
-          },
-          {
-            title: "Public Services",
-            sectionKey: "publicServicesWeight",
-            icon: faBuilding,
-          },
-          {
-            title: "Crime Rate",
-            sectionKey: "crimeRateWeight",
-            icon: faShieldAlt,
-          },
-          {
-            title: "Air Quality",
-            sectionKey: "airQualityWeight",
-            icon: faWind,
-          },
-        ].map((section) => (
-          <SelectableBox
-            title={section.title}
-            key={section.sectionKey}
-            sectionKey={section.sectionKey}
-            weight={weights[section.sectionKey]}
-            onSelect={handleSelect}
-            icon={section.icon}
-          />
-        ))}
+    <>
+      <h4 className="pb-2 mt-4">Choose Categories</h4>
+      <div className={styles.preferenceContainer}>
+        <div className={styles.dropZoneContainer}>
+          {[
+            {
+              title: "Cost of Living",
+              sectionKey: "costOfLivingWeight",
+              icon: faMoneyBillWave,
+            },
+            {
+              title: "Recreation",
+              sectionKey: "recreationalActivitiesWeight",
+              icon: faTree,
+            },
+            { title: "Weather", sectionKey: "weatherWeight", icon: faSun },
+            { title: "Scenery", sectionKey: "sceneryWeight", icon: faMountain },
+            {
+              title: "Salary & Job",
+              sectionKey: "jobOpportunityWeight",
+              icon: faBriefcase,
+            },
+            {
+              title: "Public Services",
+              sectionKey: "publicServicesWeight",
+              icon: faBuilding,
+            },
+            {
+              title: "Crime Rate",
+              sectionKey: "crimeRateWeight",
+              icon: faShieldAlt,
+            },
+            {
+              title: "Air Quality",
+              sectionKey: "airQualityWeight",
+              icon: faWind,
+            },
+          ].map((section) => (
+            <SelectableBox
+              title={section.title}
+              key={section.sectionKey}
+              sectionKey={section.sectionKey}
+              weight={weights[section.sectionKey]}
+              onSelect={handleSelect}
+              icon={section.icon}
+            />
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
