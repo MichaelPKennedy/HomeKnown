@@ -109,9 +109,9 @@ const WeatherPreferences = ({
               }));
             }}
             marks={{
-              25: "Comfortably Dry",
+              25: "Dry",
               50: "Moderate",
-              75: "High Moisture",
+              75: "High",
             }}
             step={null}
           />

@@ -39,12 +39,12 @@
 
 /* Styling the handle (the draggable part) */
 .rc-slider-handle {
-  width: 18px !important; /* making the handle larger */
-  height: 18px !important;
+  width: 25px !important; /* making the handle larger */
+  height: 25px !important;
   border: solid 2px #007bff; /* a border to match the track color */
   background-color: #fff; /* a white handle */
   box-shadow: none; /* removing any shadow */
-  margin-top: -6px !important; /* adjusting margin to vertically center the handle */
+  margin-top: -9.5px !important; /* adjusting margin to vertically center the handle */
 }
 
 /* Styling the handle when it's being dragged */

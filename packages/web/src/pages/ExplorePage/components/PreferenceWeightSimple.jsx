@@ -33,14 +33,20 @@ function SelectableBox({ title, sectionKey, weight, onSelect, icon }) {
   );
 }
 
-function PreferenceWeight({ onWeightsChange, weights }) {
+function PreferenceWeight({
+  onWeightsChange,
+  weights,
+  tempWeights,
+  setTotalWeights,
+}) {
   const handleSelect = (sectionKey) => {
     const newWeights = { ...weights };
-    newWeights[sectionKey] = weights[sectionKey] > 0 ? 0 : 1; // Toggle between 0 and 1
-    // if being selected, add 1 to the totalPoints, or else subtract 1
-    newWeights.totalWeights =
-      weights.totalWeights + (newWeights[sectionKey] === 1 ? 1 : -1);
-    onWeightsChange(newWeights);
+    const isDeselect = weights[sectionKey] > 0;
+
+    newWeights[sectionKey] = isDeselect ? 0 : tempWeights[sectionKey];
+    const total = Object.values(newWeights).reduce((a, b) => a + b, 0);
+    onWeightsChange(newWeights, isDeselect);
+    setTotalWeights(total);
   };
 
   return (

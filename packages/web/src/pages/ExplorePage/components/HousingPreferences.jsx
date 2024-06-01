@@ -8,7 +8,7 @@ import styles from "./LivingPreferenceForm.module.css";
 const HousingPreferences = ({ formData, setFormData }) => {
   // JSX for the component
   return (
-    <div className={`form-group ${styles.formGroup}`}>
+    <div className={`form-group ${styles.formGroupAlternate}`}>
       <h4 className="pb-2">Housing</h4>
       <p className={styles.question}>Are you looking to buy or rent?</p>
       <div>

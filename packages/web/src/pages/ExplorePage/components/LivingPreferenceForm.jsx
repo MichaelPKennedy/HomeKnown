@@ -5,9 +5,6 @@ import "./Slider.css";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import client from "../../../feathersClient.js";
-import { useNavigate } from "react-router-dom";
-import PreferenceWeightMobile from "./PreferenceWeightMobile.jsx";
-import PreferenceWeight from "./PreferenceWeight.jsx";
 import PreferenceWeightSimple from "./PreferenceWeightSimple.jsx";
 import LoadingScreen from "./LoadingScreen.jsx";
 import JobPreferences from "./JobPreferences.jsx";
@@ -18,7 +15,6 @@ import WeatherPreferences from "./WeatherPreferences.jsx";
 import RecreationalPreferences from "./RecreationalPreferences.jsx";
 import PopulationPreferences from "./PopulationPreferences";
 import StatePreferences from "./StatePreferences";
-import ShowHint from "./ShowHint";
 import ResultsPage from "../../ResultsPage";
 import { useCityData } from "../../../utils/CityDataContext";
 import { AuthContext } from "../../../AuthContext";
@@ -67,7 +63,6 @@ const initialFormData = {
     crimeRateWeight: 0,
     sceneryWeight: 0,
     airQualityWeight: 0,
-    totalWeights: 0,
   },
 };
 
@@ -84,16 +79,18 @@ const LivingPreferenceForm = () => {
   const [surveyResults, setSurveyResults] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formAnimation, setFormAnimation] = useState("");
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1000);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const [tempWeights, setTempWeights] = useState({
+    costOfLivingWeight: 5,
+    recreationalActivitiesWeight: 5,
+    weatherWeight: 5,
+    jobOpportunityWeight: 5,
+    publicServicesWeight: 5,
+    crimeRateWeight: 5,
+    sceneryWeight: 5,
+    airQualityWeight: 5,
+  });
+  const [totalWeights, setTotalWeights] = useState(0);
+  const [categoryCount, setCategoryCount] = useState(0);
 
   const validateForm = () => {
     let isValid = true;
@@ -160,6 +157,7 @@ const LivingPreferenceForm = () => {
     setFormData(initialFormData);
     setSurveyResults(null);
     setShowForm(true);
+    setTotalWeights(0);
     sessionStorage.removeItem("surveyResults");
     sessionStorage.removeItem("formData");
   };
@@ -198,8 +196,6 @@ const LivingPreferenceForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const { isValid, errorMessage } = validateForm();
-
-    console.log("formData", formData);
 
     if (!isValid) {
       toast.error(errorMessage);
@@ -296,11 +292,22 @@ const LivingPreferenceForm = () => {
     return formData.temperatureData.some((month) => month.temp <= 35);
   };
 
-  const updateFormDataWithWeights = (newWeights) => {
+  const updateFormDataWithWeights = (newWeights, isDeselect) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       weights: newWeights,
     }));
+    if (!isDeselect) {
+      setTempWeights((prevTempWeights) => ({
+        ...prevTempWeights,
+        ...Object.keys(newWeights).reduce((acc, key) => {
+          if (newWeights[key] !== 0) {
+            acc[key] = newWeights[key];
+          }
+          return acc;
+        }, {}),
+      }));
+    }
   };
 
   const toggleFormVisibility = () => {
@@ -312,6 +319,20 @@ const LivingPreferenceForm = () => {
     }
   };
 
+  const handleWeightChange = (key, value) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      weights: {
+        ...prevState.weights,
+        [key]: value,
+      },
+    }));
+    setTempWeights((prevTempWeights) => ({
+      ...prevTempWeights,
+      [key]: value,
+    }));
+  };
+
   useEffect(() => {
     if (showForm) {
       setFormAnimation(styles.formSlidingEnter);
@@ -319,10 +340,17 @@ const LivingPreferenceForm = () => {
   }, [showForm]);
 
   useEffect(() => {
-    const { totalWeights } = formData.weights;
     const hasNonZeroWeight = totalWeights > 0;
 
     setShowSubmitButton(hasNonZeroWeight);
+  }, [formData]);
+
+  useEffect(() => {
+    const categoriesSelected = Object.values(formData.weights).filter(
+      (weight) => weight > 0
+    ).length;
+
+    setCategoryCount(categoriesSelected);
   }, [formData]);
 
   return (
@@ -345,22 +373,31 @@ const LivingPreferenceForm = () => {
               className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
             >
               <div className={`form-group ${styles.preferenceFormGroup}`}>
-                {/* {isMobile ? (
-                  <PreferenceWeightMobile
-                    onWeightsChange={updateFormDataWithWeights}
-                    weights={formData.weights}
-                  />
-                ) : (
-                  <PreferenceWeight
-                    onWeightsChange={updateFormDataWithWeights}
-                    weights={formData.weights}
-                  />
-                )} */}
                 <PreferenceWeightSimple
                   onWeightsChange={updateFormDataWithWeights}
                   weights={formData.weights}
+                  tempWeights={tempWeights}
+                  setTotalWeights={setTotalWeights}
                 />
               </div>
+              {categoryCount > 1 && (
+                <div className={`form-group ${styles.preferenceFormGroup}`}>
+                  <h4 className="pb-2 mt-3">Customize Priority</h4>
+                  {Object.keys(formData.weights)
+                    .filter((key) => formData.weights[key] > 0)
+                    .map((key) => (
+                      <div key={key} className={styles.sliderContainer}>
+                        <label>{key.replace(/Weight$/, "")}</label>
+                        <Slider
+                          min={1}
+                          max={10}
+                          defaultValue={formData.weights[key]}
+                          onChange={(value) => handleWeightChange(key, value)}
+                        />
+                      </div>
+                    ))}
+                </div>
+              )}
               {formData.weights.jobOpportunityWeight > 0 && (
                 <JobPreferences
                   formData={formData}
@@ -409,7 +446,7 @@ const LivingPreferenceForm = () => {
                   hasColdMonth={hasColdMonth}
                 />
               )}
-              {formData.weights.totalWeights > 0 && (
+              {totalWeights > 0 && (
                 <>
                   <PopulationPreferences
                     formData={formData}

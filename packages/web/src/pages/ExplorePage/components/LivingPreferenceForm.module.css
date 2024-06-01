@@ -234,6 +234,13 @@
   margin-top: 1rem;
 }
 
+.formGroupAlternate {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  z-index: 1;
+  margin-top: 1rem;
+}
+
 .preferenceFormGroup {
   width: 100%;
   margin-bottom: 2rem;
@@ -382,8 +389,8 @@ details .formCheck {
 }
 
 .sliderContainer {
-  margin-left: 60px;
-  margin-right: 60px;
+  margin-left: 15px;
+  margin-right: 15px;
   margin-top: 25px;
 }
 

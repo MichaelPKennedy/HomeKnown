@@ -26,7 +26,7 @@ const JobPreferences = ({
   // JSX for the component
   return (
     formData.weights.jobOpportunityWeight > 0 && (
-      <div className={`form-group ${styles.formGroup}`}>
+      <div className={`form-group ${styles.formGroupAlternate}`}>
         <h4 className="pb-2">Job Industry</h4>
         <label htmlFor="job">
           What's your current profession or job title? Enter up to 2 job titles.
