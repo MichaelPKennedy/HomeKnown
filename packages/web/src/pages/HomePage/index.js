@@ -58,8 +58,7 @@ const HomePage = () => {
         <div className={styles.bannerText}>
           <p className={styles.bannerHeader}>Discover Your Perfect Place</p>
           <p className={styles.bannerBodyText}>
-            Discover your ideal cities and towns with our personalized
-            preference explorer!
+            Let us match you to your personalized top cities and towns!
           </p>
         </div>
         <a href="/explore" className={styles.ctaButton}>
