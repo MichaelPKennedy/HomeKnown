@@ -96,55 +96,58 @@ const LivingPreferenceForm = () => {
     let isValid = true;
     let errorMessage = "";
 
-    if (!formData.minPopulation || !formData.maxPopulation) {
+    if (!formData?.minPopulation || !formData?.maxPopulation) {
       isValid = false;
       errorMessage = "Please select a valid population range.";
     }
     if (
-      formData.weights.jobOpportunityWeight > 0 &&
-      formData.selectedJobs.length === 0
+      formData?.weights?.jobOpportunityWeight > 0 &&
+      formData?.selectedJobs?.length === 0
     ) {
       isValid = false;
       errorMessage = "Please select at least one job.";
     }
 
-    if (formData.weights.costOfLivingWeight > 0 && !formData.housingType) {
+    if (formData?.weights?.costOfLivingWeight > 0 && !formData?.housingType) {
       isValid = false;
       errorMessage = "Please select a housing type.";
     }
 
     if (
-      formData.weights.publicServicesWeight > 0 &&
-      formData.publicServices.length === 0
+      formData?.weights?.publicServicesWeight > 0 &&
+      formData?.publicServices?.length === 0
     ) {
       isValid = false;
       errorMessage = "Please select at least one public service.";
     }
 
-    if (formData.weights.sceneryWeight > 0 && formData.scenery.length === 0) {
+    if (
+      formData?.weights?.sceneryWeight > 0 &&
+      formData?.scenery?.length === 0
+    ) {
       isValid = false;
       errorMessage = "Please select at least one scenery preference.";
     }
 
-    if (formData.weights.weatherWeight > 0) {
+    if (formData?.weights?.weatherWeight > 0) {
       if (
-        !formData.snowPreference ||
-        !formData.rainPreference ||
-        !formData.humidityPreference
+        !formData?.snowPreference ||
+        !formData?.rainPreference ||
+        !formData?.humidityPreference
       ) {
         isValid = false;
         errorMessage = "Please specify your weather preferences.";
       }
 
-      if (formData.temperatureData.some((month) => month.temp === null)) {
+      if (formData?.temperatureData?.some((month) => month.temp === null)) {
         isValid = false;
         errorMessage = "Please complete the temperature data for each month.";
       }
     }
 
     if (
-      formData.weights.recreationalActivitiesWeight > 0 &&
-      formData.recreationalInterests.length === 0
+      formData.weights?.recreationalActivitiesWeight > 0 &&
+      formData.recreationalInterests?.length === 0
     ) {
       isValid = false;
       errorMessage = "Please select at least one recreational interest.";
@@ -160,6 +163,7 @@ const LivingPreferenceForm = () => {
     setTotalWeights(0);
     sessionStorage.removeItem("surveyResults");
     sessionStorage.removeItem("formData");
+    sessionStorage.removeItem("tempWeights");
   };
 
   const fetchOccCodes = async (inputQuery) => {
@@ -229,6 +233,7 @@ const LivingPreferenceForm = () => {
         localStorage.removeItem("recreationFilters");
         sessionStorage.setItem("surveyResults", JSON.stringify(response));
         sessionStorage.setItem("formData", JSON.stringify(formData));
+        sessionStorage.setItem("tempWeights", JSON.stringify(tempWeights));
       }
     } catch (error) {
       console.error("Failed to submit the survey:", error);
@@ -240,15 +245,18 @@ const LivingPreferenceForm = () => {
     // Check if there's saved state in sessionStorage
     const savedResults = sessionStorage.getItem("surveyResults");
     const savedFormData = sessionStorage.getItem("formData");
+    const savedTempWeights = sessionStorage.getItem("tempWeights");
 
     if (savedResults && savedFormData) {
       const results = JSON.parse(savedResults);
       const formData = JSON.parse(savedFormData);
+      const temp = JSON.parse(savedTempWeights);
       setSurveyResults(results);
       setFormData(formData);
       setShowForm(false); // Hide form if there are saved results
       const total = Object.values(formData.weights).reduce((a, b) => a + b, 0);
       setTotalWeights(total);
+      setTempWeights(temp);
     } else {
       setShowForm(true);
     }
@@ -402,7 +410,7 @@ const LivingPreferenceForm = () => {
                     ))}
                 </div>
               )}
-              {formData.weights.jobOpportunityWeight > 0 && (
+              {formData?.weights?.jobOpportunityWeight > 0 && (
                 <JobPreferences
                   formData={formData}
                   setFormData={setFormData}
@@ -415,25 +423,25 @@ const LivingPreferenceForm = () => {
                 />
               )}
               {/* Housing */}
-              {formData.weights.costOfLivingWeight > 0 && (
+              {formData?.weights?.costOfLivingWeight > 0 && (
                 <HousingPreferences
                   formData={formData}
                   setFormData={setFormData}
                 />
               )}
-              {formData.weights.recreationalActivitiesWeight > 0 && (
+              {formData?.weights?.recreationalActivitiesWeight > 0 && (
                 <RecreationalPreferences
                   formData={formData}
                   handleCheckboxChange={handleCheckboxChange}
                 />
               )}
-              {formData.weights.publicServicesWeight > 0 && (
+              {formData?.weights?.publicServicesWeight > 0 && (
                 <PublicServicePreferences
                   formData={formData}
                   handleCheckboxChange={handleCheckboxChange}
                 />
               )}
-              {formData.weights.sceneryWeight > 0 && (
+              {formData?.weights?.sceneryWeight > 0 && (
                 <SceneryPreferences
                   formData={formData}
                   handleCheckboxChange={handleCheckboxChange}
@@ -441,7 +449,7 @@ const LivingPreferenceForm = () => {
               )}
 
               {/* Weather */}
-              {formData.weights.weatherWeight > 0 && (
+              {formData?.weights?.weatherWeight > 0 && (
                 <WeatherPreferences
                   formData={formData}
                   setFormData={setFormData}
