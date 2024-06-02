@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -8,6 +8,8 @@ import { AuthContext } from "../../../AuthContext";
 import styles from "./notifications.module.css";
 
 const NotificationSettings = () => {
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useContext(AuthContext);
   const { user } = useContext(AuthContext);
   const [settings, setSettings] = useState({
     promotional: true,
@@ -54,6 +56,13 @@ const NotificationSettings = () => {
       console.error("Failed to update notification settings", error);
     }
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className={styles.personalInfoContainer}>

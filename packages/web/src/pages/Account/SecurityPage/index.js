@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../AuthContext";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import styles from "./SecurityPage.module.css";
 
 const SecurityPage = () => {
-  const { user, createPassword, changePassword, logout } =
+  const { user, isLoggedIn, createPassword, changePassword, logout } =
     useContext(AuthContext);
   const [newPassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
@@ -64,6 +64,13 @@ const SecurityPage = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className={styles.securityContainer}>

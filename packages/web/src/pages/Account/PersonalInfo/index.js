@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../../AuthContext";
@@ -9,6 +9,7 @@ const PersonalInfo = () => {
   const { isLoggedIn, user, updateUserField } = useContext(AuthContext);
   const [editingField, setEditingField] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const navigate = useNavigate();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -98,6 +99,13 @@ const PersonalInfo = () => {
 
   const renderOverlay = () =>
     editingField && <div className={styles.overlay}></div>;
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+  }, [isLoggedIn, navigate]);
 
   return (
     <div className={styles.personalInfoContainer}>

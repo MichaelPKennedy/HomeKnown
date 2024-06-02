@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import styles from "./AccountPage.module.css";
@@ -13,20 +13,33 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { AuthContext } from "../../../AuthContext";
 
-// Placeholder components
-const PaymentsSubscriptions = () => (
-  <div>Payments & Subscriptions Component</div>
-);
-const Notifications = () => <div>Notifications Component</div>;
-
 const AccountPage = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useContext(AuthContext);
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const handleLogout = () => {
     logout();
     navigate("/signed-out");
   };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn && !isMobile) {
+      navigate("/login");
+      return;
+    }
+  }, [isLoggedIn, navigate, isMobile]);
 
   return isLoggedIn ? (
     <div className={styles.gridContainer}>
