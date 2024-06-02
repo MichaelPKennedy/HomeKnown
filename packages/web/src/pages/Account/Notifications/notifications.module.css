@@ -1,0 +1,79 @@
+.personalInfoContainer {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.breadcrumb {
+  position: relative;
+  font-size: 16px;
+  margin-bottom: 24px;
+  z-index: 9999;
+}
+
+.accountLink {
+  color: #0066ff;
+  text-decoration: none;
+  margin-right: 2px;
+}
+
+.accountLink:hover {
+  text-decoration: underline;
+}
+
+.chevronIcon {
+  margin: 0 8px;
+  font-size: 12px;
+  margin-bottom: 1px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.infoLabel {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  flex-grow: 1;
+}
+
+.checkbox {
+  margin-right: 10px;
+}
+
+.saveBtn {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s;
+  background-color: white;
+  color: #01697c;
+  border: 1px solid #01697c;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  align-self: start;
+}
+
+.saveBtn:hover {
+  background-color: #01697c;
+  color: white;
+}
+
+.editForm {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}

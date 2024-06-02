@@ -62,19 +62,16 @@ export class NotificationsService implements ServiceMethods<any> {
 
   async patch(id: NullableId, data: any, params?: NotificationsParams): Promise<any> {
     try {
-      const [numberOfAffectedRows, affectedRows] = await this.sequelize.models.UserNotifications.update(
-        data,
-        {
-          where: { id },
-          returning: true
-        }
-      )
+      const { user_id, type } = data
+      const [affectedRows] = await this.sequelize.models.UserNotifications.update(data, {
+        where: { user_id, type }
+      })
 
-      if (numberOfAffectedRows === 0) {
+      if (affectedRows === 0) {
         throw new Error('Notification not found')
       }
 
-      return affectedRows[0]
+      return affectedRows
     } catch (error: any) {
       throw new Error(`Error patching notification: ${error.message}`)
     }
