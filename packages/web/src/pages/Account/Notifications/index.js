@@ -5,7 +5,7 @@ import { faChevronRight, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 import feathersClient from "../../../feathersClient";
 import { AuthContext } from "../../../AuthContext";
-import styles from "./Notifications.module.css";
+import styles from "./notifications.module.css";
 
 const NotificationSettings = () => {
   const { user } = useContext(AuthContext);
