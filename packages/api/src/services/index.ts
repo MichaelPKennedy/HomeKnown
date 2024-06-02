@@ -1,3 +1,4 @@
+import { notifications } from './notifications/notifications'
 import { realty } from './realty/realty'
 import { forgotPassword } from './forgot-password/forgot-password'
 import { categories } from './categories/categories'
@@ -24,6 +25,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(notifications)
   app.configure(realty)
   app.configure(forgotPassword)
   app.configure(categories)

@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   function setJwtToken(token) {
     axiosInstance.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -21,6 +22,7 @@ export const AuthProvider = ({ children }) => {
       });
       setUser(response);
       setIsLoggedIn(true);
+      setIsAdmin(response.isAdmin);
     } catch (error) {
       console.error("Error fetching user data:", error);
       logout();
@@ -117,6 +119,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         isLoggedIn,
         user,
+        isAdmin,
         login,
         googleLogin,
         logout,

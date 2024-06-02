@@ -4,6 +4,14 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { notificationsClient } from './services/notifications/notifications.shared'
+export type {
+  Notifications,
+  NotificationsData,
+  NotificationsQuery,
+  NotificationsPatch
+} from './services/notifications/notifications.shared'
+
 import { realtyClient } from './services/realty/realty.shared'
 export type { Realty, RealtyData, RealtyQuery, RealtyPatch } from './services/realty/realty.shared'
 
@@ -172,5 +180,6 @@ export const createClient = <Configuration = any,>(
   client.configure(categoriesClient)
   client.configure(forgotPasswordClient)
   client.configure(realtyClient)
+  client.configure(notificationsClient)
   return client
 }
