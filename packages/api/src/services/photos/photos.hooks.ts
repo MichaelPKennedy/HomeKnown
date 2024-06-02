@@ -8,7 +8,7 @@ export const photosHooks = {
     create: [disallow('external')],
     update: [disallow('external')],
     patch: [disallow('external')],
-    remove: [disallow('external')]
+    remove: []
   },
   after: {
     all: [],

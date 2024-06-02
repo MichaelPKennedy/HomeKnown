@@ -61,10 +61,12 @@ import { PasswordHistoryModel } from './models/password-history.model'
 import { CitySnowCacheModel } from './models/city-snow-cache.model'
 import { CityPlacesCacheModel } from './models/city-places-cache.model'
 import { CityPhotosModel } from './models/city-photos.model'
+import { BlacklistPhotosModel } from './models/blacklist-photos.model'
 import { CountyAverageTempModel } from './models/county-average-temp.model'
 import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 import { TopCityPhotosModel } from './models/top-city-photos.model'
+import { UserNotificationsModel } from './models/user-notifications.model'
 
 const app: Application = express(feathers())
 
@@ -135,6 +137,8 @@ TopMonthlyCitiesModel(sequelize)
 TopCityPhotosModel(sequelize)
 CityPhotosModel(sequelize)
 ContactSupportModel(sequelize)
+BlacklistPhotosModel(sequelize)
+UserNotificationsModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -171,6 +175,7 @@ const TopCities = sequelize.models.TopCities
 const TopMonthlyCities = sequelize.models.TopMonthlyCities
 const TopCityPhotos = sequelize.models.TopCityPhotos
 const CityPhotos = sequelize.models.CityPhotos
+const UserNotifications = sequelize.models.UserNotifications
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -202,6 +207,8 @@ Users.hasMany(UserCities, { foreignKey: 'user_id' })
 Users.hasMany(UserSurveys, { foreignKey: 'user_id' })
 UserRecommendedCities.belongsTo(Users, { foreignKey: 'user_id' })
 UserRecommendedCities.belongsTo(City, { foreignKey: 'city_id' })
+UserNotifications.belongsTo(Users, { foreignKey: 'user_id' })
+Users.hasMany(UserNotifications, { foreignKey: 'user_id' })
 Users.hasMany(UserRecommendedCities, { foreignKey: 'user_id' })
 Users.hasMany(PasswordHistory, { foreignKey: 'user_id' })
 Users.hasMany(ContactSupport, { foreignKey: 'user_id' })

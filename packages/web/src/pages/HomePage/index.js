@@ -89,24 +89,6 @@ const HomePage = () => {
           </Col>
         ))}
       </Row>
-      {/* <div className={styles.statsHeader}>
-        <p>Top User Cities All Time</p>
-      </div>
-      <Row className={styles.statsContainer}>
-        {topCities?.slice(0, 10).map((city, index) => (
-          <Col
-            key={`all-time-${city.city_id}-${index}`}
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            xl={3}
-            className="d-flex align-items-stretch"
-          >
-            <CityCard city={city} index={index} />
-          </Col>
-        ))}
-      </Row> */}
       {/* <CookieConsent /> */}
     </div>
   );

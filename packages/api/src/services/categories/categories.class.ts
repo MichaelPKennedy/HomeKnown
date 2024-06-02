@@ -107,22 +107,28 @@ export class CategoriesService implements ServiceMethods<any> {
           }
         ],
         limit: 50,
-        nest: true
+        nest: true,
+        order: [
+          [
+            this.sequelize.literal(
+              'COALESCE((SELECT COUNT(*) FROM CityPhotos WHERE CityPhotos.city_id = City.city_id), 0)'
+            ),
+            'DESC'
+          ]
+        ]
       })
 
       return {
         category,
-        cities: cities
-          .map((city: any) => ({
-            city_id: city.city_id,
-            city_name: city.city_name,
-            state_name: city.State.state,
-            latitude: city.Latitude,
-            longitude: city.Longitude,
-            region: city.State.region,
-            photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
-          }))
-          .sort((a: any, b: any) => b.photos.length - a.photos.length)
+        cities: cities.map((city: any) => ({
+          city_id: city.city_id,
+          city_name: city.city_name,
+          state_name: city.State.state,
+          latitude: city.Latitude,
+          longitude: city.Longitude,
+          region: city.State.region,
+          photos: city.CityPhotos ? city.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
+        }))
       }
     })
 

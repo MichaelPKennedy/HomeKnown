@@ -237,7 +237,24 @@ export class PhotosService implements ServiceMethods<any> {
     throw new Error('Method not implemented.')
   }
 
-  async remove(id: NullableId, params?: PhotosParams): Promise<any> {
-    throw new Error('Method not implemented.')
+  async remove(id: NullableId, params?: Params): Promise<any> {
+    if (!id) {
+      throw new Error('Photo ID is required')
+    }
+
+    const transaction = await this.sequelize.transaction()
+
+    try {
+      await this.sequelize.models.BlacklistPhotos.create({ id }, { transaction })
+
+      await this.sequelize.models.CityPhotos.destroy({ where: { id } }, { transaction })
+
+      await transaction.commit()
+
+      return { id }
+    } catch (error) {
+      await transaction.rollback()
+      throw error
+    }
   }
 }
