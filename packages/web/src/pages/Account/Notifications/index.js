@@ -20,7 +20,7 @@ const NotificationSettings = () => {
     const fetchSettings = async () => {
       try {
         const response = await feathersClient
-          .service("user-notifications")
+          .service("notifications")
           .find({ query: { user_id: user?.user_id } });
         if (response?.length > 0) {
           const emailSettings = response.find(
@@ -46,7 +46,7 @@ const NotificationSettings = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await feathersClient.service("user-notifications").patch(null, settings, {
+      await feathersClient.service("notifications").patch(null, settings, {
         query: { user_id: user?.user_id, type: "email" },
       });
       toast.success("Notifications Successfully Updated.");
@@ -115,9 +115,7 @@ const NotificationSettings = () => {
             Feedback
           </label>
         </div>
-        <button type="submit" className={styles.saveBtn}>
-          Save Settings
-        </button>
+        <button className={styles.saveBtn}>Save Settings</button>
       </form>
     </div>
   );

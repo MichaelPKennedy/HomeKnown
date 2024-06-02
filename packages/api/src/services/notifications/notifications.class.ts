@@ -67,10 +67,6 @@ export class NotificationsService implements ServiceMethods<any> {
         where: { user_id, type }
       })
 
-      if (affectedRows === 0) {
-        throw new Error('Notification not found')
-      }
-
       return affectedRows
     } catch (error: any) {
       throw new Error(`Error patching notification: ${error.message}`)

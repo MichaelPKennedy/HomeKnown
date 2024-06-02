@@ -71,6 +71,10 @@
   color: white;
 }
 
+.saveBtn:focus {
+  outline: none;
+}
+
 .editForm {
   width: 100%;
   display: flex;
