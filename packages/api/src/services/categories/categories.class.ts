@@ -85,8 +85,13 @@ export class CategoriesService implements ServiceMethods<any> {
 
     const categoryPromises = categories.map(async (category) => {
       let whereCondition = {}
-      if (['tropical', 'coast', 'collegeTown', 'winter'].includes(category)) {
+      if (['tropical', 'collegeTown', 'winter'].includes(category)) {
         whereCondition = { [category]: true }
+      } else if (category === 'coast') {
+        whereCondition = {
+          coast: true,
+          '$State.state_code$': { [Op.ne]: 15 }
+        }
       } else {
         whereCondition = { '$State.region$': category }
       }
@@ -99,7 +104,7 @@ export class CategoriesService implements ServiceMethods<any> {
             model: this.sequelize.models.State,
             as: 'State',
             required: true,
-            attributes: ['state', 'region']
+            attributes: ['state', 'region', 'state_code']
           },
           {
             model: this.sequelize.models.CityPhotos,
