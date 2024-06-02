@@ -47,8 +47,13 @@ export class NotificationsService implements ServiceMethods<any> {
     throw new Error('Method not implemented.')
   }
 
-  async create(data: any, params?: NotificationsParams): Promise<any> {
-    throw new Error('Method not implemented.')
+  async create(data: NotificationsData, params?: NotificationsParams): Promise<any> {
+    try {
+      const notification = await this.sequelize.models.UserNotifications.create(data)
+      return notification
+    } catch (error: any) {
+      throw new Error(`Error creating notification: ${error.message}`)
+    }
   }
 
   async update(id: NullableId, data: any, params?: NotificationsParams): Promise<any> {

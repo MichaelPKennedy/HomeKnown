@@ -14,6 +14,7 @@ import {
   userQueryResolver
 } from './users.schema'
 import welcomeEmail from './hooks/send-welcome-email'
+import createNotifications from './hooks/create-notifications'
 
 export const userHooks = {
   around: {
@@ -39,7 +40,7 @@ export const userHooks = {
   },
   after: {
     all: [],
-    create: [welcomeEmail]
+    create: [welcomeEmail, createNotifications]
   },
   error: {
     all: []

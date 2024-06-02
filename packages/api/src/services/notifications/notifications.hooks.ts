@@ -5,7 +5,7 @@ export const notificationsHooks = {
     all: [authenticate('jwt', 'apiKey')],
     find: [],
     get: [],
-    create: [disallow('external')],
+    create: [],
     update: [disallow('external')],
     patch: [],
     remove: [disallow('external')]

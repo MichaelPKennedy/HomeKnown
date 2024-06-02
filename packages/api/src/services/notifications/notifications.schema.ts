@@ -9,8 +9,12 @@ import { dataValidator, queryValidator } from '../../validators'
 // Main data model schema
 export const notificationsSchema = Type.Object(
   {
-    id: Type.Number(),
-    text: Type.String()
+    user_id: Type.Integer(),
+    type: Type.String(),
+    promotional: Type.Boolean(),
+    recommendations: Type.Boolean(),
+    newsletter: Type.Boolean(),
+    feedback: Type.Boolean()
   },
   { $id: 'Notifications', additionalProperties: false }
 )
@@ -21,9 +25,13 @@ export const notificationsResolver = resolve<Notifications, HookContext>({})
 export const notificationsExternalResolver = resolve<Notifications, HookContext>({})
 
 // Schema for creating new entries
-export const notificationsDataSchema = Type.Pick(notificationsSchema, ['text'], {
-  $id: 'NotificationsData'
-})
+export const notificationsDataSchema = Type.Pick(
+  notificationsSchema,
+  ['user_id', 'type', 'promotional', 'recommendations', 'newsletter', 'feedback'],
+  {
+    $id: 'NotificationsData'
+  }
+)
 export type NotificationsData = Static<typeof notificationsDataSchema>
 export const notificationsDataValidator = getValidator(notificationsDataSchema, dataValidator)
 export const notificationsDataResolver = resolve<Notifications, HookContext>({})
@@ -37,7 +45,14 @@ export const notificationsPatchValidator = getValidator(notificationsPatchSchema
 export const notificationsPatchResolver = resolve<Notifications, HookContext>({})
 
 // Schema for allowed query properties
-export const notificationsQueryProperties = Type.Pick(notificationsSchema, ['id', 'text'])
+export const notificationsQueryProperties = Type.Pick(notificationsSchema, [
+  'user_id',
+  'type',
+  'promotional',
+  'recommendations',
+  'newsletter',
+  'feedback'
+])
 export const notificationsQuerySchema = Type.Intersect(
   [
     querySyntax(notificationsQueryProperties),
