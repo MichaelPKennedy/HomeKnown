@@ -22,7 +22,7 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(243, 242, 242);
 }
 
 .photo {
@@ -31,7 +31,7 @@
   margin-top: 40px;
   margin-bottom: 40px;
   border-radius: 15px;
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(243, 242, 242);
 }
 
 .description {
@@ -39,7 +39,7 @@
   height: 150px;
   border-radius: 15px;
   margin-bottom: 50px;
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(243, 242, 242);
 }
 
 .details {
@@ -51,7 +51,7 @@
 }
 
 .contentBlock {
-  background-color: rgb(236, 236, 236);
+  background-color: rgb(243, 242, 242);
   width: 23%;
   height: 100%;
   border-radius: 15px;
@@ -79,7 +79,7 @@
     border-radius: 15px;
     margin-top: 60px;
     height: 30px;
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(243, 242, 242);
   }
 
   .nav {
@@ -87,6 +87,6 @@
     border-radius: 15px;
     margin-top: 20px;
     height: 40px;
-    background-color: rgb(236, 236, 236);
+    background-color: rgb(243, 242, 242);
   }
 }
