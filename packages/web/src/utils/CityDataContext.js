@@ -52,6 +52,7 @@ export const CityDataProvider = ({ children }) => {
   const [userPreferences, setUserPreferences] = useState({});
   const [userRecommendations, setUserRecommendations] = useState([]);
   const [categories, setCategories] = useState({});
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [userCityIds, setUserCityIds] = useState([]);
   const { user, isLoggedIn } = useContext(AuthContext);
   const [cityId, setCityId] = useState(null);
@@ -138,6 +139,7 @@ export const CityDataProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setCategoriesLoading(true);
       try {
         const authToken = localStorage.getItem("authToken");
         let headers;
@@ -154,6 +156,8 @@ export const CityDataProvider = ({ children }) => {
         setCategories(categoriesResponse);
       } catch (error) {
         console.error("Error fetching categories:", error);
+      } finally {
+        setCategoriesLoading(false);
       }
     };
 
@@ -274,6 +278,7 @@ export const CityDataProvider = ({ children }) => {
         userRecInterestsLoading,
         userRecInterestsError,
         categories,
+        categoriesLoading,
       }}
     >
       {children}

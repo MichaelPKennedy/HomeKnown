@@ -5,12 +5,13 @@ import { useCityData } from "../../utils/CityDataContext";
 import CookieConsent from "./components/CookieConsent";
 import SearchNavStrip from "./components/SearchNavStrip";
 import SearchBar from "./components/SearchBar";
+import PlaceholderCard from "./components/PlaceholderCard";
 import CityCard from "./components/CityCard";
 import client from "../../feathersClient.js";
 import styles from "./HomePage.module.css";
 
 const HomePage = () => {
-  const { categories } = useCityData();
+  const { categories, categoriesLoading } = useCityData();
   const [selectedOption, setSelectedOption] = useState("coast");
 
   const handleSelectionChange = (optionId) => {
@@ -20,6 +21,10 @@ const HomePage = () => {
   const getSelectedCities = () => {
     return categories[selectedOption]?.slice(0, 50) || [];
   };
+
+  useEffect(() => {
+    console.log("loading categories", categoriesLoading);
+  }, [categoriesLoading]);
 
   const handleSearch = async (searchTerm) => {
     try {
@@ -75,19 +80,33 @@ const HomePage = () => {
         currentSelection={selectedOption}
       />
       <Row className={styles.statsContainer}>
-        {getSelectedCities().map((city, index) => (
-          <Col
-            key={`${selectedOption}-${city.city_id}-${index}`}
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            xl={3}
-            className="d-flex align-items-stretch"
-          >
-            <CityCard city={city} index={index} />
-          </Col>
-        ))}
+        {categoriesLoading
+          ? Array.from({ length: 12 }).map((_, index) => (
+              <Col
+                key={`placeholder-${index}`}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+                className="d-flex align-items-stretch"
+              >
+                <PlaceholderCard index={index} />
+              </Col>
+            ))
+          : getSelectedCities().map((city, index) => (
+              <Col
+                key={`${selectedOption}-${city.city_id}-${index}`}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+                className="d-flex align-items-stretch"
+              >
+                <CityCard city={city} index={index} />
+              </Col>
+            ))}
       </Row>
       {/* <CookieConsent /> */}
     </div>
