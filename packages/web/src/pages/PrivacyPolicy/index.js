@@ -66,8 +66,7 @@ const PrivacyPolicy = () => {
         <ul className={styles.unorderedList}>
           <li>
             With your consent, including information such as location data, to
-            third parties like real estate companies for their use in marketing
-            and analytics.
+            third parties for their use in marketing and analytics.
           </li>
           <li>
             With vendors, consultants, and other service providers who need
@@ -120,7 +119,7 @@ const PrivacyPolicy = () => {
         <h2 className={styles.subHeading}>Contact Us</h2>
         <p className={styles.paragraph}>
           If you have any questions about this privacy policy, please contact us
-          at: [kennedy01mike@gmail.com].
+          at support@homeknown.app.
         </p>
       </section>
     </div>

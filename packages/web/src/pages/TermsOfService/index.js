@@ -116,7 +116,7 @@ const TermsOfService = () => {
         <h2 className={styles.subHeading}>Contact Information</h2>
         <p className={styles.paragraph}>
           If you have any questions about these Terms, please contact us at
-          kennedy01mike@gmail.com.
+          support@homeknown.app.
         </p>
       </section>
     </div>
