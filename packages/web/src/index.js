@@ -23,6 +23,7 @@ import ResultsPage from "./pages/ResultsPage";
 import City from "./pages/City";
 import MyLocations from "./pages/MyLocations";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
 import ErrorPage from "./components/ErrorPage";
 import { DndProvider } from "react-dnd";
 import { MultiBackend, TouchTransition } from "react-dnd-multi-backend";
@@ -183,6 +184,7 @@ root.render(
                   <Route path="/data-sources" element={<DataSources />} />
                 </Routes>
                 <ToastContainer />
+                <Footer />
               </Router>
             </CityDataProvider>
           </AuthProvider>
