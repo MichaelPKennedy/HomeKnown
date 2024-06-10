@@ -22,7 +22,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  background-color: rgb(243, 242, 242);
+  background-color: rgb(250, 250, 250);
+  animation: pulsate 1.75s infinite;
 }
 
 .photo {
@@ -31,7 +32,8 @@
   margin-top: 40px;
   margin-bottom: 40px;
   border-radius: 15px;
-  background-color: rgb(243, 242, 242);
+  background-color: rgb(250, 250, 250);
+  animation: pulsate 1.75s infinite;
 }
 
 .description {
@@ -39,7 +41,8 @@
   height: 150px;
   border-radius: 15px;
   margin-bottom: 50px;
-  background-color: rgb(243, 242, 242);
+  background-color: rgb(250, 250, 250);
+  animation: pulsate 1.75s infinite;
 }
 
 .details {
@@ -51,11 +54,24 @@
 }
 
 .contentBlock {
-  background-color: rgb(243, 242, 242);
+  background-color: rgb(250, 250, 250);
   width: 23%;
   height: 100%;
   border-radius: 15px;
   margin-bottom: 20px;
+  animation: pulsate 1.75s infinite;
+}
+
+@keyframes pulsate {
+  0% {
+    background-color: rgb(250, 250, 250);
+  }
+  50% {
+    background-color: rgb(235, 235, 235);
+  }
+  100% {
+    background-color: rgb(250, 250, 250);
+  }
 }
 
 @media (max-width: 768px) {
@@ -79,7 +95,8 @@
     border-radius: 15px;
     margin-top: 60px;
     height: 30px;
-    background-color: rgb(243, 242, 242);
+    background-color: rgb(250, 250, 250);
+    animation: pulsate 1.75s infinite;
   }
 
   .nav {
@@ -87,6 +104,7 @@
     border-radius: 15px;
     margin-top: 20px;
     height: 40px;
-    background-color: rgb(243, 242, 242);
+    background-color: rgb(250, 250, 250);
+    animation: pulsate 1.75s infinite;
   }
 }
