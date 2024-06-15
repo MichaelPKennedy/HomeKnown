@@ -16,6 +16,20 @@
   max-height: 330px;
 }
 
+.deleteButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
 .photo {
   display: block;
   width: 100%;

@@ -1,21 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import { Blurhash } from "react-blurhash";
+import feathersClient from "../../../feathersClient";
+import { AuthContext } from "../../../AuthContext";
 import styles from "./swiperStylesResults.module.css";
 import logo from "../../../assets/light-logo.png";
 
 import unsplashLogo from "../../../assets/unsplashLogo.png";
 
 const Photos = ({ city }) => {
-  const { photos } = city || {};
+  const { isAdmin } = useContext(AuthContext);
   const [loadedImages, setLoadedImages] = useState({});
+  const [photos, setPhotos] = useState(city.photos || []);
 
   const hasPhotos = photos && Array.isArray(photos) && photos.length > 0;
 
   const handleImageLoad = (photoId) => {
     setLoadedImages((prev) => ({ ...prev, [photoId]: true }));
+  };
+
+  const handleDelete = async (photoId) => {
+    try {
+      await feathersClient.service("photos").remove(photoId);
+      setPhotos(photos.filter((photo) => photo.id !== photoId));
+    } catch (error) {
+      console.error("Failed to delete photo", error);
+    }
   };
 
   return (
@@ -65,6 +77,17 @@ const Photos = ({ city }) => {
               )}
             </div>
           </Link>
+          {isAdmin && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete(photo.id);
+              }}
+              className={styles.deleteButton}
+            >
+              X
+            </button>
+          )}
           <p className={styles.attribution}>
             Photo by{" "}
             <a
