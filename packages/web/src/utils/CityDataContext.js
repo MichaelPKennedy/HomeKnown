@@ -39,13 +39,13 @@ const fetchPhotos = async (city) => {
   }
 };
 
-const fetchWeatherForecast = async ({ queryKey }) => {
-  const [_key, { latitude, longitude }] = queryKey;
-  const data = await client
-    .service("forecast")
-    .find({ query: { latitude, longitude } });
-  return data;
-};
+// const fetchWeatherForecast = async ({ queryKey }) => {
+//   const [_key, { latitude, longitude }] = queryKey;
+//   const data = await client
+//     .service("forecast")
+//     .find({ query: { latitude, longitude } });
+//   return data;
+// };
 
 export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
@@ -171,13 +171,13 @@ export const CityDataProvider = ({ children }) => {
     }
   }, [cityData]);
 
-  const {
-    data: weatherForecast,
-    isLoading: isForecastLoading,
-    error: forecastError,
-  } = useQuery(["weatherData", { latitude, longitude }], fetchWeatherForecast, {
-    enabled: !!latitude && !!longitude,
-  });
+  // const {
+  //   data: weatherForecast,
+  //   isLoading: isForecastLoading,
+  //   error: forecastError,
+  // } = useQuery(["weatherData", { latitude, longitude }], fetchWeatherForecast, {
+  //   enabled: !!latitude && !!longitude,
+  // });
 
   const {
     data: userRecInterests,
@@ -259,7 +259,7 @@ export const CityDataProvider = ({ children }) => {
         cityData,
         userCityData,
         userCityIds,
-        weatherForecast,
+        // weatherForecast,
         setUserCityData,
         addCity,
         removeCity,
@@ -269,8 +269,8 @@ export const CityDataProvider = ({ children }) => {
         realEstateData,
         realEstateError,
         error,
-        isForecastLoading,
-        forecastError,
+        // isForecastLoading,
+        // forecastError,
         userPreferences,
         userRecommendations,
         setUserPreferences,

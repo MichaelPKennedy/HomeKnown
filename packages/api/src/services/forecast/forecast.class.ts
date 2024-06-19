@@ -11,6 +11,8 @@ export type { Forecast, ForecastData, ForecastPatch, ForecastQuery }
 
 export interface ForecastParams extends Params {
   query?: { latitude: string; longitude: string }
+  headers?: any
+  isCrawler?: boolean
 }
 
 export class ForecastService implements ServiceMethods<any> {
@@ -33,6 +35,10 @@ export class ForecastService implements ServiceMethods<any> {
     let cachedData = myCache.get(cacheKey)
     if (cachedData) {
       return cachedData
+    }
+
+    if (params.isCrawler) {
+      return { currentWeather: {}, forecast: {} }
     }
 
     const currentWeatherResponse = await fetch(
