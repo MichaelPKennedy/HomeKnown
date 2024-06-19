@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Helmet } from "react-helmet";
-import { useLocation, Outlet, useNavigate } from "react-router-dom";
+import { useLocation, Outlet, useNavigate, useParams } from "react-router-dom";
 import styles from "./City.module.css";
 import HeartIcon from "./components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
@@ -10,11 +10,13 @@ import SideBar from "./components/SideBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 import LoadingScreen from "./components/LoadingScreen";
+import client from "../../feathersClient.js";
 
 function City() {
   const location = useLocation();
   const navigate = useNavigate();
   const [backPage, setBackPage] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
 
   const { city, fromSurvey } = location?.state || {};
   const {
@@ -31,17 +33,50 @@ function City() {
   }, []);
 
   const currentCity = fromSurvey ? city : cityData;
-  const { city_id, city_name, state_name } = city || {};
+  const { city_id } = city || {};
+  const { state, cityName } = useParams();
 
   useEffect(() => {
-    console.log("city_id", city_id);
-    console.log("currentCity", currentCity);
-    console.log("city", city);
-    console.log("fromSurvey index", fromSurvey);
     if (city_id) {
       setCityId(city_id);
     }
   }, [city_id]);
+
+  useEffect(() => {
+    const fetchCityId = async () => {
+      if (!city_id) {
+        setSearchLoading(true);
+        const searchTerm = `${cityName} ${state}`.replace(/_/g, " ");
+
+        const authToken = localStorage.getItem("authToken");
+        let headers;
+        if (authToken) {
+          headers = {
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          };
+        }
+        try {
+          const response = await client.service("/search").find({
+            query: {
+              search: searchTerm,
+            },
+            headers,
+          });
+          console.log("response", response);
+          const { city_id: fetchedCityId } = response[0];
+          if (fetchedCityId) {
+            setCityId(fetchedCityId);
+            setSearchLoading(false);
+          }
+        } catch (error) {
+          console.error("Error fetching city ID:", error);
+        }
+      }
+    };
+    fetchCityId();
+  }, [city_id, setCityId, useParams]);
 
   useEffect(() => {
     if (location.state?.fromPage && location.state.fromPage !== backPage) {
@@ -57,9 +92,10 @@ function City() {
 
   if (isLoading && !currentCity) return <LoadingScreen />;
   if (error) return <div>Error loading city data: {error.message}</div>;
-  if (!cityData && !currentCity) return <div>No city data available.</div>;
+  if (!cityData && !currentCity && !searchLoading)
+    return <div>No city data available.</div>;
 
-  let state = state_name;
+  let stateName = currentCity?.state_name;
   if (state === "District of Columbia") {
     state = "DC";
   }
@@ -115,10 +151,14 @@ function City() {
     }
   };
 
+  if (searchLoading) return <LoadingScreen />;
+
   return (
     <div className="container-fluid">
       <Helmet>
-        <title>HomeKnown | City</title>
+        <title>
+          {currentCity?.city_name}, {currentCity?.state_abbrev}
+        </title>
         <meta
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
@@ -126,7 +166,7 @@ function City() {
       </Helmet>
       <div className={`row ${styles.cityContainer}`}>
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
-          <SideBar city_id={city_id} />
+          <SideBar city_id={city_id} city={currentCity} />
         </div>
         <main className={`col-md-9 col-12 ms-sm-auto px-4 p`}>
           <div className={styles.headerContainer}>
@@ -139,7 +179,7 @@ function City() {
             </button>
             <div className={`${styles.cityName} container`}>
               <p className={styles.header}>
-                {city_name}, {state}
+                {currentCity?.city_name}, {stateName}
               </p>
               <HeartIcon
                 onClick={() => handleHeartClick(city_id)}

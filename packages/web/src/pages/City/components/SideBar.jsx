@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet";
 import styles from "./SideBar.module.css";
 
-const SideBar = () => {
+const SideBar = ({ city }) => {
   const location = useLocation();
-  const { city, fromPage, fromSurvey } = location.state || {};
-  const { city_name, state_name } = city || {};
+  const { fromPage, fromSurvey } = location.state || {};
+  const { city_name, state_name, state_abbrev } = city || {};
 
   useEffect(() => {
     console.log("fromSurvey", fromSurvey);
@@ -22,6 +23,21 @@ const SideBar = () => {
     return location.pathname.includes(path);
   };
 
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return string;
+    return string.replace(/\b\w/g, (char) => char.toUpperCase());
+  };
+
+  const getPageTitle = () => {
+    const pathParts = location.pathname.split("/");
+    if (pathParts.length > 4) {
+      return `${city_name}, ${state_abbrev} ${capitalizeFirstLetter(
+        pathParts[4].replace("-", " ")
+      )}`;
+    }
+    return `${city_name}, ${state_abbrev}`;
+  };
+
   const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
 
   const linkClass = (path) =>
@@ -29,6 +45,13 @@ const SideBar = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>{getPageTitle()}</title>
+        <meta
+          name="description"
+          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+        />
+      </Helmet>
       <div
         className={`nav-pills d-md-none d-flex bg-light p-3 ${styles.mobileNav}`}
       >

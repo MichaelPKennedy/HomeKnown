@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEfffect, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LoginModal from "../../../components/LoginModal";
 import Photos from "./Photos";
@@ -12,7 +12,9 @@ const CityCard = ({ city, index }) => {
   return (
     <div className={styles.cityContainer} key={`results-${city.cityId}`}>
       <Link
-        to={`/results/${city.cityId}/${city.state_name}/${city.city_name}`}
+        to={`/results/${toUrlFriendly(city.state)}/${toUrlFriendly(
+          city.cityName
+        )}`}
         key={city.cityId}
         state={{ fromPage: "home", city, fromSurvey: false }}
       >

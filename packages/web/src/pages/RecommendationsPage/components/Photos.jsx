@@ -40,8 +40,8 @@ const Photos = ({ city }) => {
       ).map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
           <Link
-            to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
-              city.city_name
+            to={`/results/${toUrlFriendly(city.state)}/${toUrlFriendly(
+              city.cityName
             )}`}
             state={{ fromPage: "recommendations", city, fromSurvey: false }}
           >
