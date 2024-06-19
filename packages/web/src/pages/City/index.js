@@ -153,6 +153,10 @@ function City() {
 
   if (searchLoading) return <LoadingScreen />;
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return (
     <div className="container-fluid">
       <Helmet>
@@ -163,6 +167,7 @@ function City() {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       <div className={`row ${styles.cityContainer}`}>
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>

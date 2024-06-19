@@ -120,6 +120,10 @@ const MyLocations = () => {
 
   const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return isLoggedIn ? (
     <>
       <Helmet>
@@ -128,6 +132,7 @@ const MyLocations = () => {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       {hasLocations ? (
         <div className={styles.myLocationsContainer}>

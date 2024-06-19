@@ -43,13 +43,54 @@ const SideBar = ({ city }) => {
   const linkClass = (path) =>
     `nav-link ${isActive(path) ? styles.activeLink : ""}`;
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
+  const getKeywords = () => {
+    const pathParts = location.pathname.split("/");
+    let keywords = [city_name, state_name, "living", "quality of life"];
+    if (pathParts.length > 4) {
+      keywords.push(pathParts[4].replace("-", " "));
+    }
+
+    return keywords.join(", ");
+  };
+
+  const getDescription = () => {
+    const pathParts = location.pathname.split("/");
+    if (pathParts.length > 4) {
+      return `Learn about ${capitalizeFirstLetter(
+        pathParts[4].replace("-", " ")
+      )} in ${city_name}, ${state_name}. Discover the best places to live, work, and visit.`;
+    }
+    return `Discover ${city_name}, ${state_name}. Learn about the best places to live, work, and visit.`;
+  };
+
   return (
     <div>
       <Helmet>
         <title>{getPageTitle()}</title>
+        <meta name="description" content={getDescription()} />
+        <link rel="canonical" href={getCanonicalUrl()} />
+        <meta name="keywords" content={getKeywords()} />
+        <meta property="og:title" content={getPageTitle()} />
+        <meta property="og:description" content={getDescription()} />
+        <meta property="og:url" content={getCanonicalUrl()} />
+        <meta property="og:type" content="website" />
         <meta
-          name="description"
-          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+          property="og:image"
+          content="https://www.homeknown.app/light-logo.png"
+        />
+        <meta
+          name="twitter:card"
+          content="https://www.homeknown.app/light-logo.png"
+        />
+        <meta name="twitter:title" content={getPageTitle()} />
+        <meta name="twitter:description" content={getDescription()} />
+        <meta
+          name="twitter:image"
+          content="https://www.homeknown.app/light-logo.png"
         />
       </Helmet>
       <div

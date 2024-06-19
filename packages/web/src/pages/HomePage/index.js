@@ -50,6 +50,10 @@ const HomePage = () => {
     }
   };
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return (
     <div className={styles.homeContainer}>
       <Helmet>
@@ -58,6 +62,7 @@ const HomePage = () => {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       <div className={styles.banner}>
         <div className={styles.bannerText}>

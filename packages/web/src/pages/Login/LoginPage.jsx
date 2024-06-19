@@ -47,6 +47,10 @@ const LoginPage = () => {
     }
   };
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return (
     <div className={styles.loginPageContainer}>
       <Helmet>
@@ -55,6 +59,7 @@ const LoginPage = () => {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       <h4 className={styles.title}>Login</h4>
       <Card className={styles.card}>

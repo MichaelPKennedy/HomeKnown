@@ -71,6 +71,10 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
     );
   };
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return (
     <div>
       <Helmet>
@@ -79,6 +83,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       {showEditButton && (
         <div className={styles.btnContainer}>

@@ -41,6 +41,10 @@ const AccountPage = () => {
     }
   }, [isLoggedIn, navigate, isMobile]);
 
+  const getCanonicalUrl = () => {
+    return window.location.href;
+  };
+
   return isLoggedIn ? (
     <div className={styles.gridContainer}>
       <Helmet>
@@ -49,6 +53,7 @@ const AccountPage = () => {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       <Link to="/account-settings/personal-info" className={styles.accountLink}>
         <div className={styles.gridItem}>
