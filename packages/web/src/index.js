@@ -155,7 +155,7 @@ root.render(
                   <Route path="/verify-email" element={<VerifyEmail />} />
                   <Route path="/reset-password" element={<PasswordReset />} />
                   <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/results/:cityId" element={<City />}>
+                  <Route path="/results/:state/:cityName" element={<City />}>
                     <Route index element={<Overview />} />
                     <Route path="recreation" element={<Recreation />} />
                     <Route path="weather" element={<Weather />} />
@@ -164,7 +164,7 @@ root.render(
                     <Route path="air-quality" element={<AirQuality />} />
                     <Route path="demographics" element={<Demographics />} />
                   </Route>
-                  <Route path="/city/:cityId" element={<City />}>
+                  <Route path="/city/:state/:cityName" element={<City />}>
                     <Route path="recreation" element={<Recreation />} />
                     <Route path="weather" element={<Weather />} />
                     <Route path="housing" element={<Housing />} />

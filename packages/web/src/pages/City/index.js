@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Helmet } from "react-helmet";
-import { useLocation, useParams, Outlet, useNavigate } from "react-router-dom";
+import { useLocation, Outlet, useNavigate } from "react-router-dom";
 import styles from "./City.module.css";
 import HeartIcon from "./components/HeartIcon";
 import { AuthContext } from "../../AuthContext";
@@ -16,7 +16,7 @@ function City() {
   const navigate = useNavigate();
   const [backPage, setBackPage] = useState("");
 
-  const { city } = location?.state || {};
+  const { city, fromSurvey } = location?.state || {};
   const {
     setCityId,
     userCityData,
@@ -30,15 +30,18 @@ function City() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { cityId } = useParams();
-
-  const currentCity = city ? city : cityData;
+  const currentCity = fromSurvey ? city : cityData;
+  const { city_id, city_name, state_name } = city || {};
 
   useEffect(() => {
-    if (cityId) {
-      setCityId(cityId);
+    console.log("city_id", city_id);
+    console.log("currentCity", currentCity);
+    console.log("city", city);
+    console.log("fromSurvey index", fromSurvey);
+    if (city_id) {
+      setCityId(city_id);
     }
-  }, [cityId]);
+  }, [city_id]);
 
   useEffect(() => {
     if (location.state?.fromPage && location.state.fromPage !== backPage) {
@@ -47,7 +50,7 @@ function City() {
   }, [location, backPage]);
 
   const isCitySaved = userCityData.some(
-    (savedCity) => savedCity.city_id === Number(cityId)
+    (savedCity) => savedCity.city_id === Number(city_id)
   );
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -56,7 +59,7 @@ function City() {
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
-  let state = currentCity.state_name;
+  let state = state_name;
   if (state === "District of Columbia") {
     state = "DC";
   }
@@ -67,9 +70,9 @@ function City() {
       return;
     }
     if (isCitySaved) {
-      await removeCity(Number(cityId));
+      await removeCity(Number(city_id));
     } else {
-      await addCity(Number(cityId));
+      await addCity(Number(city_id));
     }
   };
 
@@ -123,7 +126,7 @@ function City() {
       </Helmet>
       <div className={`row ${styles.cityContainer}`}>
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
-          <SideBar cityId={cityId} />
+          <SideBar city_id={city_id} />
         </div>
         <main className={`col-md-9 col-12 ms-sm-auto px-4 p`}>
           <div className={styles.headerContainer}>
@@ -136,10 +139,10 @@ function City() {
             </button>
             <div className={`${styles.cityName} container`}>
               <p className={styles.header}>
-                {currentCity?.city_name}, {state}
+                {city_name}, {state}
               </p>
               <HeartIcon
-                onClick={() => handleHeartClick(cityId)}
+                onClick={() => handleHeartClick(city_id)}
                 className={styles.heartButton}
                 isSaved={isCitySaved}
               />

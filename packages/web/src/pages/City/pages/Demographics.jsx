@@ -7,8 +7,8 @@ const Demographics = () => {
   const location = useLocation();
   const { cityData, isLoading, error } = useCityData();
 
-  const { city } = location?.state || {};
-  const currentCity = city ? city : cityData;
+  const { city, fromSurvey } = location?.state || {};
+  const currentCity = fromSurvey ? city : cityData;
   const { CityDemographics: demographics } = currentCity || {};
 
   if (!demographics || demographics?.length === 0) {

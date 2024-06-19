@@ -6,12 +6,15 @@ import styles from "./CityCard.module.css";
 
 const CityCard = ({ city, index }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return (
     <div className={styles.cityContainer} key={`results-${city.cityId}`}>
       <Link
-        to={`/results/${city.cityId}`}
+        to={`/results/${city.cityId}/${city.state_name}/${city.city_name}`}
         key={city.cityId}
-        state={{ fromPage: "home" }}
+        state={{ fromPage: "home", city, fromSurvey: false }}
       >
         <div className={styles.cityDetails}>
           <div className={styles.ranking}>{index + 1}</div>

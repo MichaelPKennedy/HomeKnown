@@ -9,9 +9,9 @@ const Weather = () => {
   const startYear = 2020;
   const endYear = 2023;
 
-  const { city } = location?.state || {};
-  const currentCity = city ? city : cityData;
-  const weatherData = currentCity.Weather;
+  const { city, fromSurvey } = location?.state || {};
+  const currentCity = fromSurvey ? city : cityData;
+  const weatherData = cityData.Weather;
 
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;

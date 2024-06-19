@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import LoginModal from "../../../components/LoginModal";
 import Photos from "./Photos";
@@ -6,13 +6,21 @@ import HomeMap from "./HomeMap";
 import styles from "./CityCard.module.css";
 
 const CityCard = ({ city, index }) => {
+  useEffect(() => {
+    console.log("city", city);
+  }, [city]);
+
+  const toUrlFriendly = (str) => str.toLowerCase().replace(/\s+/g, "_");
+
   const [showLoginModal, setShowLoginModal] = useState(false);
   return (
     <div className={styles.cityContainer} key={`results-${city.city_id}`}>
       <Link
-        to={`/results/${city.city_id}`}
+        to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+          city.city_name
+        )}`}
         key={city.city_id}
-        state={{ fromPage: "home" }}
+        state={{ fromPage: "home", city, fromSurvey: false }}
       >
         <div className={styles.cityDetails}>
           <div className={styles.ranking}>{index + 1}</div>

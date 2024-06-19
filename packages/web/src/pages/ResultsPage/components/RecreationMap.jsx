@@ -1,7 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import axios from "axios";
-import { useParams, useLocation } from "react-router-dom";
 import { useCityData, CityDataProvider } from "../../../utils/CityDataContext";
 import ReactDOMServer from "react-dom/server";
 import L from "leaflet";

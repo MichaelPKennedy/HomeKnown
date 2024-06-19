@@ -43,7 +43,7 @@ const options = [
 
 const Recreation = () => {
   const location = useLocation();
-  const { city } = location?.state || {};
+  const { city, fromSurvey } = location?.state || {};
   const { cityData, isLoading, error } = useCityData();
   const [selectedOption, setSelectedOption] = useState(null);
   const [searchData, setSearchData] = useState(null);
@@ -52,8 +52,7 @@ const Recreation = () => {
   const [recreationWeight, setRecreationWeight] = useState(false);
   const [recreationWeightLoading, setRecreationWeightLoading] = useState(true);
 
-  const currentCity = city ? city : cityData;
-  const fromSurvey = city ? true : false;
+  const currentCity = fromSurvey ? city : cityData;
 
   useEffect(() => {
     const item = sessionStorage.getItem("formData");
@@ -102,7 +101,7 @@ const Recreation = () => {
 
   return (
     <>
-      {(!city || !recreationWeight) && (
+      {(!city || !recreationWeight || !fromSurvey) && (
         <div className={styles.searchContainer}>
           <Select
             value={selectedOption}

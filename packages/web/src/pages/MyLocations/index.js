@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Helmet } from "react-helmet";
-import { useParams } from "react-router-dom";
 import styles from "../ResultsPage/ResultsPage.module.css";
 import { Link } from "react-router-dom";
 import { useCityData } from "../../utils/CityDataContext";
@@ -119,6 +118,8 @@ const MyLocations = () => {
 
   const hasLocations = userCityIds && userCityIds.length > 0;
 
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return isLoggedIn ? (
     <>
       <Helmet>
@@ -200,9 +201,15 @@ const MyLocations = () => {
                             key={`my-locations-${city.city_id}`}
                           >
                             <Link
-                              to={`/results/${city.city_id}`}
+                              to={`/results/${toUrlFriendly(
+                                city.state_name
+                              )}/${toUrlFriendly(city.city_name)}`}
                               key={city.city_id}
-                              state={{ city, fromPage: "my-locations" }}
+                              state={{
+                                city,
+                                fromPage: "my-locations",
+                                fromSurvey: false,
+                              }}
                             >
                               <div className={styles.cityDetails}>
                                 <p className={styles.myLocationsHeader}>

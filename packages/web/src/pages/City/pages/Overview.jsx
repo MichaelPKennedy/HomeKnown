@@ -27,10 +27,10 @@ const CityFactCard = ({ factName, factValue, icon }) => {
 
 const Overview = () => {
   const location = useLocation();
-  const { city } = location?.state || {};
+  const { city, fromSurvey } = location?.state || {};
   const { cityData, isLoading, error } = useCityData();
 
-  const currentCity = city ? city : cityData;
+  const currentCity = fromSurvey ? city : cityData;
   const { photos } = currentCity || {};
   const { description } = currentCity || {};
 

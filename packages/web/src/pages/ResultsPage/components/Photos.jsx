@@ -30,6 +30,8 @@ const Photos = ({ city }) => {
     }
   };
 
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return (
     <Swiper
       pagination={{
@@ -50,8 +52,10 @@ const Photos = ({ city }) => {
       ).map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
           <Link
-            to={`/results/${city.city_id}`}
-            state={{ city, fromPage: "results" }}
+            to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+              city.city_name
+            )}`}
+            state={{ city, fromPage: "results", fromSurvey: true }}
           >
             <div className={styles.imageContainer}>
               <img

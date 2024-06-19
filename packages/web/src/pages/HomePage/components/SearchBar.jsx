@@ -37,6 +37,8 @@ const SearchBar = ({ onSearch }) => {
     }, 200);
   };
 
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return (
     <>
       <Form onSubmit={(e) => e.preventDefault()}>
@@ -65,9 +67,11 @@ const SearchBar = ({ onSearch }) => {
         >
           {results.map((city) => (
             <Link
-              to={`/results/${city.city_id}`}
+              to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+                city.city_name
+              )}`}
               key={city.city_id}
-              state={{ fromPage: "search" }}
+              state={{ fromPage: "search", city, fromSurvey: false }}
             >
               <ListGroup.Item action>
                 <div className={styles.ellipsisText}>

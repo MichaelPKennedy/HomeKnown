@@ -22,11 +22,15 @@ const HomeMap = (city) => {
     return null;
   };
 
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return (
     <Link
-      to={`/results/${city.city_id}`}
+      to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+        city.city_name
+      )}`}
       key={city.city_id}
-      state={{ fromPage: "home" }}
+      state={{ fromPage: "home", city, fromSurvey: false }}
     >
       <MapContainer
         center={[city.latitude, city.longitude]}

@@ -16,8 +16,8 @@ const Housing = () => {
     realEstateError,
   } = useCityData();
 
-  const { city } = location?.state || {};
-  const currentCity = city ? city : cityData;
+  const { city, fromSurvey } = location?.state || {};
+  const currentCity = fromSurvey ? city : cityData;
   const { HomePrice: homePriceData, MonthlyRent: rentPriceData } =
     currentCity || {};
 

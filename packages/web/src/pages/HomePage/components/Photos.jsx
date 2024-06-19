@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
@@ -29,6 +29,8 @@ const Photos = ({ city }) => {
     }
   };
 
+  const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
   return (
     <Swiper
       pagination={{
@@ -41,9 +43,11 @@ const Photos = ({ city }) => {
       {photos.map((photo) => (
         <SwiperSlide key={photo.id} className={styles.swiperSlide}>
           <Link
-            to={`/results/${city.city_id}`}
+            to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+              city.city_name
+            )}`}
             key={city.city_id}
-            state={{ fromPage: "home" }}
+            state={{ fromPage: "home", city, fromSurvey: false }}
           >
             <div className={styles.imageContainer}>
               <img

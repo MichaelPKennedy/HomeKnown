@@ -36,6 +36,8 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   const renderCityData = (city, index) => {
     const isCitySaved = userCityIds.some((id) => id === city.city_id);
 
+    const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
+
     return (
       <div className={styles.cityContainer} key={`results-${city.city_id}`}>
         <HeartIcon
@@ -44,9 +46,11 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
           isSaved={isCitySaved}
         />
         <Link
-          to={`/results/${city.city_id}`}
+          to={`/results/${toUrlFriendly(city.state_name)}/${toUrlFriendly(
+            city.city_name
+          )}`}
           key={city.city_id}
-          state={{ city, fromPage: "results" }}
+          state={{ city, fromPage: "results", fromSurvey: true }}
         >
           <div className={styles.cityDetails}>
             <div className={styles.ranking}>{index + 1}</div>
