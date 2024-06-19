@@ -42,6 +42,7 @@ export interface RealtyParams extends Params {
     type?: PropertyType[]
     limit?: number
   }
+  isCrawler?: boolean
 }
 
 interface DataOptions {
@@ -107,6 +108,10 @@ export class RealtyService implements ServiceMethods<any> {
     const cachedResult = myCache.get(cacheKey)
     if (cachedResult) {
       return cachedResult
+    }
+
+    if (params.isCrawler) {
+      return []
     }
 
     const {
@@ -190,6 +195,10 @@ export class RealtyService implements ServiceMethods<any> {
     const cachedResult = myCache.get(cacheKey)
     if (cachedResult) {
       return cachedResult
+    }
+
+    if (params.isCrawler) {
+      return []
     }
 
     const options = {

@@ -1,9 +1,10 @@
 const { disallow } = require('feathers-hooks-common')
 import { authenticate } from '@feathersjs/authentication/lib/hooks'
+import crawlers from './hooks/crawlers'
 
 export const realtyHooks = {
   before: {
-    all: [authenticate('jwt', 'apiKey')],
+    all: [authenticate('jwt', 'apiKey'), crawlers],
     find: [],
     get: [],
     create: [disallow('external')],
