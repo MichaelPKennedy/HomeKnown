@@ -15,6 +15,15 @@ const Industry = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [jobOptions, setJobOptions] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobOpportunityWeight, setJobOpportunityWeight] = useState(0);
+
+  useEffect(() => {
+    const savedFormData = JSON.parse(sessionStorage.getItem("formData"));
+    const { weights } = savedFormData || {};
+    const { jobOpportunityWeight } = weights || {};
+
+    setJobOpportunityWeight(jobOpportunityWeight);
+  }, []);
 
   const { city, fromSurvey } = location?.state || {};
   const currentCity = fromSurvey ? city : cityData;
@@ -112,7 +121,7 @@ const Industry = () => {
 
   return (
     <>
-      {!fromSurvey ? (
+      {!fromSurvey || !jobOpportunityWeight || jobOpportunityWeight < 1 ? (
         <>
           <Select
             value={selectedJob}
