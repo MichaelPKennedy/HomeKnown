@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Blurhash } from "react-blurhash";
@@ -13,7 +13,12 @@ import "swiper/css/effect-flip";
 import unsplashLogo from "../../../assets/unsplashLogo.png";
 
 const CityPhotos = ({ photos }) => {
+  const [loadedImages, setLoadedImages] = useState({});
   if (!photos || !photos.length) return null;
+
+  const handleImageLoad = (photoId) => {
+    setLoadedImages((prev) => ({ ...prev, [photoId]: true }));
+  };
 
   const isMobile = window.innerWidth < 768;
 
@@ -28,26 +33,29 @@ const CityPhotos = ({ photos }) => {
     >
       {photos.map((photo, index) => (
         <SwiperSlide key={index} className={styles.swiperSlide}>
-          {photo.blurHash && (
-            <Blurhash
-              hash={photo.blurHash}
-              width="100%"
-              height="100%"
-              resolutionX={32}
-              resolutionY={32}
-              punch={1}
+          <div className={styles.imageContainer}>
+            <img
+              src={photo.reg_url}
+              alt={photo.alt}
+              className={`${styles.photo} ${
+                loadedImages[photo.id]
+                  ? styles.imageVisible
+                  : styles.imageHidden
+              }`}
+              onLoad={() => handleImageLoad(photo.id)}
             />
-          )}
-          <img
-            src={isMobile ? photo.reg_url : photo.full_url}
-            alt={photo.alt}
-            className={styles.photo}
-            onLoad={(e) => {
-              if (photo.blurHash) {
-                e.target.previousSibling.style.display = "none";
-              }
-            }}
-          />
+            {photo.blurHash && (
+              <Blurhash
+                hash={photo.blurHash}
+                width="100%"
+                height="100%"
+                resolutionX={32}
+                resolutionY={32}
+                punch={1}
+                className={styles.blurHash}
+              />
+            )}
+          </div>
           <p className="mb-0">
             Photo by{" "}
             <a
