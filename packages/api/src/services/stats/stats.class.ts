@@ -13,7 +13,8 @@ interface CityStats {
   city_id: number
   count: number
   city_name: string
-  state: string
+  state_abbrev: string
+  state_name: string
   latitude: number
   longitude: number
 }
@@ -52,7 +53,7 @@ export class StatsService implements ServiceMethods<any> {
             include: [
               {
                 model: this.sequelize.models.State,
-                attributes: ['state_abbrev']
+                attributes: ['state_abbrev', 'state']
               },
               {
                 model: this.sequelize.models.CityPhotos
@@ -68,7 +69,8 @@ export class StatsService implements ServiceMethods<any> {
       city_name: city.City.city_name,
       latitude: city.City.Latitude,
       longitude: city.City.Longitude,
-      state: city.City.State.state_abbrev,
+      state_abbrev: city.City.State.state_abbrev,
+      state_name: city.City.State.state,
       photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
 
@@ -85,7 +87,7 @@ export class StatsService implements ServiceMethods<any> {
             include: [
               {
                 model: this.sequelize.models.State,
-                attributes: ['state_abbrev']
+                attributes: ['state_abbrev', 'state']
               },
               {
                 model: this.sequelize.models.CityPhotos
@@ -101,7 +103,8 @@ export class StatsService implements ServiceMethods<any> {
       city_name: city.City.city_name,
       latitude: city.City.Latitude,
       longitude: city.City.Longitude,
-      state: city.City.State.state_abbrev,
+      state_abbrev: city.City.State.state_abbrev,
+      state_name: city.City.State.state,
       photos: city.City.CityPhotos ? city.City.CityPhotos.map((photo: any) => photo.get({ plain: true })) : []
     }))
 

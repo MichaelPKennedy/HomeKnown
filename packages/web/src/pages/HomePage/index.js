@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Helmet } from "react-helmet";
 import { useCityData } from "../../utils/CityDataContext";
@@ -13,18 +13,25 @@ import styles from "./HomePage.module.css";
 const HomePage = () => {
   const { categories, categoriesLoading } = useCityData();
   const [selectedOption, setSelectedOption] = useState("coast");
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [currentPage, setCurrentPage] = useState(1);
+  const citiesPerPage = 20;
+  const paginationRef = useRef(null);
 
   const handleSelectionChange = (optionId) => {
     setSelectedOption(optionId);
+    setCurrentPage(1);
   };
 
   const getSelectedCities = () => {
-    return categories[selectedOption]?.slice(0, 50) || [];
+    if (isMobile) {
+      return categories[selectedOption] || [];
+    } else {
+      const start = (currentPage - 1) * citiesPerPage;
+      const end = start + citiesPerPage;
+      return categories[selectedOption]?.slice(start, end) || [];
+    }
   };
-
-  useEffect(() => {
-    console.log("loading categories", categoriesLoading);
-  }, [categoriesLoading]);
 
   const handleSearch = async (searchTerm) => {
     try {
@@ -53,6 +60,30 @@ const HomePage = () => {
   const getCanonicalUrl = () => {
     return window.location.href;
   };
+
+  const totalPages = Math.ceil(
+    (categories[selectedOption]?.length || 0) / citiesPerPage
+  );
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 0);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <div className={styles.homeContainer}>
@@ -109,10 +140,31 @@ const HomePage = () => {
                 xl={3}
                 className="d-flex align-items-stretch"
               >
-                <CityCard city={city} index={index} />
+                <CityCard city={city} index={index} category={selectedOption} />
               </Col>
             ))}
       </Row>
+      {totalPages > 1 && (
+        <div className={styles.paginationContainer} ref={paginationRef}>
+          <button
+            className={styles.paginationButton}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
+          <span className={styles.paginationInfo}>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            className={styles.paginationButton}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
+      )}
       {/* <CookieConsent /> */}
     </div>
   );
