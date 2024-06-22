@@ -196,11 +196,12 @@ const Recreation = () => {
             <ul className={styles.bulletList}>
               {bulletItems.map((item, idx) => {
                 const match = item.match(/^- (.*?):\s*(.*)$/);
-                const attraction = match ? match[1] : item.slice(2); // Remove "- " if no match
-                const details = match ? match[2] : ""; // Empty if no match
+                const attraction = match ? match[1] : null;
+                const details = match ? match[2] : item.slice(2).trim();
                 return (
                   <li key={idx}>
-                    <strong>{attraction}:</strong> {details}
+                    {attraction ? <strong>{attraction}:</strong> : null}{" "}
+                    {details}
                   </li>
                 );
               })}
