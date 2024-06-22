@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { costClient } from './services/cost/cost.shared'
+export type { Cost, CostData, CostQuery, CostPatch } from './services/cost/cost.shared'
+
 import { notificationsClient } from './services/notifications/notifications.shared'
 export type {
   Notifications,
@@ -181,5 +184,6 @@ export const createClient = <Configuration = any,>(
   client.configure(forgotPasswordClient)
   client.configure(realtyClient)
   client.configure(notificationsClient)
+  client.configure(costClient)
   return client
 }

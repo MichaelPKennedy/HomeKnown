@@ -1,3 +1,4 @@
+import { cost } from './cost/cost'
 import { notifications } from './notifications/notifications'
 import { realty } from './realty/realty'
 import { forgotPassword } from './forgot-password/forgot-password'
@@ -25,6 +26,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(cost)
   app.configure(notifications)
   app.configure(realty)
   app.configure(forgotPassword)
