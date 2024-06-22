@@ -164,26 +164,21 @@ const Recreation = () => {
       const cleanedTitle = title.replace(/\d+\.\s*/, "");
 
       let bulletItems = [];
-      let paragraphItems = [];
-      let inBulletList = true;
       let currentItem = "";
 
       items.forEach((item) => {
-        if (inBulletList && item.startsWith("- ")) {
+        if (item.startsWith("- ")) {
           if (currentItem) {
             bulletItems.push(currentItem.trim());
           }
           currentItem = item;
-        } else if (inBulletList && item === "") {
-          inBulletList = false;
+        } else if (item === "") {
           if (currentItem) {
             bulletItems.push(currentItem.trim());
             currentItem = "";
           }
-        } else if (inBulletList) {
+        } else if (currentItem) {
           currentItem += ` ${item}`;
-        } else {
-          paragraphItems.push(item);
         }
       });
 
@@ -211,11 +206,6 @@ const Recreation = () => {
               })}
             </ul>
           )}
-          {paragraphItems.map((item, idx) => (
-            <p key={idx} style={{ marginTop: "1em" }}>
-              {item}
-            </p>
-          ))}
         </div>
       );
     });
