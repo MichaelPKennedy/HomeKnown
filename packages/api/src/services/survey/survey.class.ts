@@ -480,7 +480,7 @@ export class SurveyService implements ServiceMethods<any> {
         },
         {
           model: this.sequelize.models.State,
-          attributes: ['state', 'state_abbrev']
+          attributes: ['state', 'state_abbrev', 'state_code']
         },
         {
           model: this.sequelize.models.Area,
@@ -518,6 +518,9 @@ export class SurveyService implements ServiceMethods<any> {
       const { Latitude: cityLatitude, Longitude: cityLongitude } = city
       const cityJobs = jobData.filter((job) => job.area_code === city.area_code)
 
+      const { state_code } = city.State || {}
+      const stateCostOfLiving = await this.app.service('cost').get(state_code)
+
       return {
         city_id: city.city_id,
         city_name: city.city_name,
@@ -544,7 +547,8 @@ export class SurveyService implements ServiceMethods<any> {
         Jobs: cityJobs,
         selectedJobs,
         Weather: city.CityMonthlyWeathers,
-        photos: city.CityPhotos.map((photo: any) => photo.get({ plain: true }))
+        photos: city.CityPhotos.map((photo: any) => photo.get({ plain: true })),
+        costOfLiving: stateCostOfLiving
       }
     })
 

@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useCityData } from "../../../utils/CityDataContext";
 import WeatherForecast from "../components/WeatherForecast";
 import CityPhotos from "../components/CityPhotos";
+import CostOfLiving from "../components/CostOfLiving";
 import styles from "../City.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Assuming you are using FontAwesome for icons
 import {
@@ -31,8 +32,7 @@ const Overview = () => {
   const { cityData, isLoading, error } = useCityData();
 
   const currentCity = fromSurvey ? city : cityData;
-  const { photos } = currentCity || {};
-  const { description } = currentCity || {};
+  const { photos, description, costOfLiving } = currentCity || {};
 
   const cityFacts = [
     {
@@ -54,7 +54,7 @@ const Overview = () => {
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
   return (
-    <div className="container pl-0 pr-0">
+    <div className="container pl-0 pr-0 mb-5">
       {photos?.length > 0 && (
         <div className={styles.cityPhotos}>
           <CityPhotos photos={photos} />
@@ -90,6 +90,7 @@ const Overview = () => {
           />
         ))}
       </div>
+      <CostOfLiving costOfLiving={costOfLiving} />
     </div>
   );
 };
