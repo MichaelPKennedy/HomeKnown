@@ -4,6 +4,9 @@ import type { TransportConnection, Application } from '@feathersjs/feathers'
 import authenticationClient from '@feathersjs/authentication-client'
 import type { AuthenticationClientOptions } from '@feathersjs/authentication-client'
 
+import { blogClient } from './services/blog/blog.shared'
+export type { Blog, BlogData, BlogQuery, BlogPatch } from './services/blog/blog.shared'
+
 import { costClient } from './services/cost/cost.shared'
 export type { Cost, CostData, CostQuery, CostPatch } from './services/cost/cost.shared'
 
@@ -185,5 +188,6 @@ export const createClient = <Configuration = any,>(
   client.configure(realtyClient)
   client.configure(notificationsClient)
   client.configure(costClient)
+  client.configure(blogClient)
   return client
 }

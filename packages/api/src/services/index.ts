@@ -1,3 +1,4 @@
+import { blog } from './blog/blog'
 import { cost } from './cost/cost'
 import { notifications } from './notifications/notifications'
 import { realty } from './realty/realty'
@@ -26,6 +27,7 @@ import { survey } from './survey/survey'
 import type { Application } from '../declarations'
 
 export const services = (app: Application) => {
+  app.configure(blog)
   app.configure(cost)
   app.configure(notifications)
   app.configure(realty)

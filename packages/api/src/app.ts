@@ -68,6 +68,7 @@ import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 import { TopCityPhotosModel } from './models/top-city-photos.model'
 import { UserNotificationsModel } from './models/user-notifications.model'
 import { CityDescriptionsModel } from './models/city-descriptions.model'
+import { BlogPostModel } from './models/blog.model'
 
 const app: Application = express(feathers())
 
@@ -141,6 +142,7 @@ ContactSupportModel(sequelize)
 BlacklistPhotosModel(sequelize)
 UserNotificationsModel(sequelize)
 CityDescriptionsModel(sequelize)
+BlogPostModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
