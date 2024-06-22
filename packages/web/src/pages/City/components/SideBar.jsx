@@ -92,6 +92,22 @@ const SideBar = ({ city }) => {
           name="twitter:image"
           content="https://www.homeknown.app/light-logo.png"
         />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Place",
+            name: `${city_name}, ${state_name}`,
+            description: getDescription(),
+            url: getCanonicalUrl(),
+            image: "https://www.homeknown.app/light-logo.png",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: city_name,
+              addressRegion: state_name,
+              addressCountry: "Country",
+            },
+          })}
+        </script>
       </Helmet>
       <div
         className={`nav-pills d-md-none d-flex bg-light p-3 ${styles.mobileNav}`}
