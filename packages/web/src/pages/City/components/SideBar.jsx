@@ -8,10 +8,6 @@ const SideBar = ({ city }) => {
   const { fromPage, fromSurvey } = location.state || {};
   const { city_name, state_name, state_abbrev } = city || {};
 
-  useEffect(() => {
-    console.log("fromSurvey", fromSurvey);
-  }, [fromSurvey]);
-
   const isActive = (path) => {
     if (
       path ===
