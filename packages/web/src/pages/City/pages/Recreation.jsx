@@ -154,7 +154,7 @@ const Recreation = () => {
   };
 
   const parseDescription = (description) => {
-    const sections = description.split("\n\n");
+    const sections = description.split(/\d+\.\s+/).filter(Boolean);
     return sections.map((section, index) => {
       const sectionTitle = section.match(/^\d+\.\s*(.*)$/)?.[1] || section;
       const [title, ...items] = sectionTitle
@@ -170,10 +170,12 @@ const Recreation = () => {
           </h3>
           <ul className={styles.bulletList}>
             {items.map((item, idx) => {
-              const [attraction, ...details] = item.split(": ");
+              const match = item.match(/^(.*?):\s*(.*)$/);
+              const attraction = match ? match[1] : null;
+              const details = match ? match[2] : item;
               return (
                 <li key={idx}>
-                  <strong>{attraction}:</strong> {details.join(": ")}
+                  {attraction ? <strong>{attraction}:</strong> : null} {details}
                 </li>
               );
             })}
@@ -222,7 +224,9 @@ const Recreation = () => {
           />
           {cityDescriptions && cityDescriptions.recreation && (
             <div className={styles.description}>
-              <h2 className="mb-5">Things to do in {currentCity.city_name}</h2>
+              <h2 className="mb-5">
+                Things to do in {currentCity.city_name}...
+              </h2>
               {parseDescription(cityDescriptions.recreation)}
             </div>
           )}

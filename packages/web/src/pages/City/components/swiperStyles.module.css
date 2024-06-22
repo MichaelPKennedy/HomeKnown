@@ -38,6 +38,20 @@
   margin-bottom: 5px;
 }
 
+.deleteButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  z-index: 10000;
+}
+
 @media (max-width: 767px) {
   .imageContainer {
     height: 90%;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import { Blurhash } from "react-blurhash";
@@ -11,16 +11,27 @@ import "swiper/css/effect-fade";
 import "swiper/css/effect-cube";
 import "swiper/css/effect-flip";
 import unsplashLogo from "../../../assets/unsplashLogo.png";
+import feathersClient from "../../../feathersClient";
+import { AuthContext } from "../../../AuthContext";
 
-const CityPhotos = ({ photos }) => {
+const CityPhotos = ({ cityPhotos }) => {
+  const { isAdmin } = useContext(AuthContext);
   const [loadedImages, setLoadedImages] = useState({});
+  const [photos, setPhotos] = useState(cityPhotos || []);
   if (!photos || !photos.length) return null;
 
   const handleImageLoad = (photoId) => {
     setLoadedImages((prev) => ({ ...prev, [photoId]: true }));
   };
 
-  const isMobile = window.innerWidth < 768;
+  const handleDelete = async (photoId) => {
+    try {
+      await feathersClient.service("photos").remove(photoId);
+      setPhotos(photos.filter((photo) => photo.id !== photoId));
+    } catch (error) {
+      console.error("Failed to delete photo", error);
+    }
+  };
 
   return (
     <Swiper
@@ -56,6 +67,17 @@ const CityPhotos = ({ photos }) => {
               />
             )}
           </div>
+          {isAdmin && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete(photo.id);
+              }}
+              className={styles.deleteButton}
+            >
+              X
+            </button>
+          )}
           <p className="mb-0">
             Photo by{" "}
             <a
