@@ -158,28 +158,64 @@ const Recreation = () => {
     return sections.map((section, index) => {
       const sectionTitle = section.match(/^\d+\.\s*(.*)$/)?.[1] || section;
       const [title, ...items] = sectionTitle
-        .split("\n- ")
+        .split("\n")
         .map((item) => item.trim());
       const icon = getIconForTitle(title);
       const cleanedTitle = title.replace(/\d+\.\s*/, "");
+
+      let bulletItems = [];
+      let paragraphItems = [];
+      let inBulletList = true;
+      let currentItem = "";
+
+      items.forEach((item) => {
+        if (inBulletList && item.startsWith("- ")) {
+          if (currentItem) {
+            bulletItems.push(currentItem.trim());
+          }
+          currentItem = item;
+        } else if (inBulletList && item === "") {
+          inBulletList = false;
+          if (currentItem) {
+            bulletItems.push(currentItem.trim());
+            currentItem = "";
+          }
+        } else if (inBulletList) {
+          currentItem += ` ${item}`;
+        } else {
+          paragraphItems.push(item);
+        }
+      });
+
+      if (currentItem) {
+        bulletItems.push(currentItem.trim());
+      }
+
       return (
         <div key={index} className="mb-5">
           <h3>
             <FontAwesomeIcon icon={icon} style={{ marginRight: "10px" }} />{" "}
             {cleanedTitle}
           </h3>
-          <ul className={styles.bulletList}>
-            {items.map((item, idx) => {
-              const match = item.match(/^(.*?):\s*(.*)$/);
-              const attraction = match ? match[1] : null;
-              const details = match ? match[2] : item;
-              return (
-                <li key={idx}>
-                  {attraction ? <strong>{attraction}:</strong> : null} {details}
-                </li>
-              );
-            })}
-          </ul>
+          {bulletItems.length > 0 && (
+            <ul className={styles.bulletList}>
+              {bulletItems.map((item, idx) => {
+                const match = item.match(/^- (.*?):\s*(.*)$/);
+                const attraction = match ? match[1] : item.slice(2); // Remove "- " if no match
+                const details = match ? match[2] : ""; // Empty if no match
+                return (
+                  <li key={idx}>
+                    <strong>{attraction}:</strong> {details}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+          {paragraphItems.map((item, idx) => (
+            <p key={idx} style={{ marginTop: "1em" }}>
+              {item}
+            </p>
+          ))}
         </div>
       );
     });
