@@ -3,6 +3,19 @@ import { useCityData } from "../../../utils/CityDataContext";
 import { useLocation } from "react-router-dom";
 import RecreationMap from "../../ResultsPage/components/RecreationMap";
 import { fetchDataForPreference } from "../../ResultsPage/constants";
+import {
+  faHiking,
+  faTree,
+  faBicycle,
+  faMountain,
+  faWater,
+  faLandmark,
+  faMuseum,
+  faShoppingCart,
+  faUtensils,
+  faMusic,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Select from "react-select";
 import styles from "./Recreation.module.css";
 import { Spinner } from "react-bootstrap";
@@ -41,6 +54,50 @@ const options = [
   { value: "danceStudios", label: "Dance Studios" },
 ];
 
+const iconMap = {
+  outdoor: faHiking,
+  cultural: faMuseum,
+  attractions: faMuseum,
+  shopping: faShoppingCart,
+  dining: faUtensils,
+  historical: faLandmark,
+  sites: faLandmark,
+  parks: faTree,
+  gardens: faTree,
+  rivers: faWater,
+  lakes: faWater,
+  mountains: faMountain,
+  waterfalls: faWater,
+  forests: faTree,
+  hiking: faHiking,
+  trails: faHiking,
+  caves: faMountain,
+  resorts: faMountain,
+  climbing: faMountain,
+  sports: faBicycle,
+  swimming: faWater,
+  golf: faBicycle,
+  balloon: faBicycle,
+  bicycle: faBicycle,
+  monuments: faLandmark,
+  museums: faMuseum,
+  galleries: faMuseum,
+  wellness: faUtensils,
+  studios: faUtensils,
+  fitness: faUtensils,
+  dance: faMusic,
+};
+
+const getIconForTitle = (title) => {
+  const titleLower = title.toLowerCase();
+  for (const key in iconMap) {
+    if (titleLower.includes(key)) {
+      return iconMap[key];
+    }
+  }
+  return faLandmark;
+};
+
 const Recreation = () => {
   const location = useLocation();
   const { city, fromSurvey } = location?.state || {};
@@ -53,6 +110,7 @@ const Recreation = () => {
   const [recreationWeightLoading, setRecreationWeightLoading] = useState(true);
 
   const currentCity = fromSurvey ? city : cityData;
+  const { cityDescriptions } = currentCity || {};
 
   useEffect(() => {
     const item = sessionStorage.getItem("formData");
@@ -95,12 +153,42 @@ const Recreation = () => {
     }
   };
 
+  const parseDescription = (description) => {
+    const sections = description.split("\n\n");
+    return sections.map((section, index) => {
+      const sectionTitle = section.match(/^\d+\.\s*(.*)$/)?.[1] || section;
+      const [title, ...items] = sectionTitle
+        .split("\n- ")
+        .map((item) => item.trim());
+      const icon = getIconForTitle(title);
+      const cleanedTitle = title.replace(/\d+\.\s*/, "");
+      return (
+        <div key={index} className="mb-5">
+          <h3>
+            <FontAwesomeIcon icon={icon} style={{ marginRight: "10px" }} />{" "}
+            {cleanedTitle}
+          </h3>
+          <ul className={styles.bulletList}>
+            {items.map((item, idx) => {
+              const [attraction, ...details] = item.split(": ");
+              return (
+                <li key={idx}>
+                  <strong>{attraction}:</strong> {details.join(": ")}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    });
+  };
+
   if (isLoading && !currentCity) return <div>Loading city data...</div>;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity) return <div>No city data available.</div>;
 
   return (
-    <>
+    <div className="pb-5">
       {(!city || !recreationWeight || !fromSurvey) && (
         <div className={styles.searchContainer}>
           <Select
@@ -125,14 +213,22 @@ const Recreation = () => {
         </div>
       )}
       {currentCity && !recreationWeightLoading && (
-        <RecreationMap
-          data={currentCity}
-          searchData={searchData}
-          fromSurvey={fromSurvey}
-          recreationWeight={recreationWeight}
-        />
+        <div className="mb-5">
+          <RecreationMap
+            data={currentCity}
+            searchData={searchData}
+            fromSurvey={fromSurvey}
+            recreationWeight={recreationWeight}
+          />
+          {cityDescriptions && cityDescriptions.recreation && (
+            <div className={styles.description}>
+              <h2 className="mb-5">Things to do in {currentCity.city_name}</h2>
+              {parseDescription(cityDescriptions.recreation)}
+            </div>
+          )}
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

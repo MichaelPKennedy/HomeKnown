@@ -493,6 +493,9 @@ export class SurveyService implements ServiceMethods<any> {
         },
         {
           model: this.sequelize.models.CityPhotos
+        },
+        {
+          model: this.sequelize.models.CityDescriptions
         }
       ]
     })
@@ -548,7 +551,8 @@ export class SurveyService implements ServiceMethods<any> {
         selectedJobs,
         Weather: city.CityMonthlyWeathers,
         photos: city.CityPhotos.map((photo: any) => photo.get({ plain: true })),
-        costOfLiving: stateCostOfLiving
+        costOfLiving: stateCostOfLiving,
+        cityDescriptions: city.CityDescription
       }
     })
 
@@ -589,9 +593,9 @@ export class SurveyService implements ServiceMethods<any> {
       const cacheKey = `cityDetails_${id}`
       const cachedData = myCache.get(cacheKey)
 
-      if (cachedData) {
-        return cachedData
-      }
+      // if (cachedData) {
+      //   return cachedData
+      // }
 
       const cityDetails = await this.getCityDetails([{ city_id: id }])
 

@@ -67,6 +67,7 @@ import { TopCitiesModel } from './models/top-cities.model'
 import { TopMonthlyCitiesModel } from './models/top-monthly-cities.model'
 import { TopCityPhotosModel } from './models/top-city-photos.model'
 import { UserNotificationsModel } from './models/user-notifications.model'
+import { CityDescriptionsModel } from './models/city-descriptions.model'
 
 const app: Application = express(feathers())
 
@@ -139,6 +140,7 @@ CityPhotosModel(sequelize)
 ContactSupportModel(sequelize)
 BlacklistPhotosModel(sequelize)
 UserNotificationsModel(sequelize)
+CityDescriptionsModel(sequelize)
 
 const City = sequelize.models.City
 const Area = sequelize.models.Area
@@ -176,6 +178,7 @@ const TopMonthlyCities = sequelize.models.TopMonthlyCities
 const TopCityPhotos = sequelize.models.TopCityPhotos
 const CityPhotos = sequelize.models.CityPhotos
 const UserNotifications = sequelize.models.UserNotifications
+const CityDescriptions = sequelize.models.CityDescriptions
 
 //database relationships
 Area.hasOne(AirQuality, { foreignKey: 'area_code' })
@@ -193,6 +196,7 @@ City.hasOne(CitySceneryCache, { foreignKey: 'city_id' })
 City.hasOne(CityAverageTemp, { foreignKey: 'city_id' })
 City.hasOne(CrimeStatsCity, { foreignKey: 'city_id' })
 City.hasOne(CityDemographics, { foreignKey: 'city_id' })
+City.hasOne(CityDescriptions, { foreignKey: 'city_id' })
 City.hasMany(CityMonthlyWeatherCounty, { foreignKey: 'city_id' })
 City.hasMany(CityMonthlyWeather, { foreignKey: 'city_id' })
 City.hasMany(HomePrice, { foreignKey: 'city_id' })
