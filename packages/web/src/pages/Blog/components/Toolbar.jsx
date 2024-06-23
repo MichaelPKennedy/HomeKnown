@@ -5,31 +5,60 @@ const Toolbar = ({ editor, selectedImage }) => {
     return null;
   }
 
-  const setImageClass = (className) => {
+  const setImageClass = (alignment, size) => {
     if (selectedImage) {
-      selectedImage.className = className;
+      if (alignment) {
+        selectedImage.setAttribute("data-alignment", alignment);
+        selectedImage.className = `${alignment} ${
+          selectedImage.getAttribute("data-size") || "medium"
+        }`;
+      }
+      if (size) {
+        selectedImage.setAttribute("data-size", size);
+        selectedImage.className = `${
+          selectedImage.getAttribute("data-alignment") || "center"
+        } ${size}`;
+      }
       editor.commands.focus();
     }
   };
 
   return (
     <div className="toolbar">
-      <button onClick={() => setImageClass("left")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass("left", null)}
+        disabled={!selectedImage}
+      >
         Align Left
       </button>
-      <button onClick={() => setImageClass("center")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass("center", null)}
+        disabled={!selectedImage}
+      >
         Align Center
       </button>
-      <button onClick={() => setImageClass("right")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass("right", null)}
+        disabled={!selectedImage}
+      >
         Align Right
       </button>
-      <button onClick={() => setImageClass("small")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass(null, "small")}
+        disabled={!selectedImage}
+      >
         Small
       </button>
-      <button onClick={() => setImageClass("medium")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass(null, "medium")}
+        disabled={!selectedImage}
+      >
         Medium
       </button>
-      <button onClick={() => setImageClass("large")} disabled={!selectedImage}>
+      <button
+        onClick={() => setImageClass(null, "large")}
+        disabled={!selectedImage}
+      >
         Large
       </button>
     </div>
