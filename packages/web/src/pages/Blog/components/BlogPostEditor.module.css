@@ -25,3 +25,36 @@
 .previewContainer {
   overflow-y: auto;
 }
+
+/* BlogPostEditor.module.css */
+.resizable-image {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.resizable-image img {
+  display: block;
+  margin: auto;
+}
+
+.resizable-image.left img {
+  margin-left: 0;
+}
+
+.resizable-image.center img {
+  margin: auto;
+}
+
+.resizable-image.right img {
+  margin-right: 0;
+}
+
+.alignment-buttons {
+  width: 300px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}

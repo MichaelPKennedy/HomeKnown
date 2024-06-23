@@ -40,6 +40,14 @@ const ResizableImage = Node.create({
           return { style: `width: ${attributes.width}` };
         },
       },
+      alignment: {
+        default: "center",
+        parseHTML: (element) =>
+          element.getAttribute("data-alignment") || "center",
+        renderHTML: (attributes) => {
+          return { "data-alignment": attributes.alignment };
+        },
+      },
     };
   },
 
@@ -61,6 +69,7 @@ const ResizableImage = Node.create({
   addNodeView() {
     return ReactNodeViewRenderer(({ node, updateAttributes }) => {
       const [width, setWidth] = useState(node.attrs.width);
+      const [alignment, setAlignment] = useState(node.attrs.alignment);
       const imgRef = useRef();
 
       useEffect(() => {
@@ -78,7 +87,7 @@ const ResizableImage = Node.create({
       }, [imgRef, updateAttributes]);
 
       return (
-        <NodeViewWrapper style={{ position: "relative", width }}>
+        <NodeViewWrapper className={`resizable-image ${alignment}`}>
           <img
             ref={imgRef}
             src={node.attrs.src}
@@ -103,6 +112,32 @@ const ResizableImage = Node.create({
               zIndex: 10,
             }}
           />
+          <div className="alignment-buttons">
+            <button
+              onClick={() => {
+                setAlignment("left");
+                updateAttributes({ alignment: "left" });
+              }}
+            >
+              Left
+            </button>
+            <button
+              onClick={() => {
+                setAlignment("center");
+                updateAttributes({ alignment: "center" });
+              }}
+            >
+              Center
+            </button>
+            <button
+              onClick={() => {
+                setAlignment("right");
+                updateAttributes({ alignment: "right" });
+              }}
+            >
+              Right
+            </button>
+          </div>
         </NodeViewWrapper>
       );
     });
