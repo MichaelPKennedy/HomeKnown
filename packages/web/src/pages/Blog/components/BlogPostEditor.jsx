@@ -3,13 +3,12 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
-import Image from "@tiptap/extension-image";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
-import Toolbar from "./Toolbar";
-import { ImageDrop } from "../utils/ImageDrop";
-import BlogPostPreview from "./BlogPostPreview";
+import ResizableImage from "./ResizableImage";
+import Toolbar from "./Toolbar"; // Ensure the correct path
+import { ImageDrop } from "../utils/ImageDrop"; // Ensure the correct path
 import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
@@ -19,7 +18,6 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
     extensions: [
       StarterKit,
       ImageDrop,
-      Image,
       Link,
       Table.configure({
         resizable: true,
@@ -27,15 +25,10 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       TableRow,
       TableCell,
       TableHeader,
+      ResizableImage,
     ],
     content: initialContent,
   });
-
-  useEffect(() => {
-    if (editor) {
-      console.log("Editor initialized", editor);
-    }
-  }, [editor]);
 
   useEffect(() => {
     if (editor) {
@@ -56,7 +49,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
         <EditorContent editor={editor} />
       </div>
       <div className={styles.previewContainer}>
-        <BlogPostPreview content={content} />
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );
