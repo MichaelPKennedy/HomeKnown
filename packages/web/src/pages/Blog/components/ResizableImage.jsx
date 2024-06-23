@@ -1,7 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
 import { useEffect, useRef, useState } from "react";
-import styles from "./BlogPostEditor.module.css";
 
 const ResizableImage = Node.create({
   name: "resizableImage",
@@ -88,10 +87,7 @@ const ResizableImage = Node.create({
       }, [imgRef, updateAttributes]);
 
       return (
-        <NodeViewWrapper
-          className={`${styles.resizableImage} ${styles[alignment]}`}
-          style={{ width }}
-        >
+        <NodeViewWrapper className={`resizable-image ${alignment}`}>
           <img
             ref={imgRef}
             src={node.attrs.src}
@@ -116,7 +112,7 @@ const ResizableImage = Node.create({
               zIndex: 10,
             }}
           />
-          <div className={styles.alignmentButtons}>
+          <div className="alignment-buttons">
             <button
               onClick={() => {
                 setAlignment("left");

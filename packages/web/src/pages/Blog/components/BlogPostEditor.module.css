@@ -1,4 +1,3 @@
-/* BlogPostEditor.module.css */
 .editorContent {
   padding: 0 20px;
   margin: 0 auto;
@@ -27,35 +26,32 @@
   overflow-y: auto;
 }
 
-.resizableImage {
+/* BlogPostEditor.module.css */
+.resizable-image {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.resizableImage img {
+.resizable-image img {
   display: block;
-}
-
-.left img {
-  margin-left: 0;
-  float: left;
-  margin-right: 10px;
-}
-
-.center img {
   margin: auto;
-  display: block;
 }
 
-.right img {
+.resizable-image.left img {
+  margin-left: 0;
+}
+
+.resizable-image.center img {
+  margin: auto;
+}
+
+.resizable-image.right img {
   margin-right: 0;
-  float: right;
-  margin-left: 10px;
 }
 
-.alignmentButtons {
+.alignment-buttons {
   width: 300px;
   display: flex;
   justify-content: center;
