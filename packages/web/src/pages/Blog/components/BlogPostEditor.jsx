@@ -36,7 +36,6 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
     content: content,
     onUpdate({ editor }) {
       const html = editor.getHTML();
-      console.log("Content updated:", html);
       setContent(html);
       onContentChange(html);
     },
@@ -44,8 +43,12 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       const { selection } = editor.state;
       const node = editor.view.nodeDOM(selection.$anchor.pos);
       if (node && node.nodeName === "IMG") {
+        node.classList.add("focused-image");
         setSelectedImage(node);
       } else {
+        if (selectedImage) {
+          selectedImage.classList.remove("focused-image");
+        }
         setSelectedImage(null);
       }
     },
@@ -53,7 +56,6 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
 
   useEffect(() => {
     const draft = localStorage.getItem("draftPost");
-    console.log("Loading draft:", draft);
     if (draft && editor) {
       const draftContent = JSON.parse(draft).content;
       editor.commands.setContent(draftContent);
@@ -61,7 +63,6 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   }, [editor]);
 
   const handleTemporarySave = () => {
-    console.log("Saving draft:", content);
     localStorage.setItem("draftPost", JSON.stringify({ content }));
     alert("Draft saved temporarily!");
   };
@@ -69,7 +70,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   return (
     <div className={styles.editorPreviewContainer}>
       <div className={styles.editorContainer}>
-        <Toolbar editor={editor} selectedImage={selectedImage} />
+        <Toolbar editor={editor} selectedImage={selectedImage} key="toolbar" />
         <EditorContent editor={editor} />
         <button onClick={handleTemporarySave}>Save Progress</button>
       </div>

@@ -11,11 +11,7 @@ const Toolbar = ({ editor, selectedImage }) => {
       const { tr } = state;
       const pos = view.posAtDOM(selectedImage);
 
-      // Log the position for debugging
-      console.log("Selected image position:", pos);
-
-      // Validate position
-      if (pos < 0 || pos > tr.doc.content.size) {
+      if (pos === -1) {
         console.error("Invalid position:", pos);
         return;
       }
@@ -33,34 +29,29 @@ const Toolbar = ({ editor, selectedImage }) => {
         size: size || node.attrs.size,
       };
 
-      console.log("Updating node attributes:", newAttrs);
-
       try {
-        // Create a new node with updated attributes
-        const newNode = node.type.create(newAttrs, node.content, node.marks);
         tr.setNodeMarkup(pos, null, newAttrs);
 
-        // Force update the selection to ensure it's in sync with the updated node
-        tr.setSelection(
-          state.selection.constructor.create(tr.doc, pos, pos + 1)
-        );
+        // Manually set the selection to the updated image node
+        const resolvedPos = tr.doc.resolve(pos);
+        tr.setSelection(state.selection.constructor.near(resolvedPos));
         view.dispatch(tr);
 
-        // Update the selected image attributes in the DOM for immediate feedback
+        // Refocus the editor
+        editor.commands.focus();
+
         if (alignment) {
           selectedImage.setAttribute("data-alignment", alignment);
           selectedImage.className = `${alignment} ${
             selectedImage.getAttribute("data-size") || "medium"
-          }`;
+          } focused-image`;
         }
         if (size) {
           selectedImage.setAttribute("data-size", size);
           selectedImage.className = `${
             selectedImage.getAttribute("data-alignment") || "center"
-          } ${size}`;
+          } ${size} focused-image`;
         }
-
-        editor.commands.focus();
       } catch (error) {
         console.error("Error updating node:", error);
       }
