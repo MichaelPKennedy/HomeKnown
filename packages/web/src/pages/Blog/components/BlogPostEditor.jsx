@@ -36,6 +36,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
     content: content,
     onUpdate({ editor }) {
       const html = editor.getHTML();
+      console.log("Content updated:", html);
       setContent(html);
       onContentChange(html);
     },
@@ -52,7 +53,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
 
   useEffect(() => {
     const draft = localStorage.getItem("draftPost");
-    console.log("drafty", draft);
+    console.log("Loading draft:", draft);
     if (draft && editor) {
       const draftContent = JSON.parse(draft).content;
       editor.commands.setContent(draftContent);
@@ -60,6 +61,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   }, [editor]);
 
   const handleTemporarySave = () => {
+    console.log("Saving draft:", content);
     localStorage.setItem("draftPost", JSON.stringify({ content }));
     alert("Draft saved temporarily!");
   };

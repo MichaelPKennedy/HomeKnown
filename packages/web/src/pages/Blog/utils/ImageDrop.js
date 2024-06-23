@@ -6,21 +6,41 @@ export const ImageDrop = Image.extend({
     return {
       ...this.parent?.(),
       alignment: {
-        default: "center",
-        parseHTML: (element) =>
-          element.getAttribute("data-alignment") || "center",
-        renderHTML: (attributes) => ({
-          "data-alignment": attributes.alignment,
-          class: attributes.alignment, // Add class for alignment
-        }),
+        parseHTML: (element) => {
+          console.log("Parsing alignment from HTML:", element);
+          console.log(
+            "Parsing alignment from HTML:",
+            element.getAttribute("data-alignment")
+          );
+          const alignment = element.getAttribute("data-alignment") || "center";
+          console.log("Parsing alignment from HTML:", alignment);
+          return alignment;
+        },
+        renderHTML: (attributes) => {
+          console.log("Rendering alignment to HTML:", attributes.alignment);
+          return {
+            "data-alignment": attributes.alignment,
+            class: attributes.alignment, // Add class for alignment
+          };
+        },
       },
       size: {
-        default: "medium",
-        parseHTML: (element) => element.getAttribute("data-size") || "medium",
-        renderHTML: (attributes) => ({
-          "data-size": attributes.size,
-          class: attributes.size, // Add class for size
-        }),
+        parseHTML: (element) => {
+          const size = element.getAttribute("data-size") || "medium";
+          console.log(
+            "Parsing alignment from HTML:",
+            element.getAttribute("data-size")
+          );
+          console.log("Parsing size from HTML:", size);
+          return size;
+        },
+        renderHTML: (attributes) => {
+          console.log("Rendering size to HTML:", attributes.size);
+          return {
+            "data-size": attributes.size,
+            class: attributes.size, // Add class for size
+          };
+        },
       },
     };
   },
@@ -55,8 +75,6 @@ export const ImageDrop = Image.extend({
                 reader.onload = (readerEvent) => {
                   const node = schema.nodes.image.create({
                     src: readerEvent.target.result,
-                    alignment: "center", // Default alignment
-                    size: "medium", // Default size
                   });
                   const transaction = view.state.tr.replaceSelectionWith(node);
                   view.dispatch(transaction);
