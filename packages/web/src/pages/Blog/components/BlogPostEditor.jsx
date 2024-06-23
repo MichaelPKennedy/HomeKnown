@@ -29,7 +29,9 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       TableRow,
       TableCell,
       TableHeader,
-      Image,
+      Image.configure({
+        allowBase64: true,
+      }),
     ],
     content: content,
     onUpdate({ editor }) {
