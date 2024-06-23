@@ -22,7 +22,7 @@ code {
 
 /* ProseMirror styles */
 .ProseMirror {
-  min-height: 300px;
+  min-height: 600px;
   border: 1px solid #ccc;
   padding: 10px;
   border-radius: 5px;
@@ -54,36 +54,49 @@ code {
   color: #666;
 }
 
-/* Style for images inside ProseMirror editor */
 .ProseMirror img {
-  display: block;
   max-width: 100%;
   height: auto;
-  margin: 0 auto;
 }
 
-/* Style for table elements inside ProseMirror editor */
+.ProseMirror a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.ProseMirror a:hover {
+  text-decoration: underline;
+}
+
 .ProseMirror table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 1em;
 }
 
+/* Style the table cells */
 .ProseMirror th,
 .ProseMirror td {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
+/* Style the table headers */
 .ProseMirror th {
   background-color: #f2f2f2;
   font-weight: bold;
 }
 
+/* Style for alternating row colors */
 .ProseMirror tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
 .ProseMirror tr:hover {
   background-color: #f1f1f1;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
 }

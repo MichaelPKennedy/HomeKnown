@@ -38,12 +38,6 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   }, [editor]);
 
   useEffect(() => {
-    if (editor && initialContent) {
-      editor.commands.setContent(initialContent);
-    }
-  }, [editor, initialContent]);
-
-  useEffect(() => {
     if (editor) {
       const handleUpdate = () => {
         const html = editor.getHTML();

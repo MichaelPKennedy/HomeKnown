@@ -8,15 +8,18 @@
 .editorPreviewContainer {
   display: flex;
   gap: 20px;
+  flex: 1;
+  overflow: hidden;
 }
 
 .editorContainer,
 .previewContainer {
   flex: 1;
+  overflow-y: auto;
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 10px;
-  background-color: #fafafa;
+  background-color: #fff;
 }
 
 .previewContainer {

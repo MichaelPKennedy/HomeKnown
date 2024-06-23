@@ -63,7 +63,7 @@ const NewBlogPost = () => {
 
   return (
     <div className={styles.newBlogPostContainer}>
-      <form>
+      <form className={styles.detailsForm}>
         <div>
           <label>Title</label>
           <input
