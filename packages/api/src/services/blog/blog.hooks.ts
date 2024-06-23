@@ -6,10 +6,10 @@ export const blogHooks = {
     all: [authenticate('jwt', 'apiKey')],
     find: [],
     get: [],
-    create: [disallow('external')],
-    update: [disallow('external')],
-    patch: [disallow('external')],
-    remove: [disallow('external')]
+    create: [],
+    update: [],
+    patch: [],
+    remove: []
   },
   after: {
     all: [],

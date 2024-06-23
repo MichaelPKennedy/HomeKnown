@@ -44,7 +44,7 @@ const NewBlogPost = () => {
       } else {
         await addPost(post);
       }
-      localStorage.removeItem("draftPost"); // Clear draft on save
+      localStorage.removeItem("draftPost");
       navigate("/blog");
     } catch (error) {
       console.error("Error saving blog post:", error);

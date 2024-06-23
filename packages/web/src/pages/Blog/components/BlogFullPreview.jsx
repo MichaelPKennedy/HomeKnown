@@ -18,9 +18,6 @@ const BlogFullPreview = () => {
       <p>
         <strong>Author:</strong> {draft.author}
       </p>
-      <p>
-        <strong>Category:</strong> {draft.category}
-      </p>
       <div dangerouslySetInnerHTML={{ __html: draft.content }} />
     </div>
   );
