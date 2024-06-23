@@ -6,13 +6,14 @@ import Table from "@tiptap/extension-table";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
-import ResizableImage from "./ResizableImage";
+import Image from "@tiptap/extension-image";
 import Toolbar from "./Toolbar";
 import { ImageDrop } from "../utils/ImageDrop";
 import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
   const [content, setContent] = useState(initialContent);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const editor = useEditor({
     extensions: [
@@ -25,34 +26,46 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       TableRow,
       TableCell,
       TableHeader,
-      ResizableImage,
+      Image,
     ],
     content: initialContent,
+    onUpdate({ editor }) {
+      const html = editor.getHTML();
+      setContent(html);
+      onContentChange(html);
+    },
+    onSelectionUpdate({ editor }) {
+      const { selection } = editor.state;
+      const node = editor.view.nodeDOM(selection.$anchor.pos);
+      if (node && node.nodeName === "IMG") {
+        setSelectedImage(node);
+      } else {
+        setSelectedImage(null);
+      }
+    },
   });
 
   useEffect(() => {
-    if (editor) {
-      const handleUpdate = () => {
-        const html = editor.getHTML();
-        setContent(html);
-        onContentChange(html);
-      };
-      editor.on("update", handleUpdate);
-      return () => editor.off("update", handleUpdate);
+    const draftContent = localStorage.getItem("blogPostDraft");
+    if (draftContent && editor) {
+      editor.commands.setContent(draftContent);
     }
-  }, [editor, onContentChange]);
+  }, [editor]);
+
+  const handleTemporarySave = () => {
+    localStorage.setItem("blogPostDraft", content);
+    alert("Draft saved temporarily!");
+  };
 
   return (
     <div className={styles.editorPreviewContainer}>
       <div className={styles.editorContainer}>
-        <Toolbar editor={editor} />
+        <Toolbar editor={editor} selectedImage={selectedImage} />
         <EditorContent editor={editor} />
+        <button onClick={handleTemporarySave}>Save Progress</button>
       </div>
       <div className={styles.previewContainer}>
-        <div
-          className={styles.previewContent}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
+        <div dangerouslySetInnerHTML={{ __html: content }} />
       </div>
     </div>
   );

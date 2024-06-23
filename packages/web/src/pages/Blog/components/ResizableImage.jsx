@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./BlogPostEditor.module.css";
 
 const ResizableImage = Node.create({
@@ -25,15 +25,9 @@ const ResizableImage = Node.create({
 
   addAttributes() {
     return {
-      src: {
-        default: null,
-      },
-      alt: {
-        default: null,
-      },
-      title: {
-        default: null,
-      },
+      src: { default: null },
+      alt: { default: null },
+      title: { default: null },
       width: {
         default: "100%",
         parseHTML: (element) => element.style.width || "100%",
@@ -63,44 +57,44 @@ const ResizableImage = Node.create({
 
   addNodeView() {
     return ReactNodeViewRenderer(({ node, updateAttributes }) => {
-      const [width, setWidth] = useState(node.attrs.width || "100%");
-      const [alignment, setAlignment] = useState(
-        node.attrs.alignment || "center"
-      );
+      const [width, setWidth] = useState(node.attrs.width);
+      const [alignment, setAlignment] = useState(node.attrs.alignment);
 
-      const handleResize = (event) => {
+      useEffect(() => {
+        if (!node.attrs.width || !node.attrs.alignment) {
+          const updatedAttrs = {};
+          if (!node.attrs.width) updatedAttrs.width = "100%";
+          if (!node.attrs.alignment) updatedAttrs.alignment = "center";
+          updateAttributes(updatedAttrs);
+        }
+      }, [node.attrs, updateAttributes]);
+
+      const handleWidthChange = (event) => {
         const newWidth = event.target.value + "%";
         setWidth(newWidth);
         updateAttributes({ width: newWidth });
       };
 
-      useEffect(() => {
-        if (!node.attrs.width) {
-          updateAttributes({ width: "100%" });
-        }
-        if (!node.attrs.alignment) {
-          updateAttributes({ alignment: "center" });
-        }
-        console.log("Node attributes updated", node.attrs);
-      }, [node.attrs, updateAttributes]);
+      const handleAlignmentChange = (newAlignment) => {
+        setAlignment(newAlignment);
+        updateAttributes({ alignment: newAlignment });
+      };
 
       return (
-        <NodeViewWrapper
-          className={`${styles.resizableImage} ${styles[alignment]}`}
-          style={{ width }}
-        >
+        <>
           <img
             src={node.attrs.src}
             alt={node.attrs.alt}
             title={node.attrs.title}
             style={{ width: "100%" }}
+            draggable="false" // Prevent dragging the image itself
           />
           <input
             type="range"
             min="10"
             max="100"
             value={parseInt(width, 10)}
-            onChange={handleResize}
+            onChange={handleWidthChange}
             style={{
               position: "absolute",
               bottom: 0,
@@ -110,32 +104,15 @@ const ResizableImage = Node.create({
             }}
           />
           <div className={styles.alignmentButtons}>
-            <button
-              onClick={() => {
-                setAlignment("left");
-                updateAttributes({ alignment: "left" });
-              }}
-            >
-              Left
-            </button>
-            <button
-              onClick={() => {
-                setAlignment("center");
-                updateAttributes({ alignment: "center" });
-              }}
-            >
+            <button onClick={() => handleAlignmentChange("left")}>Left</button>
+            <button onClick={() => handleAlignmentChange("center")}>
               Center
             </button>
-            <button
-              onClick={() => {
-                setAlignment("right");
-                updateAttributes({ alignment: "right" });
-              }}
-            >
+            <button onClick={() => handleAlignmentChange("right")}>
               Right
             </button>
           </div>
-        </NodeViewWrapper>
+        </>
       );
     });
   },

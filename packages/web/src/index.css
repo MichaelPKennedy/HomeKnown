@@ -100,3 +100,30 @@ code {
   max-width: 100%;
   height: auto;
 }
+
+img.left {
+  float: left;
+  margin-right: 20px;
+}
+
+img.center {
+  display: block;
+  margin: 0 auto;
+}
+
+img.right {
+  float: right;
+  margin-left: 20px;
+}
+
+img.small {
+  width: 30%;
+}
+
+img.medium {
+  width: 60%;
+}
+
+img.large {
+  width: 100%;
+}

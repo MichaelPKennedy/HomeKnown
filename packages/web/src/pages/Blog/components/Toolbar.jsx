@@ -1,77 +1,37 @@
 import React from "react";
 
-const Toolbar = ({ editor }) => {
+const Toolbar = ({ editor, selectedImage }) => {
   if (!editor) {
     return null;
   }
 
-  const addImage = () => {
-    const url = prompt("Enter image URL");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+  const setImageClass = (className) => {
+    if (selectedImage) {
+      selectedImage.className = className;
+      editor.commands.focus();
     }
-  };
-
-  const addTable = () => {
-    editor
-      .chain()
-      .focus()
-      .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-      .run();
   };
 
   return (
     <div className="toolbar">
-      <button
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? "is-active" : ""}
-      >
-        Bold
+      <button onClick={() => setImageClass("left")} disabled={!selectedImage}>
+        Align Left
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={editor.isActive("italic") ? "is-active" : ""}
-      >
-        Italic
+      <button onClick={() => setImageClass("center")} disabled={!selectedImage}>
+        Align Center
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive("bulletList") ? "is-active" : ""}
-      >
-        Bullet List
+      <button onClick={() => setImageClass("right")} disabled={!selectedImage}>
+        Align Right
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive("orderedList") ? "is-active" : ""}
-      >
-        Ordered List
+      <button onClick={() => setImageClass("small")} disabled={!selectedImage}>
+        Small
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
-      >
-        H1
+      <button onClick={() => setImageClass("medium")} disabled={!selectedImage}>
+        Medium
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
-      >
-        H2
+      <button onClick={() => setImageClass("large")} disabled={!selectedImage}>
+        Large
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive("blockquote") ? "is-active" : ""}
-      >
-        Blockquote
-      </button>
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-        Horizontal Rule
-      </button>
-      <button onClick={() => editor.chain().focus().setHardBreak().run()}>
-        Hard Break
-      </button>
-      <button onClick={addImage}>Insert Image</button>
-      <button onClick={addTable}>Insert Table</button>
     </div>
   );
 };
