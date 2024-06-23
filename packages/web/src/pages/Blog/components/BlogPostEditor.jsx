@@ -7,8 +7,8 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import ResizableImage from "./ResizableImage";
-import Toolbar from "./Toolbar"; // Ensure the correct path
-import { ImageDrop } from "../utils/ImageDrop"; // Ensure the correct path
+import Toolbar from "./Toolbar";
+import { ImageDrop } from "../utils/ImageDrop";
 import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
@@ -49,7 +49,10 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
         <EditorContent editor={editor} />
       </div>
       <div className={styles.previewContainer}>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <div
+          className={styles.previewContent}
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
       </div>
     </div>
   );

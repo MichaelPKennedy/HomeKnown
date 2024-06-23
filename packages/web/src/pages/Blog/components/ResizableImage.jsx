@@ -1,6 +1,7 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { NodeViewWrapper, ReactNodeViewRenderer } from "@tiptap/react";
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import styles from "./BlogPostEditor.module.css";
 
 const ResizableImage = Node.create({
   name: "resizableImage",
@@ -35,28 +36,22 @@ const ResizableImage = Node.create({
       },
       width: {
         default: "100%",
-        parseHTML: (element) => element.style.width,
-        renderHTML: (attributes) => {
-          return { style: `width: ${attributes.width}` };
-        },
+        parseHTML: (element) => element.style.width || "100%",
+        renderHTML: (attributes) => ({ style: `width: ${attributes.width}` }),
       },
       alignment: {
         default: "center",
         parseHTML: (element) =>
           element.getAttribute("data-alignment") || "center",
-        renderHTML: (attributes) => {
-          return { "data-alignment": attributes.alignment };
-        },
+        renderHTML: (attributes) => ({
+          "data-alignment": attributes.alignment,
+        }),
       },
     };
   },
 
   parseHTML() {
-    return [
-      {
-        tag: "img[src]",
-      },
-    ];
+    return [{ tag: "img[src]" }];
   },
 
   renderHTML({ HTMLAttributes }) {
@@ -68,28 +63,33 @@ const ResizableImage = Node.create({
 
   addNodeView() {
     return ReactNodeViewRenderer(({ node, updateAttributes }) => {
-      const [width, setWidth] = useState(node.attrs.width);
-      const [alignment, setAlignment] = useState(node.attrs.alignment);
-      const imgRef = useRef();
+      const [width, setWidth] = useState(node.attrs.width || "100%");
+      const [alignment, setAlignment] = useState(
+        node.attrs.alignment || "center"
+      );
+
+      const handleResize = (event) => {
+        const newWidth = event.target.value + "%";
+        setWidth(newWidth);
+        updateAttributes({ width: newWidth });
+      };
 
       useEffect(() => {
-        const handleResize = (event) => {
-          setWidth(event.target.value + "%");
-          updateAttributes({ width: event.target.value + "%" });
-        };
-
-        const img = imgRef.current;
-        img.addEventListener("resize", handleResize);
-
-        return () => {
-          img.removeEventListener("resize", handleResize);
-        };
-      }, [imgRef, updateAttributes]);
+        if (!node.attrs.width) {
+          updateAttributes({ width: "100%" });
+        }
+        if (!node.attrs.alignment) {
+          updateAttributes({ alignment: "center" });
+        }
+        console.log("Node attributes updated", node.attrs);
+      }, [node.attrs, updateAttributes]);
 
       return (
-        <NodeViewWrapper className={`resizable-image ${alignment}`}>
+        <NodeViewWrapper
+          className={`${styles.resizableImage} ${styles[alignment]}`}
+          style={{ width }}
+        >
           <img
-            ref={imgRef}
             src={node.attrs.src}
             alt={node.attrs.alt}
             title={node.attrs.title}
@@ -100,10 +100,7 @@ const ResizableImage = Node.create({
             min="10"
             max="100"
             value={parseInt(width, 10)}
-            onChange={(e) => {
-              setWidth(e.target.value + "%");
-              updateAttributes({ width: e.target.value + "%" });
-            }}
+            onChange={handleResize}
             style={{
               position: "absolute",
               bottom: 0,
@@ -112,7 +109,7 @@ const ResizableImage = Node.create({
               zIndex: 10,
             }}
           />
-          <div className="alignment-buttons">
+          <div className={styles.alignmentButtons}>
             <button
               onClick={() => {
                 setAlignment("left");

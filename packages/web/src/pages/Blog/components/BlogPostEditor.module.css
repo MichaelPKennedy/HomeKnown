@@ -26,35 +26,57 @@
   overflow-y: auto;
 }
 
-/* BlogPostEditor.module.css */
-.resizable-image {
+.resizableImage {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.resizable-image img {
+.resizableImage img {
   display: block;
   margin: auto;
 }
 
-.resizable-image.left img {
-  margin-left: 0;
+.left img {
+  float: left;
+  margin-right: 20px;
 }
 
-.resizable-image.center img {
+.center img {
+  display: block;
   margin: auto;
 }
 
-.resizable-image.right img {
-  margin-right: 0;
+.right img {
+  float: right;
+  margin-left: 20px;
 }
 
-.alignment-buttons {
+.alignmentButtons {
   width: 300px;
   display: flex;
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
+}
+
+.previewContent img {
+  display: block;
+  margin: auto;
+}
+
+.previewContent img[data-alignment="left"] {
+  float: left;
+  margin-right: 20px;
+}
+
+.previewContent img[data-alignment="center"] {
+  display: block;
+  margin: auto;
+}
+
+.previewContent img[data-alignment="right"] {
+  float: right;
+  margin-left: 20px;
 }
