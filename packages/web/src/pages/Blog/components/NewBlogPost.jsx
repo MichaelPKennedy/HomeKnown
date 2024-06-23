@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import BlogPostEditor from "./BlogPostEditor";
 import { useBlog } from "../../../utils/BlogContext";
 import styles from "./NewBlogPost.module.css";
+import { blogTemplate } from "../../../utils/blogTemplate";
 
 const NewBlogPost = () => {
   const { addPost, updatePost, posts } = useBlog();
@@ -10,25 +11,33 @@ const NewBlogPost = () => {
   const navigate = useNavigate();
   const existingPost = posts.find((post) => post.post_id === Number(id));
 
-  const [title, setTitle] = useState(existingPost ? existingPost.title : "");
-  const [author, setAuthor] = useState(existingPost ? existingPost.author : "");
+  const [title, setTitle] = useState(
+    existingPost ? existingPost.title : blogTemplate.title
+  );
+  const [author, setAuthor] = useState(
+    existingPost ? existingPost.author : blogTemplate.author
+  );
   const [content, setContent] = useState(
-    existingPost ? existingPost.content : ""
+    existingPost ? existingPost.content : blogTemplate.content
   );
   const [category, setCategory] = useState(
-    existingPost ? existingPost.category : "general"
+    existingPost ? existingPost.category : blogTemplate.category
   );
 
   useEffect(() => {
-    // Load draft from local storage
     const draft = JSON.parse(localStorage.getItem("draftPost"));
-    if (draft) {
+    if (!existingPost && draft) {
       setTitle(draft.title);
       setAuthor(draft.author);
       setContent(draft.content);
       setCategory(draft.category);
+    } else if (!existingPost && !draft) {
+      setTitle(blogTemplate.title);
+      setAuthor(blogTemplate.author);
+      setContent(blogTemplate.content);
+      setCategory(blogTemplate.category);
     }
-  }, []);
+  }, [existingPost]);
 
   const handleSave = async () => {
     const post = {
@@ -59,6 +68,11 @@ const NewBlogPost = () => {
       category,
     };
     localStorage.setItem("draftPost", JSON.stringify(draft));
+  };
+
+  const handlePreview = () => {
+    handleDraftSave();
+    navigate("/blog/test");
   };
 
   return (
@@ -106,6 +120,7 @@ const NewBlogPost = () => {
         }}
       />
       <button onClick={handleSave}>Save Post</button>
+      <button onClick={handlePreview}>Preview Post</button>
     </div>
   );
 };
