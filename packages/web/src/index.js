@@ -9,6 +9,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { CityDataProvider } from "./utils/CityDataContext";
+import { BlogProvider } from "./utils/BlogContext";
 import HomePage from "./pages/HomePage";
 import AccountPage from "./pages/Account/AccountPage";
 import PersonalInfo from "./pages/Account/PersonalInfo";
@@ -47,6 +48,8 @@ import Demographics from "./pages/City/pages/Demographics";
 import * as Sentry from "@sentry/react";
 import PasswordReset from "./pages/Account/PasswordReset";
 import ForgotPassword from "./pages/Account/ForgotPassword";
+import BlogPage from "./pages/Blog/components/BlogPage";
+import NewBlogPost from "./pages/Blog/components/NewBlogPost";
 
 if (
   window.location.origin ===
@@ -123,69 +126,78 @@ root.render(
         <DndProvider backend={MultiBackend} options={HTML5toTouch}>
           <AuthProvider>
             <CityDataProvider>
-              <Router>
-                <NavBar />
-                <Routes>
-                  <Route path="/" element={<HomePage />} />
-                  <Route path="account-settings" element={<AccountPage />} />
-                  <Route
-                    path="account-settings/personal-info"
-                    element={<PersonalInfo />}
-                  />
-                  <Route
-                    path="account-settings/security"
-                    element={<SecurityPage />}
-                  />
-                  <Route
-                    path="account-settings/notifications"
-                    element={<Notifications />}
-                  />
-                  <Route path="/support" element={<SupportPage />} />
-                  <Route
-                    path="/support/confirmation"
-                    element={<ThankYouPage />}
-                  />
-                  <Route path="/explore" element={<ExplorePage />} />
-                  <Route path="/search" element={<SearchPage />} />
-                  <Route path="/results" element={<ResultsPage />} />
-                  <Route
-                    path="/recommendations"
-                    element={<RecommendationsPage />}
-                  />
-                  <Route path="/verify-email" element={<VerifyEmail />} />
-                  <Route path="/reset-password" element={<PasswordReset />} />
-                  <Route path="/forgot-password" element={<ForgotPassword />} />
-                  <Route path="/results/:state/:cityName" element={<City />}>
-                    <Route index element={<Overview />} />
-                    <Route path="recreation" element={<Recreation />} />
-                    <Route path="weather" element={<Weather />} />
-                    <Route path="housing" element={<Housing />} />
-                    <Route path="job-industry" element={<Industry />} />
-                    <Route path="air-quality" element={<AirQuality />} />
-                    <Route path="demographics" element={<Demographics />} />
-                  </Route>
-                  <Route path="/city/:state/:cityName" element={<City />}>
-                    <Route path="recreation" element={<Recreation />} />
-                    <Route path="weather" element={<Weather />} />
-                    <Route path="housing" element={<Housing />} />
-                    <Route path="job-industry" element={<Industry />} />
-                    <Route path="air-quality" element={<AirQuality />} />
-                    <Route path="demographics" element={<Demographics />} />
-                  </Route>
-                  <Route path="/my-locations" element={<MyLocations />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
-                  <Route path="/signed-out" element={<LoggedOut />} />
-                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                  <Route
-                    path="/terms-of-service"
-                    element={<TermsOfService />}
-                  />
-                  <Route path="/data-sources" element={<DataSources />} />
-                </Routes>
-                <ToastContainer />
-                <Footer />
-              </Router>
+              <BlogProvider>
+                <Router>
+                  <NavBar />
+                  <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="account-settings" element={<AccountPage />} />
+                    <Route
+                      path="account-settings/personal-info"
+                      element={<PersonalInfo />}
+                    />
+                    <Route
+                      path="account-settings/security"
+                      element={<SecurityPage />}
+                    />
+                    <Route
+                      path="account-settings/notifications"
+                      element={<Notifications />}
+                    />
+                    <Route path="/support" element={<SupportPage />} />
+                    <Route
+                      path="/support/confirmation"
+                      element={<ThankYouPage />}
+                    />
+                    <Route path="/explore" element={<ExplorePage />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/results" element={<ResultsPage />} />
+                    <Route
+                      path="/recommendations"
+                      element={<RecommendationsPage />}
+                    />
+                    <Route path="/verify-email" element={<VerifyEmail />} />
+                    <Route path="/reset-password" element={<PasswordReset />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPassword />}
+                    />
+                    <Route path="/results/:state/:cityName" element={<City />}>
+                      <Route index element={<Overview />} />
+                      <Route path="recreation" element={<Recreation />} />
+                      <Route path="weather" element={<Weather />} />
+                      <Route path="housing" element={<Housing />} />
+                      <Route path="job-industry" element={<Industry />} />
+                      <Route path="air-quality" element={<AirQuality />} />
+                      <Route path="demographics" element={<Demographics />} />
+                    </Route>
+                    <Route path="/city/:state/:cityName" element={<City />}>
+                      <Route path="recreation" element={<Recreation />} />
+                      <Route path="weather" element={<Weather />} />
+                      <Route path="housing" element={<Housing />} />
+                      <Route path="job-industry" element={<Industry />} />
+                      <Route path="air-quality" element={<AirQuality />} />
+                      <Route path="demographics" element={<Demographics />} />
+                    </Route>
+                    <Route path="/my-locations" element={<MyLocations />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="/signed-out" element={<LoggedOut />} />
+                    <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                    <Route
+                      path="/terms-of-service"
+                      element={<TermsOfService />}
+                    />
+                    <Route path="/data-sources" element={<DataSources />} />
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="/blog" element={<BlogPage />} />
+                    <Route path="/blog/new" element={<NewBlogPost />} />
+                    <Route path="/blog/edit/:id" element={<NewBlogPost />} />
+                  </Routes>
+                  <ToastContainer />
+                  <Footer />
+                </Router>
+              </BlogProvider>
             </CityDataProvider>
           </AuthProvider>
         </DndProvider>

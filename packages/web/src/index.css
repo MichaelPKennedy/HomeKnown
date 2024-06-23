@@ -19,3 +19,84 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+/* ProseMirror styles */
+.ProseMirror {
+  min-height: 300px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  background-color: #fafafa;
+}
+
+.ProseMirror p {
+  margin: 0;
+  padding: 0.5em 0;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  margin: 0;
+  padding: 0.5em 0;
+}
+
+.ProseMirror blockquote {
+  border-left: 4px solid #ccc;
+  padding-left: 1em;
+  margin-left: 0;
+  color: #666;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+
+.ProseMirror a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.ProseMirror a:hover {
+  text-decoration: underline;
+}
+
+.ProseMirror table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1em;
+}
+
+/* Style the table cells */
+.ProseMirror th,
+.ProseMirror td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+/* Style the table headers */
+.ProseMirror th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+/* Style for alternating row colors */
+.ProseMirror tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.ProseMirror tr:hover {
+  background-color: #f1f1f1;
+}
+
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
