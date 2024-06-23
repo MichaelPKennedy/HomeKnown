@@ -4,3 +4,21 @@
   max-width: 800px;
   width: 100%;
 }
+
+.editorPreviewContainer {
+  display: flex;
+  gap: 20px;
+}
+
+.editorContainer,
+.previewContainer {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #fafafa;
+}
+
+.previewContainer {
+  overflow-y: auto;
+}

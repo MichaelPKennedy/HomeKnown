@@ -50,6 +50,7 @@ import PasswordReset from "./pages/Account/PasswordReset";
 import ForgotPassword from "./pages/Account/ForgotPassword";
 import BlogPage from "./pages/Blog/components/BlogPage";
 import NewBlogPost from "./pages/Blog/components/NewBlogPost";
+import BlogFullPreview from "./pages/Blog/components/BlogFullPreview";
 
 if (
   window.location.origin ===
@@ -193,6 +194,7 @@ root.render(
                     <Route path="/blog" element={<BlogPage />} />
                     <Route path="/blog/new" element={<NewBlogPost />} />
                     <Route path="/blog/edit/:id" element={<NewBlogPost />} />
+                    <Route path="/blog/test" element={<BlogFullPreview />} />
                   </Routes>
                   <ToastContainer />
                   <Footer />

@@ -54,24 +54,6 @@ code {
   color: #666;
 }
 
-.editor-preview-container {
-  display: flex;
-  gap: 20px;
-}
-
-.editor-container,
-.preview-container {
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  background-color: #fafafa;
-}
-
-.preview-container {
-  overflow-y: auto;
-}
-
 /* Style for images inside ProseMirror editor */
 .ProseMirror img {
   display: block;

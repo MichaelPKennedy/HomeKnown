@@ -19,6 +19,17 @@ const NewBlogPost = () => {
     existingPost ? existingPost.category : "general"
   );
 
+  useEffect(() => {
+    // Load draft from local storage
+    const draft = JSON.parse(localStorage.getItem("draftPost"));
+    if (draft) {
+      setTitle(draft.title);
+      setAuthor(draft.author);
+      setContent(draft.content);
+      setCategory(draft.category);
+    }
+  }, []);
+
   const handleSave = async () => {
     const post = {
       title,
@@ -33,20 +44,34 @@ const NewBlogPost = () => {
       } else {
         await addPost(post);
       }
+      localStorage.removeItem("draftPost"); // Clear draft on save
       navigate("/blog");
     } catch (error) {
       console.error("Error saving blog post:", error);
     }
   };
 
+  const handleDraftSave = () => {
+    const draft = {
+      title,
+      author,
+      content,
+      category,
+    };
+    localStorage.setItem("draftPost", JSON.stringify(draft));
+  };
+
   return (
-    <div>
+    <div className={styles.newBlogPostContainer}>
       <form>
         <div>
           <label>Title</label>
           <input
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              handleDraftSave();
+            }}
             required
           />
         </div>
@@ -54,7 +79,10 @@ const NewBlogPost = () => {
           <label>Author</label>
           <input
             value={author}
-            onChange={(e) => setAuthor(e.target.value)}
+            onChange={(e) => {
+              setAuthor(e.target.value);
+              handleDraftSave();
+            }}
             required
           />
         </div>
@@ -62,14 +90,20 @@ const NewBlogPost = () => {
           <label>Category</label>
           <input
             value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            onChange={(e) => {
+              setCategory(e.target.value);
+              handleDraftSave();
+            }}
             required
           />
         </div>
       </form>
       <BlogPostEditor
         initialContent={content}
-        onContentChange={(html) => setContent(html)}
+        onContentChange={(html) => {
+          setContent(html);
+          handleDraftSave();
+        }}
       />
       <button onClick={handleSave}>Save Post</button>
     </div>

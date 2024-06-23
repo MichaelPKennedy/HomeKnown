@@ -9,7 +9,8 @@ import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import Toolbar from "./Toolbar";
 import { ImageDrop } from "../utils/ImageDrop";
-import BlogPostPreview from "./BlogPostPreview"; // Ensure the correct path
+import BlogPostPreview from "./BlogPostPreview";
+import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
   const [content, setContent] = useState(initialContent);
@@ -55,12 +56,12 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   }, [editor, onContentChange]);
 
   return (
-    <div className="editor-preview-container">
-      <div className="editor-container">
+    <div className={styles.editorPreviewContainer}>
+      <div className={styles.editorContainer}>
         <Toolbar editor={editor} />
         <EditorContent editor={editor} />
       </div>
-      <div className="preview-container">
+      <div className={styles.previewContainer}>
         <BlogPostPreview content={content} />
       </div>
     </div>
