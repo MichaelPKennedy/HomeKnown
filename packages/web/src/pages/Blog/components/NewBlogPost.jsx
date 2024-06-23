@@ -11,27 +11,25 @@ const NewBlogPost = () => {
   const navigate = useNavigate();
   const existingPost = posts.find((post) => post.post_id === Number(id));
 
-  const [title, setTitle] = useState(
-    existingPost ? existingPost.title : blogTemplate.title
-  );
-  const [author, setAuthor] = useState(
-    existingPost ? existingPost.author : blogTemplate.author
-  );
-  const [content, setContent] = useState(
-    existingPost ? existingPost.content : blogTemplate.content
-  );
-  const [category, setCategory] = useState(
-    existingPost ? existingPost.category : blogTemplate.category
-  );
+  const [title, setTitle] = useState(blogTemplate.title);
+  const [author, setAuthor] = useState(blogTemplate.author);
+  const [content, setContent] = useState(blogTemplate.content);
+  const [category, setCategory] = useState(blogTemplate.category);
 
   useEffect(() => {
-    const draft = JSON.parse(localStorage.getItem("draftPost"));
+    const draft = localStorage.getItem("draftPost");
     if (!existingPost && draft) {
-      setTitle(draft.title);
-      setAuthor(draft.author);
-      setContent(draft.content);
-      setCategory(draft.category);
-    } else if (!existingPost && !draft) {
+      const parsedDraft = JSON.parse(draft);
+      setTitle(parsedDraft.title);
+      setAuthor(parsedDraft.author);
+      setContent(parsedDraft.content);
+      setCategory(parsedDraft.category);
+    } else if (existingPost) {
+      setTitle(existingPost.title);
+      setAuthor(existingPost.author);
+      setContent(existingPost.content);
+      setCategory(existingPost.category);
+    } else {
       setTitle(blogTemplate.title);
       setAuthor(blogTemplate.author);
       setContent(blogTemplate.content);
@@ -73,6 +71,14 @@ const NewBlogPost = () => {
   const handlePreview = () => {
     handleDraftSave();
     navigate("/blog/test");
+  };
+
+  const handleClearDraft = () => {
+    localStorage.removeItem("draftPost");
+    setTitle(blogTemplate.title);
+    setAuthor(blogTemplate.author);
+    setContent(blogTemplate.content);
+    setCategory(blogTemplate.category);
   };
 
   return (
@@ -121,6 +127,7 @@ const NewBlogPost = () => {
       />
       <button onClick={handleSave}>Save Post</button>
       <button onClick={handlePreview}>Preview Post</button>
+      <button onClick={handleClearDraft}>Clear Draft</button>
     </div>
   );
 };

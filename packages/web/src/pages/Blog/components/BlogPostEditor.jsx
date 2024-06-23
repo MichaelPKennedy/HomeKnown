@@ -12,7 +12,10 @@ import { ImageDrop } from "../utils/ImageDrop";
 import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
-  const [content, setContent] = useState(initialContent);
+  const [content, setContent] = useState(() => {
+    const draft = localStorage.getItem("draftPost");
+    return draft ? JSON.parse(draft).content : initialContent;
+  });
   const [selectedImage, setSelectedImage] = useState(null);
 
   const editor = useEditor({
@@ -28,7 +31,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       TableHeader,
       Image,
     ],
-    content: initialContent,
+    content: content,
     onUpdate({ editor }) {
       const html = editor.getHTML();
       setContent(html);
@@ -46,14 +49,16 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   });
 
   useEffect(() => {
-    const draftContent = localStorage.getItem("blogPostDraft");
-    if (draftContent && editor) {
+    const draft = localStorage.getItem("draftPost");
+    console.log("drafty", draft);
+    if (draft && editor) {
+      const draftContent = JSON.parse(draft).content;
       editor.commands.setContent(draftContent);
     }
   }, [editor]);
 
   const handleTemporarySave = () => {
-    localStorage.setItem("blogPostDraft", content);
+    localStorage.setItem("draftPost", JSON.stringify({ content }));
     alert("Draft saved temporarily!");
   };
 
