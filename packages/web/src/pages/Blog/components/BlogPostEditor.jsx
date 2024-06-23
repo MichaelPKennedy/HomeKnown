@@ -1,21 +1,24 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Table from "@tiptap/extension-table";
+import Image from "@tiptap/extension-image";
 import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import Toolbar from "./Toolbar";
 import { ImageDrop } from "../utils/ImageDrop";
+import BlogPostPreview from "./BlogPostPreview"; // Ensure the correct path
 
 const BlogPostEditor = ({ initialContent, onContentChange }) => {
+  const [content, setContent] = useState(initialContent);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
       ImageDrop,
+      Image,
       Link,
       Table.configure({
         resizable: true,
@@ -43,6 +46,7 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
     if (editor) {
       const handleUpdate = () => {
         const html = editor.getHTML();
+        setContent(html);
         onContentChange(html);
       };
       editor.on("update", handleUpdate);
@@ -51,9 +55,14 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
   }, [editor, onContentChange]);
 
   return (
-    <div>
-      <Toolbar editor={editor} />
-      <EditorContent editor={editor} />
+    <div className="editor-preview-container">
+      <div className="editor-container">
+        <Toolbar editor={editor} />
+        <EditorContent editor={editor} />
+      </div>
+      <div className="preview-container">
+        <BlogPostPreview content={content} />
+      </div>
     </div>
   );
 };
