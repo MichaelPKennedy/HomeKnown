@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Toolbar = ({ editor, selectedImage }) => {
+  const [imageWidth, setImageWidth] = useState(50);
+
   if (!editor) {
     return null;
   }
@@ -20,7 +22,7 @@ const Toolbar = ({ editor, selectedImage }) => {
       .run();
   };
 
-  const setImageClass = (alignment, size) => {
+  const setImageClass = (alignment, widthPercentage) => {
     if (selectedImage) {
       const { state, view } = editor;
       const { tr } = state;
@@ -41,7 +43,10 @@ const Toolbar = ({ editor, selectedImage }) => {
       const newAttrs = {
         ...node.attrs,
         alignment: alignment || node.attrs.alignment,
-        size: size || node.attrs.size,
+        widthPercentage:
+          widthPercentage !== undefined
+            ? widthPercentage
+            : node.attrs.widthPercentage,
       };
 
       try {
@@ -57,20 +62,22 @@ const Toolbar = ({ editor, selectedImage }) => {
 
         if (alignment) {
           selectedImage.setAttribute("data-alignment", alignment);
-          selectedImage.className = `${alignment} ${
-            selectedImage.getAttribute("data-size") || "medium"
-          } focused-image`;
+          selectedImage.className = `${alignment} focused-image`;
         }
-        if (size) {
-          selectedImage.setAttribute("data-size", size);
-          selectedImage.className = `${
-            selectedImage.getAttribute("data-alignment") || "center"
-          } ${size} focused-image`;
+        if (widthPercentage !== undefined) {
+          selectedImage.setAttribute("data-width-percentage", widthPercentage);
+          selectedImage.style.width = `${widthPercentage}%`;
         }
       } catch (error) {
         console.error("Error updating node:", error);
       }
     }
+  };
+
+  const handleWidthChange = (event) => {
+    const width = event.target.value;
+    setImageWidth(width);
+    setImageClass(null, width);
   };
 
   return (
@@ -143,24 +150,20 @@ const Toolbar = ({ editor, selectedImage }) => {
       >
         Align Right
       </button>
-      <button
-        onClick={() => setImageClass(null, "small")}
-        disabled={!selectedImage}
-      >
-        Small
-      </button>
-      <button
-        onClick={() => setImageClass(null, "medium")}
-        disabled={!selectedImage}
-      >
-        Medium
-      </button>
-      <button
-        onClick={() => setImageClass(null, "large")}
-        disabled={!selectedImage}
-      >
-        Large
-      </button>
+      <div className="image-size-slider">
+        <label>
+          Image Width:
+          <input
+            type="range"
+            min="10"
+            max="100"
+            value={imageWidth}
+            onChange={handleWidthChange}
+            disabled={!selectedImage}
+          />
+          {imageWidth}%
+        </label>
+      </div>
       <button
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         className={editor.isActive({ textAlign: "left" }) ? "is-active" : ""}
