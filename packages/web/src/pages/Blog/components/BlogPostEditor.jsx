@@ -7,6 +7,7 @@ import TableRow from "@tiptap/extension-table-row";
 import TableCell from "@tiptap/extension-table-cell";
 import TableHeader from "@tiptap/extension-table-header";
 import Image from "@tiptap/extension-image";
+import TextAlign from "@tiptap/extension-text-align";
 import Toolbar from "./Toolbar";
 import { ImageDrop } from "../utils/ImageDrop";
 import styles from "./BlogPostEditor.module.css";
@@ -31,6 +32,9 @@ const BlogPostEditor = ({ initialContent, onContentChange }) => {
       TableHeader,
       Image.configure({
         allowBase64: true,
+      }),
+      TextAlign.configure({
+        types: ["heading", "paragraph"],
       }),
     ],
     content: content,
