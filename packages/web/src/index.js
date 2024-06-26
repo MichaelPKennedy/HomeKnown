@@ -49,7 +49,7 @@ import * as Sentry from "@sentry/react";
 import PasswordReset from "./pages/Account/PasswordReset";
 import ForgotPassword from "./pages/Account/ForgotPassword";
 import BlogPage from "./pages/Blog/components/BlogPage";
-import NewBlogPost from "./pages/Blog/components/NewBlogPost";
+import BlogPostEditor from "./pages/Blog/components/BlogPostEditor";
 import BlogFullPreview from "./pages/Blog/components/BlogFullPreview";
 
 if (
@@ -192,8 +192,8 @@ root.render(
                     <Route path="/data-sources" element={<DataSources />} />
                     <Route path="/" element={<HomePage />} />
                     <Route path="/blog" element={<BlogPage />} />
-                    <Route path="/blog/new" element={<NewBlogPost />} />
-                    <Route path="/blog/edit/:id" element={<NewBlogPost />} />
+                    <Route path="/blog/new" element={<BlogPostEditor />} />
+                    <Route path="/blog/edit/:id" element={<BlogPostEditor />} />
                     <Route path="/blog/test" element={<BlogFullPreview />} />
                   </Routes>
                   <ToastContainer />
