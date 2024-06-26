@@ -19,11 +19,9 @@ import styles from "./BlogPostEditor.module.css";
 const BlogPostEditor = () => {
   const { addPost, updatePost, posts } = useBlog();
   const [content, setContent] = useState(() => {
-    localStorage.removeItem("draftPost");
     const draft = localStorage.getItem("draftPost");
     return draft ? JSON.parse(draft).content : blogTemplate.content;
   });
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const { id } = useParams();
   const existingPost = posts.find((post) => post.post_id === Number(id));
@@ -104,41 +102,21 @@ const BlogPostEditor = () => {
     onUpdate({ editor }) {
       const html = editor.getHTML();
       setContent(html);
-      localStorage.setItem("draftPost", html);
-    },
-    onSelectionUpdate({ editor }) {
-      const { selection } = editor.state;
-      const node = editor.view.nodeDOM(selection.$anchor.pos);
-      if (node && node.nodeName === "IMG") {
-        node.classList.add("focused-image");
-        setSelectedImage(node);
-      } else {
-        if (selectedImage) {
-          selectedImage.classList.remove("focused-image");
-        }
-        setSelectedImage(null);
-      }
     },
   });
 
   useEffect(() => {
-    const draft = localStorage.getItem("draftPost");
-    if (draft && editor) {
-      const draftContent = JSON.parse(draft).content;
-      editor.commands.setContent(draftContent);
-    }
-  }, [editor]);
-
-  const handleTemporarySave = () => {
-    localStorage.setItem("draftPost", JSON.stringify({ content }));
-  };
+    localStorage.setItem(
+      "draftPost",
+      JSON.stringify({ title, author, category, content })
+    );
+  }, [content, title, author, category]);
 
   return (
     <div className={styles.editorPreviewContainer}>
       <div className={styles.editorContainer}>
-        <Toolbar editor={editor} selectedImage={selectedImage} key="toolbar" />
+        <Toolbar editor={editor} key="toolbar" />
         <EditorContent editor={editor} />
-        <button onClick={handleTemporarySave}>Save Progress</button>
       </div>
       <div className={styles.previewContainer}>
         <div dangerouslySetInnerHTML={{ __html: content }} />
