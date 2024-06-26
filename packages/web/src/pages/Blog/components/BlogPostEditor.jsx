@@ -118,9 +118,6 @@ const BlogPostEditor = () => {
         <Toolbar editor={editor} key="toolbar" />
         <EditorContent editor={editor} />
       </div>
-      <div className={styles.previewContainer}>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
-      </div>
       <button onClick={handleSave}>Save Post</button>
       <button onClick={handleClearDraft}>Clear Draft</button>
     </div>
