@@ -13,7 +13,6 @@ import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
 import ImageResize from "tiptap-extension-resize-image";
 import Toolbar from "./Toolbar";
-import { ImageDrop } from "../utils/ImageDrop";
 import styles from "./BlogPostEditor.module.css";
 
 const BlogPostEditor = () => {
@@ -82,7 +81,6 @@ const BlogPostEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      ImageDrop,
       ImageResize,
       Link,
       Table.configure({
@@ -118,8 +116,10 @@ const BlogPostEditor = () => {
         <Toolbar editor={editor} key="toolbar" />
         <EditorContent editor={editor} />
       </div>
-      <button onClick={handleSave}>Save Post</button>
-      <button onClick={handleClearDraft}>Clear Draft</button>
+      <div className={styles.btnContainer}>
+        <button onClick={handleSave}>Save Post</button>
+        <button onClick={handleClearDraft}>Clear Draft</button>
+      </div>
     </div>
   );
 };

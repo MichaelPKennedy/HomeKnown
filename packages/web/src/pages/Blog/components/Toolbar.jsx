@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./BlogPostEditor.module.css";
 
 const Toolbar = ({ editor }) => {
   if (!editor) {
@@ -21,7 +22,7 @@ const Toolbar = ({ editor }) => {
   };
 
   return (
-    <div className="toolbar">
+    <div className={styles.toolbar}>
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive("bold") ? "is-active" : ""}

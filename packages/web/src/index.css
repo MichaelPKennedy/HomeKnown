@@ -24,11 +24,7 @@ code {
 .ProseMirror {
   min-height: 600px;
   border: 1px solid #ccc;
-  padding: 10px;
   border-radius: 5px;
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
   background-color: #fafafa;
 }
 
@@ -99,33 +95,6 @@ code {
 .ProseMirror img {
   max-width: 100%;
   height: auto;
-}
-
-img.left {
-  float: left;
-  margin-right: 20px;
-}
-
-img.center {
-  display: block;
-  margin: 0 auto;
-}
-
-img.right {
-  float: right;
-  margin-left: 20px;
-}
-
-img.small {
-  width: 30%;
-}
-
-img.medium {
-  width: 60%;
-}
-
-img.large {
-  width: 100%;
 }
 
 img.focused-image {
