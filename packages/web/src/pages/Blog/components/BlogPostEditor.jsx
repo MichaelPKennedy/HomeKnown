@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { useParams } from "react-router-dom";
 import { useBlog } from "../../../utils/BlogContext";
@@ -56,6 +57,8 @@ const BlogPostEditor = () => {
     setAuthor(blogTemplate.author);
     setContent(blogTemplate.content);
     setCategory(blogTemplate.category);
+
+    toast.info("Draft cleared.");
   };
 
   const handleSave = async () => {
@@ -72,9 +75,10 @@ const BlogPostEditor = () => {
       } else {
         await addPost(post);
       }
+      toast.success("Blog post saved successfully!");
       localStorage.removeItem("draftPost");
     } catch (error) {
-      console.error("Error saving blog post:", error);
+      toast.error("Error has occured saving blog post.");
     }
   };
 
@@ -113,6 +117,26 @@ const BlogPostEditor = () => {
   return (
     <div className={styles.editorPreviewContainer}>
       <div className={styles.editorContainer}>
+        <div className={styles.inputFields}>
+          <label>Title:</label>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <label>Author:</label>
+          <input
+            type="text"
+            value={author}
+            onChange={(e) => setAuthor(e.target.value)}
+          />
+          <label>Category:</label>
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+        </div>
         <Toolbar editor={editor} key="toolbar" />
         <EditorContent editor={editor} />
       </div>

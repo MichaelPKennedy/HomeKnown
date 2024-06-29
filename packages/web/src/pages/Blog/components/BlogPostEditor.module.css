@@ -47,3 +47,9 @@ img.focused-image {
   background-color: #01697c;
   border-radius: 6px;
 }
+
+.inputFields {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useBlog } from "../../../utils/BlogContext";
+import styles from "./BlogPage.module.css";
 
 const BlogPage = () => {
   const { posts, loading, error } = useBlog();
@@ -10,7 +11,7 @@ const BlogPage = () => {
   if (!loading && !posts) return <div>No posts found.</div>;
 
   return (
-    <div>
+    <div className={styles.blogPageContainer}>
       <h1>Blog</h1>
       {posts.map((post) => (
         <div key={post.post_id}>
