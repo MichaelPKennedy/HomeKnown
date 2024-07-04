@@ -21,6 +21,22 @@ const Toolbar = ({ editor }) => {
       .run();
   };
 
+  const addLink = () => {
+    const url = prompt("Enter the URL");
+    if (url) {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange("link")
+        .setLink({ href: url })
+        .run();
+    }
+  };
+
+  const removeLink = () => {
+    editor.chain().focus().unsetLink().run();
+  };
+
   return (
     <div className={styles.toolbar}>
       <button
@@ -91,6 +107,8 @@ const Toolbar = ({ editor }) => {
       >
         Text Align Right
       </button>
+      <button onClick={addLink}>Add Link</button>
+      <button onClick={removeLink}>Remove Link</button>
     </div>
   );
 };
