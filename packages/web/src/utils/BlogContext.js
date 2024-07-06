@@ -36,9 +36,7 @@ export const BlogProvider = ({ children }) => {
 
   const updatePost = async (id, post) => {
     try {
-      const response = await feathersClient
-        .service("blogposts")
-        .update(id, post);
+      const response = await feathersClient.service("blog").patch(id, post);
       setPosts((prevPosts) =>
         prevPosts.map((p) => (p.post_id === id ? response : p))
       );

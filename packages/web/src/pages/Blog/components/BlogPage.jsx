@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useBlog } from "../../../utils/BlogContext";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../AuthContext";
 import styles from "./BlogPage.module.css";
 
 const BlogPage = () => {
   const { posts, loading, error } = useBlog();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const { isAdmin } = useContext(AuthContext);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading posts</div>;
@@ -74,6 +76,17 @@ const BlogPage = () => {
               />
               <h3>{post.title}</h3>
             </Link>
+            {isAdmin && (
+              <Link
+                to={{
+                  pathname: `/blog/edit/${post.post_id}`,
+                  state: { post },
+                }}
+                className={styles.editButton}
+              >
+                Edit
+              </Link>
+            )}
           </div>
         ))}
       </div>

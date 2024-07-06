@@ -15,6 +15,10 @@
   padding-bottom: 70px;
 }
 
+.editorPreviewContainer h2 {
+  font-size: 34px;
+}
+
 .editorContainer,
 .previewContainer {
   padding: 20px;
@@ -34,7 +38,7 @@ img.focused-image {
   display: flex;
   justify-content: flex-start;
   gap: 10px;
-  margin-left: 220px;
+  margin-left: 25%;
 }
 
 .toolbar button {

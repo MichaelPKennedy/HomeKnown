@@ -9,7 +9,11 @@ const Toolbar = ({ editor }) => {
   const addImage = () => {
     const url = prompt("Enter image URL");
     if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
+      editor
+        .chain()
+        .focus()
+        .setImage({ src: url, class: "display-block" })
+        .run();
     }
   };
 

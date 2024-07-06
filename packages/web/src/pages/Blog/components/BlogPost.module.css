@@ -10,3 +10,7 @@
   height: auto;
   border-radius: 10px;
 }
+
+.blogPostContainer h2 {
+  font-size: 34px;
+}

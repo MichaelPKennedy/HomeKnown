@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { useParams } from "react-router-dom";
@@ -15,20 +16,30 @@ import TextAlign from "@tiptap/extension-text-align";
 import ImageResize from "tiptap-extension-resize-image";
 import Toolbar from "./Toolbar";
 import styles from "./BlogPostEditor.module.css";
+import { AuthContext } from "../../../AuthContext";
 
 const BlogPostEditor = () => {
   const { addPost, updatePost, posts } = useBlog();
+  const location = useLocation();
+  const postFromState = location.state ? location.state.post : null;
   const [content, setContent] = useState(() => {
     const draft = localStorage.getItem("draftPost");
     return draft ? JSON.parse(draft).content : blogTemplate.content;
   });
 
   const { id } = useParams();
-  const existingPost = posts.find((post) => post.post_id === Number(id));
+  const existingPost =
+    postFromState || posts.find((post) => post.post_id === Number(id));
 
-  const [title, setTitle] = useState(blogTemplate.title);
-  const [author, setAuthor] = useState(blogTemplate.author);
-  const [category, setCategory] = useState(blogTemplate.category);
+  const [title, setTitle] = useState(
+    existingPost ? existingPost.title : blogTemplate.title
+  );
+  const [author, setAuthor] = useState(
+    existingPost ? existingPost.author : blogTemplate.author
+  );
+  const [category, setCategory] = useState(
+    existingPost ? existingPost.category : blogTemplate.category
+  );
 
   useEffect(() => {
     const draft = localStorage.getItem("draftPost");
@@ -76,7 +87,6 @@ const BlogPostEditor = () => {
         await addPost(post);
       }
       toast.success("Blog post saved successfully!");
-      localStorage.removeItem("draftPost");
     } catch (error) {
       toast.error("Error has occured saving blog post.");
     }
