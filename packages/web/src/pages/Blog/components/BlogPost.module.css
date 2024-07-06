@@ -1,0 +1,12 @@
+.blogPostContainer {
+  padding: 20px;
+  padding-bottom: 60px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.thumbnail {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}

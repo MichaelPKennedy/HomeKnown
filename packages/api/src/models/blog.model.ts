@@ -25,6 +25,15 @@ export const BlogPostModel = (sequelize: Sequelize) => {
       author: {
         type: DataTypes.STRING(100),
         allowNull: false
+      },
+      featured: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
+      thumbnail: {
+        type: DataTypes.STRING(255),
+        allowNull: false
       }
     },
     {

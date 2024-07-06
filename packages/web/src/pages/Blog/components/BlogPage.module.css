@@ -1,7 +1,40 @@
 .blogPageContainer {
-  padding: 0 20px;
+  width: 90%;
   margin: 0 auto;
-  max-width: 800px;
+  padding-bottom: 70px;
+}
+
+.categories {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.categoryButton {
+  background: none;
+  border: 1px solid #ddd;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.categoryButton:hover {
+  background-color: #f0f0f0;
+}
+
+.postsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.postItem {
+  width: 300px;
+  text-align: center;
+}
+
+.thumbnail {
   width: 100%;
-  padding-bottom: 60px;
+  height: auto;
+  border-radius: 10px;
 }
