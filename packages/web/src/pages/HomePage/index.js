@@ -151,7 +151,7 @@ const HomePage = () => {
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
           >
-            Previous
+            Prev
           </button>
           <span className={styles.paginationInfo}>
             Page {currentPage} of {totalPages}

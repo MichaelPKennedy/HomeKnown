@@ -142,7 +142,7 @@
 
 .paginationButton:disabled {
   background-color: #cccccc;
-  border: none;
+  border: 1px solid #cccccc;
   cursor: not-allowed;
 }
 
