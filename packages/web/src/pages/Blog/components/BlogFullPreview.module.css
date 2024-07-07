@@ -5,6 +5,24 @@
   margin: 0 auto;
 }
 
+.blogContainer ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.blogContainer ul li {
+  position: relative;
+}
+
+.blogContainer img[src="https://www.homeknown.app/unsplashLogo.png"]
+{
+  float: right;
+  margin-left: 10px !important;
+  margin-top: 4px !important;
+  width: 66px !important;
+  height: 15.1504px !important;
+}
+
 .blogContainer table {
   width: 100%;
   border-collapse: collapse;

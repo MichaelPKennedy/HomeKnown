@@ -15,6 +15,24 @@
   padding-bottom: 70px;
 }
 
+.editorPreviewContainer ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.editorPreviewContainer ul li {
+  position: relative;
+}
+
+.editorPreviewContainer img[src="https://www.homeknown.app/unsplashLogo.png"]
+{
+  float: right;
+  margin-left: 10px !important;
+  margin-top: 4px !important;
+  width: 66px !important;
+  height: 15.1504px !important;
+}
+
 .editorPreviewContainer h2 {
   font-size: 34px;
 }
