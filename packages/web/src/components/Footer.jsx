@@ -9,7 +9,7 @@ const Footer = () => {
       <Container fluid className={styles.container}>
         <Row className={styles.row}>
           <Col className={styles.leftColumn}>
-            <p>&copy; {new Date().getFullYear()} Everyday Adventurer, llc.</p>
+            {/* <p>&copy; {new Date().getFullYear()} Everyday Adventurer, llc.</p> */}
             <p>
               <Link to="/terms-of-service" className={styles.footerLink}>
                 Terms of Service
