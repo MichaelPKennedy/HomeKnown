@@ -60,4 +60,4 @@ Population - https://www.census.gov/data/tables/time-series/demo/popest/2020s-to
 
 ### Production App
 
-The production app is hosted live here: https://homeknown-client-c396f526d6b7.herokuapp.com/
+The production app is hosted live here: https://www.homeknown.app
