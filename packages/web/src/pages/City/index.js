@@ -90,6 +90,13 @@ function City() {
   const { isLoggedIn } = useContext(AuthContext);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // Determine if this city page is 'thin' (e.g., no description or very short, and no photos)
+  const isThinContent =
+    !currentCity?.description || currentCity.description.length < 50;
+  const hasPhotos =
+    Array.isArray(currentCity?.photos) && currentCity.photos.length > 0;
+  const shouldNoIndex = isThinContent && !hasPhotos;
+
   if (isLoading && !currentCity) return <LoadingScreen />;
   if (error) return <div>Error loading city data: {error.message}</div>;
   if (!cityData && !currentCity && !searchLoading)
@@ -171,6 +178,7 @@ function City() {
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
         <link rel="canonical" href={getCanonicalUrl()} />
+        {shouldNoIndex && <meta name="robots" content="noindex" />}
       </Helmet>
       <div className={`row ${styles.cityContainer}`}>
         <div className={`${styles.navContainer} col-md-3 col-12 bg-light`}>
