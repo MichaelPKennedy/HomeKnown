@@ -1,6 +1,6 @@
 import styles from "./GoogleLoginButton.module.css";
 
-const GOOGLE_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_CALLBACK_URL}&response_type=code&scope=profile email openid&access_type=offline&prompt=consent`;
+const GOOGLE_OAUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.VITE_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.VITE_GOOGLE_CALLBACK_URL}&response_type=code&scope=profile email openid&access_type=offline&prompt=consent`;
 
 const handleGoogleLogin = () => {
   window.location.href = GOOGLE_OAUTH_URL;

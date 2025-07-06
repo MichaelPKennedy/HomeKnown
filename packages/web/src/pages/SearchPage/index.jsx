@@ -7,7 +7,7 @@ function PlacesComponent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
   const initMap = () => {
     const location = {
