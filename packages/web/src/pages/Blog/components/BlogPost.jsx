@@ -2,6 +2,7 @@ import React from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useBlog } from "../../../utils/BlogContext";
 import styles from "./BlogPost.module.css";
+import { Helmet } from "react-helmet";
 
 const BlogPost = () => {
   const location = useLocation();
@@ -22,8 +23,20 @@ const BlogPost = () => {
     return <div>Post not found</div>;
   }
 
+  const getCanonicalUrl = () => {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  };
+
   return (
     <div className={styles.blogPostContainer}>
+      <Helmet>
+        <title>{blogPost.title}</title>
+        <meta name="description" content={blogPost.title} />
+        <link rel="canonical" href={getCanonicalUrl()} />
+      </Helmet>
       <h1>{blogPost.title}</h1>
       <div dangerouslySetInnerHTML={{ __html: blogPost.content }} />
       <p>

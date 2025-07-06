@@ -121,7 +121,10 @@ const MyLocations = () => {
   const toUrlFriendly = (str) => str?.toLowerCase()?.replace(/\s+/g, "_");
 
   const getCanonicalUrl = () => {
-    return window.location.href;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
   };
 
   return isLoggedIn ? (

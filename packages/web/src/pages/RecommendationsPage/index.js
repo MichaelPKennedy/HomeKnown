@@ -12,6 +12,13 @@ const RecommendationsPage = () => {
   const { userRecommendations } = useCityData();
   const { isLoggedIn } = useContext(AuthContext);
 
+  const getCanonicalUrl = () => {
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
+  };
+
   return isLoggedIn ? (
     <>
       <Helmet>
@@ -20,6 +27,7 @@ const RecommendationsPage = () => {
           name="description"
           content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
         />
+        <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
       {userRecommendations?.standard?.length > 0 ? (
         <div className={styles.pageContainer}>

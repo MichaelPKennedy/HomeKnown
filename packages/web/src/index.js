@@ -197,6 +197,7 @@ root.render(
                     <Route path="/blog/new" element={<BlogPostEditor />} />
                     <Route path="/blog/edit/:id" element={<BlogPostEditor />} />
                     <Route path="/blog/test" element={<BlogFullPreview />} />
+                    <Route path="*" element={<ErrorPage />} />
                   </Routes>
                   <ToastContainer />
                   <Footer />

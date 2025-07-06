@@ -40,7 +40,10 @@ const SideBar = ({ city }) => {
     `nav-link ${isActive(path) ? styles.activeLink : ""}`;
 
   const getCanonicalUrl = () => {
-    return window.location.href;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
   };
 
   const getKeywords = () => {

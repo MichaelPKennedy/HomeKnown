@@ -154,7 +154,10 @@ function City() {
   if (searchLoading) return <LoadingScreen />;
 
   const getCanonicalUrl = () => {
-    return window.location.href;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
   };
 
   return (

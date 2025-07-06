@@ -72,7 +72,10 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
   };
 
   const getCanonicalUrl = () => {
-    return window.location.href;
+    const url = new URL(window.location.href);
+    url.search = "";
+    url.hash = "";
+    return url.toString();
   };
 
   return (
