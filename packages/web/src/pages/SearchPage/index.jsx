@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from "react";
-import client from "../../feathersClient.js";
 import styles from "./SearchPage.module.css";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { axiosInstance } from "../../feathersClient";
+
+const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
 
 function PlacesComponent() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const GOOGLE_API_KEY = process.env.VITE_GOOGLE_API_KEY;
 
   const initMap = () => {
     const location = {
@@ -41,14 +44,14 @@ function PlacesComponent() {
         return;
       }
 
-      const response = await client.service("places").find({
-        query: {
+      const response = await axiosInstance.get("/places", {
+        params: {
           query: searchTerm,
         },
       });
-      setPlaces(response?.results);
+      setPlaces(response?.data?.results);
 
-      localStorage.setItem("places", JSON.stringify(response?.results));
+      localStorage.setItem("places", JSON.stringify(response?.data?.results));
 
       setLoading(false);
     } catch (err) {
