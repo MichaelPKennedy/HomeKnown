@@ -209,7 +209,6 @@ const LivingPreferenceForm = () => {
       return;
     }
 
-    // Check if user has already submitted once and is not logged in
     if (hasSubmitted && !isLoggedIn) {
       setShowLoginModal(true);
       return;
