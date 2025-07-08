@@ -18,6 +18,7 @@ import StatePreferences from "./StatePreferences";
 import ResultsPage from "../../ResultsPage";
 import { useCityData } from "../../../utils/CityDataContext";
 import { AuthContext } from "../../../AuthContext";
+import LoginModal from "../../../components/LoginModal.jsx";
 
 const initialFormData = {
   snowPreference: "none",
@@ -91,6 +92,8 @@ const LivingPreferenceForm = () => {
   });
   const [totalWeights, setTotalWeights] = useState(0);
   const [categoryCount, setCategoryCount] = useState(0);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const validateForm = () => {
     let isValid = true;
@@ -205,6 +208,13 @@ const LivingPreferenceForm = () => {
       toast.error(errorMessage);
       return;
     }
+
+    // Check if user has already submitted once and is not logged in
+    if (hasSubmitted && !isLoggedIn) {
+      setShowLoginModal(true);
+      return;
+    }
+
     setLoading(true);
     try {
       const authToken = localStorage.getItem("authToken");
@@ -229,8 +239,10 @@ const LivingPreferenceForm = () => {
         setUserPreferences(formData);
         setSurveyResults(response);
         setShowForm(false);
+        setHasSubmitted(true);
         // Save the results and form state to sessionStorage
         localStorage.removeItem("recreationFilters");
+        localStorage.setItem("hasSubmittedQuiz", "true");
         sessionStorage.setItem("surveyResults", JSON.stringify(response));
         sessionStorage.setItem("formData", JSON.stringify(formData));
         sessionStorage.setItem("tempWeights", JSON.stringify(tempWeights));
@@ -246,6 +258,11 @@ const LivingPreferenceForm = () => {
     const savedResults = sessionStorage.getItem("surveyResults");
     const savedFormData = sessionStorage.getItem("formData");
     const savedTempWeights = sessionStorage.getItem("tempWeights");
+    const hasSubmittedBefore = localStorage.getItem("hasSubmittedQuiz");
+
+    if (hasSubmittedBefore) {
+      setHasSubmitted(true);
+    }
 
     if (savedResults && savedFormData) {
       const results = JSON.parse(savedResults);
@@ -367,8 +384,22 @@ const LivingPreferenceForm = () => {
     setCategoryCount(categoriesSelected);
   }, [formData]);
 
+  // Clear submission state when user logs in
+  useEffect(() => {
+    if (isLoggedIn && hasSubmitted) {
+      setHasSubmitted(false);
+      localStorage.removeItem("hasSubmittedQuiz");
+    }
+  }, [isLoggedIn, hasSubmitted]);
+
   return (
     <div className={styles.pageContainer}>
+      {showLoginModal && (
+        <LoginModal
+          onClose={() => setShowLoginModal(false)}
+          message="You've already taken the quiz once. Please sign in or create an account to take it again and save your preferences."
+        />
+      )}
       {surveyResults && showForm && (
         <div className={styles.btnContainer}>
           <button

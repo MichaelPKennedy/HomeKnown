@@ -5,7 +5,7 @@ import axios from "axios";
 const isMobileTesting = import.meta.env.VITE_MOBILE_TESTING;
 const DEFAULT_API_ENDPOINT = isMobileTesting
   ? "http://10.0.0.2:3030"
-  : "https://homeknown-api-4fe050b813af.herokuapp.com";
+  : "http://localhost:3030";
 
 const API_ENDPOINT = import.meta.env.VITE_API_URL || DEFAULT_API_ENDPOINT;
 

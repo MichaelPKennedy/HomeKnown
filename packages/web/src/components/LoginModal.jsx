@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 
-const LoginModal = ({ onClose }) => {
+const LoginModal = ({
+  onClose,
+  message = "You must be logged in to save locations.",
+}) => {
   return (
     <div className="modal show" tabIndex="-1" style={{ display: "flex" }}>
       <div
@@ -15,7 +18,7 @@ const LoginModal = ({ onClose }) => {
             </button>
           </div>
           <div className="modal-body">
-            <p>You must be logged in to save locations.</p>
+            <p>{message}</p>
           </div>
           <div className="modal-footer">
             <button
@@ -25,6 +28,11 @@ const LoginModal = ({ onClose }) => {
             >
               Close
             </button>
+            <Link className="nav-link" to="/register">
+              <button type="button" className="btn btn-success me-2">
+                Sign Up
+              </button>
+            </Link>
             <Link className="nav-link" to="/login">
               <button type="button" className="btn btn-primary">
                 Login
