@@ -436,16 +436,18 @@ const LivingPreferenceForm = () => {
           message="You've already taken the quiz once. Please sign in or create an account to take it again and save your preferences."
         />
       )}
-      <div className={styles.btnContainer}>
-        <button
-          onClick={toggleFormVisibility}
-          className={`${styles.btnCancel} ${
-            !showForm ? styles.formHidden : ""
-          }`}
-        >
-          {showForm ? "Hide Preferences" : "Edit Preferences"}
-        </button>
-      </div>
+      {surveyResults && (
+        <div className={styles.btnContainer}>
+          <button
+            onClick={toggleFormVisibility}
+            className={`${styles.btnCancel} ${
+              !showForm ? styles.formHidden : ""
+            }`}
+          >
+            {showForm ? "Hide Preferences" : "Edit Preferences"}
+          </button>
+        </div>
+      )}
       <div className={styles.contentWrapper}>
         {showForm ? (
           <div
