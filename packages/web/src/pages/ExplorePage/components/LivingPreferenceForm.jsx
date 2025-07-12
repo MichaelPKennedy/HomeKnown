@@ -379,7 +379,7 @@ const LivingPreferenceForm = () => {
   const toggleFormVisibility = () => {
     if (showForm) {
       setFormAnimation(styles.formSlidingExit);
-      setTimeout(() => setShowForm(false), 260); // Match exit animation duration
+      setTimeout(() => setShowForm(false), 300); // Show results even sooner
     } else {
       setShowForm(true);
       setFormAnimation(styles.formSlidingEnter);
@@ -450,9 +450,7 @@ const LivingPreferenceForm = () => {
       )}
       <div className={styles.contentWrapper}>
         {showForm ? (
-          <div
-            className={`${styles.preferenceFormContainer} ${styles.formSlidingEnter}`}
-          >
+          <div className={`${styles.preferenceFormContainer} ${formAnimation}`}>
             <form
               onSubmit={handleSubmit}
               className={`container ${styles.centerContainer} ${styles.formContent}`}
