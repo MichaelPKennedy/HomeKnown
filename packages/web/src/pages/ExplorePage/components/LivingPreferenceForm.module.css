@@ -80,7 +80,7 @@
   left: 50%;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 5px solid #01697c; /* Arrow color */
+  border-top: 5px solid #000; /* Arrow color - black */
   transform: translateX(-50%) rotate(180deg);
   transition: transform 0.3s ease;
   transform-origin: center bottom;
@@ -250,6 +250,7 @@ input[type="checkbox"] {
 .btnDropdown:hover,
 .btnCancel:hover {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #fff !important;
   box-shadow: 0 4px 16px 0 rgba(16, 185, 129, 0.12);
   transform: translateY(-2px);
 }
