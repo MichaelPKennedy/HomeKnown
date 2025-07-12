@@ -1,44 +1,44 @@
 import { Link } from "react-router-dom";
+import styles from "./LoginModal.module.css";
 
 const LoginModal = ({
   onClose,
   message = "You must be logged in to save locations.",
 }) => {
   return (
-    <div className="modal show" tabIndex="-1" style={{ display: "flex" }}>
-      <div
-        className="modal-dialog"
-        style={{ display: "flex", alignItems: "center", width: "100%" }}
-      >
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Login Required</h5>
-            <button type="button" className="btn-close" onClick={onClose}>
-              x
-            </button>
-          </div>
-          <div className="modal-body">
-            <p>{message}</p>
-          </div>
-          <div className="modal-footer">
+    <div className={styles.modalOverlay} onClick={onClose}>
+      <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+        <div className={styles.modalHeader}>
+          <h5 className={styles.modalTitle}>Login Required</h5>
+          <button
+            type="button"
+            className={styles.closeButton}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            ×
+          </button>
+        </div>
+        <div className={styles.modalBody}>
+          <p className={styles.message}>{message}</p>
+        </div>
+        <div className={styles.modalFooter}>
+          <Link to="/register" className={styles.button}>
             <button
               type="button"
-              className="btn btn-secondary"
-              onClick={onClose}
+              className={`${styles.button} ${styles.successButton}`}
             >
-              Close
+              Sign Up
             </button>
-            <Link className="nav-link" to="/register">
-              <button type="button" className="btn btn-success me-2">
-                Sign Up
-              </button>
-            </Link>
-            <Link className="nav-link" to="/login">
-              <button type="button" className="btn btn-primary">
-                Login
-              </button>
-            </Link>
-          </div>
+          </Link>
+          <Link to="/login" className={styles.button}>
+            <button
+              type="button"
+              className={`${styles.button} ${styles.primaryButton}`}
+            >
+              Login
+            </button>
+          </Link>
         </div>
       </div>
     </div>

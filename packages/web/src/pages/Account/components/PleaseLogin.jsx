@@ -6,15 +6,21 @@ const PleaseLogin = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h1 className={`mt-4 ${styles.header}`}>Please Login to Contact Us</h1>
-        <p className={`mt-4`}>
+        <h1 className={styles.header}>Please Login to Contact Us</h1>
+        <p className={styles.description}>
           This will help us quickly identify you and get you the help you need
         </p>
         <div className={styles.buttonRow}>
-          <Link to="/login" className={`btn mt-3 ${styles.button}`}>
+          <Link
+            to="/login"
+            className={`${styles.button} ${styles.primaryButton}`}
+          >
             Log In
           </Link>
-          <Link to="/register" className={`btn mt-3 ${styles.button}`}>
+          <Link
+            to="/register"
+            className={`${styles.button} ${styles.secondaryButton}`}
+          >
             Sign Up
           </Link>
         </div>

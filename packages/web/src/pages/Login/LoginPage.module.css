@@ -1,85 +1,266 @@
-.card-body {
-  padding: 2rem;
-}
-
-.submitButton {
-  background-color: #017c8c;
-  border: none;
-  margin-top: 20px;
-}
-
-.registerButton {
-  background-color: #017c8c;
-  border: none;
-  margin-left: 20px;
-  color: white !important;
-}
-
-.submitButton:hover,
-.registerButton:hover {
-  background-color: #01697c;
-}
-
-.form-control {
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
-.form-label {
-  font-size: 1rem;
-  color: #333;
-}
-
 .loginPageContainer {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   flex-direction: column;
-  justify-content: start; /* Centering in the viewport */
   align-items: center;
-  height: 100vh;
-  background-color: #f0f2f5;
-  padding: 20px; /* Add some padding */
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
 }
 
-/* No need to hide overflow in html, body - we want the page to be scrollable on small screens */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+/* Background decorative elements */
+.loginPageContainer::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 50px 50px;
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+  }
+}
+
+.title {
+  color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 3rem;
+  }
 }
 
 .card {
-  width: 100%; /* Full width on small screens */
-  max-width: 600px; /* Maximum width */
-  margin-bottom: 20px; /* Spacing between cards */
-  margin-top: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: none;
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 28rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 10;
+  animation: slideUp 0.6s ease-out;
 }
 
-@media (min-width: 1000px) {
-  .card {
-    width: 600px;
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-
-  .loginPageContainer {
-    justify-content: start;
-    padding-top: 50px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.termsOfService {
-  font-size: 14px;
+.cardBody {
+  padding: 2.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formLabel {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.formControl {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  transition: all 0.2s;
+  background: white;
+}
+
+.formControl:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-1px);
+}
+
+.formControl::placeholder {
+  color: #9ca3af;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 0.75rem;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
+  margin-top: 1rem;
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(102, 126, 234, 0.5);
+}
+
+.submitButton:active {
+  transform: translateY(0);
+}
+
+.forgotPasswordContainer {
+  text-align: center;
+  margin-top: 1.5rem;
 }
 
 .forgotPasswordButton {
-  color: #444;
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
   text-decoration: none;
 }
 
-.forgotPasswordButton:hover,
-.forgotPasswordButton:focus {
-  color: #555;
+.forgotPasswordButton:hover {
+  color: #5a67d8;
   text-decoration: underline;
-  background-color: transparent;
+}
+
+.googleSection {
+  text-align: center;
+}
+
+.termsOfService {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 1rem;
+  line-height: 1.5;
+}
+
+.termsOfService a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.termsOfService a:hover {
+  text-decoration: underline;
+}
+
+.registerSection {
+  text-align: center;
+}
+
+.registerText {
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.registerButton {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 0.75rem;
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.4);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.registerButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px 0 rgba(16, 185, 129, 0.5);
+  color: white;
+  text-decoration: none;
+}
+
+.checkboxContainer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.checkbox {
+  margin-top: 0.25rem;
+  accent-color: #667eea;
+}
+
+.checkboxLabel {
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.checkboxLabel a {
+  color: #667eea;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkboxLabel a:hover {
+  text-decoration: underline;
+}
+
+.formText {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* Mobile responsive */
+@media (max-width: 640px) {
+  .loginPageContainer {
+    padding: 1rem;
+  }
+
+  .cardBody {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
 }

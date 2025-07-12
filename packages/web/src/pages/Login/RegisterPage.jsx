@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import client from "../../feathersClient.js";
 import { toast } from "react-toastify";
@@ -67,79 +66,96 @@ const RegisterPage = () => {
 
   return (
     <div className={styles.loginPageContainer}>
-      <h4 className={styles.title}>Register</h4>
-      <Card className={styles.card}>
-        <Card.Body>
-          <Form onSubmit={handleRegister}>
-            <Form.Group controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
+      <h1 className={styles.title}>Join HomeKnown</h1>
+
+      <div className={styles.card}>
+        <div className={styles.cardBody}>
+          <form onSubmit={handleRegister}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Username</label>
+              <input
                 type="text"
-                placeholder="Enter username"
+                className={styles.formControl}
+                placeholder="Choose a username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                required
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label className="mt-2">Email address</Form.Label>
-              <Form.Control
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Email Address</label>
+              <input
                 type="email"
-                placeholder="Enter email"
+                className={styles.formControl}
+                placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label className="mt-2">Password</Form.Label>
-              <Form.Control
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Password</label>
+              <input
                 type="password"
-                placeholder="Password"
+                className={styles.formControl}
+                placeholder="Create a password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
-              <Form.Text className="text-muted">
-                Passwords must be at least 8 characters and include a number, an
+              <div className={styles.formText}>
+                Password must be at least 8 characters and include a number, an
                 uppercase letter, a lowercase letter, and a special character.
-              </Form.Text>
-            </Form.Group>
+              </div>
+            </div>
 
-            <Form.Group controlId="formBasicConfirmPassword">
-              <Form.Label className="mt-2">Confirm Password</Form.Label>
-              <Form.Control
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Confirm Password</label>
+              <input
                 type="password"
-                placeholder="Confirm Password"
+                className={styles.formControl}
+                placeholder="Confirm your password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
-            </Form.Group>
-            <Form.Group controlId="formBasicCheckbox">
-              <Form.Check
-                className="mt-3"
+            </div>
+
+            <div className={styles.checkboxContainer}>
+              <input
                 type="checkbox"
-                label={
-                  <span>
-                    I agree to the{" "}
-                    <Link to="/terms-of-service">Terms of Service</Link> and{" "}
-                    <Link to="/privacy-policy">Privacy Policy</Link>
-                  </span>
-                }
+                className={styles.checkbox}
+                id="termsCheckbox"
                 checked={agreedToTerms}
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
+                required
               />
-            </Form.Group>
+              <label htmlFor="termsCheckbox" className={styles.checkboxLabel}>
+                I agree to the{" "}
+                <Link to="/terms-of-service">Terms of Service</Link> and{" "}
+                <Link to="/privacy-policy">Privacy Policy</Link>
+              </label>
+            </div>
 
-            <Button
-              variant="primary"
-              type="submit"
-              className={styles.submitButton}
-            >
-              Register
-            </Button>
-          </Form>
-        </Card.Body>
-      </Card>
+            <button type="submit" className={styles.submitButton}>
+              Create Account
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <div className={styles.cardBody}>
+          <div className={styles.registerSection}>
+            <p className={styles.registerText}>Already have an account?</p>
+            <a href="/login" className={styles.registerButton}>
+              Sign In
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

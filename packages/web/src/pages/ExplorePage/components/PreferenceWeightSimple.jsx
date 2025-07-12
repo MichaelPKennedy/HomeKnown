@@ -51,7 +51,9 @@ function PreferenceWeight({
 
   return (
     <>
-      <h4 className="pb-2 mt-4">Choose Categories</h4>
+      <h4 className="pb-2 mt-4">
+        Choose categories that matter to your lifestyle...
+      </h4>
       <div className={styles.preferenceContainer}>
         <div className={styles.dropZoneContainer}>
           {[

@@ -16,14 +16,20 @@ const SupportPage = () => {
   };
 
   return (
-    <div className={styles.supportContainer}>
+    <>
       <Helmet>
         <title>HomeKnown | Support</title>
         <meta name="description" content="Contact HomeKnown support." />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      {isLoggedIn ? <ContactForm /> : <PleaseLogin />}
-    </div>
+      {isLoggedIn ? (
+        <div className={styles.supportContainer}>
+          <ContactForm />
+        </div>
+      ) : (
+        <PleaseLogin />
+      )}
+    </>
   );
 };
 

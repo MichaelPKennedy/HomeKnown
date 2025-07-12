@@ -1,9 +1,18 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import { Helmet } from "react-helmet";
 import styles from "./ExplorePage.module.css";
 import LivingPreferenceForm from "./components/LivingPreferenceForm.jsx";
+import QuizIntro from "./components/QuizIntro.jsx";
+import { AuthContext } from "../../AuthContext";
 
 const ExplorePage = () => {
+  const { isLoggedIn } = useContext(AuthContext);
+  const [showIntro, setShowIntro] = useState(!isLoggedIn);
+
+  const handleStartQuiz = () => {
+    setShowIntro(false);
+  };
+
   const getCanonicalUrl = () => {
     const url = new URL(window.location.href);
     url.search = "";
@@ -21,7 +30,11 @@ const ExplorePage = () => {
         />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      <LivingPreferenceForm />
+      {!isLoggedIn && showIntro ? (
+        <QuizIntro onStartQuiz={handleStartQuiz} />
+      ) : (
+        <LivingPreferenceForm />
+      )}
     </div>
   );
 };

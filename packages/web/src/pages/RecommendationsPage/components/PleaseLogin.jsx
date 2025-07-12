@@ -6,18 +6,24 @@ const PleaseLogin = () => {
   return (
     <div className={styles.container}>
       <div className={styles.content}>
-        <h1 className={`mt-4 ${styles.header}`}>
+        <h1 className={styles.header}>
           Please Login to see your recommendations
         </h1>
-        <p className={`mt-4`}>
+        <p className={styles.description}>
           If you don't have an account, register for a free account to start
           receiving personalized AI generated recommendations
         </p>
         <div className={styles.buttonRow}>
-          <Link to="/login" className={`btn mt-3 ${styles.button}`}>
+          <Link
+            to="/login"
+            className={`${styles.button} ${styles.primaryButton}`}
+          >
             Log In
           </Link>
-          <Link to="/register" className={`btn mt-3 ${styles.button}`}>
+          <Link
+            to="/register"
+            className={`${styles.button} ${styles.secondaryButton}`}
+          >
             Sign Up
           </Link>
         </div>

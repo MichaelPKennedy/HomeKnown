@@ -73,6 +73,15 @@ const LivingPreferenceForm = () => {
   const { setUserPreferences } = useCityData();
   const { isLoggedIn, user } = useContext(AuthContext);
 
+  // Add refs for each form section
+  const populationRef = useRef(null);
+  const jobRef = useRef(null);
+  const housingRef = useRef(null);
+  const publicServicesRef = useRef(null);
+  const sceneryRef = useRef(null);
+  const weatherRef = useRef(null);
+  const recreationRef = useRef(null);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -95,13 +104,24 @@ const LivingPreferenceForm = () => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  const scrollToSection = (ref) => {
+    if (ref && ref.current) {
+      ref.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
   const validateForm = () => {
     let isValid = true;
     let errorMessage = "";
+    let errorSection = null;
 
     if (!formData?.minPopulation || !formData?.maxPopulation) {
       isValid = false;
       errorMessage = "Please select a valid population range.";
+      errorSection = populationRef;
     }
     if (
       formData?.weights?.jobOpportunityWeight > 0 &&
@@ -109,11 +129,13 @@ const LivingPreferenceForm = () => {
     ) {
       isValid = false;
       errorMessage = "Please select at least one job.";
+      errorSection = jobRef;
     }
 
     if (formData?.weights?.costOfLivingWeight > 0 && !formData?.housingType) {
       isValid = false;
       errorMessage = "Please select a housing type.";
+      errorSection = housingRef;
     }
 
     if (
@@ -122,6 +144,7 @@ const LivingPreferenceForm = () => {
     ) {
       isValid = false;
       errorMessage = "Please select at least one public service.";
+      errorSection = publicServicesRef;
     }
 
     if (
@@ -130,6 +153,7 @@ const LivingPreferenceForm = () => {
     ) {
       isValid = false;
       errorMessage = "Please select at least one scenery preference.";
+      errorSection = sceneryRef;
     }
 
     if (formData?.weights?.weatherWeight > 0) {
@@ -140,11 +164,13 @@ const LivingPreferenceForm = () => {
       ) {
         isValid = false;
         errorMessage = "Please specify your weather preferences.";
+        errorSection = weatherRef;
       }
 
       if (formData?.temperatureData?.some((month) => month.temp === null)) {
         isValid = false;
         errorMessage = "Please complete the temperature data for each month.";
+        errorSection = weatherRef;
       }
     }
 
@@ -154,9 +180,10 @@ const LivingPreferenceForm = () => {
     ) {
       isValid = false;
       errorMessage = "Please select at least one recreational interest.";
+      errorSection = recreationRef;
     }
 
-    return { isValid, errorMessage };
+    return { isValid, errorMessage, errorSection };
   };
 
   const resetSurvey = () => {
@@ -202,10 +229,16 @@ const LivingPreferenceForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const { isValid, errorMessage } = validateForm();
+    const { isValid, errorMessage, errorSection } = validateForm();
 
     if (!isValid) {
       toast.error(errorMessage);
+      // Add a small delay to ensure the toast is visible before scrolling
+      setTimeout(() => {
+        if (errorSection) {
+          scrollToSection(errorSection);
+        }
+      }, 100);
       return;
     }
 
@@ -238,6 +271,7 @@ const LivingPreferenceForm = () => {
         setUserPreferences(formData);
         setSurveyResults(response);
         setShowForm(false);
+        // Only set hasSubmitted to true if the API call was successful and returned results
         setHasSubmitted(true);
         // Save the results and form state to sessionStorage
         localStorage.removeItem("recreationFilters");
@@ -249,6 +283,8 @@ const LivingPreferenceForm = () => {
     } catch (error) {
       console.error("Failed to submit the survey:", error);
       setLoading(false);
+      // Don't set hasSubmitted to true if there was an error
+      // The user can try submitting again
     }
   };
 
@@ -443,59 +479,73 @@ const LivingPreferenceForm = () => {
                 </div>
               )}
               {formData?.weights?.jobOpportunityWeight > 0 && (
-                <JobPreferences
-                  formData={formData}
-                  setFormData={setFormData}
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  suggestionSelected={suggestionSelected}
-                />
+                <div ref={jobRef}>
+                  <JobPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                    suggestions={suggestions}
+                    onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                    onSuggestionsClearRequested={onSuggestionsClearRequested}
+                    suggestionSelected={suggestionSelected}
+                  />
+                </div>
               )}
               {/* Housing */}
               {formData?.weights?.costOfLivingWeight > 0 && (
-                <HousingPreferences
-                  formData={formData}
-                  setFormData={setFormData}
-                />
+                <div ref={housingRef}>
+                  <HousingPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                  />
+                </div>
               )}
               {formData?.weights?.recreationalActivitiesWeight > 0 && (
-                <RecreationalPreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
+                <div ref={recreationRef}>
+                  <RecreationalPreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </div>
               )}
               {formData?.weights?.publicServicesWeight > 0 && (
-                <PublicServicePreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
+                <div ref={publicServicesRef}>
+                  <PublicServicePreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </div>
               )}
               {formData?.weights?.sceneryWeight > 0 && (
-                <SceneryPreferences
-                  formData={formData}
-                  handleCheckboxChange={handleCheckboxChange}
-                />
+                <div ref={sceneryRef}>
+                  <SceneryPreferences
+                    formData={formData}
+                    handleCheckboxChange={handleCheckboxChange}
+                  />
+                </div>
               )}
 
               {/* Weather */}
               {formData?.weights?.weatherWeight > 0 && (
-                <WeatherPreferences
-                  formData={formData}
-                  setFormData={setFormData}
-                  handleInputChange={handleInputChange}
-                  handleTemperatureChange={handleTemperatureChange}
-                  hasColdMonth={hasColdMonth}
-                />
+                <div ref={weatherRef}>
+                  <WeatherPreferences
+                    formData={formData}
+                    setFormData={setFormData}
+                    handleInputChange={handleInputChange}
+                    handleTemperatureChange={handleTemperatureChange}
+                    hasColdMonth={hasColdMonth}
+                  />
+                </div>
               )}
               {totalWeights > 0 && (
                 <>
-                  <PopulationPreferences
-                    formData={formData}
-                    setFormData={setFormData}
-                  />
+                  <div ref={populationRef}>
+                    <PopulationPreferences
+                      formData={formData}
+                      setFormData={setFormData}
+                    />
+                  </div>
                   <StatePreferences
                     formData={formData}
                     setFormData={setFormData}

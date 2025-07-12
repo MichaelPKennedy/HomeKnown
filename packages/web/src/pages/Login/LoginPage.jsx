@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { Card, Form, Button } from "react-bootstrap";
 import styles from "./LoginPage.module.css";
 import { toast } from "react-toastify";
 import client from "../../feathersClient.js";
@@ -57,81 +56,83 @@ const LoginPage = () => {
   return (
     <div className={styles.loginPageContainer}>
       <Helmet>
-        <title>HomeKnown | Explore</title>
+        <title>HomeKnown | Login</title>
         <meta
           name="description"
-          content="Welcome to HomeKnown, your go-to platform for discovering amazing cities."
+          content="Login to HomeKnown and start discovering your perfect city."
         />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      <h4 className={styles.title}>Login</h4>
-      <Card className={styles.card}>
-        <Card.Body>
-          <Form onSubmit={handleLogin}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>User Name</Form.Label>
-              <Form.Control
+
+      <h1 className={styles.title}>Welcome Back</h1>
+
+      <div className={styles.card}>
+        <div className={styles.cardBody}>
+          <form onSubmit={handleLogin}>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Username or Email</label>
+              <input
+                type="text"
+                className={styles.formControl}
                 placeholder="Enter username or email"
                 value={loginField}
                 onChange={(e) => setLoginField(e.target.value)}
+                required
               />
-            </Form.Group>
+            </div>
 
-            <Form.Group controlId="formBasicPassword">
-              <Form.Label className="mt-2">Password</Form.Label>
-              <Form.Control
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Password</label>
+              <input
                 type="password"
-                placeholder="Password"
+                className={styles.formControl}
+                placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
-            </Form.Group>
+            </div>
 
-            <Button
-              variant="primary"
-              type="submit"
-              className={styles.submitButton}
-              onSubmit={handleLogin}
-            >
-              Login
-            </Button>
-          </Form>
-          <div className="text-center">
-            <Button
-              variant="link"
+            <button type="submit" className={styles.submitButton}>
+              Sign In
+            </button>
+          </form>
+
+          <div className={styles.forgotPasswordContainer}>
+            <button
+              type="button"
               onClick={() => navigate("/forgot-password")}
               className={styles.forgotPasswordButton}
             >
               Forgot Password?
-            </Button>
+            </button>
           </div>
-        </Card.Body>
-      </Card>
-      <Card className={styles.card}>
-        <Card.Body>
-          <GoogleLoginButton />
-          <p className={`mt-2 mb-0 ${styles.termsOfService}`}>
-            By signing in with Google, you agree to our{" "}
-            <a href="/terms-of-service"> Terms of Service</a> and
-            <a href="/privacy-policy"> Privacy Policy.</a>
-          </p>
-        </Card.Body>
-      </Card>
-      <Card className={styles.card}>
-        <Card.Body>
-          <p className="mb-0">
-            Don't have an account?{" "}
-            <Button
-              variant="primary"
-              type="submit"
-              className={styles.registerButton}
-              href="/register"
-            >
-              Sign Up
-            </Button>
-          </p>
-        </Card.Body>
-      </Card>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <div className={styles.cardBody}>
+          <div className={styles.googleSection}>
+            <GoogleLoginButton />
+            <p className={styles.termsOfService}>
+              By signing in with Google, you agree to our{" "}
+              <a href="/terms-of-service">Terms of Service</a> and{" "}
+              <a href="/privacy-policy">Privacy Policy</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className={styles.card}>
+        <div className={styles.cardBody}>
+          <div className={styles.registerSection}>
+            <p className={styles.registerText}>Don't have an account?</p>
+            <a href="/register" className={styles.registerButton}>
+              Create Account
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

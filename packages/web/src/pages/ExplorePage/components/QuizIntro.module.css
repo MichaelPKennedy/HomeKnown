@@ -1,0 +1,276 @@
+.quizIntroContainer {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #eff6ff, #ffffff, #eef2ff);
+  position: relative;
+  overflow: hidden;
+}
+
+.backgroundPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+}
+
+.backgroundCircle1 {
+  position: absolute;
+  top: 5rem;
+  left: 2.5rem;
+  width: 8rem;
+  height: 8rem;
+  background-color: #60a5fa;
+  border-radius: 50%;
+  filter: blur(3rem);
+}
+
+.backgroundCircle2 {
+  position: absolute;
+  bottom: 5rem;
+  right: 2.5rem;
+  width: 10rem;
+  height: 10rem;
+  background-color: #818cf8;
+  border-radius: 50%;
+  filter: blur(3rem);
+}
+
+.backgroundCircle3 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15rem;
+  height: 15rem;
+  background-color: #a78bfa;
+  border-radius: 50%;
+  filter: blur(3rem);
+}
+
+.mainContent {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  text-align: center;
+}
+
+.logoContainer {
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  height: 3rem;
+  width: auto;
+  margin: 0 auto 1rem;
+  filter: drop-shadow(0 10px 8px rgb(0 0 0 / 0.04));
+}
+
+@media (min-width: 768px) {
+  .logo {
+    height: 4rem;
+  }
+}
+
+.contentContainer {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(to right, #2563eb, #4f46e5);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 3rem;
+  }
+}
+
+.description {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  color: #374151;
+  line-height: 1.625;
+}
+
+@media (min-width: 768px) {
+  .description {
+    font-size: 1.125rem;
+  }
+}
+
+.ctaButton {
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(to right, #2563eb, #4f46e5);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  transition: all 0.3s;
+  transform: translateZ(0);
+}
+
+.ctaButton:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+  transform: scale(1.05) translateZ(0);
+}
+
+.benefitsContainer {
+  margin-top: 3rem;
+  width: 100%;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.benefitCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(4px);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  transition: box-shadow 0.3s;
+}
+
+.benefitCard:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+.iconContainer {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .iconContainer {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+.iconContainer.blue {
+  background-color: #dbeafe;
+}
+
+.iconContainer.green {
+  background-color: #dcfce7;
+}
+
+.iconContainer.purple {
+  background-color: #f3e8ff;
+}
+
+.iconContainer.orange {
+  background-color: #fed7aa;
+}
+
+.icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.icon.blue {
+  color: #2563eb;
+}
+
+.icon.green {
+  color: #16a34a;
+}
+
+.icon.purple {
+  color: #9333ea;
+}
+
+.icon.orange {
+  color: #ea580c;
+}
+
+.cardTitle {
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  font-size: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .cardTitle {
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+.cardDescription {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+.trustContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.trustText {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+@media (min-width: 768px) {
+  .trustText {
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .benefitsContainer {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .benefitCard {
+    padding: 0.75rem;
+  }
+}
