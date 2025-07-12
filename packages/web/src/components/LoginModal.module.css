@@ -26,7 +26,7 @@
 }
 
 .modalHeader {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8fd3d6 0%, #75c2c2 60%, #5eb3b3 100%);
   color: white;
   padding: 1.5rem;
   text-align: center;
@@ -101,14 +101,15 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
   color: white;
-  box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
 }
 
 .primaryButton:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.5);
+  box-shadow: 0 6px 20px 0 rgba(37, 99, 235, 0.5);
 }
 
 .secondaryButton {

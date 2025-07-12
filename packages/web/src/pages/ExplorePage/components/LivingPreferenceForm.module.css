@@ -56,7 +56,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: white;
+  background-color: transparent;
   z-index: 10;
 }
 
@@ -76,14 +76,18 @@
 .btnCancel::after {
   content: "";
   position: absolute;
-  bottom: -5px;
-  height: 50px;
+  bottom: -8px;
   left: 50%;
-  transform: translateX(-50%);
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid #01697c; /* Arrow color */
-  transform: rotate(180deg);
+  transform: translateX(-50%) rotate(180deg);
+  transition: transform 0.3s ease;
+  transform-origin: center bottom;
+}
+
+.btnCancel.formHidden::after {
+  transform: translateX(-50%) rotate(0deg);
 }
 
 .btnCancel:hover {
@@ -102,7 +106,7 @@
 .pageContainer {
   min-height: 100vh;
   width: 100%;
-  background: linear-gradient(135deg, #e0ecf7 0%, #f8fafc 100%);
+  /* No background color or gradient */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,9 +116,14 @@
   overflow-x: hidden;
 }
 
+.contentWrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
 .preferenceFormContainer {
   width: 100%;
-  max-width: 72rem;
+  max-width: 90rem;
   margin: 2rem auto 0 auto;
   display: flex;
   flex-direction: column;
@@ -123,6 +132,22 @@
 }
 
 .formContent {
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 32px 0 rgba(60, 72, 88, 0.1);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 72rem;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: box-shadow 0.2s;
+  display: block;
+  text-align: left;
+}
+
+.resultsContainer {
   background: #fff;
   border-radius: 1.25rem;
   box-shadow: 0 6px 32px 0 rgba(60, 72, 88, 0.1);
@@ -362,6 +387,11 @@ input[type="checkbox"] {
 @media screen and (min-width: 768px) {
   /* 768px tablets and up */
   .formContent {
+    width: 80%;
+    margin: 0 auto;
+    overflow: visible;
+  }
+  .resultsContainer {
     width: 80%;
     margin: 0 auto;
     overflow: visible;

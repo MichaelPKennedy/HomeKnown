@@ -88,16 +88,7 @@ function ResultsPage({ data, toggleFormVisibility, showEditButton }) {
         />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      {showEditButton && (
-        <div className={styles.btnContainer}>
-          <button
-            onClick={toggleFormVisibility}
-            className={`${styles.btnPreferences}`}
-          >
-            Edit Preferences
-          </button>
-        </div>
-      )}
+
       <div className="mb-4 mt-4 text-center"></div>
       <div className={styles.resultsPage}>
         {topTen.length > 0 ? (

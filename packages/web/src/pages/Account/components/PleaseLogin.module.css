@@ -1,7 +1,22 @@
+:root {
+  --color-primary: #01697c;
+  --color-primary-gradient-start: #10b981;
+  --color-primary-gradient-end: #059669;
+  --color-secondary: #2563eb;
+  --color-secondary-gradient-end: #4f46e5;
+  --color-accent: #ff8360;
+  --color-accent-light: #ffb385;
+  --color-bg-light: #f8fafc;
+  --color-bg-blue: #e0ecf7;
+  --color-bg-white: #fff;
+  --color-text-dark: #1f2937;
+  --color-text-gray: #374151;
+}
+
 .container {
   min-height: calc(100vh - 81px);
   width: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8fd3d6 0%, #75c2c2 60%, #5eb3b3 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,20 +126,28 @@
 }
 
 .primaryButton {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-secondary) 0%,
+    var(--color-secondary-gradient-end) 100%
+  );
   color: white;
-  box-shadow: 0 4px 14px 0 rgba(102, 126, 234, 0.4);
+  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
 }
 
 .primaryButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px 0 rgba(102, 126, 234, 0.5);
+  box-shadow: 0 8px 25px 0 rgba(37, 99, 235, 0.5);
   color: white;
   text-decoration: none;
 }
 
 .secondaryButton {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-gradient-start) 0%,
+    var(--color-primary-gradient-end) 100%
+  );
   color: white;
   box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.4);
 }

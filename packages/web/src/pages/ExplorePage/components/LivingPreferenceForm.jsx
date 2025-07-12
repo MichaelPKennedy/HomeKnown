@@ -378,10 +378,11 @@ const LivingPreferenceForm = () => {
 
   const toggleFormVisibility = () => {
     if (showForm) {
-      setShowForm(false);
+      setFormAnimation(styles.formSlidingExit);
+      setTimeout(() => setShowForm(false), 260); // Match exit animation duration
     } else {
-      // When showing the form, just change the state and let CSS handle the slide down
       setShowForm(true);
+      setFormAnimation(styles.formSlidingEnter);
     }
   };
 
@@ -435,22 +436,24 @@ const LivingPreferenceForm = () => {
           message="You've already taken the quiz once. Please sign in or create an account to take it again and save your preferences."
         />
       )}
-      {surveyResults && showForm && (
-        <div className={styles.btnContainer}>
-          <button
-            onClick={toggleFormVisibility}
-            className={`${styles.btnCancel}`}
-          >
-            Hide Preferences
-          </button>
-        </div>
-      )}
-      <div>
+      <div className={styles.btnContainer}>
+        <button
+          onClick={toggleFormVisibility}
+          className={`${styles.btnCancel} ${
+            !showForm ? styles.formHidden : ""
+          }`}
+        >
+          {showForm ? "Hide Preferences" : "Edit Preferences"}
+        </button>
+      </div>
+      <div className={styles.contentWrapper}>
         {showForm ? (
-          <div className={styles.preferenceFormContainer}>
+          <div
+            className={`${styles.preferenceFormContainer} ${styles.formSlidingEnter}`}
+          >
             <form
               onSubmit={handleSubmit}
-              className={`container ${styles.centerContainer} ${styles.formContent} ${formAnimation}`}
+              className={`container ${styles.centerContainer} ${styles.formContent}`}
             >
               <div className={`form-group ${styles.preferenceFormGroup}`}>
                 <PreferenceWeightSimple
@@ -585,12 +588,14 @@ const LivingPreferenceForm = () => {
             </div>
           </div>
         ) : (
-          <div className={styles.formContent}>
-            <ResultsPage
-              data={surveyResults}
-              toggleFormVisibility={toggleFormVisibility}
-              showEditButton={!showForm}
-            />
+          <div className={styles.preferenceFormContainer}>
+            <div className={styles.resultsContainer}>
+              <ResultsPage
+                data={surveyResults}
+                toggleFormVisibility={toggleFormVisibility}
+                showEditButton={!showForm}
+              />
+            </div>
           </div>
         )}
       </div>
