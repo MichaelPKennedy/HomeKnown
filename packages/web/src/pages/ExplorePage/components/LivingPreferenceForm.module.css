@@ -100,27 +100,152 @@
 }
 
 .pageContainer {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(135deg, #e0ecf7 0%, #f8fafc 100%);
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2rem 1rem;
+  position: relative;
   overflow-x: hidden;
+}
+
+.preferenceFormContainer {
+  width: 100%;
+  max-width: 72rem;
+  margin: 2rem auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   z-index: 1;
 }
 
-@media screen and (min-width: 768px) {
-  .submitBtnRow {
-    margin-bottom: 30px;
+.formContent {
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 32px 0 rgba(60, 72, 88, 0.1);
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 72rem;
+  position: relative;
+  z-index: 2;
+  animation: fadeInUp 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: box-shadow 0.2s;
+  display: block;
+  text-align: left;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.btnDropdown:hover {
-  background-color: #01697c; /* Changes background on hover, optional */
-  color: white; /* Changes text color on hover, optional */
+.formGroup {
+  width: 100%;
+  margin-bottom: 3rem;
+  display: block;
+  text-align: left;
 }
 
-.btnDropdown:focus {
+label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  display: block;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  background: #f9fafb;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
   outline: none;
+}
+
+.sliderContainer {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+.btnContainer {
+  margin-bottom: 1.5rem;
+  text-align: right;
+}
+
+.submitBtnRow {
+  margin-top: 0rem;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.btnDropdown,
+.btnCancel {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 8px 0 rgba(16, 185, 129, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+.btnDropdown:hover,
+.btnCancel:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 16px 0 rgba(16, 185, 129, 0.12);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .preferenceFormContainer {
+    max-width: 100%;
+  }
+  .formContent {
+    padding: 2rem 1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .pageContainer {
+    padding: 1rem 0.25rem;
+  }
+  .formContent {
+    padding: 1.25rem 0.5rem;
+    border-radius: 1rem;
+  }
 }
 
 /* Dropdown menu styles */
@@ -220,20 +345,6 @@
   z-index: 1;
 }
 
-.formContent {
-  width: 100%;
-  margin: 0 auto;
-  overflow-y: visible;
-  z-index: 1;
-}
-
-.formGroup {
-  width: 100%;
-  margin-bottom: 2rem;
-  z-index: 1;
-  margin-top: 1rem;
-}
-
 .formGroupAlternate {
   width: 100%;
   margin-bottom: 1.5rem;
@@ -243,7 +354,7 @@
 
 .preferenceFormGroup {
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   z-index: 1;
 }
 
@@ -251,7 +362,7 @@
 @media screen and (min-width: 768px) {
   /* 768px tablets and up */
   .formContent {
-    width: 70%;
+    width: 80%;
     margin: 0 auto;
     overflow: visible;
   }
@@ -465,3 +576,9 @@ details .formCheck {
   margin-left: 10px;
   margin-bottom: 10px;
 }
+
+.formSection {
+  margin-bottom: 2rem;
+}
+
+/* Usage: Add className={styles.formSection} to each major section/component in the form for consistent vertical spacing. */
