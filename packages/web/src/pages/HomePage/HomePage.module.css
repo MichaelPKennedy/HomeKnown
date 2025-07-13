@@ -77,7 +77,7 @@
 }
 
 .banner .ctaButton {
-  background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
   color: #fff;
   padding: 10px 20px;
   text-decoration: none;
@@ -85,13 +85,12 @@
   transition: background 0.3s, box-shadow 0.3s;
   white-space: nowrap;
   margin-left: 10px;
-  box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.2);
-  font-weight: 600;
+  box-shadow: 0 4px 14px 0 rgba(255, 107, 107, 0.2);
 }
 
 .banner .ctaButton:hover {
-  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
-  box-shadow: 0 8px 25px 0 rgba(37, 99, 235, 0.3);
+  background: linear-gradient(135deg, #ff5252 0%, #ff6b6b 100%);
+  box-shadow: 0 8px 25px 0 rgba(255, 107, 107, 0.3);
 }
 
 .bannerText {
@@ -122,8 +121,8 @@
 }
 
 .paginationButton {
-  background-color: #01697c;
-  border: 1px solid #01697c;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  border: none;
   color: white;
   padding: 10px 20px;
   width: 70px;
@@ -133,12 +132,15 @@
   font-size: 12px;
   margin: 4px 2px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 8px 0 rgba(255, 107, 107, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .paginationButton:hover {
-  background-color: white;
-  color: #01697c;
+  background: linear-gradient(135deg, #ff5252 0%, #ff6b6b 100%);
+  box-shadow: 0 4px 16px 0 rgba(255, 107, 107, 0.12);
+  transform: translateY(-2px);
 }
 
 .paginationButton:focus {

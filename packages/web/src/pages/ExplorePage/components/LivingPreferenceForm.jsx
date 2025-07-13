@@ -578,7 +578,7 @@ const LivingPreferenceForm = () => {
               )}
             </form>
             <div ref={resultsRef}>
-              {!loading && surveyResults ? (
+              {!loading && surveyResults && !showForm ? (
                 <div className={styles.formContent}>
                   <ResultsPage data={surveyResults} />
                 </div>

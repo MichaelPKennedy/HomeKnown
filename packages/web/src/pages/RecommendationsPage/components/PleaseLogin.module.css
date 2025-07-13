@@ -1,9 +1,9 @@
 :root {
-  --color-primary: #01697c;
+  --color-primary: #ff6b6b;
   --color-primary-gradient-start: #10b981;
   --color-primary-gradient-end: #059669;
-  --color-secondary: #2563eb;
-  --color-secondary-gradient-end: #4f46e5;
+  --color-secondary: #ff6b6b;
+  --color-secondary-gradient-end: #ff6b6b;
   --color-accent: #ff8360;
   --color-accent-light: #ffb385;
   --color-bg-light: #f8fafc;
@@ -15,7 +15,7 @@
 
 .container {
   min-height: calc(100vh - 81px);
-  background: linear-gradient(135deg, #8fd3d6 0%, #75c2c2 60%, #5eb3b3 100%);
+  background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,33 +24,7 @@
   overflow: hidden;
 }
 
-/* Background decorative elements */
-.container::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.1) 1px,
-    transparent 1px
-  );
-  background-size: 50px 50px;
-  animation: float 20s ease-in-out infinite;
-  pointer-events: none;
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-  }
-}
+/* Background decorative elements removed for clean white background */
 
 .content {
   background: rgba(255, 255, 255, 0.95);
@@ -112,7 +86,6 @@
   padding: 1rem 2rem;
   border: none;
   border-radius: 0.75rem;
-  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.3s;

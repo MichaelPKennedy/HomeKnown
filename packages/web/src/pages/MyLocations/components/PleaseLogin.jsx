@@ -20,12 +20,6 @@ const PleaseLogin = () => {
           >
             Log In
           </Link>
-          <Link
-            to="/register"
-            className={`${styles.button} ${styles.secondaryButton}`}
-          >
-            Sign Up
-          </Link>
         </div>
       </div>
     </div>

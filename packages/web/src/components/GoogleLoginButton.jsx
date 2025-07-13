@@ -44,7 +44,7 @@ const GoogleLoginButton = () => {
           </svg>
         </div>
         <span className={styles.materialButtonContents}>
-          Sign in with Google
+          Continue with Google
         </span>
         <span style={{ display: "none" }}>Sign in with Google</span>
       </div>

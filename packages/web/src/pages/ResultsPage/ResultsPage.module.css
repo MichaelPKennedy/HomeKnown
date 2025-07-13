@@ -99,7 +99,6 @@
   border-radius: 4px;
   padding: 2px 5px;
   font-size: 24px;
-  font-weight: bold;
   text-align: center;
 }
 
@@ -192,7 +191,6 @@
 .graphTitle {
   font-size: 18px;
   text-anchor: middle;
-  font-weight: bold;
   fill: #333;
 }
 
@@ -715,32 +713,48 @@ a:active {
   margin-bottom: 10px;
 }
 
-.selectAllButton {
-  display: block;
-  margin: 10px 0;
-  margin-bottom: 20px;
-  padding: 8px 16px;
-  width: 150px;
-  background-color: #01697c;
-  color: white;
+.filterButton,
+.selectAllButton,
+.toggleAllButton,
+.applyButton,
+.selectOnlyButton {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: #fff;
   border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  box-shadow: 0 2px 8px 0 rgba(255, 107, 107, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
   cursor: pointer;
+  margin-bottom: 10px;
 }
 
 .filterButton {
-  margin-top: 15px;
-  background-color: transparent;
-  border: 1px solid #01697c;
-  color: #01697c;
+  margin-top: 20px;
 }
 
-.filterButton:hover {
-  background-color: #01697c;
-  color: white;
+.selectAllButton {
+  display: block;
+  width: 150px;
+}
+
+.filterButton:hover,
+.selectAllButton:hover,
+.toggleAllButton:hover,
+.applyButton:hover,
+.selectOnlyButton:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #ff6b6b 100%);
+  box-shadow: 0 4px 16px 0 rgba(255, 107, 107, 0.12);
+  transform: translateY(-2px);
+  color: #fff;
 }
 
 .filterButton:focus,
-.filterButton:active {
+.selectAllButton:focus,
+.toggleAllButton:focus,
+.applyButton:focus,
+.selectOnlyButton:focus {
   outline: none;
 }
 
