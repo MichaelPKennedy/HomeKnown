@@ -9,7 +9,7 @@ import PleaseLogin from "./components/PleaseLogin";
 import styles from "./RecommendationsPage.module.css";
 
 const RecommendationsPage = () => {
-  const { userRecommendations } = useCityData();
+  const { userRecommendations, userRecommendationsLoading } = useCityData();
   const { isLoggedIn } = useContext(AuthContext);
 
   const getCanonicalUrl = () => {
@@ -29,7 +29,9 @@ const RecommendationsPage = () => {
         />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      {userRecommendations?.standard?.length > 0 ? (
+      {userRecommendationsLoading ? (
+        <div className="ml-5 mt-5">Loading recommendations...</div>
+      ) : userRecommendations?.standard?.length > 0 ? (
         <div className={styles.pageContainer}>
           <div className={styles.recommendationsHeader}>
             <p className="mb-2">Your AI Recommendations...</p>

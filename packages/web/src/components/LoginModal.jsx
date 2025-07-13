@@ -23,18 +23,10 @@ const LoginModal = ({
           <p className={styles.message}>{message}</p>
         </div>
         <div className={styles.modalFooter}>
-          <Link to="/register" className={styles.button}>
-            <button
-              type="button"
-              className={`${styles.button} ${styles.successButton}`}
-            >
-              Sign Up
-            </button>
-          </Link>
           <Link to="/login" className={styles.button}>
             <button
               type="button"
-              className={`${styles.button} ${styles.primaryButton}`}
+              className={`${styles.button} ${styles.coralButton}`}
             >
               Login
             </button>

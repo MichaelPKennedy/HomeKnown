@@ -51,6 +51,8 @@ export const CityDataProvider = ({ children }) => {
   const [userCityData, setUserCityData] = useState([]);
   const [userPreferences, setUserPreferences] = useState({});
   const [userRecommendations, setUserRecommendations] = useState([]);
+  const [userRecommendationsLoading, setUserRecommendationsLoading] =
+    useState(false);
   const [categories, setCategories] = useState({});
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [userCityIds, setUserCityIds] = useState([]);
@@ -190,6 +192,7 @@ export const CityDataProvider = ({ children }) => {
   useEffect(() => {
     const fetchUserCityData = async () => {
       if (isLoggedIn && user) {
+        setUserRecommendationsLoading(true);
         try {
           const [cityIdsResponse, surveyResponse, recommendations] =
             await Promise.all([
@@ -218,6 +221,8 @@ export const CityDataProvider = ({ children }) => {
           });
         } catch (error) {
           console.error("Error fetching saved cities:", error);
+        } finally {
+          setUserRecommendationsLoading(false);
         }
       }
     };
@@ -273,6 +278,7 @@ export const CityDataProvider = ({ children }) => {
         // forecastError,
         userPreferences,
         userRecommendations,
+        userRecommendationsLoading,
         setUserPreferences,
         userRecInterests,
         userRecInterestsLoading,

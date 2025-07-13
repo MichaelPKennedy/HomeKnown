@@ -9,7 +9,13 @@ import PleaseLogin from "./components/PleaseLogin";
 import LargeResultsMap from "../ResultsPage/components/LargeResultsMap";
 
 const MyLocations = () => {
-  const { userCityData, userCityIds, addCity, removeCity } = useCityData();
+  const {
+    userCityData,
+    userCityIds,
+    addCity,
+    removeCity,
+    userRecommendationsLoading,
+  } = useCityData();
   const [selectedStates, setSelectedStates] = useState(new Set());
   const [allStatesOpen, setAllStatesOpen] = useState(true);
   const [isFilterVisible, setIsFilterVisible] = useState(false);
@@ -137,7 +143,9 @@ const MyLocations = () => {
         />
         <link rel="canonical" href={getCanonicalUrl()} />
       </Helmet>
-      {hasLocations ? (
+      {userRecommendationsLoading ? (
+        <div className="ml-5 mt-5">Loading your saved locations...</div>
+      ) : hasLocations ? (
         <div className={styles.myLocationsContainer}>
           <button
             onClick={toggleFilterVisibility}
@@ -185,7 +193,7 @@ const MyLocations = () => {
               onClick={toggleAllStates}
               className={`btn float-right ${styles.toggleAllButton}`}
             >
-              {allStatesOpen ? "Close All" : "Expand All"}
+              {allStatesOpen ? "Close All" : "Expand"}
             </button>
             {Object.keys(citiesByState)
               .filter((state) => selectedStates.has(state))

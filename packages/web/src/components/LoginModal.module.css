@@ -131,6 +131,23 @@
   box-shadow: 0 6px 20px 0 rgba(16, 185, 129, 0.5);
 }
 
+.coralButton {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5252 100%);
+  color: #fff;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px 0 rgba(255, 107, 107, 0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.coralButton:hover {
+  background: linear-gradient(135deg, #ff5252 0%, #ff6b6b 100%);
+  color: #fff !important;
+  box-shadow: 0 4px 16px 0 rgba(255, 107, 107, 0.12);
+  transform: translateY(-2px);
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {

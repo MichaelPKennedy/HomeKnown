@@ -7,7 +7,7 @@ const Weather = () => {
   const location = useLocation();
   const { cityData, isLoading, error } = useCityData();
   const startYear = 2020;
-  const endYear = 2023;
+  const endYear = new Date().getFullYear();
 
   const { city, fromSurvey } = location?.state || {};
   const currentCity = fromSurvey ? city : cityData;
