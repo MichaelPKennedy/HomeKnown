@@ -121,5 +121,199 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+
+    <!-- Marketing Agency Tracking Pixel -->
+    <!-- Place this code just before the closing </body> tag -->
+    <script>
+      !(function () {
+        const e =
+            "%REACT_APP_TRACKING_URL%" ||
+            "https://us-central1-onyx-virtue-466622-d8.cloudfunctions.net/pixel-tracking",
+          n = "%REACT_APP_AGENCY_ID%" || "1";
+        function t() {
+          return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
+            /[xy]/g,
+            function (e) {
+              const n = (16 * Math.random()) | 0;
+              return ("x" == e ? n : (3 & n) | 8).toString(16);
+            }
+          );
+        }
+        function o() {
+          let e = (function (e) {
+            const n = `; ${document.cookie}`.split(`; ${e}=`);
+            return 2 === n.length ? n.pop().split(";").shift() : null;
+          })("_site_visitor_id");
+          return (
+            e ||
+              ((e = t()),
+              (function (e, n, t = 365) {
+                const o = new Date();
+                o.setTime(o.getTime() + 24 * t * 60 * 60 * 1e3),
+                  (document.cookie = `${e}=${n};expires=${o.toUTCString()};path=/;SameSite=Lax`);
+              })("_site_visitor_id", e)),
+            e
+          );
+        }
+        function i() {
+          let e = (function () {
+            try {
+              const e = localStorage.getItem("_site_session");
+              return e ? JSON.parse(e) : null;
+            } catch (e) {
+              return null;
+            }
+          })();
+          const n = Date.now();
+          return (
+            !e || n - e.lastActivity > 18e5
+              ? (e = {
+                  sessionId: t(),
+                  startTime: n,
+                  lastActivity: n,
+                  pageViews: 0,
+                })
+              : (e.lastActivity = n),
+            e.pageViews++,
+            (function (e) {
+              try {
+                localStorage.setItem("_site_session", JSON.stringify(e));
+              } catch (e) {
+                console.warn("localStorage not available for tracking");
+              }
+            })(e),
+            e
+          );
+        }
+        function r() {
+          const r = o(),
+            s = i(),
+            c = (function () {
+              const e = {},
+                n = new URLSearchParams(window.location.search);
+              for (const [t, o] of n) e[t] = o;
+              return e;
+            })(),
+            l = (function () {
+              const e = document.referrer;
+              if (!e) return { referrer: null, referrerDomain: null };
+              try {
+                return { referrer: e, referrerDomain: new URL(e).hostname };
+              } catch (n) {
+                return { referrer: e, referrerDomain: null };
+              }
+            })(),
+            d = {
+              userAgent: navigator.userAgent,
+              language: navigator.language,
+              platform: navigator.platform,
+              cookieEnabled: navigator.cookieEnabled,
+              screenResolution: `${screen.width}x${screen.height}`,
+              viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            },
+            u = {
+              impressionId: t(),
+              siteId: n,
+              visitorId: r,
+              sessionId: s.sessionId,
+              timestamp: new Date().toISOString(),
+              url: window.location.href,
+              path: window.location.pathname,
+              title: document.title,
+              urlParameters: c,
+              referrer: l.referrer,
+              referrerDomain: l.referrerDomain,
+              sessionPageViews: s.pageViews,
+              sessionStartTime: new Date(s.startTime).toISOString(),
+              ...d,
+              timeOnSite: 0,
+            };
+          !(function (n) {
+            if (navigator.sendBeacon) {
+              const t = new Blob([JSON.stringify(n)], {
+                type: "application/json",
+              });
+              navigator.sendBeacon(e, t);
+            } else
+              fetch(e, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(n),
+                keepalive: !0,
+              }).catch((e) => {
+                console.warn("Tracking request failed:", e);
+              });
+          })(u),
+            (function (e) {
+              const n = Date.now();
+              let t = n,
+                o = !0;
+              function i() {
+                (t = Date.now()), (o = !0);
+              }
+              [
+                "mousedown",
+                "mousemove",
+                "keypress",
+                "scroll",
+                "touchstart",
+              ].forEach((e) => {
+                document.addEventListener(e, i, !0);
+              }),
+                setInterval(() => {
+                  Date.now() - t > 6e4 && (o = !1);
+                }, 5e3),
+                setInterval(() => {
+                  if (o) {
+                    const t = Math.floor((Date.now() - n) / 1e3);
+                    a(e.visitorId, e.sessionId, t, !1, e.impressionId);
+                  }
+                }, 3e4),
+                window.addEventListener("beforeunload", () => {
+                  const t = Math.floor((Date.now() - n) / 1e3);
+                  a(e.visitorId, e.sessionId, t, !0, e.impressionId);
+                }),
+                document.addEventListener("visibilitychange", () => {
+                  document.hidden ? (o = !1) : i();
+                });
+            })(u);
+        }
+        function a(t, o, i, r = !1, a = null) {
+          const s = {
+            type: "time_update",
+            impressionId: a,
+            siteId: n,
+            visitorId: t,
+            sessionId: o,
+            timeOnSite: i,
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            isFinal: r,
+          };
+          if (r && navigator.sendBeacon) {
+            const n = new Blob([JSON.stringify(s)], {
+              type: "application/json",
+            });
+            navigator.sendBeacon(e, n);
+          } else
+            fetch(e, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(s),
+              keepalive: !0,
+            }).catch((e) => {
+              console.warn("Time update failed:", e);
+            });
+        }
+        "loading" === document.readyState
+          ? document.addEventListener("DOMContentLoaded", r)
+          : r();
+        let s = window.location.href;
+        setInterval(() => {
+          window.location.href !== s && ((s = window.location.href), r());
+        }, 1e3);
+      })();
+    </script>
   </body>
 </html>
