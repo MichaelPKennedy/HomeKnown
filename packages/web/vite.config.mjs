@@ -17,4 +17,9 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  define: {
+    // Inject environment variables into the client-side code
+    "window.__TRACKING_URL__": JSON.stringify(process.env.VITE_TRACKING_URL),
+    "window.__SITE_ID__": JSON.stringify(process.env.VITE_SITE_ID),
+  },
 });

@@ -126,193 +126,264 @@
     <!-- Place this code just before the closing </body> tag -->
     <script>
       !(function () {
-        const e =
-            "%REACT_APP_TRACKING_URL%" ||
-            "https://us-central1-onyx-virtue-466622-d8.cloudfunctions.net/pixel-tracking",
-          n = "%REACT_APP_AGENCY_ID%" || "1";
-        function t() {
+        // Get environment variables - these will be replaced during build
+        const trackingUrl = window.__TRACKING_URL__;
+        const siteId = window.__SITE_ID__;
+
+        // Only run tracking if environment variables are properly configured
+        if (!trackingUrl || !siteId) {
+          console.warn(
+            "Tracking pixel not configured: Missing environment variables"
+          );
+          return;
+        }
+
+        function generateId() {
           return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
             /[xy]/g,
-            function (e) {
-              const n = (16 * Math.random()) | 0;
-              return ("x" == e ? n : (3 & n) | 8).toString(16);
+            function (c) {
+              const r = (16 * Math.random()) | 0;
+              return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
             }
           );
         }
-        function o() {
-          let e = (function (e) {
-            const n = `; ${document.cookie}`.split(`; ${e}=`);
-            return 2 === n.length ? n.pop().split(";").shift() : null;
+
+        function getVisitorId() {
+          let visitorId = (function (name) {
+            const value = `; ${document.cookie}`.split(`; ${name}=`);
+            return value.length === 2 ? value.pop().split(";").shift() : null;
           })("_site_visitor_id");
-          return (
-            e ||
-              ((e = t()),
-              (function (e, n, t = 365) {
-                const o = new Date();
-                o.setTime(o.getTime() + 24 * t * 60 * 60 * 1e3),
-                  (document.cookie = `${e}=${n};expires=${o.toUTCString()};path=/;SameSite=Lax`);
-              })("_site_visitor_id", e)),
-            e
-          );
+
+          if (!visitorId) {
+            visitorId = generateId();
+            (function (name, value, days = 365) {
+              const date = new Date();
+              date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+              document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
+            })("_site_visitor_id", visitorId);
+          }
+          return visitorId;
         }
-        function i() {
-          let e = (function () {
+
+        function getSession() {
+          let session = (function () {
             try {
-              const e = localStorage.getItem("_site_session");
-              return e ? JSON.parse(e) : null;
+              const stored = localStorage.getItem("_site_session");
+              return stored ? JSON.parse(stored) : null;
             } catch (e) {
               return null;
             }
           })();
-          const n = Date.now();
-          return (
-            !e || n - e.lastActivity > 18e5
-              ? (e = {
-                  sessionId: t(),
-                  startTime: n,
-                  lastActivity: n,
-                  pageViews: 0,
-                })
-              : (e.lastActivity = n),
-            e.pageViews++,
-            (function (e) {
-              try {
-                localStorage.setItem("_site_session", JSON.stringify(e));
-              } catch (e) {
-                console.warn("localStorage not available for tracking");
-              }
-            })(e),
-            e
-          );
-        }
-        function r() {
-          const r = o(),
-            s = i(),
-            c = (function () {
-              const e = {},
-                n = new URLSearchParams(window.location.search);
-              for (const [t, o] of n) e[t] = o;
-              return e;
-            })(),
-            l = (function () {
-              const e = document.referrer;
-              if (!e) return { referrer: null, referrerDomain: null };
-              try {
-                return { referrer: e, referrerDomain: new URL(e).hostname };
-              } catch (n) {
-                return { referrer: e, referrerDomain: null };
-              }
-            })(),
-            d = {
-              userAgent: navigator.userAgent,
-              language: navigator.language,
-              platform: navigator.platform,
-              cookieEnabled: navigator.cookieEnabled,
-              screenResolution: `${screen.width}x${screen.height}`,
-              viewportSize: `${window.innerWidth}x${window.innerHeight}`,
-              timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            },
-            u = {
-              impressionId: t(),
-              siteId: n,
-              visitorId: r,
-              sessionId: s.sessionId,
-              timestamp: new Date().toISOString(),
-              url: window.location.href,
-              path: window.location.pathname,
-              title: document.title,
-              urlParameters: c,
-              referrer: l.referrer,
-              referrerDomain: l.referrerDomain,
-              sessionPageViews: s.pageViews,
-              sessionStartTime: new Date(s.startTime).toISOString(),
-              ...d,
-              timeOnSite: 0,
+
+          const now = Date.now();
+
+          if (!session || now - session.lastActivity > 1800000) {
+            // 30 minutes
+            session = {
+              sessionId: generateId(),
+              startTime: now,
+              lastActivity: now,
+              pageViews: 0,
             };
-          !(function (n) {
-            if (navigator.sendBeacon) {
-              const t = new Blob([JSON.stringify(n)], {
-                type: "application/json",
-              });
-              navigator.sendBeacon(e, t);
-            } else
-              fetch(e, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(n),
-                keepalive: !0,
-              }).catch((e) => {
-                console.warn("Tracking request failed:", e);
-              });
-          })(u),
-            (function (e) {
-              const n = Date.now();
-              let t = n,
-                o = !0;
-              function i() {
-                (t = Date.now()), (o = !0);
-              }
-              [
-                "mousedown",
-                "mousemove",
-                "keypress",
-                "scroll",
-                "touchstart",
-              ].forEach((e) => {
-                document.addEventListener(e, i, !0);
-              }),
-                setInterval(() => {
-                  Date.now() - t > 6e4 && (o = !1);
-                }, 5e3),
-                setInterval(() => {
-                  if (o) {
-                    const t = Math.floor((Date.now() - n) / 1e3);
-                    a(e.visitorId, e.sessionId, t, !1, e.impressionId);
-                  }
-                }, 3e4),
-                window.addEventListener("beforeunload", () => {
-                  const t = Math.floor((Date.now() - n) / 1e3);
-                  a(e.visitorId, e.sessionId, t, !0, e.impressionId);
-                }),
-                document.addEventListener("visibilitychange", () => {
-                  document.hidden ? (o = !1) : i();
-                });
-            })(u);
+          } else {
+            session.lastActivity = now;
+          }
+
+          session.pageViews++;
+
+          (function (session) {
+            try {
+              localStorage.setItem("_site_session", JSON.stringify(session));
+            } catch (e) {
+              console.warn("localStorage not available for tracking");
+            }
+          })(session);
+
+          return session;
         }
-        function a(t, o, i, r = !1, a = null) {
-          const s = {
-            type: "time_update",
-            impressionId: a,
-            siteId: n,
-            visitorId: t,
-            sessionId: o,
-            timeOnSite: i,
-            timestamp: new Date().toISOString(),
-            url: window.location.href,
-            isFinal: r,
-          };
-          if (r && navigator.sendBeacon) {
-            const n = new Blob([JSON.stringify(s)], {
+
+        function sendTrackingData(data) {
+          if (navigator.sendBeacon) {
+            const blob = new Blob([JSON.stringify(data)], {
               type: "application/json",
             });
-            navigator.sendBeacon(e, n);
-          } else
-            fetch(e, {
+            navigator.sendBeacon(trackingUrl, blob);
+          } else {
+            fetch(trackingUrl, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(s),
-              keepalive: !0,
+              body: JSON.stringify(data),
+              keepalive: true,
+            }).catch((e) => {
+              console.warn("Tracking request failed:", e);
+            });
+          }
+        }
+
+        function sendTimeUpdate(
+          visitorId,
+          sessionId,
+          timeOnSite,
+          isFinal = false,
+          impressionId = null
+        ) {
+          const data = {
+            type: "time_update",
+            impressionId: impressionId,
+            siteId: siteId,
+            visitorId: visitorId,
+            sessionId: sessionId,
+            timeOnSite: timeOnSite,
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            isFinal: isFinal,
+          };
+
+          if (isFinal && navigator.sendBeacon) {
+            const blob = new Blob([JSON.stringify(data)], {
+              type: "application/json",
+            });
+            navigator.sendBeacon(trackingUrl, blob);
+          } else {
+            fetch(trackingUrl, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+              keepalive: true,
             }).catch((e) => {
               console.warn("Time update failed:", e);
             });
+          }
         }
-        "loading" === document.readyState
-          ? document.addEventListener("DOMContentLoaded", r)
-          : r();
-        let s = window.location.href;
+
+        function trackPageView() {
+          const visitorId = getVisitorId();
+          const session = getSession();
+
+          const urlParams = (function () {
+            const params = {};
+            const searchParams = new URLSearchParams(window.location.search);
+            for (const [key, value] of searchParams) {
+              params[key] = value;
+            }
+            return params;
+          })();
+
+          const referrerInfo = (function () {
+            const ref = document.referrer;
+            if (!ref) return { referrer: null, referrerDomain: null };
+            try {
+              return { referrer: ref, referrerDomain: new URL(ref).hostname };
+            } catch (e) {
+              return { referrer: ref, referrerDomain: null };
+            }
+          })();
+
+          const deviceInfo = {
+            userAgent: navigator.userAgent,
+            language: navigator.language,
+            platform: navigator.platform,
+            cookieEnabled: navigator.cookieEnabled,
+            screenResolution: `${screen.width}x${screen.height}`,
+            viewportSize: `${window.innerWidth}x${window.innerHeight}`,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          };
+
+          const trackingData = {
+            impressionId: generateId(),
+            siteId: siteId,
+            visitorId: visitorId,
+            sessionId: session.sessionId,
+            timestamp: new Date().toISOString(),
+            url: window.location.href,
+            path: window.location.pathname,
+            title: document.title,
+            urlParameters: urlParams,
+            referrer: referrerInfo.referrer,
+            referrerDomain: referrerInfo.referrerDomain,
+            sessionPageViews: session.pageViews,
+            sessionStartTime: new Date(session.startTime).toISOString(),
+            ...deviceInfo,
+            timeOnSite: 0,
+          };
+
+          sendTrackingData(trackingData);
+
+          // Set up time tracking
+          const startTime = Date.now();
+          let lastActivity = startTime;
+          let isActive = true;
+
+          function updateActivity() {
+            lastActivity = Date.now();
+            isActive = true;
+          }
+
+          [
+            "mousedown",
+            "mousemove",
+            "keypress",
+            "scroll",
+            "touchstart",
+          ].forEach((event) => {
+            document.addEventListener(event, updateActivity, true);
+          });
+
+          setInterval(() => {
+            if (Date.now() - lastActivity > 60000) {
+              // 1 minute
+              isActive = false;
+            }
+          }, 5000);
+
+          setInterval(() => {
+            if (isActive) {
+              const timeOnSite = Math.floor((Date.now() - startTime) / 1000);
+              sendTimeUpdate(
+                visitorId,
+                session.sessionId,
+                timeOnSite,
+                false,
+                trackingData.impressionId
+              );
+            }
+          }, 30000); // Every 30 seconds
+
+          window.addEventListener("beforeunload", () => {
+            const timeOnSite = Math.floor((Date.now() - startTime) / 1000);
+            sendTimeUpdate(
+              visitorId,
+              session.sessionId,
+              timeOnSite,
+              true,
+              trackingData.impressionId
+            );
+          });
+
+          document.addEventListener("visibilitychange", () => {
+            if (document.hidden) {
+              isActive = false;
+            } else {
+              updateActivity();
+            }
+          });
+        }
+
+        // Initialize tracking
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", trackPageView);
+        } else {
+          trackPageView();
+        }
+
+        // Track route changes for SPA
+        let currentUrl = window.location.href;
         setInterval(() => {
-          window.location.href !== s && ((s = window.location.href), r());
-        }, 1e3);
+          if (window.location.href !== currentUrl) {
+            currentUrl = window.location.href;
+            trackPageView();
+          }
+        }, 1000);
       })();
     </script>
   </body>
