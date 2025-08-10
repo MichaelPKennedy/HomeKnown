@@ -106,6 +106,53 @@
     <script>
       !(function () {
         const siteId = "1";
+
+        function isBot(userAgent) {
+          const botPatterns = [
+            /googlebot/i,
+            /bingbot/i,
+            /slurp/i,
+            /duckduckbot/i,
+            /baiduspider/i,
+            /yandexbot/i,
+            /facebookexternalhit/i,
+            /twitterbot/i,
+            /rogerbot/i,
+            /linkedinbot/i,
+            /embedly/i,
+            /quora link preview/i,
+            /showyoubot/i,
+            /outbrain/i,
+            /pinterest\/0\./i,
+            /developers.google.com\/\+\/web\/snippet/i,
+            /slackbot/i,
+            /vkshare/i,
+            /w3c_validator/i,
+            /redditbot/i,
+            /applebot/i,
+            /whatsapp/i,
+            /flipboard/i,
+            /tumblr/i,
+            /bitlybot/i,
+            /skypeuripreview/i,
+            /nuzzel/i,
+            /discordbot/i,
+            /google page speed/i,
+            /qwantify/i,
+            /pinterestbot/i,
+            /bitrix link preview/i,
+            /xing-contenttabreceiver/i,
+            /chrome-lighthouse/i,
+            /telegrambot/i,
+          ];
+
+          if (!userAgent || userAgent.length < 10) {
+            return true; // Suspicious short user agent
+          }
+
+          return botPatterns.some((pattern) => pattern.test(userAgent));
+        }
+
         function generateId() {
           return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
             /[xy]/g,
@@ -217,6 +264,12 @@
         }
 
         function trackPageView() {
+          // Check for bot traffic first
+          if (isBot(navigator.userAgent)) {
+            console.log("Bot detected - skipping tracking");
+            return;
+          }
+
           const visitorId = getVisitorId();
           const session = getSession();
 
