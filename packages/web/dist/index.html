@@ -106,18 +106,7 @@
     <!-- Place this code just before the closing </body> tag -->
     <script>
       !(function () {
-        // Get environment variables - these will be replaced during build
-        const trackingUrl = window.__TRACKING_URL__;
-        const siteId = window.__SITE_ID__;
-
-        // Only run tracking if environment variables are properly configured
-        if (!trackingUrl || !siteId) {
-          console.warn(
-            "Tracking pixel not configured: Missing environment variables"
-          );
-          return;
-        }
-
+        const siteId = "1";
         function generateId() {
           return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(
             /[xy]/g,
@@ -183,21 +172,17 @@
         }
 
         function sendTrackingData(data) {
-          if (navigator.sendBeacon) {
-            const blob = new Blob([JSON.stringify(data)], {
-              type: "application/json",
-            });
-            navigator.sendBeacon(trackingUrl, blob);
-          } else {
-            fetch(trackingUrl, {
+          fetch(
+            "https://us-central1-onyx-virtue-466622-d8.cloudfunctions.net/pixel-tracking",
+            {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),
               keepalive: true,
-            }).catch((e) => {
-              console.warn("Tracking request failed:", e);
-            });
-          }
+            }
+          ).catch((e) => {
+            console.warn("Tracking request failed:", e);
+          });
         }
 
         function sendTimeUpdate(
@@ -219,21 +204,17 @@
             isFinal: isFinal,
           };
 
-          if (isFinal && navigator.sendBeacon) {
-            const blob = new Blob([JSON.stringify(data)], {
-              type: "application/json",
-            });
-            navigator.sendBeacon(trackingUrl, blob);
-          } else {
-            fetch(trackingUrl, {
+          fetch(
+            "https://us-central1-onyx-virtue-466622-d8.cloudfunctions.net/pixel-tracking",
+            {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data),
               keepalive: true,
-            }).catch((e) => {
-              console.warn("Time update failed:", e);
-            });
-          }
+            }
+          ).catch((e) => {
+            console.warn("Time update failed:", e);
+          });
         }
 
         function trackPageView() {
